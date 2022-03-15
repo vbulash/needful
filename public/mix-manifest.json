@@ -1,14 +1,12 @@
 {
-    "/js/laravel.app.js": "/js/laravel.app.js",
-    "/js/dashmix.app.js": "/js/dashmix.app.js",
+    "/js/app.js": "/js/app.js",
     "/js/pages/tables_datatables.js": "/js/pages/tables_datatables.js",
-    "/css/themes/xsmooth.css": "/css/themes/xsmooth.css",
-    "/css/themes/xmodern.css": "/css/themes/xmodern.css",
-    "/css/themes/xinspire.css": "/css/themes/xinspire.css",
-    "/css/themes/xeco.css": "/css/themes/xeco.css",
-    "/css/dashmix.css": "/css/dashmix.css",
-    "/css/themes/xplay.css": "/css/themes/xplay.css",
-    "/css/themes/xpro.css": "/css/themes/xpro.css",
-    "/css/themes/xdream.css": "/css/themes/xdream.css",
-    "/css/themes/xwork.css": "/css/themes/xwork.css"
+    "/css/app.css": "/css/app.css",
+    "/css/bootstrap.min.css.map": "/css/bootstrap.min.css.map",
+    "/css/xsmooth.css.map": "/css/xsmooth.css.map",
+    "/js/bootstrap.bundle.min.js.map": "/js/bootstrap.bundle.min.js.map",
+    "/js/jquery-3.6.0.min.map": "/js/jquery-3.6.0.min.map",
+    "/js/modules/helpers.js": "/js/modules/helpers.js",
+    "/js/modules/template.js": "/js/modules/template.js",
+    "/media/photos/moscow_city_12.jpeg": "/media/photos/moscow_city_12.jpeg"
 }

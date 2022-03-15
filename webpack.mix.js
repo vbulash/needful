@@ -13,28 +13,46 @@ const mix = require('laravel-mix');
 
 mix
     /* CSS */
-    .sass('resources/sass/main.scss', 'public/css/dashmix.css')
-    .sass('resources/sass/dashmix/themes/xeco.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xinspire.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xmodern.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xsmooth.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xwork.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xdream.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xpro.scss', 'public/css/themes/')
-    .sass('resources/sass/dashmix/themes/xplay.scss', 'public/css/themes/')
+    .styles([
+        'resources/plugins/bootstrap/css/bootstrap.min.css',
+        'resources/css/app.css',
+        'resources/sass/main.css',
+        'resources/sass/dashmix/themes/xsmooth.css',
+    ], 'public/css/app.css')
+    .copy([
+        'resources/plugins/bootstrap/css/bootstrap.min.css.map',
+        'resources/sass/dashmix/themes/xsmooth.css.map'
+    ], 'public/css')
 
     /* JS */
-    .js('resources/js/app.js', 'public/js/laravel.app.js')
-    .js('resources/js/dashmix/app.js', 'public/js/dashmix.app.js')
+    .js([
+        //'resources/plugins/jquery/jquery-3.6.0.min.js',
+        //'resources/plugins/bootstrap/js/bootstrap.bundle.min.js',
+		'resources/plugins/bootstrap-notify/bootstrap-notify.min.js',
+        'resources/js/app.js',
+        'resources/js/dashmix/app.js',
+        'resources/plugins/pusher/pusher.min.js',
+    ], 'public/js/app.js')
+    .copy([
+        'resources/plugins/bootstrap/js/bootstrap.bundle.min.js.map',
+		'resources/plugins/jquery/jquery-3.6.0.min.map'
+    ], 'public/js')
+	.copyDirectory([
+		'resources/js/dashmix/modules'
+	], 'public/js/modules')
 
     /* Page JS */
     .js('resources/js/pages/tables_datatables.js', 'public/js/pages/tables_datatables.js')
 
+    /* Media */
+    .copyDirectory('resources/img/photos', 'public/media/photos')
+
     /* Tools */
     .browserSync('localhost:8000')
-    .disableNotifications()
+    //.disableNotifications()
 
     /* Options */
     .options({
-        processCssUrls: false
+        processCssUrls: true
     });
+
