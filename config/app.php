@@ -179,7 +179,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\SessionIdProvider::class,
-
+		Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

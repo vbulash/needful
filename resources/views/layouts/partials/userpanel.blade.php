@@ -6,9 +6,12 @@
         <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
-{{--        <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">--}}
-{{--            User Options--}}
-{{--        </div>--}}
+        <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
+			@php
+				$roles = \Illuminate\Support\Facades\Auth::user()->getRoleNames()->join(",<br/>");
+			@endphp
+			<span class="role-name">{!! $roles !!}</span>
+        </div>
         <div class="p-2">
             <a class="dropdown-item" href="javascript:void(0)">
                 <i class="far fa-fw fa-user me-1"></i> Профиль

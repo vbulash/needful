@@ -37,6 +37,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended();
         } catch(Exception $exc) {
 			session()->put('error', $exc->getMessage());
+            event(new ToastEvent('error', '', $exc->getMessage()));
 
             return redirect()->route('login');
         }

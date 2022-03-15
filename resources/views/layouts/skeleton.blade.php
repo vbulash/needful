@@ -44,15 +44,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
-	// Broadcast
-	var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-		cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
-	});
 
-	var channel = pusher.subscribe('needful-channel-{!! $sid !!}');
-	channel.bind('toast-event', (data) => {
-		alert('pusher');
-	});
 </script>
 <script>
 	function showToast(type, message, autohide) {
@@ -84,17 +76,25 @@
 	}
 
 	document.addEventListener("DOMContentLoaded", () => {
-		document.getElementById('btn').addEventListener('click', (event) => {
-			showToast('info', 'Проверочный текст<br/>Вторая строка', true);
-		}, false);
+		//
 	}, false);
 
 	// Ошибки и сообщения
+	// Broadcast
+	var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+		cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
+	});
+
+	var channel = pusher.subscribe('needful-channel-{!! $sid !!}');
+	channel.bind('toast-event', (data) => {
+		//
+	});
+
 	@if (isset($errors) && $errors->any())
-	@foreach ($errors->all() as $error)
-	//showToast('info', "{!! session('success') !!}", true);
-	//toastr['error']("{!! $error !!}");
-	@endforeach
+	@php
+		$error = implode('<br/>', $errors->all());
+	@endphp
+	showToast('error', "{!! $error !!}", false);
 	@elseif(session()->has('error'))
 	showToast('error', "{!! session('error') !!}", false);
 	@php
