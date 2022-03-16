@@ -55,19 +55,35 @@
 									<div class="mb-4">
 										<div class="input-group input-group-lg">
 											<input type="password" class="signup form-control"
-												   id="signup-password-confirm"
-												   name="signup-password-confirm" placeholder="Подтверждение пароля">
+												   id="password_confirmation"
+												   name="password_confirmation" placeholder="Подтверждение пароля">
 											<span class="input-group-text">
                                                 <i class="fa fa-asterisk"></i>
                                             </span>
 										</div>
 									</div>
+									<div class="mb-4">
+										<div class="input-group input-group-lg">
+											<select name="role" id="role"
+													class="form-control">
+												<option selected disabled>Выберите роль нового пользователя из списка
+												</option>
+												@foreach($roles as $role)
+													<option value="{{ $role }}">{!! $role !!}</option>
+												@endforeach
+											</select>
+											<span class="input-group-text">
+												<i class="fa fa-chevron-down"></i>
+                                            </span>
+										</div>
+									</div>
+
 									<div
 										class="d-sm-flex justify-content-sm-between align-items-sm-center mb-4 bg-body rounded py-2 px-3">
 										<div class="form-check">
-											<input type="checkbox" class="signup form-check-input" id="signup-terms"
-												   name="signup-terms">
-											<label class="form-check-label" for="signup-terms">Я соглашаюсь с Политикой
+											<input type="checkbox" class="signup form-check-input" id="terms"
+												   name="terms">
+											<label class="form-check-label" for="terms">Я соглашаюсь с Политикой
 												конфиденциальности</label>
 										</div>
 										<div class="fw-semibold fs-sm py-1">
@@ -76,7 +92,7 @@
 										</div>
 									</div>
 									<div class="text-center mb-4">
-										<button type="submit" class="btn btn-hero btn-primary" id="submit_btn" disabled>
+										<button type="submit" class="btn btn-hero btn-primary" id="submit_btn">
 											<i class="fa fa-fw fa-plus opacity-50 me-1"></i> Зарегистрировать
 										</button>
 									</div>
@@ -141,27 +157,6 @@
 
 @section('js_after')
 	<script>
-		document.querySelectorAll(".signup").forEach((doc) => {
-			doc.addEventListener('change', event => {
-				let username = document.getElementById('signup-username');
-				let email = document.getElementById('signup-email');
-				let password = document.getElementById('signup-password');
-				let confirm = document.getElementById('signup-password-confirm');
-				let terms = document.getElementById('signup-terms');
-
-				let allowed = (
-					(username.value !== '') &&
-					(email.value !== '') &&
-					(password.value !== '') &&
-					(confirm.value !== '') &&
-					terms.checked
-				);
-
-				let submit = document.getElementById('submit_btn');
-				submit.disabled = !allowed;
-			}, false);
-		});
-
 		document.addEventListener("DOMContentLoaded", () => {
 		}, false);
 	</script>

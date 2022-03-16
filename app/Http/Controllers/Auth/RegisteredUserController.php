@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\NewUserRequest;
+use App\Models\Role;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Notifications\NewUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use \Exception;
+use Spatie\Permission\Models\Permission;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +23,11 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+		$roles = Role::where('selfassign', true)
+			->orderBy('name')
+			->pluck('name')
+			->toArray();
+        return view('auth.register', ['roles' => $roles]);
     }
 
     /**
@@ -31,25 +38,48 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(NewUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required'],
-            //'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+		$role = $request->role;
+		try {
+			$user = User::create([
+				'name' => $request->name,
+				'email' => $request->email,
+				'password' => Hash::make($request->password),
+			]);
+			$user->assignRole($role);
+			if($request->role == 'Работодатель') {
+				$this->addWildcard($user, 'employers.edit', $user->getKey());
+				$this->addWildcard($user, 'employers.show', $user->getKey());
+			} elseif ($request->role == 'Практикант') {
+				$this->addWildcard($user, 'students.edit', $user->getKey());
+				$this->addWildcard($user, 'students.show', $user->getKey());
+			}
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+			event(new Registered($user));
+			$user->notify(new NewUser($user));
+			$name = $user->name;
 
-        event(new Registered($user));
+			Auth::login($user);
 
-        Auth::login($user);
+			session()->put('success',
+				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");
 
-        return redirect(RouteServiceProvider::HOME);
+			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+		} catch (Exception $exc) {
+			session()->put('error',
+				"Ошибка регистрации нового пользователя: {$exc->getMessage()}");
+
+			return redirect()->route('register');
+		}
     }
+
+	private function addWildcard(User $user, string $right, int $id)
+	{
+		if ($user->hasPermissionTo($right)) {
+			$permission = "{$right}.{$id}";
+			Permission::findOrCreate($permission);
+			$user->givePermissionTo($permission);
+		}
+	}
 }

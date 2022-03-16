@@ -75,10 +75,6 @@
 		toast.show();
 	}
 
-	document.addEventListener("DOMContentLoaded", () => {
-		//
-	}, false);
-
 	// Ошибки и сообщения
 	// Broadcast
 	var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
@@ -90,31 +86,34 @@
 		//
 	});
 
-	@if (isset($errors) && $errors->any())
-	@php
-		$error = implode('<br/>', $errors->all());
-	@endphp
-	showToast('error', "{!! $error !!}", false);
-	@elseif(session()->has('error'))
-	showToast('error', "{!! session('error') !!}", false);
-	@php
-		session()->forget('error');
-	@endphp
-	@endif
+	document.addEventListener("DOMContentLoaded", () => {
+		@if (isset($errors) && $errors->any())
+		@php
+			session()->put('error', implode('<br/>', $errors->all()));
+		@endphp
+		@endif
 
-	@if (session()->has('success'))
-	showToast('success', "{!! session('success') !!}", true);
-	@php
-		session()->forget('success');
-	@endphp
-	@endif
+		@if(session()->has('error'))
+		showToast('error', '{!! session('error') !!}', false);
+		@php
+			session()->forget('error');
+		@endphp
+		@endif
 
-	@if (session()->has('info'))
-	showToast('info', "{!! session('info') !!}", true);
-	@php
-		session()->forget('info');
-	@endphp
-	@endif
+		@if (session()->has('success'))
+		showToast('success', '{!! session('success') !!}', true);
+		@php
+			session()->forget('success');
+		@endphp
+		@endif
+
+		@if (session()->has('info'))
+		showToast('info', '{!! session('info') !!}', true);
+		@php
+			session()->forget('info');
+		@endphp
+		@endif
+	}, false);
 </script>
 @yield('js_after')
 

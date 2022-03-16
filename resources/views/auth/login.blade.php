@@ -27,7 +27,7 @@
                                     <div class="mb-4">
                                         <div class="input-group input-group-lg">
                                             <input type="email" class="form-control" id="email" name="email"
-                                                   placeholder="Имя пользователя" required>
+                                                   placeholder="Имя пользователя">
                                             <span class="input-group-text">
                                             <i class="fa fa-user-circle"></i>
                                         </span>
@@ -36,7 +36,7 @@
                                     <div class="mb-4">
                                         <div class="input-group input-group-lg">
                                             <input type="password" class="form-control" id="password" name="password"
-                                                   placeholder="Пароль" required>
+                                                   placeholder="Пароль">
                                             <span class="input-group-text">
                                             <i class="fa fa-asterisk"></i>
                                         </span>

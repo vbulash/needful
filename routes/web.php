@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.backend');
-})->middleware(['auth'])->name('dashboard');;
+Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'restore.session']], function () {
+	Route::get('/', function () {
+		return view('layouts.backend');
+	})->name('dashboard');
+});
 
 require __DIR__.'/auth.php';
