@@ -52,7 +52,7 @@
 
           <!-- Open Search Section -->
           <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-          <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
+          <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="header_search_on" disabled>
             <i class="fa fa-fw opacity-50 fa-search"></i> <span class="ms-1 d-none d-sm-inline-block">Поиск</span>
           </button>
           <!-- END Open Search Section -->

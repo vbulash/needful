@@ -12,19 +12,23 @@ const mix = require('laravel-mix');
  */
 
 mix
-    /* CSS */
+    // CSS
     .styles([
         'resources/plugins/bootstrap/css/bootstrap.min.css',
         'resources/css/app.css',
         'resources/sass/main.css',
         'resources/sass/dashmix/themes/xsmooth.css',
+		'resources/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css',
     ], 'public/css/app.css')
     .copy([
         'resources/plugins/bootstrap/css/bootstrap.min.css.map',
-        'resources/sass/dashmix/themes/xsmooth.css.map'
+        'resources/sass/dashmix/themes/xsmooth.css.map',
+		'resources/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css.map',
+		'resources/plugins/datatables/datatables.css',
+		'resources/plugins/datatables/datatables.min.css'
     ], 'public/css')
 
-    /* JS */
+    // JS
     .js([
         //'resources/plugins/jquery/jquery-3.6.0.min.js',
         //'resources/plugins/bootstrap/js/bootstrap.bundle.min.js',
@@ -32,26 +36,29 @@ mix
         'resources/js/app.js',
         'resources/js/dashmix/app.js',
         'resources/plugins/pusher/pusher.min.js',
+		'resources/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
     ], 'public/js/app.js')
     .copy([
         'resources/plugins/bootstrap/js/bootstrap.bundle.min.js.map',
-		'resources/plugins/jquery/jquery-3.6.0.min.map'
+		'resources/plugins/jquery/jquery-3.6.0.min.map',
+		'resources/plugins/datatables/datatables.js',
+		'resources/plugins/datatables/datatables.min.js',
     ], 'public/js')
 	.copyDirectory([
 		'resources/js/dashmix/modules'
 	], 'public/js/modules')
 
-    /* Page JS */
-    .js('resources/js/pages/tables_datatables.js', 'public/js/pages/tables_datatables.js')
-
-    /* Media */
+    // Media
     .copyDirectory('resources/img/photos', 'public/media/photos')
 
-    /* Tools */
+	// Разное
+	.copy('resources/plugins/datatables/lang/ru/datatables.json', 'public/lang/ru/datatables.json')
+
+    // Tools
     .browserSync('localhost:8000')
     //.disableNotifications()
 
-    /* Options */
+    // Options
     .options({
         processCssUrls: true
     });

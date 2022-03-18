@@ -17,6 +17,10 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/', function () {
 		return view('layouts.backend');
 	})->name('dashboard');
+
+	// Пользователи
+	Route::resource('/users', 'UserController');
+	Route::get('/users.data', 'UserController@getData')->name('users.index.data');
 });
 
 require __DIR__.'/auth.php';

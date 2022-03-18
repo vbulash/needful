@@ -13,7 +13,12 @@
 			<span class="role-name">{!! $roles !!}</span>
         </div>
         <div class="p-2">
-            <a class="dropdown-item" href="javascript:void(0)">
+            <a class="dropdown-item"
+			   href="{{ route('users.edit', [
+    'user' => \Illuminate\Support\Facades\Auth::user()->getKey(),
+    'sid' => session()->getId(),
+    'profile' => true
+    ]) }}">
                 <i class="far fa-fw fa-user me-1"></i> Профиль
             </a>
 

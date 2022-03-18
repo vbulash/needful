@@ -1,12 +1,17 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/pages/tables_datatables.js": "/js/pages/tables_datatables.js",
     "/css/app.css": "/css/app.css",
     "/css/bootstrap.min.css.map": "/css/bootstrap.min.css.map",
     "/css/xsmooth.css.map": "/css/xsmooth.css.map",
+    "/css/bootstrap-datepicker.css.map": "/css/bootstrap-datepicker.css.map",
+    "/css/datatables.css": "/css/datatables.css",
+    "/css/datatables.min.css": "/css/datatables.min.css",
     "/js/bootstrap.bundle.min.js.map": "/js/bootstrap.bundle.min.js.map",
     "/js/jquery-3.6.0.min.map": "/js/jquery-3.6.0.min.map",
+    "/js/datatables.js": "/js/datatables.js",
+    "/js/datatables.min.js": "/js/datatables.min.js",
     "/js/modules/helpers.js": "/js/modules/helpers.js",
     "/js/modules/template.js": "/js/modules/template.js",
-    "/media/photos/moscow_city_12.jpeg": "/media/photos/moscow_city_12.jpeg"
+    "/media/photos/moscow_city_12.jpeg": "/media/photos/moscow_city_12.jpeg",
+    "/lang/ru/datatables.json": "/lang/ru/datatables.json"
 }
