@@ -36,12 +36,14 @@
 			</ul>
 		</li>
 		<li class="nav-main-heading">Лица</li>
+		@hasrole('Работодатель')
 		<li class="nav-main-item">
-			<a class="nav-main-link" href="/">
+			<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}" href="{{ route('employers.index') }}">
 				<i class="nav-main-link-icon fa fa-globe"></i>
 				<span class="nav-main-link-name">Работодатели</span>
 			</a>
 		</li>
+		@endhasrole
 		<li class="nav-main-item">
 			<a class="nav-main-link" href="/">
 				<i class="nav-main-link-icon fa fa-globe"></i>

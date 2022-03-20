@@ -29,6 +29,7 @@ class PermissionSeeder extends Seeder
 			// Работодатели
 			'employers.*',
 			'employers.list',
+			'employers.list.*',
 			'employers.create',
 			'employers.edit',
 			'employers.show',
@@ -52,6 +53,8 @@ class PermissionSeeder extends Seeder
 
 		$employer = Role::where('name', 'Работодатель')->first();
 		$employer->givePermissionTo([
+			'employers.list',
+			'employers.list.*',
 			'employers.edit.*',
 			'employers.show.*',
 			'students.list',
