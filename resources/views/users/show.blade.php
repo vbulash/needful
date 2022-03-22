@@ -39,7 +39,7 @@
 						<label class="col-sm-3 col-form-label" for="role">Роль пользователя</label>
 						<div class="col-sm-5">
 							<input type="text" class="form-control" id="role" name="role"
-								   value="{!! \Illuminate\Support\Facades\Auth::user()->getRoleNames()->join(",<br/>") !!}" disabled>
+								   value="{!! $user->getRoleNames()->join(",<br/>") !!}" disabled>
 						</div>
 					</div>
 					<div class="row mb-4">

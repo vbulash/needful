@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ToastEvent;
 use App\Models\Employer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,13 +16,6 @@ use \Exception;
 
 class EmployerController extends Controller
 {
-	/*
-	 * CRUD::addColumn(['name' => 'inn', 'label' => 'ИНН']);
-		CRUD::addColumn(['name' => 'name', 'label' => 'Наименование']);
-		CRUD::addColumn(['name' => 'address', 'label' => 'Фактический адрес']);
-		CRUD::addColumn(['name' => 'phone', 'label' => 'Телефон']);
-		CRUD::addColumn(['name' => 'email', 'label' => 'Электронная почта']);
-	 */
 	/**
 	 * Process datatables ajax request.
 	 *
@@ -51,7 +45,7 @@ class EmployerController extends Controller
 				if (Auth::user()->can('employers.destroy'))
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->name})\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				return $actions;
@@ -125,14 +119,24 @@ class EmployerController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param Request $request
+	 * @param int $employer
+	 * @return bool
+	 */
+	public function destroy(Request $request, int $employer)
     {
-        //
+        if ($employer == 0) {
+            $id = $request->id;
+        } else $id = $employer;
+
+        $employer = Employer::findOrFail($id);
+        $name = $employer->name;
+        $employer->delete();
+
+        event(new ToastEvent('success', '', "Работодатель '{$name}' удалён"));
+        return true;
     }
 }

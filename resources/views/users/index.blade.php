@@ -59,7 +59,7 @@
 @section('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
-		function clickDelete(name) {
+		function clickDelete(id, name) {
 			if(window.confirm('Удалить пользователя "' + name + '" ?')) {
 				$.ajax({
 					method: 'DELETE',

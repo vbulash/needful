@@ -36,17 +36,15 @@
 			</ul>
 		</li>
 		<li class="nav-main-heading">Лица</li>
-		@hasrole('Работодатель')
 		<li class="nav-main-item">
 			<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}" href="{{ route('employers.index') }}">
-				<i class="nav-main-link-icon fa fa-globe"></i>
+				<i class="nav-main-link-icon fa fa-business-time"></i>
 				<span class="nav-main-link-name">Работодатели</span>
 			</a>
 		</li>
-		@endhasrole
 		<li class="nav-main-item">
-			<a class="nav-main-link" href="/">
-				<i class="nav-main-link-icon fa fa-globe"></i>
+			<a class="nav-main-link{{ request()->routeIs('students.*') ? ' active' : '' }}" href="{{ route('students.index') }}">
+				<i class="nav-main-link-icon fa fa-gear"></i>
 				<span class="nav-main-link-name">Практиканты</span>
 			</a>
 		</li>
@@ -57,7 +55,7 @@
 		@can('users.list')
 			<li class="nav-main-item">
 				<a class="nav-main-link" href="{{ route('users.index', ['sid' => session()->getId()]) }}">
-					<i class="nav-main-link-icon fa fa-globe"></i>
+					<i class="nav-main-link-icon fa fa-user-alt"></i>
 					<span class="nav-main-link-name">Пользователи</span>
 				</a>
 			</li>

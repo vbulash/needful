@@ -24,6 +24,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Работодатели
 	Route::resource('/employers', 'EmployerController');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
+	// Практиканты
+	Route::resource('/students', 'StudentController');
+	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
 });
 
 require __DIR__.'/auth.php';

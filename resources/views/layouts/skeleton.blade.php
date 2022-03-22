@@ -87,6 +87,10 @@
 	});
 
 	document.addEventListener("DOMContentLoaded", () => {
+		flatpickr('.flatpickr-input', {
+			"locale": "ru"
+		});
+
 		@if (isset($errors) && $errors->any())
 		@php
 			session()->put('error', implode('<br/>', $errors->all()));
@@ -116,27 +120,7 @@
 	}, false);
 
 	$(function () {
-		// Настройка bootstrap-datepicker
-		$.fn.datepicker.dates['ru'] = {
-			days: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-			daysShort: ["Вск", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб"],
-			daysMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-			months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-			monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
-			today: "Сегодня",
-			clear: "Очистить",
-			format: "dd.mm.yyyy",
-			weekStart: 1,
-			monthsTitle: 'Месяцы'
-		};
-		$('.form-group.date').datepicker({
-			format: "d.m.yyyy",
-			clearBtn: true,
-			language: "ru",
-			autoclose: true,
-			todayHighlight: true,
-			weekStart: 1,
-		});
+
 	});
 </script>
 @yield('js_after')

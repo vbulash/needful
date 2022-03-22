@@ -18,12 +18,11 @@ mix
         'resources/css/app.css',
         'resources/sass/main.css',
         'resources/sass/dashmix/themes/xsmooth.css',
-		'resources/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css',
+		'resources/plugins/flatpickr/flatpickr.min.css'
     ], 'public/css/app.css')
     .copy([
         'resources/plugins/bootstrap/css/bootstrap.min.css.map',
         'resources/sass/dashmix/themes/xsmooth.css.map',
-		'resources/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css.map',
 		'resources/plugins/datatables/datatables.css',
 		'resources/plugins/datatables/datatables.min.css'
     ], 'public/css')
@@ -32,11 +31,11 @@ mix
     .js([
         //'resources/plugins/jquery/jquery-3.6.0.min.js',
         //'resources/plugins/bootstrap/js/bootstrap.bundle.min.js',
-		'resources/plugins/bootstrap-notify/bootstrap-notify.min.js',
         'resources/js/app.js',
         'resources/js/dashmix/app.js',
         'resources/plugins/pusher/pusher.min.js',
-		'resources/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+		'resources/plugins/flatpickr/flatpickr.min.js',
+		'resources/plugins/flatpickr/l10n/ru.js'
     ], 'public/js/app.js')
     .copy([
         'resources/plugins/bootstrap/js/bootstrap.bundle.min.js.map',
