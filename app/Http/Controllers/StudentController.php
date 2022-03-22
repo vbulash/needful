@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
+use App\Models\User;
 use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -87,7 +88,10 @@ class StudentController extends Controller
 	 */
 	public function create()
 	{
-		return view('students.create');
+		if(Auth::user()->hasRole('Администратор')) {
+			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+			return view('students.create', ['users' => $users]);
+		} else return view('students.create');
 	}
 
 	/**

@@ -21,6 +21,18 @@
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
 				<p><span class="required">*</span> - поля, обязательные для заполнения</p>
+				@hasrole('Администратор')
+				<div class="row mb-4">
+					<label class="col-sm-5 col-form-label" for="link">Свяжите данную анкету практиканта с записью пользователя</label>
+					<div class="col-sm-7">
+						<select name="link" id="link">
+							<option selected disabled>Выберите пол</option>
+							<option value="Мужской">Мужской</option>
+							<option value="Женский">Женский</option>
+						</select>
+					</div>
+				</div>
+				@endhasrole
 			</div>
 			<div class="block-content pb-3">
 				<form role="form" class="mb-5" method="post"
@@ -28,13 +40,15 @@
 					  autocomplete="off" enctype="multipart/form-data">
 					@csrf
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="lastname">Фамилия <span class="required">*</span></label>
+						<label class="col-sm-3 col-form-label" for="lastname">Фамилия <span
+								class="required">*</span></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control" id="lastname" name="lastname"">
+							<input type="text" class="form-control" id="lastname" name="lastname">
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="firstname">Имя <span class="required">*</span></label>
+						<label class="col-sm-3 col-form-label" for="firstname">Имя <span
+								class="required">*</span></label>
 						<div class="col-sm-5">
 							<input type="text" class="form-control" id="firstname" name="firstname">
 						</div>
@@ -56,38 +70,46 @@
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="phone">Телефон <span class="required">*</span></label>
+						<label class="col-sm-3 col-form-label" for="phone">Телефон <span
+								class="required">*</span></label>
 						<div class="col-sm-5">
 							<input type="text" class="form-control" id="phone" name="phone">
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="email">Электронная почта <span class="required">*</span></label>
+						<label class="col-sm-3 col-form-label" for="email">Электронная почта <span
+								class="required">*</span></label>
 						<div class="col-sm-5">
 							<input type="text" class="form-control" id="email" name="email">
 						</div>
 					</div>
 					<div class="row mb-4 date">
-						<label class="col-sm-3 col-form-label" for="birthdate">Дата рождения <span class="required">*</span></label>
+						<label class="col-sm-3 col-form-label" for="birthdate">Дата рождения <span
+								class="required">*</span></label>
 						<div class="col-sm-5">
-{{--							<input type="text" class="form-control" id="birthdate" name="birthdate">--}}
-							<input type="text" class="form-control flatpickr-input active" id="birthdate" name="birthdate" data-date-format="d.m.Y">
+							{{--							<input type="text" class="form-control" id="birthdate" name="birthdate">--}}
+							<input type="text" class="form-control flatpickr-input active" id="birthdate"
+								   name="birthdate" data-date-format="d.m.Y">
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="parents">ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать</label>
+						<label class="col-sm-3 col-form-label" for="parents">ФИО родителей, опекунов (до 14 лет), после
+							14 лет можно не указывать</label>
 						<div class="col-sm-5">
 							<textarea class="form-control" name="parents" id="parents" cols="30" rows="5"></textarea>
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="parentscontact">Контактные телефоны родителей или опекунов</label>
+						<label class="col-sm-3 col-form-label" for="parentscontact">Контактные телефоны родителей или
+							опекунов</label>
 						<div class="col-sm-5">
-							<textarea class="form-control" name="parentscontact" id="parentscontact" cols="30" rows="5"></textarea>
+							<textarea class="form-control" name="parentscontact" id="parentscontact" cols="30"
+									  rows="5"></textarea>
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="passport">Данные паспорта (серия, номер, кем и когда выдан)</label>
+						<label class="col-sm-3 col-form-label" for="passport">Данные паспорта (серия, номер, кем и когда
+							выдан)</label>
 						<div class="col-sm-5">
 							<textarea class="form-control" name="passport" id="passport" cols="30" rows="5"></textarea>
 						</div>
@@ -99,9 +121,11 @@
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="institutions">Учебное заведение (на момент заполнения)</label>
+						<label class="col-sm-3 col-form-label" for="institutions">Учебное заведение (на момент
+							заполнения)</label>
 						<div class="col-sm-5">
-							<textarea class="form-control" name="institutions" id="institutions" cols="30" rows="5"></textarea>
+							<textarea class="form-control" name="institutions" id="institutions" cols="30"
+									  rows="5"></textarea>
 						</div>
 					</div>
 					<div class="row mb-4">
@@ -117,21 +141,24 @@
 						</div>
 					</div>
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="hobbyyears">Как давно занимается хобби (лет)?</label>
+						<label class="col-sm-3 col-form-label" for="hobbyyears">Как давно занимается хобби
+							(лет)?</label>
 						<div class="col-sm-5">
 							<input type="number" class="form-control" id="hobbyyears" name="hobbyyears">
 						</div>
 					</div>
-{{--					<div class="row mb-4 date">--}}
-{{--						<label class="col-sm-3 col-form-label" for="hobbyachievements">Есть ли достижения, полученные благодаря хобби?</label>--}}
-{{--						<div class="col-sm-5">--}}
-{{--							<textarea class="form-control" name="hobbyachievements" id="hobbyachievements" cols="30" rows="10"></textarea>--}}
-{{--						</div>--}}
-{{--					</div>--}}
+					{{--					<div class="row mb-4 date">--}}
+					{{--						<label class="col-sm-3 col-form-label" for="hobbyachievements">Есть ли достижения, полученные благодаря хобби?</label>--}}
+					{{--						<div class="col-sm-5">--}}
+					{{--							<textarea class="form-control" name="hobbyachievements" id="hobbyachievements" cols="30" rows="10"></textarea>--}}
+					{{--						</div>--}}
+					{{--					</div>--}}
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="contestachievements">Участие в конкурсах, олимпиадах. Достижения</label>
+						<label class="col-sm-3 col-form-label" for="contestachievements">Участие в конкурсах,
+							олимпиадах. Достижения</label>
 						<div class="col-sm-5">
-							<textarea class="form-control" name="contestachievements" id="contestachievements" cols="30" rows="5"></textarea>
+							<textarea class="form-control" name="contestachievements" id="contestachievements" cols="30"
+									  rows="5"></textarea>
 						</div>
 					</div>
 					<div class="row mb-4">
@@ -140,7 +167,7 @@
 							<textarea class="form-control" name="dream" id="dream" cols="30" rows="5"></textarea>
 						</div>
 					</div>
-{{--					TODO: реализовать browse_multiple (elFinder?) для хранения документов --}}
+					{{--					TODO: реализовать browse_multiple (elFinder?) для хранения документов --}}
 					{{-- $this->crud->field('documents')->label('Документы')->type('browse_multiple'); --}}
 
 					<div class="row mb-4">
