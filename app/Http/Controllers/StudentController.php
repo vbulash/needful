@@ -59,12 +59,14 @@ class StudentController extends Controller
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('students.destroy'))
+				if (Auth::user()->can('students.destroy')) {
+					$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$student->id}, '{$student->name}')\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$student->id}, '{$name}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
+				}
 				return $actions;
 			})
 			->make(true);
@@ -185,7 +187,7 @@ class StudentController extends Controller
 		} else $id = $student;
 
 		$student = Student::findOrFail($id);
-		$name = $student->name;
+		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
 		$student->delete();
 
 		event(new ToastEvent('success', '', "Практикант '{$name}' удалён"));

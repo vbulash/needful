@@ -39,6 +39,7 @@
 @yield('body')
 
 @include('layouts.partials.toast')
+@include('layouts.partials.modal-confirm')
 
 @yield('js_before')
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -83,7 +84,7 @@
 
 	var channel = pusher.subscribe('needful-channel-{!! $sid !!}');
 	channel.bind('toast-event', (data) => {
-		//
+		showToast(data.type, data.message, false);
 	});
 
 	document.addEventListener("DOMContentLoaded", () => {

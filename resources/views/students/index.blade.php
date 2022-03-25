@@ -22,7 +22,8 @@
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
 				@can('students.create')
-					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить практиканта</a>
+					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
+					   class="btn btn-primary mt-3 mb-3">Добавить практиканта</a>
 				@endcan
 			</div>
 			<div class="block-content pb-3">
@@ -60,20 +61,27 @@
 @section('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
+
+		document.getElementById('confirm-yes').addEventListener('click', (event) => {
+			$.ajax({
+				method: 'DELETE',
+				url: "{{ route('students.destroy', ['student' => '0']) }}",
+				data: {
+					id: event.target.dataset.id,
+				},
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: () => {
+					window.datatable.ajax.reload();
+				}
+			});
+		}, false);
+
 		function clickDelete(id, name) {
-			if(window.confirm('Удалить практиканта "' + name + '" ?')) {
-				$.ajax({
-					method: 'DELETE',
-					url: "{{ route('students.destroy', ['student' => '0']) }}",
-					data: {
-						id: id,
-					},
-					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}
+			document.getElementById('confirm-title').innerText = "Подтвердите удаление";
+			document.getElementById('confirm-body').innerHTML = "Удалить практиканта &laquo;" + name + "&raquo; ?";
+			document.getElementById('confirm-yes').dataset.id = id;
+			let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
+			confirmDialog.show();
 		}
 
 		$(function () {

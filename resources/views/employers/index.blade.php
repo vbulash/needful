@@ -61,20 +61,27 @@
 @section('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
+
+		document.getElementById('confirm-yes').addEventListener('click', (event) => {
+			$.ajax({
+				method: 'DELETE',
+				url: "{{ route('employers.destroy', ['employer' => '0']) }}",
+				data: {
+					id: event.target.dataset.id,
+				},
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: () => {
+					window.datatable.ajax.reload();
+				}
+			});
+		}, false);
+
 		function clickDelete(id, name) {
-			if(window.confirm('Удалить работодателя "' + name + '" ?')) {
-				$.ajax({
-					method: 'DELETE',
-					url: "{{ route('employers.destroy', ['user' => '0']) }}",
-					data: {
-						id: id,
-					},
-					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}
+			document.getElementById('confirm-title').innerText = "Подтвердите удаление";
+			document.getElementById('confirm-body').innerHTML = "Удалить работодателя &laquo;" + name + "&raquo; ?";
+			document.getElementById('confirm-yes').dataset.id = id;
+			let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
+			confirmDialog.show();
 		}
 
 		$(function () {
