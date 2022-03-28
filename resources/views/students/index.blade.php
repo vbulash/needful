@@ -38,6 +38,7 @@
 								<th>Дата рождения</th>
 								<th>Телефон</th>
 								<th>Электронная почта</th>
+								<th>Пользователь</th>
 								<th>Действия</th>
 							</tr>
 							</thead>
@@ -99,6 +100,7 @@
 					{data: 'birthdate', name: 'birthdate', responsivePriority: 2},
 					{data: 'phone', name: 'phone', responsivePriority: 2},
 					{data: 'email', name: 'email', responsivePriority: 3},
+					{data: 'link', name: 'link', responsivePriority: 3},
 					{
 						data: 'action',
 						name: 'action',

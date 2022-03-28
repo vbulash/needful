@@ -42,6 +42,9 @@ class StudentController extends Controller
 						return $birthdate->format('d.m.Y');
 				}
 			})
+			->editColumn('link', function ($student) {
+				return $student->user->name;
+			})
 			->addColumn('action', function ($student) {
 				$editRoute = route('students.edit', ['student' => $student->id, 'sid' => session()->getId()]);
 				$showRoute = route('students.show', ['student' => $student->id, 'sid' => session()->getId()]);
@@ -90,7 +93,7 @@ class StudentController extends Controller
 	 */
 	public function create()
 	{
-		if(Auth::user()->hasRole('Администратор')) {
+		if (Auth::user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
 			return view('students.create', ['users' => $users]);
 		} else return view('students.create');
@@ -109,9 +112,9 @@ class StudentController extends Controller
 				break;
 			case 'mysql':
 			default:
-			$birthdate = DateTime::createFromFormat('d.m.Y', $request->birthdate);
-			$request->birthdate = $birthdate->format('Y-m-d');
-			break;
+				$birthdate = DateTime::createFromFormat('d.m.Y', $request->birthdate);
+				$request->birthdate = $birthdate->format('Y-m-d');
+				break;
 		}
 
 		$student = Student::create($request->all());

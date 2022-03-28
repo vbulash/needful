@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreStudentRequest extends FormRequest
 {
@@ -23,23 +24,29 @@ class StoreStudentRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+		$local = [
             'lastname' => ['required'],
 			'firstname' => ['required'],
 			'birthdate' => ['date', 'required', 'before:today'],
 			'phone' => ['required'],
 			'email' => ['required', 'email']
         ];
+		if(Auth::user()->hasRole('Администратор')) $local['user_id'] = ['required'];
+
+		return $local;
     }
 
 	public function attributes()
 	{
-		return [
+		$local = [
 			'lastname' => 'Фамилия',
 			'firstname' => 'Имя',
 			'birthdate' => 'Дата рождения',
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта'
 		];
+		if(Auth::user()->hasRole('Администратор')) $local['user_id'] = 'Связанный пользователь';
+
+		return $local;
 	}
 }

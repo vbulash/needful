@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
 	protected $fillable = [
 		'lastname',
@@ -27,6 +27,12 @@ class Student extends Model
 		'hobbyyears',
 		'contestachievements',
 		'dream',
-		'documents'
+		'documents',
+		'user_id'
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 }
