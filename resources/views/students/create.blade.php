@@ -23,29 +23,7 @@
 				<div class="row pt-5 ps-5 pe-5">
 					<p><span class="required">*</span> - поля, обязательные для заполнения</p>
 				</div>
-				<div class="block-content ps-5 pe-5">
-					@hasrole('Администратор')
-					<div class="row mb-4">
-						<label class=" col-sm-3 col-form-label" for="link">Свяжите данную анкету практиканта с записью
-							пользователя <span
-								class="required">*</span></label>
-						<div class="col-sm-5 col-form-label">
-							{{--							<div class="input-group input-group-lg">--}}
-							<select name="link" id="link" class="form-control select2">
-								<option selected disabled>Выберите пользователя</option>
-								@foreach($users as $key => $value)
-									<option value="{{ $key }}"
-											@if(\Illuminate\Support\Facades\Auth::user()->name == $value) selected @endif >{{ $value }}</option>
-								@endforeach
-							</select>
-							{{--								<span class="input-group-text">--}}
-							{{--								<i class="fa fa-chevron-down"></i>--}}
-							{{--							</span>--}}
-							{{--							</div>--}}
-						</div>
-						@endhasrole
-					</div>
-				</div>
+				@include('students.assign')
 			</div>
 			<form role="form" class="p-5" method="post"
 				  id="student-create" name="student-create"
@@ -153,5 +131,4 @@
 			document.getElementById("user_id").value = link;
 		}, false);
 	</script>
-
 @endsection

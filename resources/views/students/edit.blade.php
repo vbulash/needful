@@ -21,20 +21,18 @@
 	<!-- Main content -->
 	<div class="content p-3">
 		<div class="block block-rounded">
-			@if(!$show)
-				<div class="block-header-default">
-					<div class="row p-5">
+
+			<div class="block-header-default">
+				@if(!$show)
+					<div class="row pt-5 ps-5 pe-5">
 						<p><span class="required">*</span> - поля, обязательные для заполнения</p>
 					</div>
-					<div class="">
-
-					</div>
-				</div>
-			@endif
-
-			{{-- TODO: привязка пользователя к практиканту по образцу того, что делается в create --}}
+				@endif
+				@include('students.assign')
+			</div>
 
 			<form role="form" class="p-5" method="post"
+				  id="student-edit" name="student-edit"
 				  action="{{ route('students.update', ['student' => $student->id, 'sid' => session()->getId()]) }}"
 				  autocomplete="off" enctype="multipart/form-data">
 				@method('PUT')
@@ -59,13 +57,21 @@
 						['name' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?', 'required' => false, 'type' => 'number', 'value' => $student->hobbyyears],
 						['name' => 'contestachievements', 'title' => 'Участие в конкурсах, олимпиадах. Достижения', 'required' => false, 'type' => 'textarea', 'value' => $student->contestachievements],
 						['name' => 'dream', 'title' => 'Чем хочется заниматься в жизни?', 'required' => false, 'type' => 'textarea', 'value' => $student->dream],
+						['name' => 'user_id', 'type' => 'hidden']
 					];
 				@endphp
 
 				@foreach($fields as $field)
 					<div class="row mb-4">
-						<label class="col-sm-3 col-form-label" for="{{ $field['name'] }}">{{ $field['title'] }}
-							@if(!$show && $field['required']) <span class="required">*</span> @endif</label>
+						@switch($field['type'])
+							@case('hidden')
+							@break
+
+							@default
+							<label class="col-sm-3 col-form-label" for="{{ $field['name'] }}">{{ $field['title'] }}
+								@if($field['required'] && !$show) <span class="required">*</span> @endif</label>
+							@break
+						@endswitch
 						<div class="col-sm-5">
 							@switch($field['type'])
 
@@ -78,7 +84,7 @@
 								@break
 
 								@case('select')
-								<div class="input-group input-group-lg">
+								<div>
 									<select class="form-control select2" name="{{ $field['name'] }}"
 											id="{{ $field['name'] }}" @if($show) disabled @endif>
 										@foreach($field['options'] as $option)
@@ -86,7 +92,6 @@
 													@if($field['value'] == $option) selected @endif>{{ $option }}</option>
 										@endforeach
 									</select>
-									<span class="input-group-text"><i class="fa fa-chevron-down"></i></span>
 								</div>
 								@break
 
@@ -101,6 +106,11 @@
 								<textarea class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}"
 										  cols="30"
 										  rows="5" @if($show) disabled @endif>{{ $field['value'] }}</textarea>
+								@break
+
+								@case('hidden')
+								<input type="{{ $field['type'] }}" id="{{ $field['name'] }}"
+									   name="{{ $field['name'] }}">
 								@break
 							@endswitch
 						</div>
@@ -125,4 +135,13 @@
 		</div>
 	</div>
 
+@endsection
+
+@section('js_after')
+	<script>
+		document.getElementById("student-edit").addEventListener("submit", () => {
+			let link = document.getElementById("link").value;
+			document.getElementById("user_id").value = link;
+		}, false);
+	</script>
 @endsection

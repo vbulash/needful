@@ -93,10 +93,11 @@ class StudentController extends Controller
 	 */
 	public function create()
 	{
+		$show = false;
 		if (Auth::user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
-			return view('students.create', ['users' => $users]);
-		} else return view('students.create');
+			return view('students.create', compact('users', 'show'));
+		} else return view('students.create', compact('show'));
 	}
 
 	/**
@@ -145,7 +146,10 @@ class StudentController extends Controller
 	public function edit(int $id, bool $show = false)
 	{
 		$student = Student::findOrFail($id);
-		return view('students.edit', compact('student', 'show'));
+		if (Auth::user()->hasRole('Администратор')) {
+			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+			return view('students.edit', compact('student', 'users', 'show'));
+		} else return view('students.edit', compact('student', 'show'));
 	}
 
 	/**
