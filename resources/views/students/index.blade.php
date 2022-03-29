@@ -25,6 +25,10 @@
 					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
 					   class="btn btn-primary mt-3 mb-3">Добавить практиканта</a>
 				@endcan
+
+				@if(isset($ids))
+					<p class="m-auto">Отображаются только записи практикантов, доступные текущему пользователю</p>
+				@endif
 			</div>
 			<div class="block-content pb-3">
 				@if ($count > 0)
@@ -92,7 +96,11 @@
 				},
 				processing: true,
 				serverSide: true,
+				@if(isset($ids))
+				ajax: '{!! route('students.index.data', ['ids' => $ids]) !!}',
+				@else
 				ajax: '{!! route('students.index.data') !!}',
+				@endif
 				responsive: true,
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},

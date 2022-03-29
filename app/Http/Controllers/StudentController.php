@@ -6,6 +6,7 @@ use App\Events\ToastEvent;
 use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
 use App\Models\User;
+use App\Support\PermissionUtils;
 use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use \Exception;
 
@@ -23,12 +25,17 @@ class StudentController extends Controller
 	/**
 	 * Process datatables ajax request.
 	 *
+	 * @param Request $request
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData()
+	public function getData(Request $request)
 	{
-		return Datatables::of(Student::all())
+		$query = Student::all();
+		if($request->has('ids'))
+			$query = $query->whereIn('id', $request->ids);
+
+		return Datatables::of($query)
 			->editColumn('fio', function ($student) {
 				return sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
 			})
@@ -78,26 +85,42 @@ class StudentController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Application|Factory|View
+	 * @return Application|Factory|View|RedirectResponse
 	 */
 	public function index()
 	{
 		$count = Student::all()->count();
-		return view('students.index', compact('count'));
+		if(Auth::user()->can('students.list')) {
+			return view('students.index', compact('count'));
+		} elseif (PermissionUtils::can('students.list.')) {
+			$ids = PermissionUtils::getPermissionIDs('students.list.');
+			return view('students.index', compact('count', 'ids'));
+		} elseif (Auth::user()->can('students.create')) {
+			return redirect()->route('students.create', ['sid' => session()->getId()]);
+		} else {
+			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
+			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+		}
 	}
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Application|Factory|View
+	 * @return Application|Factory|View|RedirectResponse
 	 */
 	public function create()
 	{
 		$show = false;
+		$baseRight = "students.create";
 		if (Auth::user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
 			return view('students.create', compact('users', 'show'));
-		} else return view('students.create', compact('show'));
+		} elseif (Auth::user()->can($baseRight))
+			return view('students.create', compact('show'));
+		else {
+			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
+			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+		}
 	}
 
 	/**
@@ -122,6 +145,16 @@ class StudentController extends Controller
 		$student->save();
 		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
 
+		$permissions = [
+			'students.list',
+			'students.edit',
+			'students.show'
+		];
+		foreach ($permissions as $permission) {
+			$perm = Permission::findOrCreate($permission . '.' . $student->getKey());
+			$student->user->givePermissionTo($perm);
+		}
+
 		session()->put('success', "Практикант \"{$name}\" создан");
 		return redirect()->route('students.index', ['sid' => session()->getId()]);
 	}
@@ -141,15 +174,22 @@ class StudentController extends Controller
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param int $id
-	 * @return Application|Factory|View
+	 * @return Application|Factory|View|RedirectResponse
 	 */
 	public function edit(int $id, bool $show = false)
 	{
 		$student = Student::findOrFail($id);
+		$baseRight = sprintf("students.%s", $show ? "show" : "edit");
+		$right = sprintf("%s.%d", $baseRight, $student->getKey());
 		if (Auth::user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
 			return view('students.edit', compact('student', 'users', 'show'));
-		} else return view('students.edit', compact('student', 'show'));
+		} elseif (Auth::user()->can($baseRight) || Auth::user()->can($right))
+			return view('students.edit', compact('student', 'show'));
+		else {
+			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи практиканта'));
+			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+		}
 	}
 
 	/**
@@ -175,6 +215,16 @@ class StudentController extends Controller
 		$student = Student::findOrFail($id);
 		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
 		$student->update($request->all());
+
+		$permissions = [
+			'students.list',
+			'students.edit',
+			'students.show'
+		];
+		foreach ($permissions as $permission) {
+			$perm = Permission::findOrCreate($permission . '.' . $student->getKey());
+			$student->user->givePermissionTo($perm);
+		}
 
 		session()->put('success', "Анкета практиканта \"{$name}\" обновлена");
 		return redirect()->route('students.index', ['sid' => session()->getId()]);
