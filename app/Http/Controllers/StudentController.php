@@ -198,7 +198,6 @@ class StudentController extends Controller
 	 * @param StoreStudentRequest $request
 	 * @param int $id
 	 * @return RedirectResponse
-	 * @return Response
 	 */
 	public function update(StoreStudentRequest $request, int $id)
 	{

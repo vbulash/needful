@@ -21,9 +21,14 @@
 		<!-- Table -->
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
-				@can('users.create')
-					<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
+				@can('students.create')
+					<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
+					   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
 				@endcan
+
+				@if(isset($ids))
+					<p class="mt-auto mb-auto">Отображаются только записи работодателей, доступные текущему пользователю</p>
+				@endif
 			</div>
 			<div class="block-content pb-3">
 				@if ($count > 0)
@@ -38,6 +43,7 @@
 								<th>Почтовый адрес</th>
 								<th>Телефон</th>
 								<th>Электронная почта</th>
+								<th>Пользователь</th>
 								<th>Действия</th>
 							</tr>
 							</thead>
@@ -65,7 +71,7 @@
 		document.getElementById('confirm-yes').addEventListener('click', (event) => {
 			$.ajax({
 				method: 'DELETE',
-				url: "{{ route('employers.destroy', ['employer' => '0']) }}",
+				url: "{{ route('employers.destroy', ['student' => '0']) }}",
 				data: {
 					id: event.target.dataset.id,
 				},
@@ -91,7 +97,11 @@
 				},
 				processing: true,
 				serverSide: true,
+				@if(isset($ids))
+				ajax: '{!! route('employers.index.data', ['ids' => $ids]) !!}',
+				@else
 				ajax: '{!! route('employers.index.data') !!}',
+				@endif
 				responsive: true,
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},
@@ -100,6 +110,7 @@
 					{data: 'post_address', name: 'post_name', responsivePriority: 3},
 					{data: 'phone', name: 'phone', responsivePriority: 3},
 					{data: 'email', name: 'email', responsivePriority: 2},
+					{data: 'link', name: 'link', responsivePriority: 3},
 					{
 						data: 'action',
 						name: 'action',
