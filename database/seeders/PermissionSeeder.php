@@ -55,7 +55,6 @@ class PermissionSeeder extends Seeder
 
 		$student = Role::where('name', 'Практикант')->first();
 		$student->givePermissionTo([
-			'employers.list',
 			'students.create',
 			// При создании записи практиканта будет добавлены права на конкретный ID
 			//'students.edit',

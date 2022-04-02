@@ -22,7 +22,8 @@ class Employer extends Model
 		'post_address',
 		'description',
 		'expectation',
-		'nda'
+		'nda',
+		'user_id'
 	];
 
 	public function user()

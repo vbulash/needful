@@ -21,10 +21,10 @@
 		<!-- Table -->
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
-				@can('students.create')
+				@hasrole('Администратор')
 					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
 					   class="btn btn-primary mt-3 mb-3">Добавить практиканта</a>
-				@endcan
+				@endhasrole
 
 				@if(isset($ids))
 					<p class="mt-auto mb-auto">Отображаются только записи практикантов, доступные текущему пользователю</p>

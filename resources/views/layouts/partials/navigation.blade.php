@@ -1,3 +1,21 @@
+@hasrole('Администратор')
+@php
+	$employers = true;
+	$students = true;
+@endphp
+@endhasrole
+@hasrole('Работодатель')
+@php
+	$employers = true;
+	$students = false;
+@endphp
+@endhasrole
+@hasrole('Практикант')
+@php
+	$employers = false;
+	$students = true;
+@endphp
+@endhasrole
 <div class="content-side content-side-full">
 	<ul class="nav-main">
 		<li class="nav-main-item">
@@ -8,46 +26,24 @@
 			</a>
 		</li>
 		<li class="nav-main-heading">Лица</li>
-
-		<li class="nav-main-heading">Various</li>
-		<li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
-			<a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-			   aria-expanded="true" href="#">
-				<i class="nav-main-link-icon fa fa-users"></i>
-				<span class="nav-main-link-name">Лица</span>
-			</a>
-			<ul class="nav-main-submenu">
-				<li class="nav-main-item">
-					<a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}"
-					   href="/pages/datatables">
-						<span class="nav-main-link-name">DataTables</span>
-					</a>
-				</li>
-				<li class="nav-main-item">
-					<a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
-						<span class="nav-main-link-name">Slick Slider</span>
-					</a>
-				</li>
-				<li class="nav-main-item">
-					<a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
-						<span class="nav-main-link-name">Blank</span>
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li class="nav-main-heading">Лица</li>
-		<li class="nav-main-item">
-			<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}" href="{{ route('employers.index') }}">
-				<i class="nav-main-link-icon fa fa-business-time"></i>
-				<span class="nav-main-link-name">Работодатели</span>
-			</a>
-		</li>
-		<li class="nav-main-item">
-			<a class="nav-main-link{{ request()->routeIs('students.*') ? ' active' : '' }}" href="{{ route('students.index') }}">
-				<i class="nav-main-link-icon fa fa-gear"></i>
-				<span class="nav-main-link-name">Практиканты</span>
-			</a>
-		</li>
+		@if($employers)
+			<li class="nav-main-item">
+				<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}"
+				   href="{{ route('employers.index') }}">
+					<i class="nav-main-link-icon fa fa-business-time"></i>
+					<span class="nav-main-link-name">Работодатели</span>
+				</a>
+			</li>
+		@endif
+		@if($students)
+			<li class="nav-main-item">
+				<a class="nav-main-link{{ request()->routeIs('students.*') ? ' active' : '' }}"
+				   href="{{ route('students.index') }}">
+					<i class="nav-main-link-icon fa fa-gear"></i>
+					<span class="nav-main-link-name">Практиканты</span>
+				</a>
+			</li>
+		@endif
 
 		@hasrole('Администратор')
 		<li class="nav-main-heading">Настройки</li>

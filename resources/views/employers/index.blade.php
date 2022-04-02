@@ -21,10 +21,10 @@
 		<!-- Table -->
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
-				@can('students.create')
+				@hasrole('Администратор')
 					<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
 					   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
-				@endcan
+				@endhasrole
 
 				@if(isset($ids))
 					<p class="mt-auto mb-auto">Отображаются только записи работодателей, доступные текущему пользователю</p>
@@ -71,7 +71,7 @@
 		document.getElementById('confirm-yes').addEventListener('click', (event) => {
 			$.ajax({
 				method: 'DELETE',
-				url: "{{ route('employers.destroy', ['student' => '0']) }}",
+				url: "{{ route('employers.destroy', ['employer' => '0']) }}",
 				data: {
 					id: event.target.dataset.id,
 				},

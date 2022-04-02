@@ -27,7 +27,7 @@ class StoreEmployerRequest extends FormRequest
 			'name' => ['required'],
 			'phone' => ['required'],
 			'email' => ['email', 'required'],
-			'inn' => ['number', 'required'],
+			'inn' => ['numeric', 'required'],
 			'post_address' => ['required']
         ];
     }
