@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Http\Requests\StoreInternshipRequest;
+use App\Http\Requests\UpdateInternshipRequest;
 use App\Models\Employer;
 use App\Models\Internship;
 use Illuminate\Contracts\Foundation\Application;
@@ -23,6 +24,7 @@ class InternshipController extends Controller
 	 * Process datatables ajax request.
 	 *
 	 * @param Request $request
+	 * @param int $employer
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
@@ -43,6 +45,7 @@ class InternshipController extends Controller
 			->addColumn('action', function ($internship) {
 				$editRoute = route('internships.edit', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$showRoute = route('internships.show', ['internship' => $internship->id, 'sid' => session()->getId()]);
+				$timetablesRoute = route('timetables.index', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				$actions .=
@@ -56,12 +59,12 @@ class InternshipController extends Controller
 					"<i class=\"fas fa-eye\"></i>\n" .
 					"</a>\n";
 				$actions .=
-					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-5\" " .
+					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$internship->id}, '{$internship->iname}')\">\n" .
 					"<i class=\"fas fa-trash-alt\"></i>\n" .
 					"</a>\n";
 				$actions .=
-					"<a href=\"#\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"График(и) стажировок\">\n" .
 					"<i class=\"fas fa-clock\"></i>\n" .
 					"</a>\n";
@@ -141,11 +144,11 @@ class InternshipController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param Request $request
+	 * @param UpdateInternshipRequest $request
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(Request $request, $id)
+	public function update(UpdateInternshipRequest $request, $id)
 	{
 		$internship = Internship::findOrFail($id);
 		$name = $internship->iname;
@@ -172,7 +175,7 @@ class InternshipController extends Controller
 		$name = $internship->iname;
 		$internship->delete();
 
-		event(new ToastEvent('success', '', "Стажирока '{$name}' удалена"));
+		event(new ToastEvent('success', '', "Стажировка '{$name}' удалена"));
 		return true;
 	}
 }

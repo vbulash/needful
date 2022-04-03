@@ -20,4 +20,8 @@ class Internship extends Model
 	public function employer() {
 		return $this->belongsTo(Employer::class);
 	}
+
+	public function timetables() {
+		return $this->hasMany(Timetable::class);
+	}
 }

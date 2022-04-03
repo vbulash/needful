@@ -30,6 +30,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Стажировки
 	Route::resource('/internships', 'InternshipController');
 	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
+	// Графики стажировки
+	Route::resource('/timetables', 'TimetableController');
+	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
 });
 
 require __DIR__.'/auth.php';
