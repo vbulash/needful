@@ -20,14 +20,14 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/apple-touch-icon-180x180.png') }}">
 
 	<!-- Fonts and Styles -->
-	@yield('css_before')
+	@stack('css_before')
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
 		rel="stylesheet">
 	<link rel="stylesheet" id="css-main" href="{{ asset('css/app.css') }}">
-@yield('css_after')
+	@stack('css_after')
 
 <!-- Scripts -->
 	<script>
@@ -35,13 +35,13 @@
 	</script>
 </head>
 
-<body>
+<body @yield('body-params')>
 @yield('body')
 
 @include('layouts.partials.toast')
 @include('layouts.partials.modal-confirm')
 
-@yield('js_before')
+@stack('js_before')
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
@@ -124,7 +124,7 @@
 
 	});
 </script>
-@yield('js_after')
+@stack('js_after')
 
 </body>
 

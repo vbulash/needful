@@ -40,6 +40,7 @@ class EmployerController extends Controller
 			->addColumn('action', function ($employer) {
 				$editRoute = route('employers.edit', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$showRoute = route('employers.show', ['employer' => $employer->id, 'sid' => session()->getId()]);
+				$internshipRoute = route('internships.index', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				if (Auth::user()->can('employers.edit'))
@@ -56,11 +57,18 @@ class EmployerController extends Controller
 						"</a>\n";
 				if (Auth::user()->can('employers.destroy')) {
 					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-5\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				}
+
+				if (Auth::user()->can('employers.edit'))
+					$actions .=
+						"<a href=\"{$internshipRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Стажировки\">\n" .
+						"<i class=\"fas fa-calendar-alt\"></i>\n" .
+						"</a>\n";
 				return $actions;
 			})
 			->make(true);

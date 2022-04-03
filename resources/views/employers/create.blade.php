@@ -5,7 +5,7 @@
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Новый работодатели</h1>
+				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Новый работодатель</h1>
 				<nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item">Лица</li>
@@ -118,11 +118,11 @@
 	</div>
 @endsection
 
-@section('js_after')
+@push('js_after')
 	<script>
 		document.getElementById("employer-create").addEventListener("submit", () => {
 			let link = document.getElementById("link").value;
 			document.getElementById("user_id").value = link;
 		}, false);
 	</script>
-@endsection
+@endpush

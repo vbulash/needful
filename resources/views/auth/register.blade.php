@@ -155,9 +155,9 @@
 	<!-- END Page Container -->
 @endsection
 
-@section('js_after')
+@push('js_after')
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
 		}, false);
 	</script>
-@endsection
+@endpush

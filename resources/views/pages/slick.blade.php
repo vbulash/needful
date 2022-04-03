@@ -1,11 +1,11 @@
 @extends('layouts.backend')
 
-@section('css_before')
+@push('css_before')
   <link rel="stylesheet" href="{{ asset('js/plugins/slick-carousel/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/slick-carousel/slick-theme.css') }}">
-@endsection
+@endpush
 
-@section('js_after')
+@push('js_after')
   <!-- jQuery (required for Slick Slider plugin) -->
   <script src="{{ asset('js/lib/jquery.min.js') }}"></script>
 
@@ -16,7 +16,7 @@
   <script>
     Dashmix.helpersOnLoad('jq-slick');
   </script>
-@endsection
+@endpush
 
 @section('content')
   <!-- Hero -->

@@ -25,8 +25,9 @@ mix
         'resources/plugins/bootstrap/css/bootstrap.min.css.map',
         'resources/sass/dashmix/themes/xsmooth.css.map',
 		'resources/plugins/datatables/datatables.css',
-		'resources/plugins/datatables/datatables.min.css'
+		'resources/plugins/datatables/datatables.min.css',
     ], 'public/css')
+	.copy('resources/plugins/ckeditor5/sample/styles.css', 'public/css/ckeditor.css')
 
     // JS
     .js([
@@ -44,6 +45,8 @@ mix
 		'resources/plugins/jquery/jquery-3.6.0.min.map',
 		'resources/plugins/datatables/datatables.js',
 		'resources/plugins/datatables/datatables.min.js',
+		'resources/plugins/ckeditor5/build/ckeditor.js',
+		'resources/plugins/ckeditor5/build/ckeditor.js.map',
     ], 'public/js')
 	.copyDirectory([
 		'resources/js/dashmix/modules'

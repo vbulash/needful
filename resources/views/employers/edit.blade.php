@@ -130,11 +130,11 @@
 
 @endsection
 
-@section('js_after')
+@push('js_after')
 	<script>
 		document.getElementById("employer-edit").addEventListener("submit", () => {
 			let link = document.getElementById("link").value;
 			document.getElementById("user_id").value = link;
 		}, false);
 	</script>
-@endsection
+@endpush

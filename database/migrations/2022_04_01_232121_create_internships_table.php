@@ -16,8 +16,8 @@ return new class extends Migration
 		// Стажировка
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
-			$table->string('name')->comment('Название стажировки');
-			$table->enum('type', ['Открытая стажировка', 'Закрытая стажировка'])->comment('Тип стажировки');
+			$table->string('iname')->comment('Название стажировки');
+			$table->enum('itype', ['Открытая стажировка', 'Закрытая стажировка'])->comment('Тип стажировки');
 			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
 			$table->text('program')->comment('Программа стажировки');
 			$table->unsignedBigInteger('employer_id')->comment('Связанный работодатель');

@@ -31782,4 +31782,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   padding-left: 0.75rem;
 }
 
+.row-editor {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 /*# sourceMappingURL=main.css.map */

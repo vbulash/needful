@@ -52,11 +52,11 @@
 @endsection
 
 @if ($count > 0)
-@section('css_after')
+@push('css_after')
 	<link rel="stylesheet" href="{{ asset('css/datatables.css') }}">
-@endsection
+@endpush
 
-@section('js_after')
+@push('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
 		function clickDelete(id, name) {
@@ -104,5 +104,5 @@
 			});
 		});
 	</script>
-@endsection
+@endpush
 @endif

@@ -27,6 +27,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Практиканты
 	Route::resource('/students', 'StudentController');
 	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
+	// Стажировки
+	Route::resource('/internships', 'InternshipController');
+	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
 });
 
 require __DIR__.'/auth.php';

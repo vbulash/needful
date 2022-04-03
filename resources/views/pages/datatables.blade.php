@@ -1,12 +1,12 @@
 @extends('layouts.backend')
 
-@section('css_before')
+@push('css_before')
   <!-- Page JS Plugins CSS -->
   <link rel="stylesheet" href="{{ asset('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
-@endsection
+@endpush
 
-@section('js_after')
+@push('js_after')
   <!-- jQuery (required for DataTables plugin) -->
   <script src="{{ asset('js/lib/jquery.min.js') }}"></script>
 
@@ -23,7 +23,7 @@
 
   <!-- Page JS Code -->
   <script src="{{ asset('js/pages/tables_datatables.js') }}"></script>
-@endsection
+@endpush
 
 @section('content')
   <!-- Hero -->
