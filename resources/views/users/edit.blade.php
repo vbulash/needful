@@ -38,13 +38,15 @@
 					<div class="row mb-4">
 						<label class="col-sm-3 col-form-label" for="email">Электронная почта</label>
 						<div class="col-sm-5">
-							<input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" autocomplete="off">
+							<input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}"
+								   autocomplete="off">
 						</div>
 					</div>
 					<div class="row mb-4">
 						<label class="col-sm-3 col-form-label" for="password">Новый пароль</label>
 						<div class="col-sm-5">
-							<input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
+							<input type="password" class="form-control" id="password" name="password"
+								   autocomplete="new-password">
 						</div>
 					</div>
 					<div class="row mb-4">
@@ -58,9 +60,25 @@
 					<div class="row mb-4">
 						<label class="col-sm-3 col-form-label" for="role">Роль пользователя</label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control" id="role" name="role"
-								   value="{!! $user->getRoleNames()->join(",<br/>") !!}"
+							@php
+								$current = $user->getRoleNames()->join(",<br/>");
+							@endphp
+							@hasrole('Администратор')
+							<select name="role" id="role" class="form-control select2">
+								@foreach($roles as $role)
+									<option value="{{ $role }}"
+											@if($role == $current) selected @endif>{!! $role !!}</option>
+								@endforeach
+							</select>
+							@endhasrole
+							@hasrole('Работодатель')
+							<input type="text" class="form-control" id="role" name="role" value="{!! $current !!}"
 								   disabled>
+							@endhasrole
+							@hasrole('Практикант')
+							<input type="text" class="form-control" id="role" name="role" value="{!! $current !!}"
+								   disabled>
+							@endhasrole
 						</div>
 					</div>
 					<div class="row mb-4">
@@ -68,7 +86,8 @@
 						<div class="col-sm-5">
 							<button type="submit" class="btn btn-primary">Сохранить</button>
 							<a class="btn btn-secondary pl-3"
-							   href="{{ route($profile ? 'dashboard' : 'users.index', ['sid' => session()->getId()]) }}" role="button">Закрыть</a>
+							   href="{{ route($profile ? 'dashboard' : 'users.index', ['sid' => session()->getId()]) }}"
+							   role="button">Закрыть</a>
 						</div>
 					</div>
 				</form>

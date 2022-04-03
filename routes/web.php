@@ -14,10 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'restore.session']], function () {
-	Route::get('/', function () {
-		return view('layouts.backend');
-	})->name('dashboard');
-
+	// Главная
+	Route::get('/', 'MainController@index')->name('dashboard');
 	// Пользователи
 	Route::resource('/users', 'UserController');
 	Route::get('/users.data', 'UserController@getData')->name('users.index.data');

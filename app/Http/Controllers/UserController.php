@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Employer;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -116,7 +117,8 @@ class UserController extends Controller
 	{
 		$user = User::findOrFail($id);
 		$profile = $request->has('profile');
-		return view('users.edit', compact('user', 'profile'));
+		$roles = Role::all()->pluck('name')->toArray();
+		return view('users.edit', compact('user', 'profile', 'roles'));
 	}
 
 	/**
@@ -138,6 +140,9 @@ class UserController extends Controller
 		$user = User::findOrFail($id);
 		$name = $user->name;
 		$user->update($draft);
+
+		$user->roles()->detach();
+		$user->assignRole($request->role);
 
 		session()->put('success', "Пользователь \"{$name}\" обновлён");
 		return redirect()->route($profile ? 'dashboard' : 'users.index', ['sid' => session()->getId()]);
