@@ -31,6 +31,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Графики стажировки
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
+
+	// Сервисы
+	Route::get('/employers.select', 'EmployerController@select')->name('employers.select');
 });
 
 require __DIR__.'/auth.php';
