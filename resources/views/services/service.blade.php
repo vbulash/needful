@@ -3,42 +3,62 @@
 @yield('steps')
 
 @section('content')
-	@php
-		$steps = [
-			['title' => 'Выбрать работодателя', 'subtitle' => '', 'done' => true, 'active' => false],
-			['title' => 'Выбор стажировки', 'subtitle' => '', 'done' => false, 'active' => true],
-			['title' => 'Выбор практиканта', 'subtitle' => '', 'done' => false, 'active' => false],
-			['title' => 'Подтверждение выбора', 'subtitle' => '', 'done' => false, 'active' => false],
-		];
-	@endphp
-	<div class="block-header block-header-default">
-		<div class="row items-push">
-			@foreach($steps as $step)
-				@if($loop->first) @php($left = true) @endif
-				<div class="col-md-6 col-xl-4 mb-4">
-					<a class="block block-rounded block-transparent block-link-pop {!! $left ? "bg-gd-sea" : "" !!} h-100 mb-0"
-					   href="javascript:void(0)">
-						<div
-							class="block-content block-content-full d-flex align-items-center justify-content-between">
-							<div>
-								<p class="fs-lg fw-semibold mb-0 text-white">{{ $step['title'] }}</p>
-								<p class="text-white-75 mb-0">{{ $step['subtitle'] }}</p>
-							</div>
+	<div class="bg-body-light">
+		<div class="content content-full">
+			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Услуга &laquo;@yield('service')&raquo;</h1>
+			</div>
+			<div class="row items-push">
+				@foreach($steps as $step)
+					@php
+						if($loop->first) $left = true;
+						if($step['active']) {
+							$left = false;
+							$class = 'block block-rounded block-transparent block-link-pop bg-gd-sea h-100 mb-0 no-link';
+							$text = 'fs-lg fw-semibold mb-0 text-white';
+							$icon = 'fas fa-2x fa-chevron-right text-white-50';
+						} elseif ($left) {
+							$class = 'block block-rounded block-transparent block-link-pop bg-gd-lake h-100 mb-0 no-link';
+							$text = 'fs-lg fw-semibold mb-0 text-white';
+							$icon = 'fas fa-2x fa-check text-white-50';
+						} else {
+							$class = 'block block-rounded block-link-shadow h-100 mb-0 no-link';
+							$text = 'fs-lg fw-semibold mb-0 text-muted';
+							$icon = 'fas fa-2x fa-chevron-right text-muted';
+						}
+						if($loop->last) $icon = 'fa fa-2x fa-square text-muted';
+					@endphp
 
-							<div class="ms-3 item">
-								@if($left)
-								<i class="fas fa-check text-white-50"></i>
-									@elseif()
+					<div class="col-md-6 col-xl-3 mb-4">
+						<a class="{!! $class !!}"
+						   href="javascript:void(0)">
+							<div
+								class="block-content block-content-full d-flex align-items-center justify-content-between">
+								<div>
+									<p class="{!! $text !!}">{{ $step['title'] }}</p>
+								</div>
+
+								<div class="ms-3 item">
+									<i class="{!! $icon !!}"></i>
+								</div>
 							</div>
-						</div>
-					</a>
-				</div>
-				@if($step['active'])
-					@php($left = false)
-				@endif
-			@endforeach
+						</a>
+					</div>
+				@endforeach
+			</div>
 		</div>
 	</div>
+	<div class="content">
+		<div class="row">
+			<div class="col-12">
+				<div class="block block-rounded">
+					@yield('interior')
+				</div>
+			</div>
 
+
+		</div>
+	</div>
 @endsection
+
 

@@ -31794,4 +31794,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   margin-bottom: 1.75rem;
 }
 
+.no-link {
+  cursor: default;
+}
+
 /*# sourceMappingURL=main.css.map */

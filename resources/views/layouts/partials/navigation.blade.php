@@ -1,22 +1,16 @@
-@hasrole('Администратор')
-@php
-	$employers = true;
-	$students = true;
-@endphp
-@endhasrole
-@hasrole('Работодатель')
-@php
-	$employers = true;
-	$students = false;
-@endphp
-@endhasrole
-@hasrole('Практикант')
-@php
-	$employers = false;
-	$students = true;
-@endphp
-@endhasrole
 <div class="content-side content-side-full">
+	@php
+		if (auth()->user()->hasRole('Администратор')) {
+			$employers = true;
+			$students = true;
+		} elseif (auth()->user()->hasRole('Работодатель')) {
+			$employers = true;
+			$students = false;
+		} elseif (auth()->user()->hasRole('Практикант')) {
+			$employers = false;
+			$students = true;
+		}
+	@endphp
 	<ul class="nav-main">
 		<li class="nav-main-item">
 			<a class="nav-main-link{{ request()->routeIs('dashboard') ? ' active' : '' }}"
