@@ -7,6 +7,7 @@
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => true],
 			['title' => 'Выбор стажировки', 'active' => false],
+			['title' => 'Выбор графика стажировки', 'active' => false],
 			['title' => 'Выбор практиканта', 'active' => false],
 			['title' => 'Подтверждение выбора', 'active' => false],
 		];
@@ -34,7 +35,6 @@
 						<th>Почтовый адрес</th>
 						<th>Телефон</th>
 						<th>Электронная почта</th>
-						<th>Пользователь</th>
 						<th>Действия</th>
 					</tr>
 					</thead>
@@ -74,7 +74,6 @@
 						{data: 'post_address', name: 'post_name', responsivePriority: 3},
 						{data: 'phone', name: 'phone', responsivePriority: 3},
 						{data: 'email', name: 'email', responsivePriority: 2},
-						{data: 'link', name: 'link', responsivePriority: 3},
 						{
 							data: 'action',
 							name: 'action',

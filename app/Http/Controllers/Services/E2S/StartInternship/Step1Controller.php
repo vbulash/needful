@@ -28,9 +28,6 @@ class Step1Controller extends Controller
 			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
-			->editColumn('link', function ($employer) {
-				return $employer->user->name;
-			})
 			->addColumn('action', function ($employer) {
 				$showRoute = route('e2s.start_internship.step1.show', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$selectRoute = route('e2s.start_internship.step1.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
@@ -57,6 +54,13 @@ class Step1Controller extends Controller
 		session()->put('context', ['employer' => $employer]);
 
 		// TODO редирект на шаг 2
+	}
+
+	// Просмотр анкеты работодателя
+	public function showEmployer(int $id)
+	{
+		$employer = Employer::findOrFail($id);
+		return view('services.e2s.start_internship.show-employer', compact('employer'));
 	}
 
 	//

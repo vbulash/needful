@@ -14,24 +14,30 @@
 						if($loop->first) $left = true;
 						if($step['active']) {
 							$left = false;
-							$class = 'block block-rounded block-transparent block-link-pop bg-gd-sea h-100 mb-0 no-link';
+							$class = 'block block-rounded block-transparent block-link-pop bg-gd-sea h-100 mb-0';
 							$text = 'fs-lg fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-chevron-right text-white-50';
 						} elseif ($left) {
-							$class = 'block block-rounded block-transparent block-link-pop bg-gd-lake h-100 mb-0 no-link';
+							$class = 'block block-rounded block-transparent block-link-pop bg-gd-lake h-100 mb-0';
 							$text = 'fs-lg fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-check text-white-50';
 						} else {
-							$class = 'block block-rounded block-link-shadow h-100 mb-0 no-link';
+							$class = 'block block-rounded block-link-shadow h-100 mb-0';
 							$text = 'fs-lg fw-semibold mb-0 text-muted';
 							$icon = 'fas fa-2x fa-chevron-right text-muted';
 						}
 						if($loop->last) $icon = 'fa fa-2x fa-square text-muted';
+                        if(isset($step['link'])) {
+                            $link = $step['link'];
+                        } else {
+                            $class .= ' no-link';
+                            $link = 'javascript:void(0)';
+                        }
 					@endphp
 
 					<div class="col-md-6 col-xl-3 mb-4">
 						<a class="{!! $class !!}"
-						   href="javascript:void(0)">
+						   href="{!! $link !!}">
 							<div
 								class="block-content block-content-full d-flex align-items-center justify-content-between">
 								<div>
