@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employer extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTitle;
 
 	protected $fillable = [
 		'name',
@@ -25,6 +25,11 @@ class Employer extends Model
 		'nda',
 		'user_id'
 	];
+
+	public function getTitle(): string
+	{
+		return $this->name;
+	}
 
 	public function user()
 	{

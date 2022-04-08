@@ -1,14 +1,14 @@
 @extends('services.service')
 
-@section('service')Начать стажировку практиканта@endsection
+@section('service')Работодатель. Начать стажировку практиканта@endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Выбор работодателя', 'active' => true, 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => false],
-			['title' => 'Выбор графика стажировки', 'active' => false],
-			['title' => 'Выбор практиканта', 'active' => false],
+			['title' => 'Выбор работодателя', 'active' => true, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
+			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship'],
+			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Выбор практиканта', 'active' => false, 'context' => 'student'],
 			['title' => 'Подтверждение выбора', 'active' => false],
 		];
 	@endphp

@@ -8,6 +8,10 @@
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
 				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Услуга &laquo;@yield('service')&raquo;</h1>
 			</div>
+
+			@php
+				$context = session('context');
+			@endphp
 			<div class="row items-push">
 				@foreach($steps as $step)
 					@php
@@ -33,6 +37,11 @@
                             $class .= ' no-link';
                             $link = 'javascript:void(0)';
                         }
+
+                        $subtitle = '';
+						if(isset($step['context']))
+                            if(isset($context[$step['context']]))
+                            	$subtitle = $context[$step['context']]->getTitle();
 					@endphp
 
 					<div class="col-md-6 col-xl-3 mb-4">
@@ -41,7 +50,8 @@
 							<div
 								class="block-content block-content-full d-flex align-items-center justify-content-between">
 								<div>
-									<p class="{!! $text !!}">{{ $step['title'] }}</p>
+									<p class="{!! $text !!}">{{ $step['title'] }}
+										@if($subtitle):<br/><br/><small>{!! $subtitle !!}</small> @endif</p>
 								</div>
 
 								<div class="ms-3 item">

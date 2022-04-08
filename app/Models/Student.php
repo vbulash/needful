@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-	use HasFactory;
+	use HasFactory, HasTitle;
 
 	protected $fillable = [
 		'lastname',
@@ -30,6 +30,11 @@ class Student extends Model
 		'documents',
 		'user_id'
 	];
+	public function getTitle(): string
+	{
+		return sprintf("%s %s%s",
+			$this->lastname, $this->firstname, $this->surname ? ' ' . $this->surname : '');
+	}
 
 	public function user()
 	{

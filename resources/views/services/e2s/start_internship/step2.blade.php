@@ -5,8 +5,8 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Выбор работодателя', 'active' => true, 'context' => 'employer'],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship'],
+			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
+			['title' => 'Выбор стажировки', 'active' => true, 'context' => 'internship'],
 			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable'],
 			['title' => 'Выбор практиканта', 'active' => false, 'context' => 'student'],
 			['title' => 'Подтверждение выбора', 'active' => false],
@@ -16,32 +16,29 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<h3 class="block-title">Выбор работодателя <br/>
-			@if(isset($ids))
-				<small>Отображаются только записи работодателей, доступные текущему пользователю</small>
-			@endif
+		<h3 class="block-title fw-semibold">
+			Выбор стажировки у работодателя &laquo;{{ $employer->name }}&raquo;<br/>
+			<small>Показываются только незакрытые стажировки</small>
 		</h3>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="employers_table"
+				<table class="table table-bordered table-hover text-nowrap" id="internships_table"
 					   style="width: 100%;">
 					<thead>
 					<tr>
 						<th style="width: 30px">#</th>
-						<th>ИНН</th>
-						<th>Наименование</th>
-						<th>Почтовый адрес</th>
-						<th>Телефон</th>
-						<th>Электронная почта</th>
+						<th>Название стажировки</th>
+						<th>Тип</th>
+						<th>Статус</th>
 						<th>Действия</th>
 					</tr>
 					</thead>
 				</table>
 			</div>
 		@else
-			<p>Работодателей пока нет...</p>
+			<p>Стажировок пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -55,25 +52,19 @@
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
 			$(function () {
-				window.datatable = $('#employers_table').DataTable({
+				window.datatable = $('#internships_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
 					},
 					processing: true,
 					serverSide: true,
-					@if(isset($ids))
-					ajax: '{!! route('e2s.start_internship.step1.data', ['ids' => $ids]) !!}',
-					@else
-					ajax: '{!! route('e2s.start_internship.step1.data') !!}',
-					@endif
+					ajax: '{!! route('e2s.start_internship.step2.data') !!}',
 					responsive: true,
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
-						{data: 'inn', name: 'inn', responsivePriority: 1},
-						{data: 'name', name: 'name', responsivePriority: 2},
-						{data: 'post_address', name: 'post_name', responsivePriority: 3},
-						{data: 'phone', name: 'phone', responsivePriority: 3},
-						{data: 'email', name: 'email', responsivePriority: 2},
+						{data: 'iname', name: 'iname', responsivePriority: 2},
+						{data: 'itype', name: 'itype', responsivePriority: 3},
+						{data: 'status', name: 'status', responsivePriority: 3},
 						{
 							data: 'action',
 							name: 'action',

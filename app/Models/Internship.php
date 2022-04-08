@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Internship extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTitle;
 
 	protected $fillable = [
 		'iname',
@@ -16,6 +16,11 @@ class Internship extends Model
 		'program',
 		'employer_id'
 	];
+
+	public function getTitle(): string
+	{
+		return $this->iname;
+	}
 
 	public function employer() {
 		return $this->belongsTo(Employer::class);

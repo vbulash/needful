@@ -24,7 +24,7 @@ class Step1Controller extends Controller
 	public function getData(Request $request)
 	{
 		$query = Employer::all();
-		if($request->has('ids'))
+		if ($request->has('ids'))
 			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
@@ -33,27 +33,29 @@ class Step1Controller extends Controller
 				$selectRoute = route('e2s.start_internship.step1.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-					$actions .=
-						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-						"<i class=\"fas fa-eye\"></i>\n" .
-						"</a>\n";
-					$actions .=
-						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-						"<i class=\"fas fa-check\"></i>\n" .
-						"</a>\n";
+				$actions .=
+					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
+					"<i class=\"fas fa-eye\"></i>\n" .
+					"</a>\n";
+				$actions .=
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
+					"</a>\n";
 				return $actions;
 			})
 			->make(true);
 	}
 
 	// Выбор
-	public function select(int $employer) {
+	public function select(int $id)
+	{
 		session()->forget('context');
+		$employer = Employer::findOrFail($id);
 		session()->put('context', ['employer' => $employer]);
 
-		// TODO редирект на шаг 2
+		return redirect()->route('e2s.start_internship.step2', ['sid' => session()->getId()]);
 	}
 
 	// Просмотр анкеты работодателя
@@ -64,16 +66,19 @@ class Step1Controller extends Controller
 	}
 
 	//
-	public function run() {
+	public function run()
+	{
+		session()->forget('context');
 		$view = 'services.e2s.start_internship.step1';
 		$count = Employer::all()->count();
 
-		if($count == 0) {
+		if ($count == 0) {
 			event(new ToastEvent('info', '', 'Нет записей работодателей. Необходимо их создать'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
-		if(Auth::user()->can('employers.list')) {
+		session()->forget('context');
+		if (Auth::user()->can('employers.list')) {
 			return view($view, compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('employers.list.');
