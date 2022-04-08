@@ -67,7 +67,7 @@ class Step2Controller extends Controller
 		session()->forget('context');
 		session()->put('context', $context);
 
-		// TODO редирект на шаг 3
+		return redirect()->route('e2s.start_internship.step3', ['sid' => session()->getId()]);
 	}
 
 	// Просмотр карточки стажировки
@@ -83,13 +83,16 @@ class Step2Controller extends Controller
 		$context = session('context');
 		$employer = $context['employer'];
 		unset($context['internship']);
+		unset($context['timetable']);
+		unset($context['student']);
 
 		$view = 'services.e2s.start_internship.step2';
-		$count = Internship::all()->count();
+		$count = $employer->internships()->count();
 
 		if ($count == 0) {
-			event(new ToastEvent('info', '', 'Нет записей стажировок. Необходимо их создать'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+			event(new ToastEvent('info', '',
+				'Нет записей стажировок. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другим работодателем'));
+			//return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
 		return view($view, compact('employer', 'count'));

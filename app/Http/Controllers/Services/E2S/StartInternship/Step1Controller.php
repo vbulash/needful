@@ -51,8 +51,8 @@ class Step1Controller extends Controller
 	// Выбор
 	public function select(int $id)
 	{
-		session()->forget('context');
 		$employer = Employer::findOrFail($id);
+		session()->forget('context');
 		session()->put('context', ['employer' => $employer]);
 
 		return redirect()->route('e2s.start_internship.step2', ['sid' => session()->getId()]);
@@ -77,7 +77,6 @@ class Step1Controller extends Controller
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
-		session()->forget('context');
 		if (Auth::user()->can('employers.list')) {
 			return view($view, compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {

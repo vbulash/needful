@@ -48,6 +48,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 	Route::get('/e2s.start_internship.step2.data', 'StartInternship\Step2Controller@getData')->name('e2s.start_internship.step2.data');
 	Route::get('/e2s.start_internship.step2.show/{internship}', 'StartInternship\Step2Controller@showInternship')->name('e2s.start_internship.step2.show');
 	Route::get('/e2s.start_internship.step2.select/{internship}', 'StartInternship\Step2Controller@select')->name('e2s.start_internship.step2.select');
+	// Графики стажировки
+	Route::get('/e2s.start_internship.step3', 'StartInternship\Step3Controller@run')->name('e2s.start_internship.step3');
+	Route::get('/e2s.start_internship.step3.data', 'StartInternship\Step3Controller@getData')->name('e2s.start_internship.step3.data');
+	Route::get('/e2s.start_internship.step3.show/{timetable}', 'StartInternship\Step3Controller@showTimetable')->name('e2s.start_internship.step3.show');
+	Route::get('/e2s.start_internship.step3.select/{timetable}', 'StartInternship\Step3Controller@select')->name('e2s.start_internship.step3.select');
 });
 
 require __DIR__.'/auth.php';
