@@ -33,10 +33,12 @@ class Timetable extends Model
 		switch (env('DB_CONNECTION')) {
 			case 'sqlite':
 				$end = $this->end;
+				break;
 			case 'mysql':
 			default:
 				$end = DateTime::createFromFormat('Y-m-d', $this->end);
 				$end = $end->format('d.m.Y');
+				break;
 		}
 		return sprintf("С %s по %s", $start, $end);
 	}

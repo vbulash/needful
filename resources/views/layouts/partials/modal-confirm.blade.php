@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" id="confirm-yes" data-bs-dismiss="modal">Да</button>
-				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Нет</button>
+				<button type="button" class="btn btn-primary" id="confirm-no" data-bs-dismiss="modal">Нет</button>
 			</div>
 		</div>
 	</div>

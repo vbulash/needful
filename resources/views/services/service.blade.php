@@ -30,7 +30,11 @@
 							$text = 'fs-lg fw-semibold mb-0 text-muted';
 							$icon = 'fas fa-2x fa-chevron-right text-muted';
 						}
-						if($loop->last) $icon = 'fa fa-2x fa-square text-muted';
+
+						if($loop->last) {
+                            $icon = 'fas fa-2x fa-stop text-white-50';
+						}
+
                         if(isset($step['link'])) {
                             $link = $step['link'];
                         } else {

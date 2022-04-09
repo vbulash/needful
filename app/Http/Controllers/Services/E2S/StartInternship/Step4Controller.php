@@ -6,15 +6,17 @@ use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Employer;
 use App\Models\Internship;
+use App\Models\Student;
 use App\Models\Timetable;
 use App\Support\PermissionUtils;
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Exception;
 
-class Step3Controller extends Controller
+class Step4Controller extends Controller
 {
 	/**
 	 * Process datatables ajax request.
@@ -25,33 +27,25 @@ class Step3Controller extends Controller
 	 */
 	public function getData(Request $request)
 	{
-		$context = session('context');
-		$query = $context['internship']->timetables()->get();
+		$query = Student::all();
 
 		return Datatables::of($query)
-			->editColumn('start', function ($timetable) {
+			->editColumn('fio', function ($student) {
+				return $student->getTitle();
+			})
+			->editColumn('birthdate', function ($student) {
 				switch (env('DB_CONNECTION')) {
 					case 'sqlite':
-						return $timetable->start;
+						return $student->birthdate;
 					case 'mysql':
 					default:
-						$start = DateTime::createFromFormat('Y-m-d', $timetable->start);
-						return $start->format('d.m.Y');
+						$birthdate = DateTime::createFromFormat('Y-m-d', $student->birthdate);
+						return $birthdate->format('d.m.Y');
 				}
 			})
-			->editColumn('end', function ($timetable) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $timetable->end;
-					case 'mysql':
-					default:
-						$end = DateTime::createFromFormat('Y-m-d', $timetable->end);
-						return $end->format('d.m.Y');
-				}
-			})
-			->addColumn('action', function ($timetable) {
-				$showRoute = route('e2s.start_internship.step3.show', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
-				$selectRoute = route('e2s.start_internship.step3.select', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
+			->addColumn('action', function ($student) {
+				$showRoute = route('e2s.start_internship.step4.show', ['student' => $student->id, 'sid' => session()->getId()]);
+				$selectRoute = route('e2s.start_internship.step4.select', ['student' => $student->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				$actions .=
@@ -73,39 +67,37 @@ class Step3Controller extends Controller
 	public function select(int $id)
 	{
 		$context = session('context');
-		$timetable = Timetable::findOrFail($id);
-		$context['timetable'] = $timetable;
+		$student = Student::findOrFail($id);
+		$context['student'] = $student;
 
 		session()->forget('context');
 		session()->put('context', $context);
 
-		return redirect()->route('e2s.start_internship.step4', ['sid' => session()->getId()]);
+		return redirect()->route('e2s.start_internship.step5', ['sid' => session()->getId()]);
 	}
 
 	// Просмотр карточки стажировки
-	public function showTimetable(int $id)
+	public function showStudent(int $id)
 	{
-		$timetable = Timetable::findOrFail($id);
-		return view('services.e2s.start_internship.show-timetable', compact('timetable'));
+		$student = Student::findOrFail($id);
+		return view('services.e2s.start_internship.show-student', compact('student'));
 	}
 
 	//
 	public function run()
 	{
 		$context = session('context');
-		$internship = $context['internship'];
-		unset($context['timetable']);
 		unset($context['student']);
 
-		$view = 'services.e2s.start_internship.step3';
-		$count = $internship->timetables()->count();
+		$view = 'services.e2s.start_internship.step4';
+		$count = Student::all()->count();
 
 		if ($count == 0) {
 			event(new ToastEvent('info', '',
-				'Нет записей графиков стажировок. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другой стажировкой'));
+				'Нет студентов. Необходимо их создать'));
 			//return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
-		return view($view, compact('internship', 'count'));
+		return view($view, compact('count'));
 	}
 }
