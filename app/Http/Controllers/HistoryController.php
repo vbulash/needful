@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\History;
+use App\Models\Timetable;
 use App\Models\User;
+use App\Notifications\e2s\StartInternshipNotification;
 use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -144,11 +146,17 @@ class HistoryController extends Controller
      *
      * @param Request $request
      * @param  int  $id
-     * @return Response
-     */
+     * @return RedirectResponse
+	 */
     public function update(Request $request, $id)
     {
-        //
+		$history = History::findOrFail($id);
+		$history->update($request->all());
+		$history->notify(new StartInternshipNotification($history));
+
+		session()->put('success', "Запись истории стажировки № " . $history->getKey() .
+			" обновлена<br/>Письмо практиканту отправлено");
+		return redirect()->route('history.index', ['sid' => session()->getId()]);
     }
 
 	/**
