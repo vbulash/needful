@@ -46,4 +46,8 @@ class Timetable extends Model
 	public function internship() {
 		return $this->belongsTo(Internship::class);
 	}
+
+	public function histories() {
+		return $this->hasMany(History::class);
+	}
 }

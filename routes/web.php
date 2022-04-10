@@ -31,9 +31,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Графики стажировки
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
-
-	// Сервисы
-	Route::get('/employers.select', 'EmployerController@select')->name('employers.select');
+	// Истории стажировок
+	Route::resource('/history', 'HistoryController');
+	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
 });
 
 // Маршруты "от работодателя" (E2S)

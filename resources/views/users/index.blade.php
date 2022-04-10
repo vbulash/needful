@@ -21,9 +21,10 @@
 		<!-- Table -->
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
-				@can('users.create')
-					<a href="{{ route('users.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить пользователя</a>
-				@endcan
+{{--				@can('users.create')--}}
+{{--					<a href="{{ route('users.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить пользователя</a>--}}
+{{--				@endcan--}}
+				<p>Пользователи регистрируются самостоятельно. Администратор может поменять тип пользователя</p>
 			</div>
 			<div class="block-content pb-3">
 				@if ($count > 0)

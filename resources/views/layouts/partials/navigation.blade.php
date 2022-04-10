@@ -14,16 +14,26 @@
 	<ul class="nav-main">
 		<li class="nav-main-item">
 			<a class="nav-main-link{{ request()->routeIs('dashboard') ? ' active' : '' }}"
-			   href="{{ route('dashboard') }}">
+			   href="{{ route('dashboard', ['sid' => session()->getId()]) }}">
 				<i class="nav-main-link-icon fa fa-home"></i>
 				<span class="nav-main-link-name">Главная</span>
 			</a>
 		</li>
+
+		<li class="nav-main-heading">Стажировки</li>
+		<li class="nav-main-item">
+			<a class="nav-main-link{{ request()->routeIs('history.*') ? ' active' : '' }}"
+			   href="{{ route('history.index', ['sid' => session()->getId()]) }}">
+				<i class="nav-main-link-icon fas fa-history"></i>
+				<span class="nav-main-link-name">История стажировок</span>
+			</a>
+		</li>
+
 		<li class="nav-main-heading">Лица</li>
 		@if($employers)
 			<li class="nav-main-item">
 				<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}"
-				   href="{{ route('employers.index') }}">
+				   href="{{ route('employers.index', ['sid' => session()->getId()]) }}">
 					<i class="nav-main-link-icon fa fa-business-time"></i>
 					<span class="nav-main-link-name">Работодатели</span>
 				</a>
@@ -32,7 +42,7 @@
 		@if($students)
 			<li class="nav-main-item">
 				<a class="nav-main-link{{ request()->routeIs('students.*') ? ' active' : '' }}"
-				   href="{{ route('students.index') }}">
+				   href="{{ route('students.index', ['sid' => session()->getId()]) }}">
 					<i class="nav-main-link-icon fa fa-gear"></i>
 					<span class="nav-main-link-name">Практиканты</span>
 				</a>
