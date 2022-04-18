@@ -87,9 +87,12 @@ class TimetableController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$internship = Internship::findOrFail($request->internship);
-		$count = $internship->timetables()->count();
+		$context = session('context');
+		$internship = $context['internship'];
+		unset($context['timetable']);
+		session()->put('context', $context);
 
+		$count = $internship->timetables()->count();
 		return view('timetables.index', compact('internship', 'count'));
 	}
 

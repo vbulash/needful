@@ -31,7 +31,7 @@ class EmployerController extends Controller
 	{
 		$query = Employer::all();
 		if($request->has('ids'))
-			$query = $query->whereIn('id', json_decode($request->ids));
+			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
 			->editColumn('link', function ($employer) {

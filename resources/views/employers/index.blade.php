@@ -91,7 +91,11 @@
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('employers.index.data') !!}',
+					@if(isset($ids))
+					ajax: '{!! route('employers.index.data', ['ids' => $ids, 'sid' => session()->getId()]) !!}',
+					@else
+					ajax: '{!! route('employers.index.data', ['sid' => session()->getId()]) !!}',
+					@endif
 					responsive: true,
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},

@@ -28,7 +28,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
 	// Стажировки
 	Route::resource('/internships', 'InternshipController');
-	Route::get('/internships.data', 'InternshipController@getData')->name('internships.index.data');
+	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
+	Route::get('/internships.select/{internship}', 'InternshipController@select')->name('internships.select');
 	// Графики стажировки
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
