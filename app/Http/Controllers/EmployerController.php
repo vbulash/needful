@@ -31,7 +31,7 @@ class EmployerController extends Controller
 	{
 		$query = Employer::all();
 		if($request->has('ids'))
-			$query = $query->whereIn('id', $request->ids);
+			$query = $query->whereIn('id', json_decode($request->ids));
 
 		return Datatables::of($query)
 			->editColumn('link', function ($employer) {
@@ -40,7 +40,7 @@ class EmployerController extends Controller
 			->addColumn('action', function ($employer) {
 				$editRoute = route('employers.edit', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$showRoute = route('employers.show', ['employer' => $employer->id, 'sid' => session()->getId()]);
-				$internshipRoute = route('internships.index', ['employer' => $employer->id, 'sid' => session()->getId()]);
+				$selectRoute = route('employers.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				if (Auth::user()->can('employers.edit'))
@@ -63,15 +63,23 @@ class EmployerController extends Controller
 						"</a>\n";
 				}
 
-				if (Auth::user()->can('employers.edit'))
-					$actions .=
-						"<a href=\"{$internshipRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Стажировки\">\n" .
-						"<i class=\"fas fa-calendar-alt\"></i>\n" .
-						"</a>\n";
+				$actions .=
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
+					"</a>\n";
 				return $actions;
 			})
 			->make(true);
+	}
+
+	public function select(int $id)
+	{
+		$employer = Employer::findOrFail($id);
+		session()->forget('context');
+		session()->put('context', ['employer' => $employer]);
+
+		return redirect()->route('internships.index', ['sid' => session()->getId()]);
 	}
 
     /**
@@ -81,6 +89,7 @@ class EmployerController extends Controller
 	 */
     public function index()
     {
+		session()->forget('context');
 		$count = Employer::all()->count();
 		if(Auth::user()->can('employers.list')) {
 			return view('employers.index', compact('count'));

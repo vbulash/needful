@@ -45,7 +45,7 @@ class InternshipController extends Controller
 			->addColumn('action', function ($internship) {
 				$editRoute = route('internships.edit', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$showRoute = route('internships.show', ['internship' => $internship->id, 'sid' => session()->getId()]);
-				$timetablesRoute = route('timetables.index', ['internship' => $internship->id, 'sid' => session()->getId()]);
+				$selectRoute = route('internships.select', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				$actions .=
@@ -63,14 +63,28 @@ class InternshipController extends Controller
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$internship->id}, '{$internship->iname}')\">\n" .
 					"<i class=\"fas fa-trash-alt\"></i>\n" .
 					"</a>\n";
+
 				$actions .=
-					"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"График(и) стажировок\">\n" .
-					"<i class=\"fas fa-clock\"></i>\n" .
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
 					"</a>\n";
 				return $actions;
 			})
 			->make(true);
+	}
+
+	public function select(int $id)
+	{
+		$internship = Internship::findOrFail($id);
+
+		$context = session('context');
+		unset($context['internship']);
+		unset($context['timetable']);
+		$context['internship'] = $internship;
+		session()->put('context', $context);
+
+		return redirect()->route('timetables.index', ['sid' => session()->getId()]);
 	}
 
 	/**
@@ -81,7 +95,8 @@ class InternshipController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$employer = Employer::findOrFail($request->employer);
+		$context = session('context');
+		$employer = $context['employer'];
 		$count = $employer->internships()->count();
 
 		return view('internships.index', compact('employer', 'count'));

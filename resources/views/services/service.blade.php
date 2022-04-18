@@ -6,7 +6,7 @@
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Услуга &laquo;@yield('service')&raquo;</h1>
+				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">@yield('service')</h1>
 			</div>
 
 			@php
@@ -18,11 +18,11 @@
 						if($loop->first) $left = true;
 						if($step['active']) {
 							$left = false;
-							$class = 'block block-rounded block-transparent block-link-pop bg-gd-sea h-100 mb-0';
+							$class = 'block block-rounded block-transparent block-link-pop bg-xsmooth h-100 mb-0';
 							$text = 'fs-lg fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-chevron-right text-white-50';
 						} elseif ($left) {
-							$class = 'block block-rounded block-transparent block-link-pop bg-gd-lake h-100 mb-0';
+							$class = 'block block-rounded block-transparent block-link-pop bg-xeco h-100 mb-0';
 							$text = 'fs-lg fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-check text-white-50';
 						} else {

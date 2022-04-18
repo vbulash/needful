@@ -117,9 +117,6 @@
 					</div>
 				@endforeach
 
-				{{--					TODO: реализовать browse_multiple (elFinder?) для хранения документов --}}
-				{{-- $this->crud->field('documents')->label('Документы')->type('browse_multiple'); --}}
-
 				<div class="row">
 					<div class="col-sm-3 col-form-label">&nbsp;</div>
 					<div class="col-sm-5">

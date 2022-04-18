@@ -5,11 +5,11 @@
 		$cards = [
     		[
     			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Начать стажировку практиканта', 'class' => 'bg-gd-sea', 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Отслеживать стажировку', 'class' => 'bg-gd-sea', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
-    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Завершить стажировку', 'class' => 'bg-gd-sea', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
+    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Отслеживать стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
+    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Завершить стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
     		],
     		[
-    			['role' => 'Практикант', 'title' => 'Практикант', 'subtitle' => 'Пройти стажировку', 'class' => 'bg-gd-dusk', 'icon' => 'fas fa-2x fa-user-graduate', 'link' => 'javascript:void(0)'],
+    			['role' => 'Практикант', 'title' => 'Практикант', 'subtitle' => 'Пройти стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fas fa-2x fa-user-graduate', 'link' => 'javascript:void(0)'],
     		]
 		];
 	@endphp

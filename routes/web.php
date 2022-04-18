@@ -22,12 +22,13 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Работодатели
 	Route::resource('/employers', 'EmployerController');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
+	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
 	// Практиканты
 	Route::resource('/students', 'StudentController');
 	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
 	// Стажировки
 	Route::resource('/internships', 'InternshipController');
-	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
+	Route::get('/internships.data', 'InternshipController@getData')->name('internships.index.data');
 	// Графики стажировки
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
