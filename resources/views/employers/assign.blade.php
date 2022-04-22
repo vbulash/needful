@@ -9,22 +9,22 @@
 		<select name="user_id" id="user_id" class="form-control select2" @if($show) disabled @endif>
 			@hasrole('Администратор')
 			<option selected disabled>Выберите пользователя</option>
-			@foreach($users as $key => $value)
-				<option value="{{ $key }}"
-						@if(isset($employer) && $employer->user_id = $value)
+			@foreach($users as $user)
+				<option value="{{ $user['id'] }}"
+						@if(isset($employer) && $employer->user_id = $user['id'])
 						selected
-						@elseif(\Illuminate\Support\Facades\Auth::user()->name == $value)
+						@elseif(auth()->user()->getKey() == $user['id'])
 						selected
 					@endif
 				>
-					{{ $value }}
+					{{ $user['name'] }}
 				</option>
 			@endforeach
 			@endhasrole
 
 			@hasrole('Работодатель')
-			<option value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">
-				{{ \Illuminate\Support\Facades\Auth::user()->name }}
+			<option value="{{ auth()->user()->getKey() }}">
+				{{ auth()->user()->name }}
 			</option>
 			@endhasrole
 		</select>

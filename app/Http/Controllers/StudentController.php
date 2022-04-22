@@ -113,7 +113,21 @@ class StudentController extends Controller
 		$show = false;
 		$baseRight = "students.create";
 		if (Auth::user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+			$users = User::orderBy('name')->get()
+				->map(function ($user) {
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole('Практикант'))
+					;
+					if (!$collect) return null;
+
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
+				->reject(fn ($value) => $value === null)
+				->toArray();
 			return view('students.create', compact('users', 'show'));
 		} elseif (Auth::user()->can($baseRight))
 			return view('students.create', compact('show'));

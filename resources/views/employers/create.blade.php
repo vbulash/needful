@@ -94,12 +94,3 @@
 		</div>
 	</form>
 @endsection
-
-@push('js_after')
-	<script>
-		document.getElementById("employer-create").addEventListener("submit", () => {
-			let link = document.getElementById("link").value;
-			document.getElementById("user_id").value = link;
-		}, false);
-	</script>
-@endpush

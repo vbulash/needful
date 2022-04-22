@@ -30,7 +30,7 @@ class EmployerController extends Controller
 	public function getData(Request $request)
 	{
 		$query = Employer::all();
-		if($request->has('ids'))
+		if ($request->has('ids'))
 			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
@@ -82,16 +82,16 @@ class EmployerController extends Controller
 		return redirect()->route('internships.index', ['sid' => session()->getId()]);
 	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View|RedirectResponse
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return Application|Factory|View|RedirectResponse
 	 */
-    public function index()
-    {
+	public function index()
+	{
 		session()->forget('context');
 		$count = Employer::all()->count();
-		if(Auth::user()->can('employers.list')) {
+		if (Auth::user()->can('employers.list')) {
 			return view('employers.index', compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('employers.list.');
@@ -102,19 +102,33 @@ class EmployerController extends Controller
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
-    }
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View|RedirectResponse
-     */
-    public function create()
-    {
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Application|Factory|View|RedirectResponse
+	 */
+	public function create()
+	{
 		$show = false;
 		$baseRight = "employers.create";
 		if (Auth::user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+			$users = User::orderBy('name')->get()
+				->map(function ($user) {
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole('Работодатель'))
+					;
+					if (!$collect) return null;
+
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
+				->reject(fn ($value) => $value === null)
+				->toArray();
 			return view('employers.create', compact('users', 'show'));
 		} elseif (Auth::user()->can($baseRight))
 			return view('employers.create', compact('show'));
@@ -122,16 +136,16 @@ class EmployerController extends Controller
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
-    }
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param StoreEmployerRequest $request
-     * @return RedirectResponse
-     */
-    public function store(StoreEmployerRequest $request)
-    {
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param StoreEmployerRequest $request
+	 * @return RedirectResponse
+	 */
+	public function store(StoreEmployerRequest $request)
+	{
 		$employer = Employer::create($request->all());
 		$employer->save();
 		$name = $employer->name;
@@ -148,27 +162,27 @@ class EmployerController extends Controller
 
 		session()->put('success', "Работодатель \"{$name}\" создан");
 		return redirect()->route('employers.index', ['sid' => session()->getId()]);
-    }
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Application|Factory|View
-     */
-    public function show($id)
-    {
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param int $id
+	 * @return Application|Factory|View
+	 */
+	public function show($id)
+	{
 		return $this->edit($id, true);
-    }
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Application|Factory|View|RedirectResponse
-     */
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param int $id
+	 * @return Application|Factory|View|RedirectResponse
+	 */
 	public function edit(int $id, bool $show = false)
-    {
+	{
 		$employer = Employer::findOrFail($id);
 		$baseRight = sprintf("employers.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $employer->getKey());
@@ -181,7 +195,7 @@ class EmployerController extends Controller
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи работодателя'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
-    }
+	}
 
 	/**
 	 * Update the specified resource in storage.
@@ -190,8 +204,8 @@ class EmployerController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-    public function update(StoreEmployerRequest $request, $id)
-    {
+	public function update(StoreEmployerRequest $request, $id)
+	{
 		$employer = Employer::findOrFail($id);
 		$name = $employer->name;
 		$employer->update($request->all());
@@ -208,7 +222,7 @@ class EmployerController extends Controller
 
 		session()->put('success', "Анкета работодателя \"{$name}\" обновлена");
 		return redirect()->route('employers.index', ['sid' => session()->getId()]);
-    }
+	}
 
 	/**
 	 * Remove the specified resource from storage.
@@ -218,16 +232,16 @@ class EmployerController extends Controller
 	 * @return bool
 	 */
 	public function destroy(Request $request, int $employer)
-    {
-        if ($employer == 0) {
-            $id = $request->id;
-        } else $id = $employer;
+	{
+		if ($employer == 0) {
+			$id = $request->id;
+		} else $id = $employer;
 
-        $employer = Employer::findOrFail($id);
-        $name = $employer->name;
-        $employer->delete();
+		$employer = Employer::findOrFail($id);
+		$name = $employer->name;
+		$employer->delete();
 
-        event(new ToastEvent('success', '', "Работодатель '{$name}' удалён"));
-        return true;
-    }
+		event(new ToastEvent('success', '', "Работодатель '{$name}' удалён"));
+		return true;
+	}
 }
