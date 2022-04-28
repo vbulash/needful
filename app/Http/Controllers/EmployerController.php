@@ -186,8 +186,23 @@ class EmployerController extends Controller
 		$employer = Employer::findOrFail($id);
 		$baseRight = sprintf("employers.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $employer->getKey());
+
 		if (Auth::user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+			$users = User::orderBy('name')->get()
+				->map(function ($user) {
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole('Работодатель'))
+					;
+					if (!$collect) return null;
+
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
+				->reject(fn ($value) => $value === null)
+				->toArray();
 			return view('employers.edit', compact('employer', 'users', 'show'));
 		} elseif (Auth::user()->can($baseRight) || Auth::user()->can($right))
 			return view('employers.edit', compact('employer', 'show'));

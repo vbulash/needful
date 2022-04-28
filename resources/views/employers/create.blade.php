@@ -18,7 +18,7 @@
 	<div class="block-header block-header-default">
 		<h3 class="block-title fw-semibold">
 			Новый работодатель<br/>
-			<span class="required">*</span> - поля, обязательные для заполнения</p>
+			<span class="required">*</span> - поля, обязательные для заполнения
 		</h3>
 	</div>
 	<form role="form" class="p-5" method="post"

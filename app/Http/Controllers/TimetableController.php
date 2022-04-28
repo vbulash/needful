@@ -34,26 +34,8 @@ class TimetableController extends Controller
 		$query = Internship::findOrFail($internship)->timetables()->get();
 
 		return Datatables::of($query)
-			->editColumn('start', function ($timetable) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $timetable->start;
-					case 'mysql':
-					default:
-						$start = DateTime::createFromFormat('Y-m-d', $timetable->start);
-						return $start->format('d.m.Y');
-				}
-			})
-			->editColumn('end', function ($timetable) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $timetable->end;
-					case 'mysql':
-					default:
-						$end = DateTime::createFromFormat('Y-m-d', $timetable->end);
-						return $end->format('d.m.Y');
-				}
-			})
+			->editColumn('start', fn($timetable) => $timetable->start->format('d.m.Y'))
+			->editColumn('end', fn($timetable) => $timetable->end->format('d.m.Y'))
 			->addColumn('action', function ($timetable) {
 				$editRoute = route('timetables.edit', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
 				$showRoute = route('timetables.show', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
@@ -104,7 +86,8 @@ class TimetableController extends Controller
 	 */
 	public function create(Request $request)
 	{
-		$internship = Internship::findOrFail($request->internship);
+		$context = session('context');
+		$internship = $context['internship'];
 		return view('timetables.create', compact('internship'));
 	}
 

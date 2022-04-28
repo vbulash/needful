@@ -25,7 +25,7 @@
 			анкеты работодателя &laquo;{{ $employer->name }}&raquo;
 			@if(!$show)
 				<br/>
-				<span class="required">*</span> - поля, обязательные для заполнения</p>
+				<span class="required">*</span> - поля, обязательные для заполнения
 			@endif
 		</h3>
 	</div>

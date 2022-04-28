@@ -35,7 +35,8 @@ class AuthenticatedSessionController extends Controller
             $request->session()->regenerate();
 			session()->put('success', "Вы успешно авторизовались");
 
-            return redirect()->intended();
+            //return redirect()->intended();
+			return redirect()->route('dashboard', ['sid' => session()->getId()]);
         } catch(Exception $exc) {
 			session()->put('error', $exc->getMessage());
             event(new ToastEvent('error', '', $exc->getMessage()));

@@ -22,8 +22,8 @@
 	<div class="block-content p-4">
 		@php
 			$fields = [
-				['name' => 'start', 'title' => 'Начало', 'type' => 'date', 'value' => $timetable->start],
-				['name' => 'end', 'title' => 'Завершение', 'type' => 'date', 'value' => $timetable->end],
+				['name' => 'start', 'title' => 'Начало', 'type' => 'date', 'value' => $timetable->start->format('d.m.Y')],
+				['name' => 'end', 'title' => 'Завершение', 'type' => 'date', 'value' => $timetable->end->format('d.m.Y')],
 				['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'type' => 'text', 'value' => $timetable->name],
 			];
 		@endphp
@@ -71,8 +71,7 @@
 							<div class="document-editor__toolbar"></div>
 						</div>
 						<div class="row row-editor">
-							<div class="editor" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
-								 d>{!! $field['value'] !!}</div>
+							<div class="editor" id="{{ $field['name'] }}" name="{{ $field['name'] }}">{!! $field['value'] !!}</div>
 						</div>
 					</div>
 					@break;

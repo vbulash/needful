@@ -29,26 +29,8 @@ class Step3Controller extends Controller
 		$query = $context['internship']->timetables()->get();
 
 		return Datatables::of($query)
-			->editColumn('start', function ($timetable) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $timetable->start;
-					case 'mysql':
-					default:
-						$start = DateTime::createFromFormat('Y-m-d', $timetable->start);
-						return $start->format('d.m.Y');
-				}
-			})
-			->editColumn('end', function ($timetable) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $timetable->end;
-					case 'mysql':
-					default:
-						$end = DateTime::createFromFormat('Y-m-d', $timetable->end);
-						return $end->format('d.m.Y');
-				}
-			})
+			->editColumn('start', fn($timetable) => $timetable->start->format('d.m.Y'))
+			->editColumn('end', fn($timetable) => $timetable->end->format('d.m.Y'))
 			->addColumn('action', function ($timetable) {
 				$showRoute = route('e2s.start_internship.step3.show', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
 				$selectRoute = route('e2s.start_internship.step3.select', ['timetable' => $timetable->id, 'sid' => session()->getId()]);

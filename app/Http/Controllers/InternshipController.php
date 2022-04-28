@@ -110,7 +110,8 @@ class InternshipController extends Controller
 	 */
 	public function create(Request $request)
 	{
-		$employer = Employer::findOrFail($request->employer);
+		$context = session('context');
+		$employer = $context['employer'];
 		return view('internships.create', compact('employer'));
 	}
 

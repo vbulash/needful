@@ -89,8 +89,7 @@
 							<div class="document-editor__toolbar"></div>
 						</div>
 						<div class="row row-editor">
-							<div class="editor" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
-								 d>{!! $field['value'] !!}</div>
+							<div class="editor" id="{{ $field['name'] }}" name="{{ $field['name'] }}">{!! $field['value'] !!}</div>
 						</div>
 					</div>
 					@break;
