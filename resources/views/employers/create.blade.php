@@ -18,10 +18,10 @@
 	<div class="block-header block-header-default">
 		<h3 class="block-title fw-semibold">
 			Новый работодатель<br/>
-			<span class="required">*</span> - поля, обязательные для заполнения
+			<small><span class="required">*</span> - поля, обязательные для заполнения</small>
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="employer-create" name="employer-create"
 		  action="{{ route('employers.store', ['sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">

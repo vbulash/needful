@@ -32,7 +32,7 @@
 			@endif
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="internship-edit" name="internship-edit"
 		  action="{{ route('internships.update', ['internship' => $internship->getKey(), 'sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">

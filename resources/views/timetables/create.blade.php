@@ -21,7 +21,7 @@
 			<span class="required">*</span> - поля, обязательные для заполнения
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="timetable-create" name="timetable-create"
 		  action="{{ route('timetables.store', ['sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">

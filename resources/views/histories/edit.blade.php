@@ -29,7 +29,7 @@
 				@endif
 			</div>
 
-			<form role="form" class="p-5" method="post"
+			<form role="form" method="post"
 				  id="student-edit" name="student-edit"
 				  action="{{ route('history.update', ['history' => $history->getKey(), 'sid' => session()->getId()]) }}"
 				  autocomplete="off" enctype="multipart/form-data">

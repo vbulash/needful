@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 class Student extends Model
 {
@@ -30,6 +32,27 @@ class Student extends Model
 		'documents',
 		'user_id'
 	];
+
+	// Геттеры Laravel
+	private static function convert2Date($value): DateTime
+	{
+		if($value instanceof DateTime)
+			return $value;
+		else {
+			$temp = new DateTime($value);
+			return $temp;
+		}
+	}
+
+	protected function birthdate(): Attribute
+	{
+		return Attribute::make(
+			get: fn($value) => self::convert2Date($value),
+			set: fn($value) => self::convert2Date($value),
+		);
+
+	}
+
 	public function getTitle(): string
 	{
 		return sprintf("%s %s%s",

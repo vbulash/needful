@@ -14,8 +14,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use \Exception;
@@ -36,44 +34,31 @@ class StudentController extends Controller
 			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
-			->editColumn('fio', function ($student) {
-				return sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
-			})
-			->editColumn('birthdate', function ($student) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $student->birthdate;
-					case 'mysql':
-					default:
-						$birthdate = DateTime::createFromFormat('Y-m-d', $student->birthdate);
-						return $birthdate->format('d.m.Y');
-				}
-			})
-			->editColumn('link', function ($student) {
-				return $student->user->name;
-			})
+			->editColumn('fio', fn ($student) => $student->getTitle())
+			->editColumn('birthdate', fn ($student) => $student->birthdate->format('d.m.Y'))
+			->editColumn('link', fn ($student) => $student->user->name)
 			->addColumn('action', function ($student) {
-				$editRoute = route('students.edit', ['student' => $student->id, 'sid' => session()->getId()]);
-				$showRoute = route('students.show', ['student' => $student->id, 'sid' => session()->getId()]);
+				$editRoute = route('students.edit', ['student' => $student->getKey(), 'sid' => session()->getId()]);
+				$showRoute = route('students.show', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (Auth::user()->can('students.edit'))
+				if (auth()->user()->can('students.edit'))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('students.show'))
+				if (auth()->user()->can('students.show'))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('students.destroy')) {
-					$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
+				if (auth()->user()->can('students.destroy')) {
+					$name = $student->getTitle();
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$student->id}, '{$name}')\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$student->getKey()}, '{$name}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				}
@@ -90,12 +75,12 @@ class StudentController extends Controller
 	public function index()
 	{
 		$count = Student::all()->count();
-		if(Auth::user()->can('students.list')) {
+		if(auth()->user()->can('students.list')) {
 			return view('students.index', compact('count'));
 		} elseif (PermissionUtils::can('students.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('students.list.');
 			return view('students.index', compact('count', 'ids'));
-		} elseif (Auth::user()->can('students.create')) {
+		} elseif (auth()->user()->can('students.create')) {
 			return redirect()->route('students.create', ['sid' => session()->getId()]);
 		} else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
@@ -112,7 +97,8 @@ class StudentController extends Controller
 	{
 		$show = false;
 		$baseRight = "students.create";
-		if (Auth::user()->hasRole('Администратор')) {
+
+		if (auth()->user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
@@ -129,7 +115,7 @@ class StudentController extends Controller
 				->reject(fn ($value) => $value === null)
 				->toArray();
 			return view('students.create', compact('users', 'show'));
-		} elseif (Auth::user()->can($baseRight))
+		} elseif (auth()->user()->can($baseRight))
 			return view('students.create', compact('show'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
@@ -145,19 +131,9 @@ class StudentController extends Controller
 	 */
 	public function store(StoreStudentRequest $request)
 	{
-		switch (env('DB_CONNECTION')) {
-			case 'sqlite':
-				break;
-			case 'mysql':
-			default:
-				$birthdate = DateTime::createFromFormat('d.m.Y', $request->birthdate);
-				$request->birthdate = $birthdate->format('Y-m-d');
-				break;
-		}
-
 		$student = Student::create($request->all());
 		$student->save();
-		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
+		$name = $student->getTitle();
 
 		$permissions = [
 			'students.list',
@@ -195,10 +171,24 @@ class StudentController extends Controller
 		$student = Student::findOrFail($id);
 		$baseRight = sprintf("students.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $student->getKey());
-		if (Auth::user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()->pluck('name', 'id')->toArray();
+		if (auth()->user()->hasRole('Администратор')) {
+			$users = User::orderBy('name')->get()
+				->map(function ($user) {
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole('Практикант'))
+					;
+					if (!$collect) return null;
+
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
+				->reject(fn ($value) => $value === null)
+				->toArray();
 			return view('students.edit', compact('student', 'users', 'show'));
-		} elseif (Auth::user()->can($baseRight) || Auth::user()->can($right))
+		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
 			return view('students.edit', compact('student', 'show'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи практиканта'));
@@ -226,7 +216,7 @@ class StudentController extends Controller
 		}
 
 		$student = Student::findOrFail($id);
-		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
+		$name = $student->getTitle();
 		$student->update($request->all());
 
 		$permissions = [
@@ -257,7 +247,7 @@ class StudentController extends Controller
 		} else $id = $student;
 
 		$student = Student::findOrFail($id);
-		$name = sprintf("%s %s%s", $student->lastname, $student->firstname, ($student->surname ? ' ' . $student->surname : ''));
+		$name = $student->getTitle();
 		$student->delete();
 
 		event(new ToastEvent('success', '', "Практикант '{$name}' удалён"));

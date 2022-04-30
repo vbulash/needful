@@ -25,11 +25,11 @@
 			анкеты работодателя &laquo;{{ $employer->name }}&raquo;
 			@if(!$show)
 				<br/>
-				<span class="required">*</span> - поля, обязательные для заполнения
+				<small><span class="required">*</span> - поля, обязательные для заполнения</small>
 			@endif
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="employer-edit" name="employer-edit"
 		  action="{{ route('employers.update', ['employer' => $employer->getKey(), 'sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">
@@ -56,45 +56,78 @@
 			@endphp
 
 			@foreach($fields as $field)
-				<div class="row mb-4">
-					<label class="col-sm-3 col-form-label" for="{{ $field['name'] }}">
-						{{ $field['title'] }} @if($field['required'] && !$show)
-							<span class="required">*</span>
-						@endif
-					</label>
-					<div class="col-sm-5">
+				@switch($field['type'])
+					@case('hidden')
+					@break
+
+					@default
+					<div class="row mb-4">
+						<label class="col-sm-3 col-form-label" for="{{ $field['name'] }}">{{ $field['title'] }}
+							@if($field['required'] && !$show)
+								<span class="required">*</span>
+							@endif</label>
+						@break
+						@endswitch
+
 						@switch($field['type'])
 
 							@case('text')
 							@case('email')
 							@case('number')
-							<input type="{{ $field['type'] }}" class="form-control" id="{{ $field['name'] }}"
-								   name="{{ $field['name'] }}"
-								   value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}"
-								   @if($show) disabled @endif
-							>
+							<div class="col-sm-5">
+								<input type="{{ $field['type'] }}" class="form-control" id="{{ $field['name'] }}"
+									   name="{{ $field['name'] }}"
+									   value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}"
+									   @if($show) disabled @endif
+								>
+							</div>
+							@break
+
+							@case('textarea')
+							<div class="col-sm-5">
+						<textarea class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}"
+								  cols="30"
+								  rows="5"
+								  @if($show) disabled @endif
+						>{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}</textarea>
+							</div>
 							@break
 
 							@case('date')
+							<div class="col-sm-5">
 							<input type="text" class="flatpickr-input form-control" id="{{ $field['name'] }}"
 								   name="{{ $field['name'] }}" data-date-format="d.m.Y"
 								   value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}"
 								   @if($show) disabled @endif
 							>
+							</div>
 							@break
 
-							@case('textarea')
-							<textarea class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}"
-									  cols="30"
-									  rows="5"
-									  @if($show) disabled @endif
-							>
-								{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}
-							</textarea>
+							@case('select')
+							<div class="col-sm-5">
+								<select class="form-control select2" name="{{ $field['name'] }}"
+										id="{{ $field['name'] }}" @if($show) disabled @endif>
+									@foreach($field['options'] as $key => $value)
+										<option value="{{ $key }}"
+												@if($field['value'] == $key) selected @endif>{{ $value }}</option>
+									@endforeach
+								</select>
+							</div>
+							@break
+
+							@case('hidden')
+							<input type="{{ $field['type'] }}" id="{{ $field['name'] }}"
+								   name="{{ $field['name'] }}" value="{{ $field['value'] }}">
 							@break
 						@endswitch
+						@switch($field['type'])
+							@case('hidden')
+							@break
+
+							@default
 					</div>
-				</div>
+					@break
+				@endswitch
 			@endforeach
 		</div>
 

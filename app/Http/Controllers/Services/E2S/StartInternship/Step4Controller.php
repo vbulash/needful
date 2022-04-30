@@ -30,19 +30,8 @@ class Step4Controller extends Controller
 		$query = Student::all();
 
 		return Datatables::of($query)
-			->editColumn('fio', function ($student) {
-				return $student->getTitle();
-			})
-			->editColumn('birthdate', function ($student) {
-				switch (env('DB_CONNECTION')) {
-					case 'sqlite':
-						return $student->birthdate;
-					case 'mysql':
-					default:
-						$birthdate = DateTime::createFromFormat('Y-m-d', $student->birthdate);
-						return $birthdate->format('d.m.Y');
-				}
-			})
+			->editColumn('fio', fn ($student) => $student->getTitle())
+			->editColumn('birthdate', fn ($student) => $student->birthdate->format('d.m.Y'))
 			->addColumn('action', function ($student) {
 				$showRoute = route('e2s.start_internship.step4.show', ['student' => $student->id, 'sid' => session()->getId()]);
 				$selectRoute = route('e2s.start_internship.step4.select', ['student' => $student->id, 'sid' => session()->getId()]);

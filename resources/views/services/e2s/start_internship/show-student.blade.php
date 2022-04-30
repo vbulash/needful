@@ -25,7 +25,7 @@
 				['name' => 'firstname', 'title' => 'Имя', 'type' => 'text', 'value' => $student->firstname],
 				['name' => 'surname', 'title' => 'Отчество', 'type' => 'text', 'value' => $student->surname],
 				['name' => 'sex', 'title' => 'Пол', 'type' => 'text', 'value' => $student->sex],
-				['name' => 'birthdate', 'title' => 'Дата рождения', 'type' => 'date', 'value' => $student->birthdate],
+				['name' => 'birthdate', 'title' => 'Дата рождения', 'type' => 'date', 'value' => $student->birthdate->format('d.m.Y')],
 				['name' => 'phone', 'title' => 'Телефон', 'type' => 'text', 'value' => $student->phone],
 				['name' => 'email', 'title' => 'Электронная почта', 'type' => 'email', 'value' => $student->email],
 				['name' => 'parents', 'title' => 'ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать', 'type' => 'textarea', 'value' => $student->parents],

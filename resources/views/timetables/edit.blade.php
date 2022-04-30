@@ -28,7 +28,7 @@
 			@endif
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="timetable-edit" name="timetable-edit"
 		  action="{{ route('timetables.update', ['timetable' => $timetable->getKey(), 'sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">

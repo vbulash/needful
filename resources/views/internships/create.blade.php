@@ -25,7 +25,7 @@
 			<span class="required">*</span> - поля, обязательные для заполнения
 		</h3>
 	</div>
-	<form role="form" class="p-5" method="post"
+	<form role="form" method="post"
 		  id="internship-create" name="internship-create"
 		  action="{{ route('internships.store', ['sid' => session()->getId()]) }}"
 		  autocomplete="off" enctype="multipart/form-data">
