@@ -136,7 +136,7 @@
 								</div>
 								<div class="row row-editor">
 									<div class="editor" id="{{ $field['name'] }}_editor"
-										 name="{{ $field['name'] }}_editor">{!! $field['value'] !!}</div>
+										 name="{{ $field['name'] }}_editor">{!! $field['value'] ?? '' !!}</div>
 								</div>
 							</div>
 							@break;

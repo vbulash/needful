@@ -127,6 +127,19 @@
 							<input type="{{ $field['type'] }}" id="{{ $field['name'] }}"
 								   name="{{ $field['name'] }}" value="{{ $field['value'] }}">
 							@break
+
+							@case('editor')
+							<input type="hidden" id="{{ $field['name'] }}" name="{{ $field['name'] }}">
+							<div class="col-sm-9">
+								<div class="row">
+									<div class="document-editor__toolbar"></div>
+								</div>
+								<div class="row row-editor">
+									<div class="editor" id="{{ $field['name'] }}_editor"
+										 name="{{ $field['name'] }}_editor">{!! $field['value'] ?? '' !!}</div>
+								</div>
+							</div>
+							@break;
 						@endswitch
 						@switch($field['type'])
 							@case('hidden')
