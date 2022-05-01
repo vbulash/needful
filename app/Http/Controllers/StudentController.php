@@ -42,19 +42,19 @@ class StudentController extends Controller
 				$showRoute = route('students.show', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (auth()->user()->can('students.edit'))
+				if (auth()->user()->can('students.edit') || auth()->user()->can('students.edit.' . $student->getKey()))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('students.show'))
+				if (auth()->user()->can('students.show') || auth()->user()->can('students.show.' . $student->getKey()))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('students.destroy')) {
+				if (auth()->user()->can('students.destroy') || auth()->user()->can('students.destroy.' . $student->getKey())) {
 					$name = $student->getTitle();
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
@@ -205,16 +205,6 @@ class StudentController extends Controller
 	 */
 	public function update(StoreStudentRequest $request, int $id)
 	{
-		switch (env('DB_CONNECTION')) {
-			case 'sqlite':
-				break;
-			case 'mysql':
-			default:
-				$birthdate = DateTime::createFromFormat('d.m.Y', $request->birthdate);
-				$request->birthdate = $birthdate->format('Y-m-d');
-				break;
-		}
-
 		$student = Student::findOrFail($id);
 		$name = $student->getTitle();
 		$student->update($request->all());

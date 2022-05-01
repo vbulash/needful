@@ -142,19 +142,6 @@ class TimetableController extends Controller
 	 */
 	public function update(UpdateTimetableRequest $request, $id)
 	{
-		switch (env('DB_CONNECTION')) {
-			case 'sqlite':
-				break;
-			case 'mysql':
-			default:
-				$start = DateTime::createFromFormat('d.m.Y', $request->start);
-				$request->start = $start->format('Y-m-d');
-
-				$end = DateTime::createFromFormat('d.m.Y', $request->end);
-				$request->end = $end->format('Y-m-d');
-				break;
-		}
-
 		$timetable = Timetable::findOrFail($id);
 		$name = $timetable->name;
 		$timetable->update($request->all());

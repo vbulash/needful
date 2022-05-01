@@ -38,19 +38,19 @@ class UserController extends Controller
 				$showRoute = route('users.show', ['user' => $user->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (Auth::user()->can('users.edit'))
+				if (auth()->user()->can('users.edit'))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('users.show'))
+				if (auth()->user()->can('users.show'))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('users.destroy') && Auth::user()->getKey() != $user->getKey())
+				if (auth()->user()->can('users.destroy') && auth()->user()->getKey() != $user->getKey())
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$user->id}, '{$user->name}')\">\n" .

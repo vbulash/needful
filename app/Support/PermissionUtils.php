@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Permission;
 class PermissionUtils
 {
 	public static function can(string $right): bool {
-		$permissions = Auth::user()->getAllPermissions()
+		$permissions = auth()->user()->getAllPermissions()
 			->filter(function ($value, $key) use ($right) {
 				return Str::contains($value, $right);
 			});
@@ -19,7 +19,7 @@ class PermissionUtils
 
 	public static function getPermissionIDs(string $right): ?array {
 		$IDs = [];
-		$permissions = Auth::user()->getAllPermissions()
+		$permissions = auth()->user()->getAllPermissions()
 			->each(function ($value, $key) use ($right, &$IDs) {
 				if (Str::contains($value->name, $right)) {
 					$parts = explode('.', $value->name);

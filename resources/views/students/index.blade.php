@@ -1,6 +1,6 @@
 @extends('services.service')
 
-@section('service')Работа с практикантами @endsection
+{{--@section('service')Работа с практикантами @endsection--}}
 
 @section('steps')
 	@php

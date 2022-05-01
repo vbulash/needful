@@ -21,8 +21,14 @@
 		<!-- Table -->
 		<div class="block block-rounded">
 			<div class="block-header block-header-default">
-				@if(isset($ids))
-					<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, доступные текущему
+				@if(isset($sids))
+					<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых
+						доступны текущему
+						пользователю</p>
+				@endif
+				@if(isset($eids))
+					<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых
+						доступны текущему
 						пользователю</p>
 				@endif
 			</div>
@@ -92,8 +98,10 @@
 					},
 					processing: true,
 					serverSide: true,
-					@if(isset($ids))
-					ajax: '{!! route('history.index.data', ['ids' => $ids]) !!}',
+					@if(isset($sids))
+					ajax: '{!! route('history.index.data', ['sids' => $sids]) !!}',
+					@elseif (isset($eids))
+					ajax: '{!! route('history.index.data', ['eids' => $eids]) !!}',
 					@else
 					ajax: '{!! route('history.index.data') !!}',
 					@endif

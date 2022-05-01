@@ -60,7 +60,7 @@ class RegisteredUserController extends Controller
 			$user->notify(new NewUser($user));
 			$name = $user->name;
 
-			Auth::login($user);
+			auth()->login($user);
 
 			session()->put('success',
 				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");

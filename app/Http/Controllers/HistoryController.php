@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\History;
+use App\Models\Student;
 use App\Models\Timetable;
 use App\Models\User;
 use App\Notifications\e2s\StartInternshipNotification;
@@ -32,9 +33,17 @@ class HistoryController extends Controller
 	public function getData(Request $request)
 	{
 		$query = History::all();
-		// TODO Отладить ограничения выборки через ids
-		//if($request->has('ids'))
-		// $query = $query->whereIn('id', $request->ids);
+		if ($request->has('eids')) {
+			$timetables = [];
+			foreach (Employer::all()->whereIn('id', $request->eids) as $employer)
+				foreach ($employer->internships->timetables->toArray() as $timetable)
+					$timetables[] = $timetable;
+			$query = $query->whereIn('timetable_id', $timetables);
+		}
+		if ($request->has('sids')) {
+			$students = Student::all()->whereIn('id', $request->sids)->pluck('id')->toArray();
+			$query = $query->whereIn('student_id', $students);
+		}
 
 		return Datatables::of($query)
 			->editColumn('employer', function ($history) {
@@ -54,7 +63,7 @@ class HistoryController extends Controller
 				$showRoute = route('history.show', ['history' => $history->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (!Auth::user()->hasRole('Практикант'))
+				if (!auth()->user()->hasRole('Практикант'))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
@@ -65,7 +74,7 @@ class HistoryController extends Controller
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 					"<i class=\"fas fa-eye\"></i>\n" .
 					"</a>\n";
-				if (Auth::user()->hasRole('Администратор')) {
+				if (auth()->user()->hasRole('Администратор')) {
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$history->id}, '')\">\n" .
@@ -84,17 +93,23 @@ class HistoryController extends Controller
 	 */
     public function index()
     {
-		$ids = null;
-		$count = History::all()->count();
-		if(Auth::user()->hasRole('Работодатель')) {
-			// TODO Отладить ветку работодателя
-		} elseif(Auth::user()->hasRole('Практикант')) {
-			// TODO Отладить ветку практиканта
+		$params = [
+			'count' => History::all()->count()
+		];
+		if(auth()->user()->hasRole('Работодатель')) {
+			if (auth()->user()->can('employers.list')) {
+				// Работодатель имеет право на полный список - ничего не делаем
+			} elseif (PermissionUtils::can('employers.list.')) {
+				$params['eids'] = PermissionUtils::getPermissionIDs('employers.list.');
+			}
+		} elseif(auth()->user()->hasRole('Практикант')) {
+			if (auth()->user()->can('students.list')) {
+				// Практикант имеет право на полный список - ничего не делаем
+			} elseif (PermissionUtils::can('students.list.')) {
+				$params['sids'] = PermissionUtils::getPermissionIDs('students.list.');
+			}
 		}
-		return view('histories.index', $ids ?
-			compact('count', 'ids') :
-			compact('count')
-		);
+		return view('histories.index', $params);
     }
 
     /**

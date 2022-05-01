@@ -31,7 +31,7 @@ class StoreStudentRequest extends FormRequest
 			'phone' => ['required'],
 			'email' => ['required', 'email']
         ];
-		if(Auth::user()->hasRole('Администратор')) $local['user_id'] = ['required'];
+		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = ['required'];
 
 		return $local;
     }
@@ -45,7 +45,7 @@ class StoreStudentRequest extends FormRequest
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта'
 		];
-		if(Auth::user()->hasRole('Администратор')) $local['user_id'] = 'Связанный пользователь';
+		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = 'Связанный пользователь';
 
 		return $local;
 	}

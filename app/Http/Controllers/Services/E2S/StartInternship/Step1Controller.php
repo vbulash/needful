@@ -77,7 +77,7 @@ class Step1Controller extends Controller
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
-		if (Auth::user()->can('employers.list')) {
+		if (auth()->user()->can('employers.list')) {
 			return view($view, compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('employers.list.');

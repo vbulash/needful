@@ -43,19 +43,19 @@ class EmployerController extends Controller
 				$selectRoute = route('employers.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (Auth::user()->can('employers.edit'))
+				if (auth()->user()->can('employers.edit'))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('employers.show'))
+				if (auth()->user()->can('employers.show'))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (Auth::user()->can('employers.destroy')) {
+				if (auth()->user()->can('employers.destroy')) {
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
@@ -91,12 +91,12 @@ class EmployerController extends Controller
 	{
 		session()->forget('context');
 		$count = Employer::all()->count();
-		if (Auth::user()->can('employers.list')) {
+		if (auth()->user()->can('employers.list')) {
 			return view('employers.index', compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('employers.list.');
 			return view('employers.index', compact('count', 'ids'));
-		} elseif (Auth::user()->can('employers.create')) {
+		} elseif (auth()->user()->can('employers.create')) {
 			return redirect()->route('employers.create', ['sid' => session()->getId()]);
 		} else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
@@ -113,7 +113,7 @@ class EmployerController extends Controller
 	{
 		$show = false;
 		$baseRight = "employers.create";
-		if (Auth::user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
@@ -130,7 +130,7 @@ class EmployerController extends Controller
 				->reject(fn ($value) => $value === null)
 				->toArray();
 			return view('employers.create', compact('users', 'show'));
-		} elseif (Auth::user()->can($baseRight))
+		} elseif (auth()->user()->can($baseRight))
 			return view('employers.create', compact('show'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
@@ -187,7 +187,7 @@ class EmployerController extends Controller
 		$baseRight = sprintf("employers.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $employer->getKey());
 
-		if (Auth::user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
@@ -204,7 +204,7 @@ class EmployerController extends Controller
 				->reject(fn ($value) => $value === null)
 				->toArray();
 			return view('employers.edit', compact('employer', 'users', 'show'));
-		} elseif (Auth::user()->can($baseRight) || Auth::user()->can($right))
+		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
 			return view('employers.edit', compact('employer', 'show'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи работодателя'));
