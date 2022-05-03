@@ -43,19 +43,19 @@ class EmployerController extends Controller
 				$selectRoute = route('employers.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (auth()->user()->can('employers.edit'))
+				if (auth()->user()->can('employers.edit') || auth()->user()->can('employers.edit.' . $employer->getKey()))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('employers.show'))
+				if (auth()->user()->can('employers.show') || auth()->user()->can('employers.show.' . $employer->getKey()))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('employers.destroy')) {
+				if (auth()->user()->can('employers.destroy') || auth()->user()->can('employers.destroy.' . $employer->getKey())) {
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
@@ -111,7 +111,7 @@ class EmployerController extends Controller
 	 */
 	public function create()
 	{
-		$show = false;
+		$mode = config('global.create');
 		$baseRight = "employers.create";
 		if (auth()->user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()
@@ -129,9 +129,9 @@ class EmployerController extends Controller
 				})
 				->reject(fn ($value) => $value === null)
 				->toArray();
-			return view('employers.create', compact('users', 'show'));
+			return view('employers.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
-			return view('employers.create', compact('show'));
+			return view('employers.create', compact('mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
@@ -183,6 +183,7 @@ class EmployerController extends Controller
 	 */
 	public function edit(int $id, bool $show = false)
 	{
+		$mode = $show ? config('global.show') : config('global.edit');
 		$employer = Employer::findOrFail($id);
 		$baseRight = sprintf("employers.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $employer->getKey());
@@ -203,9 +204,9 @@ class EmployerController extends Controller
 				})
 				->reject(fn ($value) => $value === null)
 				->toArray();
-			return view('employers.edit', compact('employer', 'users', 'show'));
+			return view('employers.edit', compact('employer', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
-			return view('employers.edit', compact('employer', 'show'));
+			return view('employers.edit', compact('employer', 'mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи работодателя'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);

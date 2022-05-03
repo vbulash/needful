@@ -7,7 +7,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
 use App\Models\User;
 use App\Support\PermissionUtils;
-use DateTime;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -16,7 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
-use \Exception;
 
 class StudentController extends Controller
 {
@@ -30,13 +29,13 @@ class StudentController extends Controller
 	public function getData(Request $request)
 	{
 		$query = Student::all();
-		if($request->has('ids'))
+		if ($request->has('ids'))
 			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
-			->editColumn('fio', fn ($student) => $student->getTitle())
-			->editColumn('birthdate', fn ($student) => $student->birthdate->format('d.m.Y'))
-			->editColumn('link', fn ($student) => $student->user->name)
+			->editColumn('fio', fn($student) => $student->getTitle())
+			->editColumn('birthdate', fn($student) => $student->birthdate->format('d.m.Y'))
+			->editColumn('link', fn($student) => $student->user->name)
 			->addColumn('action', function ($student) {
 				$editRoute = route('students.edit', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 				$showRoute = route('students.show', ['student' => $student->getKey(), 'sid' => session()->getId()]);
@@ -75,7 +74,7 @@ class StudentController extends Controller
 	public function index()
 	{
 		$count = Student::all()->count();
-		if(auth()->user()->can('students.list')) {
+		if (auth()->user()->can('students.list')) {
 			return view('students.index', compact('count'));
 		} elseif (PermissionUtils::can('students.list.')) {
 			$ids = PermissionUtils::getPermissionIDs('students.list.');
@@ -95,7 +94,7 @@ class StudentController extends Controller
 	 */
 	public function create()
 	{
-		$show = false;
+		$mode = config('global.create');
 		$baseRight = "students.create";
 
 		if (auth()->user()->hasRole('Администратор')) {
@@ -103,8 +102,7 @@ class StudentController extends Controller
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Практикант'))
-					;
+						($user->hasRole('Практикант'));
 					if (!$collect) return null;
 
 					return [
@@ -112,11 +110,11 @@ class StudentController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn ($value) => $value === null)
+				->reject(fn($value) => $value === null)
 				->toArray();
-			return view('students.create', compact('users', 'show'));
+			return view('students.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
-			return view('students.create', compact('show'));
+			return view('students.create', compact('mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
@@ -168,6 +166,8 @@ class StudentController extends Controller
 	 */
 	public function edit(int $id, bool $show = false)
 	{
+		$mode = $show ? config('global.show') : config('global.edit');
+
 		$student = Student::findOrFail($id);
 		$baseRight = sprintf("students.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $student->getKey());
@@ -176,8 +176,7 @@ class StudentController extends Controller
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Практикант'))
-					;
+						($user->hasRole('Практикант'));
 					if (!$collect) return null;
 
 					return [
@@ -185,11 +184,11 @@ class StudentController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn ($value) => $value === null)
+				->reject(fn($value) => $value === null)
 				->toArray();
-			return view('students.edit', compact('student', 'users', 'show'));
+			return view('students.edit', compact('student', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
-			return view('students.edit', compact('student', 'show'));
+			return view('students.edit', compact('student', 'mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи практиканта'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);

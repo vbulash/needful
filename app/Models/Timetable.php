@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Timetable extends Model
+class Timetable extends Model implements FormTemplate
 {
     use HasFactory;
 
@@ -57,5 +57,25 @@ class Timetable extends Model
 
 	public function histories() {
 		return $this->hasMany(History::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [
+			'id' => 'timetable-create',
+			'name' => 'timetable-create',
+			'action' => route('timetables.store', ['sid' => session()->getId()]),
+			'close' => route('timetables.index', ['sid' => session()->getId()]),
+		];
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'timetable-edit',
+			'name' => 'timetable-edit',
+			'action' => route('timetables.update', ['timetable' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('timetables.index', ['sid' => session()->getId()]),
+		];
 	}
 }

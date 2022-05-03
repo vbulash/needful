@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class History extends Model
+class History extends Model implements FormTemplate
 {
     use HasFactory, Notifiable;
 
@@ -22,5 +22,20 @@ class History extends Model
 
 	public function student() {
 		return $this->belongsTo(Student::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [];	// Создать запись истории стажировок через CRUD нельзя
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'history-edit',
+			'name' => 'history-edit',
+			'action' => route('history.update', ['history' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('history.index', ['sid' => session()->getId()]),
+		];
 	}
 }

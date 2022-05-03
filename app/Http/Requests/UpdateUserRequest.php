@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-			'fio' => ['required', 'string', 'max:255'],
+			'name' => ['required', 'string', 'max:255'],
 			'email' => ['required', 'string', 'email', 'max:255'],
 			'password' => ['confirmed'],
         ];
@@ -33,7 +33,7 @@ class UpdateUserRequest extends FormRequest
 	public function attributes()
 	{
 		return [
-			'fio' => 'Фамилия, имя и отчество',
+			'name' => 'Фамилия, имя и отчество',
 			'email' => 'Электронная почта',
 			'password' => 'Пароль',
 		];

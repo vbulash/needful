@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTime;
 
-class Student extends Model
+class Student extends Model implements FormTemplate
 {
 	use HasFactory, HasTitle;
 
@@ -66,5 +66,25 @@ class Student extends Model
 
 	public function histories() {
 		return $this->hasMany(History::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [
+			'id' => 'student-create',
+			'name' => 'student-create',
+			'action' => route('students.store', ['sid' => session()->getId()]),
+			'close' => route('students.index', ['sid' => session()->getId()]),
+		];
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'student-edit',
+			'name' => 'student-edit',
+			'action' => route('students.update', ['student' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('students.index', ['sid' => session()->getId()]),
+		];
 	}
 }

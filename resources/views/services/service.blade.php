@@ -2,13 +2,16 @@
 
 @yield('steps')
 
+@section('header')
+	<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+		<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">@yield('service')</h1>
+	</div>
+@endsection
+
 @section('content')
 	<div class="bg-body-light">
 		<div class="content content-full">
-			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">@yield('service')</h1>
-			</div>
-
+			@yield('header')
 			@php
 				$context = session('context');
 			@endphp
@@ -55,7 +58,9 @@
 								class="block-content block-content-full d-flex align-items-center justify-content-between">
 								<div>
 									<p class="{!! $text !!}">{{ $step['title'] }}
-										@if($subtitle):<br/><br/><small>{!! $subtitle !!}</small> @endif</p>
+										@if($subtitle)
+											:<br/><br/><small>{!! $subtitle !!}</small>
+										@endif</p>
 								</div>
 
 								<div class="ms-3 item">
@@ -75,10 +80,6 @@
 					@yield('interior')
 				</div>
 			</div>
-
-
 		</div>
 	</div>
 @endsection
-
-

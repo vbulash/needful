@@ -86,9 +86,10 @@ class TimetableController extends Controller
 	 */
 	public function create(Request $request)
 	{
+		$mode = config('global.create');
 		$context = session('context');
 		$internship = $context['internship'];
-		return view('timetables.create', compact('internship'));
+		return view('timetables.create', compact('internship', 'mode'));
 	}
 
 	/**
@@ -129,8 +130,9 @@ class TimetableController extends Controller
 	 */
 	public function edit(Request $request, int $id, bool $show = false)
 	{
+		$mode = $show ? config('global.show') : config('global.edit');
 		$timetable = Timetable::findOrFail($id);
-		return view('timetables.edit', compact('timetable', 'show'));
+		return view('timetables.edit', compact('timetable', 'mode'));
 	}
 
 	/**

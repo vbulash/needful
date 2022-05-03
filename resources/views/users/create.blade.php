@@ -15,8 +15,8 @@
 @endsection
 
 @section('form.params')
-	id="{{ form($user, $mode, 'id') }}" name="{{ form($user, $mode, 'name') }}"
-	action="{{ form($user, $mode, 'action') }}"
+	id="{{ form(\App\Models\User::class, $mode, 'id') }}" name="{{ form(App\Models\User::class, $mode, 'name') }}"
+	action="{{ form(App\Models\User::class, $mode, 'action') }}"
 @endsection
 
 @section('form.fields')
@@ -37,17 +37,17 @@
 			];
 		}
 		$fields = [
-			['name' => 'name', 'title' => 'Фамилия, имя и отчество', 'required' => true, 'type' => 'text', 'value' => $user->name],
-			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email', 'value' => $user->email],
-			['name' => 'password', 'title' => 'Новый пароль', 'required' => false, 'type' => 'password', 'generate' => true],
-			['name' => 'password_confirmation', 'title' => 'Повторный ввод пароля', 'required' => false, 'type' => 'password'],
-			['name' => 'role', 'title' => 'Роль пользователя', 'required' => true, 'type' => 'select', 'options' => $roles, 'value' => $user->getRoleNames()->join(" / ")],
+			['name' => 'name', 'title' => 'Фамилия, имя и отчество', 'required' => true, 'type' => 'text'],
+			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email'],
+			['name' => 'password', 'title' => 'Новый пароль', 'required' => true, 'type' => 'password', 'generate' => true],
+			['name' => 'password_confirmation', 'title' => 'Повторный ввод пароля', 'required' => true, 'type' => 'password'],
+			['name' => 'role', 'title' => 'Роль пользователя', 'required' => true, 'type' => 'select', 'options' => $roles],
 		];
 	@endphp
 @endsection
 
 @section('form.close')
-	{{ form($user, $mode, 'close') }}
+	{{ form(App\Models\User::class, $mode, 'close') }}
 @endsection
 
 @push('js_after')

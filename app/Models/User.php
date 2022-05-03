@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FormTemplate
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable;
 
@@ -51,5 +51,25 @@ class User extends Authenticatable
 	public function employer()
 	{
 		$this->hasOne(Employer::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [
+			'id' => 'user-create',
+			'name' => 'user-create',
+			'action' => route('users.store', ['sid' => session()->getId()]),
+			'close' => route('users.index', ['sid' => session()->getId()]),
+		];
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'user-edit',
+			'name' => 'user-edit',
+			'action' => route('users.update', ['user' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('users.index', ['sid' => session()->getId()]),
+		];
 	}
 }

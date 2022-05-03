@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employer extends Model
+class Employer extends Model implements FormTemplate
 {
     use HasFactory, HasTitle;
 
@@ -39,5 +39,25 @@ class Employer extends Model
 	public function internships()
 	{
 		return $this->hasMany(Internship::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [
+			'id' => 'employer-create',
+			'name' => 'employer-create',
+			'action' => route('employers.store', ['sid' => session()->getId()]),
+			'close' => route('employers.index', ['sid' => session()->getId()]),
+		];
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'employer-edit',
+			'name' => 'employer-edit',
+			'action' => route('employers.update', ['employer' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('employers.index', ['sid' => session()->getId()]),
+		];
 	}
 }

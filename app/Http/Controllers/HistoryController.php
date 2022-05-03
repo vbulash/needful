@@ -152,8 +152,9 @@ class HistoryController extends Controller
 	 */
 	public function edit(int $id, bool $show = false)
 	{
+		$mode = $show ? config('global.show') : config('global.edit');
 		$history = History::findOrFail($id);
-		return view('histories.edit', compact('history', 'show'));
+		return view('histories.edit', compact('history', 'mode'));
 	}
 
     /**

@@ -110,9 +110,10 @@ class InternshipController extends Controller
 	 */
 	public function create(Request $request)
 	{
+		$mode = config('global.create');
 		$context = session('context');
 		$employer = $context['employer'];
-		return view('internships.create', compact('employer'));
+		return view('internships.create', compact('employer', 'mode'));
 	}
 
 	/**
@@ -153,8 +154,9 @@ class InternshipController extends Controller
 	 */
 	public function edit(Request $request, int $id, bool $show = false)
 	{
+		$mode = $show ? config('global.show') : config('global.edit');
 		$internship = Internship::findOrFail($id);
-		return view('internships.edit', compact('internship', 'show'));
+		return view('internships.edit', compact('internship', 'mode'));
 	}
 
 	/**

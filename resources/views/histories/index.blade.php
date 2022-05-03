@@ -1,63 +1,53 @@
-@extends('layouts.backend')
+@extends('services.service')
 
-@section('content')
-	<!-- Content Header (Page header) -->
-	<div class="bg-body-light">
-		<div class="content content-full">
-			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Истории стажировки</h1>
-				<nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item">Стажировки</li>
-						<li class="breadcrumb-item active" aria-current="page">Истории стажировки</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
+@section('header') @endsection
+
+@section('steps')
+	@php
+		$steps = [
+			['title' => 'Истории стажировки', 'active' => true, 'context' => 'history'],
+		];
+	@endphp
+@endsection
+
+@section('interior')
+	<div class="block-header block-header-default">
+		<span>Новая история стажировки создается через услугу на <a href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span>
+		@if(isset($sids))
+			<br/>
+			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых
+				доступны текущему
+				пользователю</p>
+		@endif
+		@if(isset($eids))
+			<br/>
+			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых
+				доступны текущему
+				пользователю</p>
+		@endif
 	</div>
-
-	<!-- Main content -->
-	<div class="content p-3">
-		<!-- Table -->
-		<div class="block block-rounded">
-			<div class="block-header block-header-default">
-				@if(isset($sids))
-					<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых
-						доступны текущему
-						пользователю</p>
-				@endif
-				@if(isset($eids))
-					<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых
-						доступны текущему
-						пользователю</p>
-				@endif
+	<div class="block-content p-4">
+		@if ($count > 0)
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover text-nowrap" id="histories_table"
+					   style="width: 100%;">
+					<thead>
+					<tr>
+						<th style="width: 30px">#</th>
+						<th>Работодатель</th>
+						<th>Стажировка</th>
+						<th>График стажировки</th>
+						<th>Практикант</th>
+						<th>Статус</th>
+						<th>Действия</th>
+					</tr>
+					</thead>
+				</table>
 			</div>
-			<div class="block-content pb-3">
-				@if ($count > 0)
-					<div class="table-responsive">
-						<table class="table table-bordered table-hover text-nowrap" id="histories_table"
-							   style="width: 100%;">
-							<thead>
-							<tr>
-								<th style="width: 30px">#</th>
-								<th>Работодатель</th>
-								<th>Стажировка</th>
-								<th>График стажировки</th>
-								<th>Практикант</th>
-								<th>Статус</th>
-								<th>Действия</th>
-							</tr>
-							</thead>
-						</table>
-					</div>
-				@else
-					<p>Записей историй стажировок пока нет...</p>
-				@endif
-			</div>
-		</div>
-		<!-- END Table -->
+		@else
+			<p>Записей историй стажировок пока нет...</p>
+		@endif
 	</div>
-
 @endsection
 
 @if ($count > 0)

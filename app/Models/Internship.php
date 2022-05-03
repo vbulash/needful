@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Internship extends Model
+class Internship extends Model implements FormTemplate
 {
     use HasFactory, HasTitle;
 
@@ -28,5 +28,25 @@ class Internship extends Model
 
 	public function timetables() {
 		return $this->hasMany(Timetable::class);
+	}
+
+	public static function createTemplate(): array
+	{
+		return [
+			'id' => 'internship-create',
+			'name' => 'internship-create',
+			'action' => route('internships.store', ['sid' => session()->getId()]),
+			'close' => route('internships.index', ['sid' => session()->getId()]),
+		];
+	}
+
+	public function editTemplate(): array
+	{
+		return [
+			'id' => 'internship-edit',
+			'name' => 'internship-edit',
+			'action' => route('internships.update', ['internship' => $this->getKey(), 'sid' => session()->getId()]),
+			'close' => route('internships.index', ['sid' => session()->getId()]),
+		];
 	}
 }
