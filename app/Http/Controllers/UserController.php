@@ -111,7 +111,7 @@ class UserController extends Controller
 			$user->notify(new NewUser($user));
 			$name = $user->name;
 
-			auth()->login($user);
+			//auth()->login($user);
 
 			session()->put('success',
 				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");
