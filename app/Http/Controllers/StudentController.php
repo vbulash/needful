@@ -82,7 +82,7 @@ class StudentController extends Controller
 		} elseif (auth()->user()->can('students.create')) {
 			return redirect()->route('students.create', ['sid' => session()->getId()]);
 		} else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
+			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учащегося'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 	}
@@ -116,7 +116,7 @@ class StudentController extends Controller
 		} elseif (auth()->user()->can($baseRight))
 			return view('students.create', compact('mode'));
 		else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи практиканта'));
+			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учащегося'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 	}
@@ -143,7 +143,7 @@ class StudentController extends Controller
 			$student->user->givePermissionTo($perm);
 		}
 
-		session()->put('success', "Практикант \"{$name}\" создан");
+		session()->put('success', "Учащийся \"{$name}\" создан");
 		return redirect()->route('students.index', ['sid' => session()->getId()]);
 	}
 
@@ -190,7 +190,7 @@ class StudentController extends Controller
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
 			return view('students.edit', compact('student', 'mode'));
 		else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи практиканта'));
+			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи учащегося'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 	}
@@ -218,7 +218,7 @@ class StudentController extends Controller
 			$student->user->givePermissionTo($perm);
 		}
 
-		session()->put('success', "Анкета практиканта \"{$name}\" обновлена");
+		session()->put('success', "Анкета учащегося \"{$name}\" обновлена");
 		return redirect()->route('students.index', ['sid' => session()->getId()]);
 	}
 
@@ -239,7 +239,7 @@ class StudentController extends Controller
 		$name = $student->getTitle();
 		$student->delete();
 
-		event(new ToastEvent('success', '', "Практикант '{$name}' удалён"));
+		event(new ToastEvent('success', '', "Учащийся '{$name}' удалён"));
 		return true;
 	}
 }

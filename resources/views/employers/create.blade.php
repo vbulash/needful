@@ -34,7 +34,7 @@
 			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'text'],
 			['name' => 'inn', 'title' => 'Индивидуальный номер налогоплательщика (ИНН)', 'required' => true, 'type' => 'text'],
 			['name' => 'kpp', 'title' => 'КПП', 'required' => false, 'type' => 'text'],
-			['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => false, 'type' => 'text'],
+			['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => true, 'type' => 'text'],
 			['name' => 'official_address', 'title' => 'Юридический адрес', 'required' => false, 'type' => 'text'],
 			['name' => 'post_address', 'title' => 'Почтовый адрес', 'required' => true, 'type' => 'text'],
 			['name' => 'description', 'title' => 'Краткое описание организации (основная деятельность)', 'required' => false, 'type' => 'textarea'],

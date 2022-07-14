@@ -36,6 +36,19 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Истории стажировок
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
+
+	// Учебные заведения
+	Route::resource('/schools', 'SchoolController');
+	Route::get('/schools.data', 'SchoolController@getData')->name('schools.index.data');
+	Route::get('/schools.select/{school}', 'SchoolController@select')->name('schools.select');
+	// Специальности
+	Route::resource('/fspecialties', 'FSpecialtyController');
+	Route::get('/fspecialties.data', 'FspecialtyController@getData')->name('fspecialties.index.data');
+
+	// Словари
+	// Специальности
+	Route::resource('/specialties', 'SpecialtyController');
+	Route::get('/specialties.data', 'SpecialtyController@getData')->name('specialties.index.data');
 });
 
 // Маршруты "от работодателя" (E2S)

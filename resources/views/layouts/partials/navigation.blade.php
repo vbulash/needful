@@ -1,65 +1,59 @@
 <div class="content-side content-side-full">
 	@php
+		$employers = false;
+        $students = false;
+        $schools = false;
+        $admin = false;
 		if (auth()->user()->hasRole('Администратор')) {
 			$employers = true;
 			$students = true;
-		} elseif (auth()->user()->hasRole('Работодатель')) {
-			$employers = true;
-			$students = false;
-		} elseif (auth()->user()->hasRole('Практикант')) {
-			$employers = false;
-			$students = true;
+            $schools = true;
+            $admin = true;
+		} else {
+            $employers = auth()->user()->hasRole('Работодатель');
+			$students = auth()->user()->hasRole('Практикант');
+			$schools = auth()->user()->hasRole('Учебное заведение');
+		}
+
+        $menu = [
+            ['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard'],
+
+            ['title' => 'Стажировки', 'heading' => true],
+            ['title' => 'История стажировок', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*']],
+        ];
+
+        if ($employers || $students || $schools)
+            $menu[] = ['title' => 'Субъекты', 'heading' => true];
+
+        if ($employers)
+            $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index', 'pattern' => ['employers.*']];
+        if ($schools)
+            $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
+		if ($students)
+            $menu[] = ['title' => 'Учащиеся', 'icon' => 'fas fa-gear', 'route' => 'students.index', 'pattern' => ['students.*']];
+
+        $menu[] = ['title' => 'Справочники', 'heading' => true];
+        $menu[] = ['title' => 'Специальности', 'icon' => 'fas fa-book', 'route' => 'specialties.index', 'pattern' => ['specialties.*']];
+
+        if ($admin) {
+            $menu[] = ['title' => 'Настройки', 'heading' => true];
+            $menu[] = ['title' => 'Пользователи', 'icon' => 'fa fa-user-alt', 'route' => 'users.index', 'pattern' => 'users.*'];
+            $menu[] = ['title' => 'Laravel Telescope', 'icon' => 'fa fa-gears', 'route' => 'telescope', 'pattern' => 'telescope'];
 		}
 	@endphp
 	<ul class="nav-main">
-		<li class="nav-main-item">
-			<a class="nav-main-link{{ request()->routeIs('dashboard') ? ' active' : '' }}"
-			   href="{{ route('dashboard', ['sid' => session()->getId()]) }}">
-				<i class="nav-main-link-icon fa fa-home"></i>
-				<span class="nav-main-link-name">Главная</span>
-			</a>
-		</li>
-
-		<li class="nav-main-heading">Стажировки</li>
-		<li class="nav-main-item">
-			<a class="nav-main-link{{ request()->routeIs('history.*') ? ' active' : '' }}"
-			   href="{{ route('history.index', ['sid' => session()->getId()]) }}">
-				<i class="nav-main-link-icon fas fa-history"></i>
-				<span class="nav-main-link-name">История стажировок</span>
-			</a>
-		</li>
-
-		<li class="nav-main-heading">Лица</li>
-		@if($employers)
-			<li class="nav-main-item">
-				<a class="nav-main-link{{ request()->routeIs('employers.*') ? ' active' : '' }}"
-				   href="{{ route('employers.index', ['sid' => session()->getId()]) }}">
-					<i class="nav-main-link-icon fa fa-business-time"></i>
-					<span class="nav-main-link-name">Работодатели</span>
-				</a>
-			</li>
-		@endif
-		@if($students)
-			<li class="nav-main-item">
-				<a class="nav-main-link{{ request()->routeIs('students.*') ? ' active' : '' }}"
-				   href="{{ route('students.index', ['sid' => session()->getId()]) }}">
-					<i class="nav-main-link-icon fa fa-gear"></i>
-					<span class="nav-main-link-name">Практиканты</span>
-				</a>
-			</li>
-		@endif
-
-		@hasrole('Администратор')
-		<li class="nav-main-heading">Настройки</li>
-		{{--		<ul class="nav-main-submenu">--}}
-		@can('users.list')
-			<li class="nav-main-item">
-				<a class="nav-main-link" href="{{ route('users.index', ['sid' => session()->getId()]) }}">
-					<i class="nav-main-link-icon fa fa-user-alt"></i>
-					<span class="nav-main-link-name">Пользователи</span>
-				</a>
-			</li>
-		@endcan
-		@endhasrole
+		@foreach($menu as $item)
+			@if(isset($item['heading']))
+				<li class="nav-main-heading">{{ $item['title'] }}</li>
+			@else
+				<li class="nav-main-item">
+					<a class="nav-main-link{{ request()->routeIs($item['pattern']) ? ' active' : '' }}"
+					   href="{{ route($item['route'], ['sid' => session()->getId()]) }}">
+						<i class="nav-main-link-icon {{ $item['icon'] }}"></i>
+						<span class="nav-main-link-name">{{ $item['title'] }}</span>
+					</a>
+				</li>
+			@endif
+		@endforeach
 	</ul>
 </div>

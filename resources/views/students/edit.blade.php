@@ -5,7 +5,7 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Практиканты', 'active' => true, 'context' => 'student', 'link' => route('students.index', ['sid' => session()->getId()])],
+			['title' => 'Учащиеся', 'active' => true, 'context' => 'student', 'link' => route('students.index', ['sid' => session()->getId()])],
 		];
 	@endphp
 @endsection
@@ -16,7 +16,7 @@
 	@else
 		Редактирование
 	@endif
-	анкеты практиканта &laquo;{{ $student->getTitle() }}&raquo;
+	анкеты учащегося &laquo;{{ $student->getTitle() }}&raquo;
 @endsection
 
 @section('form.params')

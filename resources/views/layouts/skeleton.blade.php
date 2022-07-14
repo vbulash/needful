@@ -27,6 +27,7 @@
 		href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
 		rel="stylesheet">
 	<link rel="stylesheet" id="css-main" href="{{ mix('css/app.css', '') }}">
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	@stack('css_after')
 
 <!-- Scripts -->
@@ -44,6 +45,8 @@
 @stack('js_before')
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ru.js"></script>
 <script>
 
 </script>
@@ -121,7 +124,9 @@
 	}, false);
 
 	$(function () {
-
+		$('.select2').select2({
+			language: 'ru'
+		});
 	});
 </script>
 @stack('js_after')

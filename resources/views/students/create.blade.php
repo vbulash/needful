@@ -1,17 +1,17 @@
-@extends('layouts.detail')
+@extends('layouts.chain')
 
 @section('header') @endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Практиканты', 'active' => true, 'context' => 'student', 'link' => route('students.index', ['sid' => session()->getId()])],
+			['title' => 'Учащиеся', 'active' => true, 'context' => 'student', 'link' => route('students.index', ['sid' => session()->getId()])],
 		];
 	@endphp
 @endsection
 
 @section('interior.header')
-	Новый практикант
+	Новый учащийся
 @endsection
 
 @section('form.params')

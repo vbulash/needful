@@ -9,3 +9,16 @@ if (! function_exists('form')) {
 		};
 	}
 }
+
+if (! function_exists('classByContext')) {
+	function classByContext(string $context) {
+		return match ($context) {
+			'employer' => \App\Models\Employer::class,
+			'role' => \App\Models\Role::class,
+			'user' => \App\Models\User::class,
+			'school' => \App\Models\School::class,
+			'specialty' => \App\Models\Specialty::class,
+			'fspecialty' => \App\Models\Fspecialty::class,
+		};
+	}
+}

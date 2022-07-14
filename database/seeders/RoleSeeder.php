@@ -22,5 +22,6 @@ class RoleSeeder extends Seeder
 		Role::create(['name' => 'Администратор', 'selfassign' => false]);
 		Role::create(['name' => 'Работодатель', 'selfassign' => true]);
 		Role::create(['name' => 'Практикант', 'selfassign' => true]);
+		Role::create(['name' => 'Учебное заведение', 'selfassign' => true]);
 	}
 }

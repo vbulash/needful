@@ -15,5 +15,6 @@
     "/js/modules/helpers.js": "/js/modules/helpers.js",
     "/js/modules/template.js": "/js/modules/template.js",
     "/media/photos/moscow_city_12.jpeg": "/media/photos/moscow_city_12.jpeg",
+    "/uploads/migrations/positions.json": "/uploads/migrations/positions.json",
     "/lang/ru/datatables.json": "/lang/ru/datatables.json"
 }

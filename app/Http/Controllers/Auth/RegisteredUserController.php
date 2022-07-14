@@ -7,39 +7,37 @@ use App\Http\Requests\Auth\NewUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\NewUser;
+use Exception;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use \Exception;
 use Spatie\Permission\Models\Permission;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
+	/**
+	 * Display the registration view.
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function create()
+	{
 		$roles = Role::where('selfassign', true)
 			->orderBy('name')
 			->pluck('name')
 			->toArray();
-        return view('auth.register', ['roles' => $roles]);
-    }
+		return view('auth.register', ['roles' => $roles]);
+	}
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(NewUserRequest $request)
-    {
+	/**
+	 * Handle an incoming registration request.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 *
+	 * @throws \Illuminate\Validation\ValidationException
+	 */
+	public function store(NewUserRequest $request)
+	{
 		$role = $request->role;
 		try {
 			$user = User::create([
@@ -48,12 +46,14 @@ class RegisteredUserController extends Controller
 				'password' => Hash::make($request->password),
 			]);
 			$user->assignRole($role);
-			if($request->role == 'Работодатель') {
-				$this->addWildcard($user, 'employers.edit', $user->getKey());
-				$this->addWildcard($user, 'employers.show', $user->getKey());
-			} elseif ($request->role == 'Практикант') {
-				$this->addWildcard($user, 'students.edit', $user->getKey());
-				$this->addWildcard($user, 'students.show', $user->getKey());
+			$rights = match ($role) {
+				'Работодатель' => ['employers.edit', 'employers.show'],
+				'Учебное заведение' => ['schools.edit', 'schools.show'],
+				'Практикант' => ['students.edit', 'students.show'],
+				default => []
+			};
+			foreach ($rights as $right) {
+				$this->addWildcard($user, $right, $user->getKey());
 			}
 
 			event(new Registered($user));
@@ -72,7 +72,7 @@ class RegisteredUserController extends Controller
 
 			return redirect()->route('register');
 		}
-    }
+	}
 
 	private function addWildcard(User $user, string $right, int $id)
 	{

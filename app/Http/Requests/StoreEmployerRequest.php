@@ -23,11 +23,13 @@ class StoreEmployerRequest extends FormRequest
      */
     public function rules()
     {
+		// TODO строгая проверка ИНН / ОГРН, идентичная Платформе нейротестирования 1
         return [
 			'name' => ['required'],
 			'phone' => ['required'],
 			'email' => ['email', 'required'],
 			'inn' => ['numeric', 'required'],
+			'ogrn' => ['numeric', 'required'],
 			'post_address' => ['required']
         ];
     }
@@ -39,6 +41,7 @@ class StoreEmployerRequest extends FormRequest
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта',
 			'inn' => 'Индивидуальный номер налогоплательщика (ИНН)',
+			'ogrn' => 'ОГРН / ОГРНИП',
 			'post_address' => 'Почтовый адрес'
 		];
 	}
