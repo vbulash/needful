@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
 			$table->string('name')->comment('Наименование учебного заведения');
 			$table->tinyInteger('type')->default(2)->comment('Тип учебного заведения');
+			$table->tinyInteger('status')->default(0)->comment('Статус активности объекта');
 			$table->string('contact')->comment('Контактное лицо')->nullable();
 			$table->string('phone')->comment('Телефон')->nullable();
 			$table->string('email')->comment('Электронная почта')->nullable();

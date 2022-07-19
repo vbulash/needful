@@ -105,6 +105,9 @@ class UserController extends Controller
 			} elseif ($request->role == 'Практикант') {
 				$this->addWildcard($user, 'students.edit', $user->getKey());
 				$this->addWildcard($user, 'students.show', $user->getKey());
+			} elseif ($request->role == 'Учебное заведение') {
+				$this->addWildcard($user, 'schools.edit', $user->getKey());
+				$this->addWildcard($user, 'schools.show', $user->getKey());
 			}
 
 			event(new Registered($user));
@@ -114,7 +117,9 @@ class UserController extends Controller
 			//auth()->login($user);
 
 			session()->put('success',
-				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");
+				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"<br/>" .
+				"Письмо пользователю направлено"
+			);
 		} catch (Exception $exc) {
 			session()->put('error',
 				"Ошибка регистрации нового пользователя: {$exc->getMessage()}");

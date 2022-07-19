@@ -31,8 +31,8 @@ mix
 
     // JS
     .js([
-        'resources/plugins/jquery/jquery-3.6.0.min.js',
-        'resources/plugins/bootstrap/js/bootstrap.bundle.min.js',
+        //'resources/plugins/jquery/jquery-3.6.0.min.js',
+        //'resources/plugins/bootstrap/js/bootstrap.bundle.min.js',
         'resources/js/app.js',
         'resources/js/dashmix/app.js',
         'resources/plugins/pusher/pusher.min.js',

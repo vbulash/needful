@@ -42,7 +42,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/schools.data', 'SchoolController@getData')->name('schools.index.data');
 	Route::get('/schools.select/{school}', 'SchoolController@select')->name('schools.select');
 	// Специальности
-	Route::resource('/fspecialties', 'FSpecialtyController');
+	Route::resource('/fspecialties', 'FspecialtyController');
 	Route::get('/fspecialties.data', 'FspecialtyController@getData')->name('fspecialties.index.data');
 
 	// Словари

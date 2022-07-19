@@ -37,9 +37,28 @@
 
 @push('js_after')
 	<script>
+		function formatRecord(record) {
+			if (!record.id) return record.text;
+
+			if (isNaN(parseInt(record.id))) return record.text;
+
+			return $(
+				"<div class='row'>\n" +
+				"<div class='col-9'>" + record.text + "</div>\n" +
+				"<div class='col-3'>" + (record.federal === 1 ? "Федеральный справочник" : "Ручной ввод") + "</div>\n" +
+				"</div>\n"
+			);
+		}
+
 		$(document).ready(function() {
-			//$('#specialty_id').select2('destroy');
-			// TODO затем сделать повторную инициализацию с нужными параметрами
+			let data = {!! $specialties !!};
+			let select = $('#specialty_id');
+			select.select2('destroy');
+			select.select2({
+				language: 'ru',
+				data: data,
+				templateResult: formatRecord,
+			});
 		});
 	</script>
 @endpush

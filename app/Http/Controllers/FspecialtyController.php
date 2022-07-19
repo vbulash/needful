@@ -89,10 +89,17 @@ class FspecialtyController extends Controller
 		$context = session('context');
 		$school = School::findOrFail($context['school']);
 
-		$specialties = Specialty::all()
-			->sortBy('name')
-			->pluck(value: 'name', key: 'id')
-			->all();
+		$temp = Specialty::all()
+			->sortBy('name');
+		$specialties = [];
+		foreach ($temp as $item) {
+			$specialties[] = [
+				'id' => $item->getKey(),
+				'text' => $item->name,
+				'federal' => $item->federal
+			];
+		}
+		$specialties = json_encode($specialties);
 
 		return view('fspecialties.create', compact('school', 'specialties', 'mode'));
 	}
@@ -108,7 +115,7 @@ class FspecialtyController extends Controller
 		$context = session('context');
 		$school = School::findOrFail($context['school']);
 
-		if ($request->has('specialty')) {    // Новая специальность
+		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
 			// Сначала добавить новую специальность в список
 			$specialty = Specialty::create([
 				'name' => $request->specialty
@@ -118,12 +125,6 @@ class FspecialtyController extends Controller
 		} else {    // Выбор из существующих
 			$specialty = Specialty::findOrFail($request->specialty_id);
 			$created = false;
-
-			$fspecialty = new Fspecialty();
-			$fspecialty->specialty()->associate($specialty);
-			$fspecialty->school()->associate($school);
-			$fspecialty->save();
-			$name = $fspecialty->name;
 		}
 
 		// Затем добавляем эту специальность в список специальностей учебного заведения
@@ -170,10 +171,17 @@ class FspecialtyController extends Controller
 		$mode = $show ? config('global.show') : config('global.edit');
 		$fspecialty = Fspecialty::findOrFail($id);
 
-		$specialties = Specialty::all()
-			->sortBy('name')
-			->pluck(value: 'name', key: 'id')
-			->all();
+		$temp = Specialty::all()
+			->sortBy('name');
+		$specialties = [];
+		foreach ($temp as $item) {
+			$specialties[] = [
+				'id' => $item->getKey(),
+				'text' => $item->name,
+				'federal' => $item->federal
+			];
+		}
+		$specialties = json_encode($specialties);
 
 		return view('fspecialties.edit', compact('fspecialty', 'specialties', 'mode'));
 	}
@@ -191,7 +199,7 @@ class FspecialtyController extends Controller
 		$fspecialty = Fspecialty::findOrFail($id);
 		$school = $fspecialty->school;
 
-		if ($request->has('specialty')) {    // Новая специальность
+		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
 			// Сначала добавить новую специальность в список
 			$specialty = Specialty::create([
 				'name' => $request->specialty

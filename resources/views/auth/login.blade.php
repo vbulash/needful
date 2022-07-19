@@ -27,7 +27,7 @@
                                     <div class="mb-4">
                                         <div class="input-group input-group-lg">
                                             <input type="email" class="form-control" id="email" name="email"
-                                                   placeholder="Имя пользователя">
+                                                   placeholder="Электронная почта пользователя">
                                             <span class="input-group-text">
                                             <i class="fa fa-user-circle"></i>
                                         </span>

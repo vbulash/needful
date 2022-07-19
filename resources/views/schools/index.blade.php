@@ -15,10 +15,14 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		@hasrole('Администратор')
-		<a href="{{ route('schools.create', ['sid' => session()->getId()]) }}"
-		   class="btn btn-primary mt-3 mb-3">Добавить учебное заведение</a>
-		@endhasrole
+		<div>
+			@hasrole('Администратор')
+			<a href="{{ route('schools.create', ['sid' => session()->getId()]) }}"
+			   class="btn btn-primary mt-3 mb-3">Добавить учебное заведение</a>
+			@endhasrole
+
+			<p>Красным цветом выделены неактивные учебные заведения. Активацию объектов выполняет администратор платформы</p>
+		</div>
 
 		<h3 class="block-title">
 			@if(isset($ids))
@@ -95,6 +99,10 @@
 					ajax: '{!! route('schools.index.data', ['sid' => session()->getId()]) !!}',
 					@endif
 					responsive: true,
+					createdRow: function (row, data, dataIndex) {
+						if (data.status === 0)
+							row.style.color = 'red';
+					},
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
 						{data: 'type', name: 'type', responsivePriority: 1},

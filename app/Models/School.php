@@ -12,6 +12,7 @@ class School extends Model implements FormTemplate
 	protected $fillable = [
 		'name',		// Наименование учебного заведения
 		'type',		// Тип учебного заведения
+		'status',	// Статус активности объекта
 		'contact',	// Контактное лицо
 		'phone',	// Телефон
 		'email',	// Электронная почта
