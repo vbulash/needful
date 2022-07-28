@@ -25,9 +25,6 @@ return new class extends Migration
 			$table->string('ogrn')->comment('ОГРН / ОГРНИП')->nullable();
 			$table->string('official_address')->comment('Юридический адрес')->nullable();
 			$table->string('post_address')->comment('Почтовый адрес')->nullable();
-			$table->text('description')->comment('Краткое описание организации (основная деятельность)')->nullable();
-			$table->text('expectation')->comment('Какие результаты ожидаются от практикантов / выпускников?')->nullable();
-			$table->string('nda')->comment('Соглашение о неразглашении информации')->nullable();
 			$table->unsignedBigInteger('user_id')->comment('Связанный пользователь');
 			$table->foreign('user_id')->references('id')->on('users');
 

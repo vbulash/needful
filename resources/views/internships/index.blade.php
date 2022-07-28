@@ -1,4 +1,4 @@
-@extends('services.service')
+@extends('layouts.chain')
 
 @section('service')
 	Работа с работодателями
@@ -9,7 +9,7 @@
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
 			['title' => 'Стажировка', 'active' => true, 'context' => 'internship'],
-			['title' => 'График стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection

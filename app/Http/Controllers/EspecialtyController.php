@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Http\Requests\StoreEspecialtyRequest;
 use App\Http\Requests\StoreFspecialtyRequest;
-use App\Http\Requests\UpdateFspecialtyRequest;
-use App\Models\Faculty;
+use App\Http\Requests\UpdateEspecialtyRequest;
+use App\Models\Especialty;
 use App\Models\Fspecialty;
+use App\Models\Internship;
 use App\Models\School;
 use App\Models\Specialty;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -17,8 +18,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use \Exception;
 
-class FspecialtyController extends Controller
+class EspecialtyController extends Controller
 {
 	/**
 	 * Process datatables ajax request.
@@ -30,13 +32,13 @@ class FspecialtyController extends Controller
 	public function getData(Request $request)
 	{
 		$context = session('context');
-		$query = School::findOrFail($context['school'])->fspecialties()->get();
+		$query = Internship::findOrFail($context['internship'])->especialties()->get();
 
 		return Datatables::of($query)
-			->addColumn('name', fn ($fspecialty) => $fspecialty->specialty->name)
-			->addColumn('action', function ($fspecialty) {
-				$editRoute = route('fspecialties.edit', ['fspecialty' => $fspecialty->getKey(), 'sid' => session()->getId()]);
-				$showRoute = route('fspecialties.show', ['fspecialty' => $fspecialty->getKey(), 'sid' => session()->getId()]);
+			->addColumn('name', fn ($especialty) => $especialty->specialty->name)
+			->addColumn('action', function ($especialty) {
+				$editRoute = route('especialties.edit', ['especialty' => $especialty->getKey(), 'sid' => session()->getId()]);
+				$showRoute = route('especialties.show', ['especialty' => $especialty->getKey(), 'sid' => session()->getId()]);
 				$actions = '';
 
 				$actions .=
@@ -51,7 +53,7 @@ class FspecialtyController extends Controller
 					"</a>\n";
 				$actions .=
 					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$fspecialty->getKey()}, '{$fspecialty->specialty->name}')\">\n" .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$especialty->getKey()}, '{$especialty->specialty->name}')\">\n" .
 					"<i class=\"fas fa-trash-alt\"></i>\n" .
 					"</a>\n";
 
@@ -69,15 +71,14 @@ class FspecialtyController extends Controller
 	public function index(Request $request)
 	{
 		$context = session('context');
-		unset($context['fspecialty']);
+		unset($context['especialty']);
 		session()->put('context', $context);
 
-		$school = School::findOrFail($context['school']);
-		$count = $school->fspecialties()->count();
+		$internship = Internship::findOrFail($context['internship']);
+		$count = $internship->especialties()->count();
 
-		return view('fspecialties.index', compact('count'));
+		return view('especialties.index', compact('count'));
 	}
-
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -87,8 +88,6 @@ class FspecialtyController extends Controller
 	public function create(Request $request)
 	{
 		$mode = config('global.create');
-		$context = session('context');
-		$school = School::findOrFail($context['school']);
 
 		$temp = Specialty::all()
 			->sortBy('name');
@@ -102,19 +101,19 @@ class FspecialtyController extends Controller
 		}
 		$specialties = json_encode($specialties);
 
-		return view('fspecialties.create', compact('school', 'specialties', 'mode'));
+		return view('especialties.create', compact('specialties', 'mode'));
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param Request $request
+	 * @param StoreEspecialtyRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreFspecialtyRequest $request)
+	public function store(StoreEspecialtyRequest $request)
 	{
 		$context = session('context');
-		$school = School::findOrFail($context['school']);
+		$internship = Internship::findOrFail($context['internship']);
 
 		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
 			// Сначала добавить новую специальность в список
@@ -128,19 +127,20 @@ class FspecialtyController extends Controller
 			$created = false;
 		}
 
-		// Затем добавляем эту специальность в список специальностей учебного заведения
-		$fspecialty = new Fspecialty();
-		$fspecialty->specialty()->associate($specialty);
-		$fspecialty->school()->associate($school);
-		$fspecialty->save();
-		$name = $fspecialty->name;
+		// Затем добавляем эту специальность в список специальностей работодателя
+		$especialty = new Especialty();
+		$especialty->specialty()->associate($specialty);
+		$especialty->internship()->associate($internship);
+		$especialty->count = $request->count;
+		$especialty->save();
+		$name = $especialty->name;
 
 		session()->put('success', $created ?
 			"Специальность \"{$name}\" добавлена" :
-			"Список специальностей учебного заведения изменён"
+			"Список специальностей по стажировке работодателя изменён"
 		);
 
-		return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
+		return redirect()->route('especialties.index', ['sid' => session()->getId()]);
 	}
 
 	/**
@@ -166,11 +166,11 @@ class FspecialtyController extends Controller
 	public function edit(Request $request, int $id, bool $show = false)
 	{
 		$context = session('context');
-		$context['fspecialty'] = $id;
+		$context['especialty'] = $id;
 		session()->put('context', $context);
 
 		$mode = $show ? config('global.show') : config('global.edit');
-		$fspecialty = Fspecialty::findOrFail($id);
+		$especialty = Especialty::findOrFail($id);
 
 		$temp = Specialty::all()
 			->sortBy('name');
@@ -184,20 +184,20 @@ class FspecialtyController extends Controller
 		}
 		$specialties = json_encode($specialties);
 
-		return view('fspecialties.edit', compact('fspecialty', 'specialties', 'mode'));
+		return view('especialties.edit', compact('especialty', 'specialties', 'mode'));
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param UpdateFspecialtyRequest $request
+	 * @param UpdateEspecialtyRequest $request
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateFspecialtyRequest $request, $id)
+	public function update(UpdateEspecialtyRequest $request, $id)
 	{
-		$fspecialty = Fspecialty::findOrFail($id);
-		$school = $fspecialty->school;
+		$especialty = Especialty::findOrFail($id);
+		$internship = $especialty->internship;
 
 		$out = [];
 		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
@@ -211,33 +211,34 @@ class FspecialtyController extends Controller
 		} else {	// Выбор из существующих
 			$specialty = Specialty::findOrFail($request->specialty_id);
 		}
-		$fspecialty->specialty()->associate($specialty);
-		$fspecialty->school()->associate($school);
-		$fspecialty->update();
-		$out[] = "Список специальностей учебного заведения обновлён";
-
+		$especialty->specialty()->associate($specialty);
+		$especialty->internship()->associate($internship);
+		$especialty->count = $request->count;
+		$especialty->update();
+		$out[] = "Список специальностей стажировки работодателя обновлён";
 		session()->put('success', implode('<br/>', $out));
-		return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
+
+		return redirect()->route('especialties.index', ['sid' => session()->getId()]);
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param Request $request
-	 * @param int $fspecialty
+	 * @param int $especialty
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $fspecialty)
+	public function destroy(Request $request, int $especialty)
 	{
-		if ($fspecialty == 0) {
+		if ($especialty == 0) {
 			$id = $request->id;
-		} else $id = $fspecialty;
+		} else $id = $especialty;
 
-		$fspecialty = Fspecialty::findOrFail($id);
-		$name = $fspecialty->specialty->name;
-		$fspecialty->delete();
+		$especialty = Especialty::findOrFail($id);
+		$name = $especialty->specialty->name;
+		$especialty->delete();
 
-		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей учебного заведения"));
+		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей стажировки работодателя"));
 		return true;
 	}
 }

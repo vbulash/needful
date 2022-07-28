@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Http\Requests\StoreSchoolRequest;
+use App\Models\ActiveStatus;
 use App\Models\School;
 use App\Models\SchoolType;
 use App\Models\User;
+use App\Notifications\NewSchool;
+use App\Notifications\NewUser;
+use App\Notifications\UpdateSchool;
 use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -62,11 +66,12 @@ class SchoolController extends Controller
 						"</a>\n";
 				}
 
-				$actions .=
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
-					"</a>\n";
+				if ($school->status == ActiveStatus::ACTIVE->value)
+					$actions .=
+						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+						"<i class=\"fas fa-check\"></i>\n" .
+						"</a>\n";
 				return $actions;
 			})
 			->make(true);
@@ -159,6 +164,8 @@ class SchoolController extends Controller
 			$school->user->givePermissionTo($perm);
 		}
 
+		$school->user->notify(new NewSchool($school));
+
 		session()->put('success', "Учебное заведение \"{$name}\" создано");
 		return redirect()->route('schools.index', ['sid' => session()->getId()]);
 	}
@@ -237,6 +244,8 @@ class SchoolController extends Controller
 			$perm = Permission::findOrCreate($permission . '.' . $school->getKey());
 			$school->user->givePermissionTo($perm);
 		}
+
+		$school->user->notify(new UpdateSchool($school));
 
 		session()->put('success', "Анкета учебного заведения \"{$name}\" обновлена");
 		return redirect()->route('schools.index', ['sid' => session()->getId()]);

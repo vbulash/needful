@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class OneSpecialtyOnSchoolRule implements Rule
 {
 	protected Request $request;
+
     /**
      * Create a new rule instance.
      *

@@ -9,7 +9,7 @@
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
 			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
-			['title' => 'График стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection
@@ -37,8 +37,7 @@
 			['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => true, 'type' => 'text'],
 			['name' => 'official_address', 'title' => 'Юридический адрес', 'required' => false, 'type' => 'text'],
 			['name' => 'post_address', 'title' => 'Почтовый адрес', 'required' => true, 'type' => 'text'],
-			['name' => 'description', 'title' => 'Краткое описание организации (основная деятельность)', 'required' => false, 'type' => 'textarea'],
-			['name' => 'expectation', 'title' => 'Какие результаты ожидаются от практикантов / выпускников?', 'required' => false, 'type' => 'textarea'],
+			['name' => 'status', 'type' => 'hidden', 'value' => \App\Models\ActiveStatus::NEW->value],
 		];
 	@endphp
 @endsection

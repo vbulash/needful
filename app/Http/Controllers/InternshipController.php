@@ -45,7 +45,9 @@ class InternshipController extends Controller
 			->addColumn('action', function ($internship) {
 				$editRoute = route('internships.edit', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$showRoute = route('internships.show', ['internship' => $internship->id, 'sid' => session()->getId()]);
-				$selectRoute = route('internships.select', ['internship' => $internship->id, 'sid' => session()->getId()]);
+				$timetablesRoute = route('internships.timetables', ['internship' => $internship->id, 'sid' => session()->getId()]);
+				$especialtiesRoute = route('internships.especialties', ['internship' => $internship->id, 'sid' => session()->getId()]);
+
 				$actions = '';
 
 				$actions .=
@@ -65,26 +67,41 @@ class InternshipController extends Controller
 					"</a>\n";
 
 				$actions .=
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
+					"<a href=\"{$especialtiesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для стажировки\">\n" .
+					"<i class=\"fas fa-people-arrows\"></i>\n" .
+					"</a>\n";
+				$actions .=
+					"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики стажировки\">\n" .
+					"<i class=\"fas fa-calendar-check\"></i>\n" .
 					"</a>\n";
 				return $actions;
 			})
 			->make(true);
 	}
 
-	public function select(int $id)
+	private function next(string $view, int $id)
 	{
 		$internship = Internship::findOrFail($id);
 
 		$context = session('context');
 		unset($context['internship']);
 		unset($context['timetable']);
-		$context['internship'] = $internship;
+		$context['internship'] = $internship->getKey();
 		session()->put('context', $context);
 
-		return redirect()->route('timetables.index', ['sid' => session()->getId()]);
+		return redirect()->route($view, ['sid' => session()->getId()]);
+	}
+
+	public function timetables(int $id)
+	{
+		return $this->next('timetables.index', $id);
+	}
+
+	public function especialties(int $id)
+	{
+		return $this->next('especialties.index', $id);
 	}
 
 	/**
@@ -96,8 +113,11 @@ class InternshipController extends Controller
 	public function index(Request $request)
 	{
 		$context = session('context');
-		$employer = $context['employer'];
+		unset($context['especialty']);
+		unset($context['timetable']);
+		$employer = Employer::findOrFail($context['employer']);
 		$count = $employer->internships()->count();
+		session()->put('context', $context);
 
 		return view('internships.index', compact('employer', 'count'));
 	}
@@ -112,7 +132,7 @@ class InternshipController extends Controller
 	{
 		$mode = config('global.create');
 		$context = session('context');
-		$employer = $context['employer'];
+		$employer = Employer::findOrFail($context['employer']);
 		return view('internships.create', compact('employer', 'mode'));
 	}
 

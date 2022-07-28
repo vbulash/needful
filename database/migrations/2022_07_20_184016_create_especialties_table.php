@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-		// Графики стажировки
-        Schema::create('timetables', function (Blueprint $table) {
+        Schema::create('especialties', function (Blueprint $table) {
             $table->id();
-			$table->date('start')->comment('Начало');
-			$table->date('end')->comment('Завершение');
-			$table->string('name')->comment('Наименование или тема графика стажировки')->nullable();
+			//
+			$table->unsignedBigInteger('specialty_id')->comment('Специальность у работодателя');
+			$table->foreign('specialty_id')->references('id')->on('specialties')->cascadeOnDelete();
+			//
+			$table->integer('count')->comment('Количество позиций по специальности');
 			//
 			$table->unsignedBigInteger('internship_id')->comment('Связанная стажировка');
-			$table->foreign('internship_id')->references('id')->on('internships');
+			$table->foreign('internship_id')->references('id')->on('internships')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('timetables');
+        Schema::dropIfExists('especialties');
     }
 };

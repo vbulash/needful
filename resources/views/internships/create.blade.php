@@ -13,7 +13,7 @@
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
 			['title' => 'Стажировка', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'График стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection

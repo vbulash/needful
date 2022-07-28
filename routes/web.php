@@ -19,20 +19,27 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Пользователи
 	Route::resource('/users', 'UserController');
 	Route::get('/users.data', 'UserController@getData')->name('users.index.data');
+
+	// Практиканты
+	Route::resource('/students', 'StudentController');
+	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
+
 	// Работодатели
 	Route::resource('/employers', 'EmployerController');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
 	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
-	// Практиканты
-	Route::resource('/students', 'StudentController');
-	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
 	// Стажировки
 	Route::resource('/internships', 'InternshipController');
 	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
-	Route::get('/internships.select/{internship}', 'InternshipController@select')->name('internships.select');
+	Route::get('/internships.timetables/{internship}', 'InternshipController@timetables')->name('internships.timetables');
+	Route::get('/internships.especialties/{internship}', 'InternshipController@especialties')->name('internships.especialties');
 	// Графики стажировки
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
+	// Специальности
+	Route::resource('/especialties', 'EspecialtyController');
+	Route::get('/especialties.data', 'EspecialtyController@getData')->name('especialties.index.data');
+
 	// Истории стажировок
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');

@@ -1,4 +1,4 @@
-@extends('services.service')
+@extends('layouts.chain')
 
 @section('service')
 	Работа с работодателями
@@ -9,17 +9,22 @@
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer'],
 			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
-			['title' => 'График стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection
 
 @section('interior')
 	<div class="block-header block-header-default">
-		@hasrole('Администратор')
-		<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
-		   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
-		@endhasrole
+		<div>
+			@hasrole('Администратор')
+			<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
+			   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
+			@endhasrole
+
+			<p>Красным цветом выделены неактивные работодатели. Активацию объектов выполняет администратор платформы<br/>
+			Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
+		</div>
 
 		<h3 class="block-title">
 			@if(isset($ids))
@@ -96,6 +101,10 @@
 					@else
 					ajax: '{!! route('employers.index.data', ['sid' => session()->getId()]) !!}',
 					@endif
+					createdRow: function (row, data, dataIndex) {
+						if (data.status === 0)
+							row.style.color = 'red';
+					},
 					responsive: true,
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},

@@ -27,31 +27,49 @@
 @section('form.fields')
 	@include('students.assign')
 	@php
-		$fields = [
-			['name' => 'lastname', 'title' => 'Фамилия', 'required' => true, 'type' => 'text', 'value' => $student->lastname],
-			['name' => 'firstname', 'title' => 'Имя', 'required' => true, 'type' => 'text', 'value' => $student->firstname],
-			['name' => 'surname', 'title' => 'Отчество', 'required' => false, 'type' => 'text', 'value' => $student->surname],
-			['name' => 'sex', 'title' => 'Пол', 'required' => true, 'type' => 'select', 'options' => [
-				'Мужской' => 'Мужской',
-				'Женский' => 'Женский',
-			], 'value' => $student->sex],
-			['name' => 'birthdate', 'title' => 'Дата рождения', 'required' => true, 'type' => 'date', 'value' => $student->birthdate->format('d.m.Y')],
-			['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text', 'value' => $student->phone],
-			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email', 'value' => $student->email],
-			['name' => 'parents', 'title' => 'ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать', 'required' => false, 'type' => 'textarea', 'value' => $student->parents],
-			['name' => 'parentscontact', 'title' => 'Контактные телефоны родителей или опекунов', 'required' => false, 'type' => 'textarea', 'value' => $student->parentscontact],
-			['name' => 'passport', 'title' => 'Данные паспорта (серия, номер, кем и когда выдан)', 'required' => false, 'type' => 'textarea', 'value' => $student->passport],
-			['name' => 'address', 'title' => 'Адрес проживания', 'required' => false, 'type' => 'textarea', 'value' => $student->address],
-			['name' => 'institutions', 'title' => 'Учебное заведение (на момент заполнения)', 'required' => false, 'type' => 'textarea', 'value' => $student->institutions],
-			['name' => 'grade', 'title' => 'Класс / группа (на момент заполнения)', 'required' => false, 'type' => 'text', 'value' => $student->grade],
-			['name' => 'hobby', 'title' => 'Увлечения (хобби)', 'required' => false, 'type' => 'textarea', 'value' => $student->hobby],
-			['name' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?', 'required' => false, 'type' => 'number', 'value' => $student->contestachievements],
-			['name' => 'contestachievements', 'title' => 'Участие в конкурсах, олимпиадах. Достижения', 'required' => false, 'type' => 'textarea', 'value' => $student->dream],
-			['name' => 'dream', 'title' => 'Чем хочется заниматься в жизни?', 'required' => false, 'type' => 'textarea', 'value' => $student->dream],
-		];
+		$fields = [];
+        if (auth()->user()->hasRole('Администратор')) {
+            $fields[] = ['name' => 'status', 'title' => 'Статус активности объекта', 'required' => false, 'type' => 'select', 'options' => [
+                \App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
+                \App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
+                \App\Models\ActiveStatus::FROZEN->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::FROZEN->value),
+			], 'value' => $student->status];
+        }
+		$fields[] = ['name' => 'lastname', 'title' => 'Фамилия', 'required' => true, 'type' => 'text', 'value' => $student->lastname];
+		$fields[] = ['name' => 'firstname', 'title' => 'Имя', 'required' => true, 'type' => 'text', 'value' => $student->firstname];
+		$fields[] = ['name' => 'surname', 'title' => 'Отчество', 'required' => false, 'type' => 'text', 'value' => $student->surname];
+        $fields[] = ['name' => 'specialties', 'type' => 'hidden', 'value' => ''];
+        $fields[] = ['name' => 'hspecialties', 'title' => 'Специальности', 'required' => true, 'type' => 'select', 'multiple' => true, 'options' => $specialties, 'value' => $sspecialties];
+
+		$fields[] = ['name' => 'sex', 'title' => 'Пол', 'required' => true, 'type' => 'select', 'options' => [
+			'Мужской' => 'Мужской',
+			'Женский' => 'Женский',
+		], 'value' => $student->sex];
+		$fields[] = ['name' => 'birthdate', 'title' => 'Дата рождения', 'required' => true, 'type' => 'date', 'value' => $student->birthdate->format('d.m.Y')];
+		$fields[] = ['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text', 'value' => $student->phone];
+		$fields[] = ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email', 'value' => $student->email];
+		$fields[] = ['name' => 'parents', 'title' => 'ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать', 'required' => false, 'type' => 'textarea', 'value' => $student->parents];
+		$fields[] = ['name' => 'parentscontact', 'title' => 'Контактные телефоны родителей или опекунов', 'required' => false, 'type' => 'textarea', 'value' => $student->parentscontact];
+		$fields[] = ['name' => 'passport', 'title' => 'Данные паспорта (серия, номер, кем и когда выдан)', 'required' => false, 'type' => 'textarea', 'value' => $student->passport];
+		$fields[] = ['name' => 'address', 'title' => 'Адрес проживания', 'required' => false, 'type' => 'textarea', 'value' => $student->address];
+		$fields[] = ['name' => 'institutions', 'title' => 'Учебное заведение (на момент заполнения)', 'required' => false, 'type' => 'textarea', 'value' => $student->institutions];
+		$fields[] = ['name' => 'grade', 'title' => 'Класс / группа (на момент заполнения)', 'required' => false, 'type' => 'text', 'value' => $student->grade];
+		$fields[] = ['name' => 'hobby', 'title' => 'Увлечения (хобби)', 'required' => false, 'type' => 'textarea', 'value' => $student->hobby];
+		$fields[] = ['name' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?', 'required' => false, 'type' => 'number', 'value' => $student->contestachievements];
+		$fields[] = ['name' => 'contestachievements', 'title' => 'Участие в конкурсах, олимпиадах. Достижения', 'required' => false, 'type' => 'textarea', 'value' => $student->dream];
+		$fields[] = ['name' => 'dream', 'title' => 'Чем хочется заниматься в жизни?', 'required' => false, 'type' => 'textarea', 'value' => $student->dream];
 	@endphp
 @endsection
 
 @section('form.close')
 	{{ form($student, $mode, 'close') }}
 @endsection
+
+@push('js_after')
+	<script>
+		let form = document.getElementById("{{ form($student, $mode, 'id') }}");
+		form.addEventListener('submit', () => {
+			$('#specialties').val(JSON.stringify($('#hspecialties').val()));
+		}, false);
+	</script>
+@endpush

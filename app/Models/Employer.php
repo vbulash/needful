@@ -11,6 +11,7 @@ class Employer extends Model implements FormTemplate
 
 	protected $fillable = [
 		'name',
+		'status',
 		'contact',
 		'address',
 		'phone',
@@ -20,9 +21,6 @@ class Employer extends Model implements FormTemplate
 		'ogrn',
 		'official_address',
 		'post_address',
-		'description',
-		'expectation',
-		'nda',
 		'user_id'
 	];
 

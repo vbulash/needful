@@ -70,7 +70,7 @@ class TimetableController extends Controller
 	public function index(Request $request)
 	{
 		$context = session('context');
-		$internship = $context['internship'];
+		$internship = Internship::findOrFail($context['internship']);
 		unset($context['timetable']);
 		session()->put('context', $context);
 
@@ -88,7 +88,7 @@ class TimetableController extends Controller
 	{
 		$mode = config('global.create');
 		$context = session('context');
-		$internship = $context['internship'];
+		$internship = Internship::findOrFail($context['internship']);
 		return view('timetables.create', compact('internship', 'mode'));
 	}
 

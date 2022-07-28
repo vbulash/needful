@@ -1,4 +1,4 @@
-@extends('services.service')
+@extends('layouts.chain')
 
 @section('service')
 	Работа с работодателями
@@ -16,8 +16,12 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<a href="{{ route('timetables.create', ['sid' => session()->getId()]) }}"
-		   class="btn btn-primary mt-3 mb-3">Добавить запись графика стажировки</a>
+		<div>
+			<a href="{{ route('timetables.create', ['sid' => session()->getId()]) }}"
+			   class="btn btn-primary mt-3 mb-3">Добавить запись графика стажировки</a>
+			<p>Вы также можете перейти на список специальностей по стажировке по ссылке
+				<a href="{{ route('especialties.index', ['sid' => session()->getId()]) }}">Список специальностей стажировки</a></p>
+		</div>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)

@@ -145,17 +145,24 @@
 									<select class="form-control select2" name="{{ $field['name'] }}"
 											id="{{ $field['name'] }}"
 											@if($mode == config('global.show') || isset($field['disabled'])) disabled @endif
+											@if (isset($field['multiple']) && $field['multiple']) multiple="multiple" @endif
 									>
 										@if (isset($field['placeholder']))
-											<option selected disabled>{{ $field['placeholder'] }}</option>
+											<option disabled>{{ $field['placeholder'] }}</option>
 										@endif
 										@if (isset($field['options']))
 											@foreach($field['options'] as $key => $value)
 												<option value="{{ $key }}"
-														@if(isset($field['value']))
+													@if (isset($field['value']))
+														@if (isset($field['multiple']) && $field['multiple'])
+															@if (in_array($key, $field['value']))
+																selected
+															@endif
+														@else
 															@if($field['value'] == $key)
 																selected
-													@endif
+															@endif
+														@endif
 													@endif
 												>
 													{{ $value }}</option>

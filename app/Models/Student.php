@@ -12,6 +12,7 @@ class Student extends Model implements FormTemplate
 	use HasFactory, HasTitle;
 
 	protected $fillable = [
+		'status',	// Статус активности объекта
 		'lastname',
 		'firstname',
 		'surname',
@@ -66,6 +67,10 @@ class Student extends Model implements FormTemplate
 
 	public function histories() {
 		return $this->hasMany(History::class);
+	}
+
+	public function specialties() {
+		return $this->belongsToMany(Specialty::class, 'student_specialty')->withTimestamps();
 	}
 
 	public static function createTemplate(): array

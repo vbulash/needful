@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Http\Requests\StoreEmployerRequest;
+use App\Models\ActiveStatus;
 use App\Models\Employer;
 use App\Models\User;
+use App\Notifications\NewEmployer;
+use App\Notifications\UpdateEmployer;
 use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,7 +16,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use \Exception;
@@ -63,11 +65,12 @@ class EmployerController extends Controller
 						"</a>\n";
 				}
 
-				$actions .=
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
-					"</a>\n";
+				if ($employer->status == ActiveStatus::ACTIVE->value)
+					$actions .=
+						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+						"<i class=\"fas fa-check\"></i>\n" .
+						"</a>\n";
 				return $actions;
 			})
 			->make(true);
@@ -77,7 +80,7 @@ class EmployerController extends Controller
 	{
 		$employer = Employer::findOrFail($id);
 		session()->forget('context');
-		session()->put('context', ['employer' => $employer]);
+		session()->put('context', ['employer' => $employer->getKey()]);
 
 		return redirect()->route('internships.index', ['sid' => session()->getId()]);
 	}
@@ -160,6 +163,8 @@ class EmployerController extends Controller
 			$employer->user->givePermissionTo($perm);
 		}
 
+		$employer->user->notify(new NewEmployer($employer));
+
 		session()->put('success', "Работодатель \"{$name}\" создан");
 		return redirect()->route('employers.index', ['sid' => session()->getId()]);
 	}
@@ -235,6 +240,8 @@ class EmployerController extends Controller
 			$perm = Permission::findOrCreate($permission . '.' . $employer->getKey());
 			$employer->user->givePermissionTo($perm);
 		}
+
+		$employer->user->notify(new UpdateEmployer($employer));
 
 		session()->put('success', "Анкета работодателя \"{$name}\" обновлена");
 		return redirect()->route('employers.index', ['sid' => session()->getId()]);

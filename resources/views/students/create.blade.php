@@ -1,4 +1,4 @@
-@extends('layouts.chain')
+@extends('layouts.detail')
 
 @section('header') @endsection
 
@@ -23,9 +23,12 @@
 	@include('students.assign')
 	@php
 		$fields = [
+            ['name' => 'status', 'type' => 'hidden', 'value' => \App\Models\ActiveStatus::NEW->value],
 			['name' => 'lastname', 'title' => 'Фамилия', 'required' => true, 'type' => 'text'],
 			['name' => 'firstname', 'title' => 'Имя', 'required' => true, 'type' => 'text'],
 			['name' => 'surname', 'title' => 'Отчество', 'required' => false, 'type' => 'text'],
+			['name' => 'specialties', 'type' => 'hidden', 'value' => ''],
+			['name' => 'hspecialties', 'title' => 'Специальности', 'required' => true, 'type' => 'select', 'multiple' => true, 'options' => $specialties, 'placeholder' => 'Выберите одну или несколько специальностей'],
 			['name' => 'sex', 'title' => 'Пол', 'required' => true, 'type' => 'select', 'options' => [
 				'Мужской' => 'Мужской',
 				'Женский' => 'Женский',
@@ -50,3 +53,12 @@
 @section('form.close')
 	{{ form(\App\Models\Student::class, $mode, 'close') }}
 @endsection
+
+@push('js_after')
+	<script>
+		let form = document.getElementById("{{ form(\App\Models\Student::class, $mode, 'id') }}");
+		form.addEventListener('submit', () => {
+			$('#specialties').val(JSON.stringify($('#hspecialties').val()));
+		}, false);
+	</script>
+@endpush

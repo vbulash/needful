@@ -1,7 +1,7 @@
 @extends('layouts.detail')
 
 @section('service')
-	Работа с работодателями
+	Работа с учебными заведениями
 @endsection
 
 @section('steps')
@@ -14,7 +14,7 @@
 @endsection
 
 @section('interior.header')
-	Новый работодатель
+	Новое учебное заведение
 @endsection
 
 @section('form.params')
@@ -31,6 +31,7 @@
                 \App\Models\SchoolType::COLLEGE->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::COLLEGE->value),
                 \App\Models\SchoolType::UNIVERSITY->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::UNIVERSITY->value),
 			], 'value' => \App\Models\SchoolType::COLLEGE->value],
+			['name' => 'status', 'type' => 'hidden', 'value' => \App\Models\ActiveStatus::NEW->value],
 			['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text'],
 			['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text'],
 			['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text'],
@@ -40,8 +41,6 @@
 			['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => true, 'type' => 'text'],
 			['name' => 'official_address', 'title' => 'Юридический адрес', 'required' => false, 'type' => 'text'],
 			['name' => 'post_address', 'title' => 'Почтовый адрес', 'required' => true, 'type' => 'text'],
-			['name' => 'description', 'title' => 'Краткое описание организации (основная деятельность)', 'required' => false, 'type' => 'textarea'],
-			['name' => 'expectation', 'title' => 'Какие результаты ожидаются от практикантов / выпускников?', 'required' => false, 'type' => 'textarea'],
 		];
 	@endphp
 @endsection

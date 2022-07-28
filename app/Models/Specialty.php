@@ -32,6 +32,10 @@ class Specialty extends Model implements FormTemplate
 		return $this->belongsTo(Item::class, 'level2_id');
 	}
 
+	public function students() {
+		return $this->belongsToMany(Student::class, 'student_specialty')->withTimestamps();
+	}
+
 	public static function createTemplate(): array
 	{
 		return [

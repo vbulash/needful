@@ -12,10 +12,16 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		@hasrole('Администратор')
-		<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
-		   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
-		@endhasrole
+		<div>
+			@hasrole('Администратор')
+			<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
+			   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
+			@endhasrole
+
+			<p>Красным цветом выделены неактивные учащиеся. Активацию объектов выполняет администратор
+				платформы<br/>
+				Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
+		</div>
 
 		<h3 class="block-title">
 			@if(isset($ids))
@@ -35,7 +41,7 @@
 						<th>Фамилия, имя и отчество</th>
 						<th>Дата рождения</th>
 						<th>Телефон</th>
-						<th>Электронная почта</th>
+						<th>Специальности</th>
 						<th>Пользователь</th>
 						<th>Действия</th>
 					</tr>
@@ -92,12 +98,20 @@
 					ajax: '{!! route('students.index.data') !!}',
 					@endif
 					responsive: true,
+					createdRow: function (row, data, dataIndex) {
+						if (data.status === 0)
+							row.style.color = 'red';
+					},
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
 						{data: 'fio', name: 'fio', responsivePriority: 1},
 						{data: 'birthdate', name: 'birthdate', responsivePriority: 2},
 						{data: 'phone', name: 'phone', responsivePriority: 2},
-						{data: 'email', name: 'email', responsivePriority: 3},
+						{
+							data: 'specialties', name: 'specialties', responsivePriority: 3, render: (data) => {
+								return data.join(",<br/>");
+							}
+						},
 						{data: 'link', name: 'link', responsivePriority: 3},
 						{
 							data: 'action',

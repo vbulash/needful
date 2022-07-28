@@ -26,7 +26,7 @@
             $menu[] = ['title' => 'Субъекты', 'heading' => true];
 
         if ($employers)
-            $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index', 'pattern' => ['employers.*']];
+            $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
         if ($schools)
             $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
 		if ($students)

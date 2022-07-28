@@ -26,6 +26,10 @@ class Internship extends Model implements FormTemplate
 		return $this->belongsTo(Employer::class);
 	}
 
+	public function especialties() {
+		return $this->hasMany(Especialty::class);
+	}
+
 	public function timetables() {
 		return $this->hasMany(Timetable::class);
 	}

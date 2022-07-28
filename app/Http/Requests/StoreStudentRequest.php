@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SpecialtiesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +28,7 @@ class StoreStudentRequest extends FormRequest
 		$local = [
             'lastname' => ['required'],
 			'firstname' => ['required'],
+			'specialties' => [new SpecialtiesRule()],
 			'birthdate' => ['date', 'required', 'before:today'],
 			'phone' => ['required'],
 			'email' => ['required', 'email']
@@ -41,6 +43,7 @@ class StoreStudentRequest extends FormRequest
 		$local = [
 			'lastname' => 'Фамилия',
 			'firstname' => 'Имя',
+			'specialties' => 'Специальности',
 			'birthdate' => 'Дата рождения',
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта'
