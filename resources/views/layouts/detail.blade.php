@@ -48,7 +48,7 @@
 
 					@case('heading')
 					<div class="row mt-4 mb-4">
-						<p><b>{{ $field['title'] }}</b></p>
+						<p><b>{!! $field['title'] !!}</b></p>
 						@break;
 
 						@case('checkbox')
@@ -72,6 +72,9 @@
 								<div class="col-sm-5">
 									<input type="{{ $field['type'] }}" class="form-control" id="{{ $field['name'] }}"
 										   name="{{ $field['name'] }}"
+										   @if (isset($field['length']))
+										   		maxlength="{{ $field['length'] }}"
+										   @endif
 										   @if($field['type'] == 'number' && isset($field['min']))
 											   min="{{ $field['min'] }}"
 										   @endif
@@ -87,16 +90,15 @@
 
 								@case('checkbox')
 								<div class="col-sm-8">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
-												   @if(isset($field['value']) && $field['value'])
-													   checked
-												   @endif
-												   @if($mode == config('global.show') || isset($field['disabled'])) disabled @endif
-											>
-											{{ $field['title'] }}
-										</label>
+									<div class="form-check form-switch">
+										<input class="form-check-input"
+											type="checkbox"
+											id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+											@if(isset($field['value']) && $field['value'])
+												checked
+											@endif
+											@if($mode == config('global.show') || isset($field['disabled'])) disabled @endif>
+										<label class="form-check-label" for="{{ $field['name'] }}">{{ $field['title'] }}</label>
 									</div>
 								</div>
 								@break

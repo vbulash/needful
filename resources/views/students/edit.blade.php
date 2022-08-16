@@ -6,6 +6,7 @@
 	@php
 		$steps = [
 			['title' => 'Учащиеся', 'active' => true, 'context' => 'student', 'link' => route('students.index', ['sid' => session()->getId()])],
+			['title' => 'История обучения', 'active' => false, 'context' => 'learn'],
 		];
 	@endphp
 @endsection
@@ -38,8 +39,6 @@
 		$fields[] = ['name' => 'lastname', 'title' => 'Фамилия', 'required' => true, 'type' => 'text', 'value' => $student->lastname];
 		$fields[] = ['name' => 'firstname', 'title' => 'Имя', 'required' => true, 'type' => 'text', 'value' => $student->firstname];
 		$fields[] = ['name' => 'surname', 'title' => 'Отчество', 'required' => false, 'type' => 'text', 'value' => $student->surname];
-        $fields[] = ['name' => 'specialties', 'type' => 'hidden', 'value' => ''];
-        $fields[] = ['name' => 'hspecialties', 'title' => 'Специальности', 'required' => true, 'type' => 'select', 'multiple' => true, 'options' => $specialties, 'value' => $sspecialties];
 
 		$fields[] = ['name' => 'sex', 'title' => 'Пол', 'required' => true, 'type' => 'select', 'options' => [
 			'Мужской' => 'Мужской',
@@ -50,9 +49,8 @@
 		$fields[] = ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email', 'value' => $student->email];
 		$fields[] = ['name' => 'parents', 'title' => 'ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать', 'required' => false, 'type' => 'textarea', 'value' => $student->parents];
 		$fields[] = ['name' => 'parentscontact', 'title' => 'Контактные телефоны родителей или опекунов', 'required' => false, 'type' => 'textarea', 'value' => $student->parentscontact];
-		$fields[] = ['name' => 'passport', 'title' => 'Данные паспорта (серия, номер, кем и когда выдан)', 'required' => false, 'type' => 'textarea', 'value' => $student->passport];
+		$fields[] = ['name' => 'passport', 'title' => 'Данные документа, удостоверяющего личность (серия, номер, кем и когда выдан)', 'required' => false, 'type' => 'textarea', 'value' => $student->passport];
 		$fields[] = ['name' => 'address', 'title' => 'Адрес проживания', 'required' => false, 'type' => 'textarea', 'value' => $student->address];
-		$fields[] = ['name' => 'institutions', 'title' => 'Учебное заведение (на момент заполнения)', 'required' => false, 'type' => 'textarea', 'value' => $student->institutions];
 		$fields[] = ['name' => 'grade', 'title' => 'Класс / группа (на момент заполнения)', 'required' => false, 'type' => 'text', 'value' => $student->grade];
 		$fields[] = ['name' => 'hobby', 'title' => 'Увлечения (хобби)', 'required' => false, 'type' => 'textarea', 'value' => $student->hobby];
 		$fields[] = ['name' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?', 'required' => false, 'type' => 'number', 'value' => $student->contestachievements];
@@ -69,7 +67,7 @@
 	<script>
 		let form = document.getElementById("{{ form($student, $mode, 'id') }}");
 		form.addEventListener('submit', () => {
-			$('#specialties').val(JSON.stringify($('#hspecialties').val()));
+			//
 		}, false);
 	</script>
 @endpush

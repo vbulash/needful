@@ -100,12 +100,15 @@ class UserController extends Controller
 			]);
 			$user->assignRole($role);
 			if ($request->role == 'Работодатель') {
+				$this->addWildcard($user, 'employers.create', $user->getKey());
 				$this->addWildcard($user, 'employers.edit', $user->getKey());
 				$this->addWildcard($user, 'employers.show', $user->getKey());
 			} elseif ($request->role == 'Практикант') {
+				$this->addWildcard($user, 'students.create', $user->getKey());
 				$this->addWildcard($user, 'students.edit', $user->getKey());
 				$this->addWildcard($user, 'students.show', $user->getKey());
 			} elseif ($request->role == 'Учебное заведение') {
+				$this->addWildcard($user, 'schools.create', $user->getKey());
 				$this->addWildcard($user, 'schools.edit', $user->getKey());
 				$this->addWildcard($user, 'schools.show', $user->getKey());
 			}
@@ -176,11 +179,17 @@ class UserController extends Controller
 
 		$user->assignRole($role);
 		if ($request->role == 'Работодатель') {
+			$this->addWildcard($user, 'employers.create', $user->getKey());
 			$this->addWildcard($user, 'employers.edit', $user->getKey());
 			$this->addWildcard($user, 'employers.show', $user->getKey());
 		} elseif ($request->role == 'Практикант') {
+			$this->addWildcard($user, 'students.create', $user->getKey());
 			$this->addWildcard($user, 'students.edit', $user->getKey());
 			$this->addWildcard($user, 'students.show', $user->getKey());
+		} elseif ($request->role == 'Учебное заведение') {
+			$this->addWildcard($user, 'schools.create', $user->getKey());
+			$this->addWildcard($user, 'schools.edit', $user->getKey());
+			$this->addWildcard($user, 'schools.show', $user->getKey());
 		}
 
 		session()->put('success',

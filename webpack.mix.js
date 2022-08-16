@@ -39,7 +39,7 @@ mix
 		'resources/plugins/flatpickr/flatpickr.min.js',
 		'resources/plugins/flatpickr/l10n/ru.js',
 		//'resources/plugins/select2/select2.full.min.js',
-		//'resources/plugins/select2/i18n/ru.js'
+		//'resources/plugins/select2/i18n/ru.js',
     ], 'public/js/app.js')
     .copy([
         'resources/plugins/bootstrap/js/bootstrap.bundle.min.js.map',

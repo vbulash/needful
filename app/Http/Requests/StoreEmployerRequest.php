@@ -25,6 +25,7 @@ class StoreEmployerRequest extends FormRequest
     {
 		// TODO строгая проверка ИНН / ОГРН, идентичная Платформе нейротестирования 1
         return [
+			'short' => ['required'],
 			'name' => ['required'],
 			'phone' => ['required'],
 			'email' => ['email', 'required'],
@@ -37,6 +38,7 @@ class StoreEmployerRequest extends FormRequest
 	public function attributes()
 	{
 		return [
+			'short' => 'Краткое наименование организации',
 			'name' => 'Наименование организации',
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта',

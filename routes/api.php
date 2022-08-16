@@ -30,5 +30,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 	})->name('api.down');
 	// Окружение
 	Route::get('/phpinfo', fn() => phpinfo())->name('api.phpinfo');
+	// Загрузка картинок из CKEditor5
+	Route::post('/upload.ckeditor', 'HelperController@uploadCKEditor')->name('upload.ckeditor');
 });
-

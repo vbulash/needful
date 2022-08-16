@@ -1,15 +1,17 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class School extends Model implements FormTemplate
 {
     use HasFactory, HasTitle;
 
 	protected $fillable = [
+		'short',	// Краткое наименование учебного заведения
 		'name',		// Наименование учебного заведения
 		'type',		// Тип учебного заведения
 		'status',	// Статус активности объекта
@@ -27,7 +29,7 @@ class School extends Model implements FormTemplate
 
 	public function getTitle(): string
 	{
-		return $this->name;
+		return $this->short;
 	}
 
 	public function user()
@@ -38,6 +40,16 @@ class School extends Model implements FormTemplate
 	public function fspecialties()
 	{
 		return $this->hasMany(Fspecialty::class);
+	}
+
+	public function learns(): HasMany
+	{
+		return $this->hasMany(Learn::class);
+	}
+
+	public function teachers()
+	{
+		return $this->morphMany(Teacher::class, 'job');
 	}
 
 	public static function createTemplate(): array

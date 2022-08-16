@@ -57,21 +57,18 @@ class NewStudent extends Notification
 
 	protected function getStudentContent(): iterable
 	{
-		$specialties = $this->student->specialties->pluck('name')->toArray();
 		$fields = [
 			'Фамилия' => $this->student->lastname,
 			'Имя' => $this->student->firstname,
 			'Отчество' => $this->student->surname,
-			'Специальности' => implode(', ', $specialties),
 			'Пол' => $this->student->sex,
 			'Дата рождения' => $this->student->birthdate->format('d.m.Y'),
 			'Телефон' => $this->student->phone,
 			'Электронная почта' => $this->student->email,
-			'ФИО родителей, опекунов (до 14 лет), после 14 лет можно не указывать' => $this->student->parents,
+			'ФИО родителей (до 14 лет)' => $this->student->parents,
 			'Контактные телефоны родителей или опекунов' => $this->student->parentscontact,
 			'Данные документа, удостоверяющего личность (серия, номер, кем и когда выдан)' => $this->student->passport,
 			'Адрес проживания' => $this->student->address,
-			'Учебное заведение (на момент заполнения)' => $this->student->institutions,
 			'Класс / группа (на момент заполнения)' => $this->student->grade,
 			'Увлечения (хобби)' => $this->student->hobby,
 			'Как давно занимаетесь хобби (лет)?' => $this->student->hobbyyears,

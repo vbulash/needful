@@ -15,11 +15,20 @@
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
-		Просмотр
-	@else
-		Изменение
-	@endif специальности &laquo;{{ $especialty->specialty->name }}&raquo;
+	<div>
+		<p>
+		@if($mode == config('global.show'))
+			Просмотр
+		@else
+			Изменение
+		@endif специальности &laquo;{{ $especialty->specialty->name }}&raquo;
+		</p>
+		@if($mode == config('global.edit'))
+			@if (!auth()->user()->hasRole('Администратор'))
+				<p>Новые специальности может добавлять только администратор платформы</p>
+			@endif
+		@endif
+	</div>
 @endsection
 
 @section('form.params')
@@ -48,7 +57,8 @@
             'name' => 'id', 'type' => 'hidden', 'value' => $especialty->getKey()
 		];
         if($mode == config('global.edit'))
-            $fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+            if (auth()->user()->hasRole('Администратор'))
+            	$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
         $fields[] = ['name' => 'count', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $especialty->count];
 	@endphp
 @endsection
@@ -72,7 +82,7 @@
 			);
 		}
 
-		$(document).ready(function() {
+		$(document).ready(function () {
 			let data = {!! $specialties !!};
 			let select = $('#specialty_id');
 			select.select2('destroy');

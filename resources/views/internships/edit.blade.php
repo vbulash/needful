@@ -61,73 +61,30 @@
 @push('js_after')
 	<script src="{{ asset('js/ckeditor.js') }}"></script>
 	<script>
+		let readonly = Boolean({{ $mode == config('global.show') ? 'true' : 'false' }});
+		let formName = "{{ form($internship, $mode, 'name') }}";
+		let ckefield = 'program';
+
 		DecoupledDocumentEditor
-			.create(document.querySelector('.editor'), {
-				toolbar: {
-					items: [
-						'heading',
-						'|',
-						'fontSize',
-						'fontFamily',
-						'|',
-						'fontColor',
-						'fontBackgroundColor',
-						'|',
-						'bold',
-						'italic',
-						'underline',
-						'strikethrough',
-						'subscript',
-						'superscript',
-						'highlight',
-						'|',
-						'alignment',
-						'|',
-						'numberedList',
-						'bulletedList',
-						'|',
-						'outdent',
-						'indent',
-						'codeBlock',
-						'|',
-						'todoList',
-						'link',
-						'blockQuote',
-						'insertTable',
-						'|',
-						'undo',
-						'redo'
-					]
-				},
-				language: 'ru',
-				table: {
-					contentToolbar: [
-						'tableColumn',
-						'tableRow',
-						'mergeTableCells',
-						'tableCellProperties',
-						'tableProperties'
-					]
-				},
-				licenseKey: '',
-			})
+			.create(document.querySelector('.editor'))
 			.then(editor => {
 				window.editor = editor;
 
 				document.querySelector('.document-editor__toolbar').appendChild(editor.ui.view.toolbar.element);
 				document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
 
-				@if($mode == config('global.show')) editor.isReadOnly = true; @endif
+				if (readonly)
+					editor.enableReadOnlyMode('internship.lock');
 			})
 			.catch(error => {
 				console.error('Oops, something went wrong!');
 				console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
-				console.warn('Build id: bfknlbbh0ej1-27rpc1i5joqr');
+				console.warn('Build id: 7qp6pd211rg0-qmvmsysb38gy');
 				console.error(error);
 			});
 
-		document.getElementById('internship-create').addEventListener('submit', () => {
-			document.getElementById('program').value = editor.getData();
+		document.getElementById(formName).addEventListener('submit', () => {
+			document.getElementById(ckefield).value = editor.getData();
 		}, false);
 	</script>
 @endpush

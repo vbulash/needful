@@ -20,9 +20,13 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::resource('/users', 'UserController');
 	Route::get('/users.data', 'UserController@getData')->name('users.index.data');
 
-	// Практиканты
+	// Учащиеся
 	Route::resource('/students', 'StudentController');
 	Route::get('/students.data', 'StudentController@getData')->name('students.index.data');
+	Route::get('/students.select/{student}', 'StudentController@select')->name('students.select');
+	// История обучения
+	Route::resource('/learns', 'LearnController');
+	Route::get('/learns.data', 'LearnController@getData')->name('learns.index.data');
 
 	// Работодатели
 	Route::resource('/employers', 'EmployerController');
@@ -52,10 +56,18 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::resource('/fspecialties', 'FspecialtyController');
 	Route::get('/fspecialties.data', 'FspecialtyController@getData')->name('fspecialties.index.data');
 
+	// Наставники
+	Route::resource('/teachers', 'TeacherController');
+	Route::get('/teachers.data', 'TeacherController@getData')->name('teachers.index.data');
+	Route::get('/teachers.select/{teacher}', 'TeacherController@select')->name('teachers.select');
+
 	// Словари
 	// Специальности
 	Route::resource('/specialties', 'SpecialtyController');
 	Route::get('/specialties.data', 'SpecialtyController@getData')->name('specialties.index.data');
+
+	// Обращение к администратору платформы
+	Route::post('/support', 'HelperController@support')->name('support');
 });
 
 // Маршруты "от работодателя" (E2S)

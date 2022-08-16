@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Specialty extends Model implements FormTemplate
 {
@@ -32,8 +33,9 @@ class Specialty extends Model implements FormTemplate
 		return $this->belongsTo(Item::class, 'level2_id');
 	}
 
-	public function students() {
-		return $this->belongsToMany(Student::class, 'student_specialty')->withTimestamps();
+	public function learns(): HasMany
+	{
+		return $this->hasMany(Learn::class);
 	}
 
 	public static function createTemplate(): array

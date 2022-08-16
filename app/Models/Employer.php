@@ -39,6 +39,11 @@ class Employer extends Model implements FormTemplate
 		return $this->hasMany(Internship::class);
 	}
 
+	public function teachers()
+	{
+		return $this->morphMany(Teacher::class, 'job');
+	}
+
 	public static function createTemplate(): array
 	{
 		return [

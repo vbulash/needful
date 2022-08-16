@@ -41,7 +41,7 @@
 					<tr>
 						<th style="width: 30px">#</th>
 						<th>Тип учебного заведения</th>
-						<th>Наименование</th>
+						<th>Краткое наименование</th>
 						<th>Телефон</th>
 						<th>Электронная почта</th>
 						<th>Связан с пользователем</th>
@@ -106,11 +106,11 @@
 					},
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
-						{data: 'type', name: 'type', responsivePriority: 1},
-						{data: 'name', name: 'name', responsivePriority: 1},
-						{data: 'phone', name: 'phone', responsivePriority: 3},
+						{data: 'type', name: 'type', responsivePriority: 2},
+						{data: 'short', name: 'short', responsivePriority: 1},
+						{data: 'phone', name: 'phone', responsivePriority: 2},
 						{data: 'email', name: 'email', responsivePriority: 2},
-						{data: 'link', name: 'link', responsivePriority: 3},
+						{data: 'link', name: 'link', responsivePriority: 2},
 						{
 							data: 'action',
 							name: 'action',

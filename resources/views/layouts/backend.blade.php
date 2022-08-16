@@ -61,16 +61,10 @@
 							class="ms-1 d-none d-sm-inline-block">Поиск</span>
 					</button>
 					<!-- END Open Search Section -->
-					@yield('menu')
-					@if (isset($menu))
-						<div class="btn-group">
-							@foreach($menu as $menuitem)
-								<a href="{{ route($menuitem['route'], ['sid' => session()->getId()]) }}"
-								   class="btn btn-alt-secondary"
-								>{!! $menuitem['title'] !!}</a>
-							@endforeach
-						</div>
-					@endif
+					<a
+						href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal-support"
+						class="btn btn-alt-secondary"
+					>Обращение к администратору</a>
 				</div>
 				<!-- END Left Section -->
 
@@ -127,3 +121,4 @@
 	</div>
 	<!-- END Page Container -->
 @endsection
+

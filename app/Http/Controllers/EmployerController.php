@@ -59,7 +59,7 @@ class EmployerController extends Controller
 						"</a>\n";
 				if (auth()->user()->can('employers.destroy') || auth()->user()->can('employers.destroy.' . $employer->getKey())) {
 					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
+						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
@@ -67,7 +67,7 @@ class EmployerController extends Controller
 
 				if ($employer->status == ActiveStatus::ACTIVE->value)
 					$actions .=
-						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
 						"<i class=\"fas fa-check\"></i>\n" .
 						"</a>\n";

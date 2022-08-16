@@ -6,6 +6,7 @@
 	@php
 		$steps = [
 			['title' => 'Учащиеся', 'active' => true, 'context' => 'student'],
+			['title' => 'История обучения', 'active' => false, 'context' => 'learn'],
 		];
 	@endphp
 @endsection
@@ -41,7 +42,7 @@
 						<th>Фамилия, имя и отчество</th>
 						<th>Дата рождения</th>
 						<th>Телефон</th>
-						<th>Специальности</th>
+						<th>Электронная почта</th>
 						<th>Пользователь</th>
 						<th>Действия</th>
 					</tr>
@@ -107,11 +108,7 @@
 						{data: 'fio', name: 'fio', responsivePriority: 1},
 						{data: 'birthdate', name: 'birthdate', responsivePriority: 2},
 						{data: 'phone', name: 'phone', responsivePriority: 2},
-						{
-							data: 'specialties', name: 'specialties', responsivePriority: 3, render: (data) => {
-								return data.join(",<br/>");
-							}
-						},
+						{data: 'email', name: 'email', responsivePriority: 2},
 						{data: 'link', name: 'link', responsivePriority: 3},
 						{
 							data: 'action',

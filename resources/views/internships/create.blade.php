@@ -52,9 +52,12 @@
 
 @push('js_after')
 	<script src="{{ asset('js/ckeditor.js') }}"></script>
-	<script>
+	<script type="module">
+		import {SimpleUploadAdapter} from '@ckeditor/ckeditor5-upload';
+
 		DecoupledDocumentEditor
 			.create(document.querySelector('.editor'), {
+				plugins: [SimpleUploadAdapter],
 				toolbar: {
 					items: [
 						'heading',
@@ -69,9 +72,6 @@
 						'italic',
 						'underline',
 						'strikethrough',
-						'subscript',
-						'superscript',
-						'highlight',
 						'|',
 						'alignment',
 						'|',
@@ -80,12 +80,12 @@
 						'|',
 						'outdent',
 						'indent',
-						'codeBlock',
 						'|',
-						'todoList',
 						'link',
 						'blockQuote',
+						'imageUpload',
 						'insertTable',
+						'mediaEmbed',
 						'|',
 						'undo',
 						'redo'
@@ -118,8 +118,35 @@
 				console.error(error);
 			});
 
-		document.getElementById('internship-create').addEventListener('submit', () => {
+		document.getElementById('{{ form(\App\Models\Internship::class, $mode, 'name') }}').addEventListener('submit', () => {
 			document.getElementById('program').value = editor.getData();
+		}, false);
+	</script>
+@endpush
+
+@push('js_after')
+	<script src="{{ asset('js/ckeditor.js') }}"></script>
+	<script>
+		let formName = "{ form(\App\Models\Internship::class, $mode, 'name') }}";
+		let ckefield = 'program';
+
+		DecoupledDocumentEditor
+			.create(document.querySelector('.editor'))
+			.then(editor => {
+				window.editor = editor;
+
+				document.querySelector('.document-editor__toolbar').appendChild(editor.ui.view.toolbar.element);
+				document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+			})
+			.catch(error => {
+				console.error('Oops, something went wrong!');
+				console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+				console.warn('Build id: 7qp6pd211rg0-qmvmsysb38gy');
+				console.error(error);
+			});
+
+		document.getElementById(formName).addEventListener('submit', () => {
+			document.getElementById(ckefield).value = editor.getData();
 		}, false);
 	</script>
 @endpush

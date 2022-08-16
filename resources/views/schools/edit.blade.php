@@ -46,7 +46,8 @@
 			], 'value' => $school->type
 		];
 
-		$fields[] = ['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text', 'value' => $school->name];
+        $fields[] = ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40, 'value' => $school->short];
+		$fields[] = ['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'textarea', 'value' => $school->name];
 		$fields[] = ['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text', 'value' => $school->contact];
 		$fields[] = ['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text', 'value' => $school->phone];
 		$fields[] = ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'text', 'value' => $school->email];

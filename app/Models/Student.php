@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTime;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model implements FormTemplate
 {
@@ -25,6 +27,7 @@ class Student extends Model implements FormTemplate
 		'passport',
 		'address',
 		'institutions',
+		'position',
 		'grade',
 		'hobby',
 		'hobbyyears',
@@ -60,17 +63,19 @@ class Student extends Model implements FormTemplate
 			$this->lastname, $this->firstname, $this->surname ? ' ' . $this->surname : '');
 	}
 
-	public function user()
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}
 
-	public function histories() {
+	public function histories(): HasMany
+	{
 		return $this->hasMany(History::class);
 	}
 
-	public function specialties() {
-		return $this->belongsToMany(Specialty::class, 'student_specialty')->withTimestamps();
+	public function learns(): HasMany
+	{
+		return $this->hasMany(Learn::class);
 	}
 
 	public static function createTemplate(): array

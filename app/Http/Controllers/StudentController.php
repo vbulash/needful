@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Http\Requests\StoreStudentRequest;
-use App\Models\Specialty;
+use App\Http\Requests\UpdateStudentRequest;
+use App\Models\ActiveStatus;
 use App\Models\Student;
 use App\Models\User;
-use App\Notifications\NewSchool;
 use App\Notifications\NewStudent;
 use App\Notifications\UpdateStudent;
 use App\Support\PermissionUtils;
@@ -40,10 +40,10 @@ class StudentController extends Controller
 			->editColumn('fio', fn($student) => $student->getTitle())
 			->editColumn('birthdate', fn($student) => $student->birthdate->format('d.m.Y'))
 			->editColumn('link', fn($student) => $student->user->name)
-			->addColumn('specialties', fn($student) => $student->specialties->pluck('name')->toArray())
 			->addColumn('action', function ($student) {
 				$editRoute = route('students.edit', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 				$showRoute = route('students.show', ['student' => $student->getKey(), 'sid' => session()->getId()]);
+				$selectRoute = route('students.select', ['student' => $student->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				if (auth()->user()->can('students.edit') || auth()->user()->can('students.edit.' . $student->getKey()))
@@ -66,6 +66,14 @@ class StudentController extends Controller
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				}
+
+				if ($student->status == ActiveStatus::ACTIVE->value)
+					$actions .=
+						"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+						"<i class=\"fas fa-check\"></i>\n" .
+						"</a>\n";
+
 				return $actions;
 			})
 			->make(true);
@@ -78,6 +86,8 @@ class StudentController extends Controller
 	 */
 	public function index()
 	{
+		session()->forget('context');
+
 		$count = Student::all()->count();
 		if (auth()->user()->can('students.list')) {
 			return view('students.index', compact('count'));
@@ -92,6 +102,15 @@ class StudentController extends Controller
 		}
 	}
 
+	public function select(int $id)
+	{
+		$student = Student::findOrFail($id);
+		session()->forget('context');
+		session()->put('context', ['student' => $student->getKey()]);
+
+		return redirect()->route('learns.index', ['sid' => session()->getId()]);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -101,7 +120,6 @@ class StudentController extends Controller
 	{
 		$mode = config('global.create');
 		$baseRight = "students.create";
-		$specialties = Specialty::all()->pluck('name', 'id')->toArray();
 
 		if (auth()->user()->hasRole('Администратор')) {
 			$users = User::orderBy('name')->get()
@@ -118,9 +136,9 @@ class StudentController extends Controller
 				})
 				->reject(fn($value) => $value === null)
 				->toArray();
-			return view('students.create', compact('users', 'mode', 'specialties'));
+			return view('students.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
-			return view('students.create', compact('mode', 'specialties'));
+			return view('students.create', compact('mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учащегося'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
@@ -138,9 +156,6 @@ class StudentController extends Controller
 		$student = Student::create($request->all());
 		$student->save();
 		$name = $student->getTitle();
-		// Добавить специальности
-		$specialties = json_decode($request->specialties);
-		$student->specialties()->sync($specialties);
 
 		$permissions = [
 			'students.list',
@@ -180,10 +195,7 @@ class StudentController extends Controller
 		$mode = $show ? config('global.show') : config('global.edit');
 
 		$student = Student::findOrFail($id);
-		// Все специальности
-		$specialties = Specialty::all()->pluck('name', 'id')->toArray();
-		// Специальности учащегося
-		$sspecialties = $student->specialties->pluck('id')->toArray();
+
 		//
 		$baseRight = sprintf("students.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $student->getKey());
@@ -204,9 +216,11 @@ class StudentController extends Controller
 				})
 				->reject(fn($value) => $value === null)
 				->toArray();
-			return view('students.edit', compact('student', 'users', 'mode', 'specialties', 'sspecialties'));
+			return view('students.edit',
+				compact('student', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
-			return view('students.edit', compact('student', 'mode', 'specialties', 'sspecialties'));
+			return view('students.edit',
+				compact('student', 'mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи учащегося'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
@@ -216,18 +230,16 @@ class StudentController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param StoreStudentRequest $request
+	 * @param UpdateStudentRequest $request
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(StoreStudentRequest $request, int $id)
+	public function update(UpdateStudentRequest $request, int $id)
 	{
 		$student = Student::findOrFail($id);
+		$data = $request->all();
+		$student->update($data);
 		$name = $student->getTitle();
-		$student->update($request->all());
-		// Добавить специальности
-		$specialties = json_decode($request->specialties);
-		$student->specialties()->sync($specialties);
 
 		$permissions = [
 			'students.list',

@@ -1,5 +1,17 @@
 <?php
 
+use App\Models\Employer;
+use App\Models\Especialty;
+use App\Models\Fspecialty;
+use App\Models\Internship;
+use App\Models\Learn;
+use App\Models\Role;
+use App\Models\School;
+use App\Models\Specialty;
+use App\Models\Student;
+use App\Models\Teacher;
+use App\Models\User;
+
 if (! function_exists('form')) {
 	function form($formTemplate, int $mode, string $param): string {
 		return match ($mode) {
@@ -13,14 +25,17 @@ if (! function_exists('form')) {
 if (! function_exists('classByContext')) {
 	function classByContext(string $context) {
 		return match ($context) {
-			'employer' => \App\Models\Employer::class,
-			'internship' => \App\Models\Internship::class,
-			'role' => \App\Models\Role::class,
-			'user' => \App\Models\User::class,
-			'school' => \App\Models\School::class,
-			'specialty' => \App\Models\Specialty::class,
-			'fspecialty' => \App\Models\Fspecialty::class,
-			'especialty' => \App\Models\Especialty::class,
+			'employer' => Employer::class,
+			'internship' => Internship::class,
+			'learn' => Learn::class,
+			'role' => Role::class,
+			'user' => User::class,
+			'school' => School::class,
+			'specialty' => Specialty::class,
+			'student' => Student::class,
+			'fspecialty' => Fspecialty::class,
+			'especialty' => Especialty::class,
+			'teacher' => Teacher::class,
 		};
 	}
 }

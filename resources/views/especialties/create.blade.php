@@ -15,7 +15,12 @@
 @endsection
 
 @section('interior.header')
-	Новая специальность по стажировке работодателя
+	<div>
+		<p>Новая специальность по стажировке работодателя</p>
+		@if (!auth()->user()->hasRole('Администратор'))
+			<p>Новые специальности может добавлять только администратор платформы</p>
+		@endif
+	</div>
 @endsection
 
 @section('form.params')
@@ -27,9 +32,10 @@
 	@php
 		$fields = [
 			['name' => 'specialty_id', 'title' => 'Выбор специальности', 'required' => false, 'type' => 'select', 'placeholder' => 'Выберите специальность'],
-			['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'],
-			['name' => 'count', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'min' => 1],
 		];
+        if (auth()->user()->hasRole('Администратор'))
+			$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+        $fields[] = ['name' => 'count', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'min' => 1];
 	@endphp
 @endsection
 
