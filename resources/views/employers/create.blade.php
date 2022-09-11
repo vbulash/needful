@@ -27,6 +27,7 @@
 	@include('employers.assign')
 	@php
 		$fields = [
+            ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40],
 			['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text'],
 			['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text'],
 			['name' => 'address', 'title' => 'Фактический адрес', 'required' => false, 'type' => 'text'],

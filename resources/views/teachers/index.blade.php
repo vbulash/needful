@@ -1,13 +1,13 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с наставниками
+	Работа с руководителями практики
 @endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Наставник', 'active' => true, 'context' => 'teacher', 'link' => route('teachers.index', ['sid' => session()->getId()])],
+			['title' => 'Руководители практики', 'active' => true, 'context' => 'teacher', 'link' => route('teachers.index', ['sid' => session()->getId()])],
 			['title' => 'Практиканты', 'active' => false, 'context' => 'tstudent'],
 		];
 	@endphp
@@ -17,7 +17,7 @@
 	<div class="block-header block-header-default">
 		<div>
 			<a href="{{ route('teachers.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить наставника</a>
+			   class="btn btn-primary mt-3 mb-3">Добавить руководителя практики</a>
 		</div>
 	</div>
 	<div class="block-content p-4">
@@ -28,8 +28,8 @@
 					<thead>
 					<tr>
 						<th style="width: 30px">#</th>
-						<th>ФИО наставника</th>
-						<th>Наставник работает в</th>
+						<th>ФИО руководителя практики</th>
+						<th>Руководитель практики работает в</th>
 						<th>Должность</th>
 						<th>Действия</th>
 					</tr>
@@ -37,7 +37,7 @@
 				</table>
 			</div>
 		@else
-			<p>Наставников пока нет...</p>
+			<p>Руководителя практики пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -67,7 +67,7 @@
 
 			function clickDelete(id, name) {
 				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить наставника &laquo;" + name + "&raquo; ?";
+				document.getElementById('confirm-body').innerHTML = "Удалить руководителя практики &laquo;" + name + "&raquo; ?";
 				document.getElementById('confirm-yes').dataset.id = id;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 				confirmDialog.show();

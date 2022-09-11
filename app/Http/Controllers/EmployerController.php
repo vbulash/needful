@@ -147,7 +147,7 @@ class EmployerController extends Controller
 	 * @param StoreEmployerRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreEmployerRequest $request)
+	public function store(StoreEmployerRequest $request): RedirectResponse
 	{
 		$employer = Employer::create($request->all());
 		$employer->save();
@@ -186,7 +186,7 @@ class EmployerController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function edit(int $id, bool $show = false)
+	public function edit(int $id, bool $show = false): View|Factory|RedirectResponse|Application
 	{
 		$mode = $show ? config('global.show') : config('global.edit');
 		$employer = Employer::findOrFail($id);

@@ -109,7 +109,7 @@
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
 						{data: 'inn', name: 'inn', responsivePriority: 1},
-						{data: 'name', name: 'name', responsivePriority: 2},
+						{data: 'short', name: 'short', responsivePriority: 2},
 						{data: 'post_address', name: 'post_address', responsivePriority: 3},
 						{data: 'phone', name: 'phone', responsivePriority: 3},
 						{data: 'email', name: 'email', responsivePriority: 2},

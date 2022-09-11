@@ -4,11 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int federal
+ * @property int order
+ * @property string code
+ * @property string $name
+ * @property string degree
+ * @method static findOrFail(mixed $specialty_id)
+ */
 class Specialty extends Model implements FormTemplate
 {
-    use HasFactory;
+    use HasFactory, HasTitle;
 
 	protected $fillable = [
 		'federal',	// Признак федерального справочника профессий
@@ -18,17 +27,17 @@ class Specialty extends Model implements FormTemplate
 		'degree',	// Квалификация по федеральному справочнику
 	];
 
-	public function level0()
+	public function level0(): BelongsTo
 	{
 		return $this->belongsTo(Item::class, 'level0_id');
 	}
 
-	public function level1()
+	public function level1(): BelongsTo
 	{
 		return $this->belongsTo(Item::class, 'level1_id');
 	}
 
-	public function level2()
+	public function level2(): BelongsTo
 	{
 		return $this->belongsTo(Item::class, 'level2_id');
 	}
@@ -58,7 +67,13 @@ class Specialty extends Model implements FormTemplate
 		];
 	}
 
-	public function fspecialties() {
+	public function fspecialties(): HasMany
+	{
 		return $this->hasMany(Fspecialty::class);
+	}
+
+	public function getTitle(): string
+	{
+		return $this->name;
 	}
 }
