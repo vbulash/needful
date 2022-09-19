@@ -17,7 +17,7 @@
 	<div class="block-header block-header-default">
 		<div>
 			<a href="{{ route('tstudents.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить практиканта</a>
+			   class="btn btn-primary mt-3 mb-3">Добавить новую связку руководителя практики и практиканта</a>
 		</div>
 	</div>
 	<div class="block-content p-4">

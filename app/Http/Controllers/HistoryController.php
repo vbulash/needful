@@ -30,7 +30,7 @@ class HistoryController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request)
+	public function getData(Request $request): JsonResponse
 	{
 		$query = History::all();
 		if ($request->has('eids')) {
@@ -91,8 +91,8 @@ class HistoryController extends Controller
      *
      * @return Application|Factory|View|RedirectResponse
 	 */
-    public function index()
-    {
+    public function index(): View|Factory|RedirectResponse|Application
+	{
 		$params = [
 			'count' => History::all()->count()
 		];
@@ -117,8 +117,8 @@ class HistoryController extends Controller
      *
      * @return Response
      */
-    public function create()
-    {
+    public function create(): Response
+	{
         //
     }
 
@@ -128,8 +128,8 @@ class HistoryController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request): Response
+	{
         //
     }
 
@@ -164,8 +164,8 @@ class HistoryController extends Controller
      * @param  int  $id
      * @return RedirectResponse
 	 */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id): RedirectResponse
+	{
 		$history = History::findOrFail($id);
 		$history->update($request->all());
 		$history->notify(new StartInternshipNotification($history));
@@ -182,7 +182,7 @@ class HistoryController extends Controller
 	 * @param int $history
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $history)
+	public function destroy(Request $request, int $history): bool
 	{
 		if ($history == 0) {
 			$id = $request->id;

@@ -63,7 +63,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Практиканты
 	Route::resource('/tstudents', 'TeacherStudentController');
 	Route::get('/tstudents.data', 'TeacherStudentController@getData')->name('tstudents.index.data');
-	Route::get('/tstudents.source', 'TeacherStudentController@getSource')->name('tstudents.source');
+	Route::post('/tstudents.source', 'TeacherStudentController@getSource')->name('tstudents.source');
 
 	// Словари
 	// Специальности
