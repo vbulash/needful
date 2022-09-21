@@ -7,13 +7,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
 {
 	/**
 	 * Display the password reset link request view.
 	 *
-	 * @return \Illuminate\View\View
+	 * @return View
 	 */
 	public function create()
 	{

@@ -1,6 +1,6 @@
 @extends('services.service')
 
-@section('service')Работодатель. Начать стажировку практиканта@endsection
+@section('service')Работодатель. Запланировать стажировку практикантов@endsection
 
 @section('steps')
 	@php
@@ -8,7 +8,7 @@
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
 			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
 			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
-			['title' => 'Выбор практиканта', 'active' => true, 'context' => 'student', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
+			['title' => 'Выбор практикантов', 'active' => true, 'context' => null, 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
 			['title' => 'Подтверждение выбора', 'active' => false],
 		];
 	@endphp

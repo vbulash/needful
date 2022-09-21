@@ -41,7 +41,6 @@ class TeacherController extends Controller
 			->addColumn('action', function ($teacher) {
 				$editRoute = route('teachers.edit', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
 				$showRoute = route('teachers.show', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
-				$selectRoute = route('teachers.select', ['teacher' => $teacher->id, 'sid' => session()->getId()]);
 				$actions = '';
 
 				$actions .=
@@ -62,24 +61,9 @@ class TeacherController extends Controller
 					"<i class=\"fas fa-trash-alt\"></i>\n" .
 					"</a>\n";
 
-				$actions .=
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
-					"</a>\n";
-
 				return $actions;
 			})
 			->make(true);
-	}
-
-	public function select(int $id)
-	{
-		$teacher = Teacher::findOrFail($id);
-		session()->forget('context');
-		session()->put('context', ['teacher' => $teacher->getKey()]);
-
-		return redirect()->route('tstudents.index', ['sid' => session()->getId()]);
 	}
 
     /**
@@ -89,7 +73,6 @@ class TeacherController extends Controller
 	 */
     public function index()
     {
-		session()->forget('context');
 		$count = Teacher::all()->count();
 
 		return view('teachers.index', compact('count'));

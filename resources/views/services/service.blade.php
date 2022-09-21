@@ -10,27 +10,27 @@
 
 @section('content')
 	<div class="bg-body-light">
-		<div class="content content-full">
+		<div class="content content-full pt-0">
 			@yield('header')
 			@php
 				$context = session('context');
 			@endphp
-			<div class="row items-push">
+			<div class="row items-push mt-0 mb-0">
 				@foreach($steps as $step)
 					@php
 						if($loop->first) $left = true;
 						if($step['active']) {
 							$left = false;
 							$class = 'block block-rounded block-transparent block-link-pop bg-xsmooth h-100 mb-0';
-							$text = 'fs-lg fw-semibold mb-0 text-white';
+							$text = 'fs-sm fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-chevron-right text-white-50';
 						} elseif ($left) {
 							$class = 'block block-rounded block-transparent block-link-pop bg-xeco h-100 mb-0';
-							$text = 'fs-lg fw-semibold mb-0 text-white';
+							$text = 'fs-sm fw-semibold mb-0 text-white';
 							$icon = 'fas fa-2x fa-check text-white-50';
 						} else {
 							$class = 'block block-rounded block-link-shadow h-100 mb-0';
-							$text = 'fs-lg fw-semibold mb-0 text-muted';
+							$text = 'fs-sm fw-semibold mb-0 text-muted';
 							$icon = 'fas fa-2x fa-chevron-right text-muted';
 						}
 

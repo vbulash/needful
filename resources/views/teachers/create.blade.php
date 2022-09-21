@@ -8,7 +8,6 @@
 	@php
 		$steps = [
 			['title' => 'Руководители практики', 'active' => true, 'context' => 'teacher', 'link' => route('teachers.index', ['sid' => session()->getId()])],
-			['title' => 'Практиканты', 'active' => false, 'context' => 'tstudent'],
 		];
 	@endphp
 @endsection

@@ -4,46 +4,52 @@ namespace App\Http\Controllers\Services\E2S\StartInternship;
 
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Employer;
 use App\Models\History;
-use App\Models\Internship;
-use App\Models\Student;
-use App\Models\Timetable;
+use App\Models\HistoryStatus;
+use App\Models\TraineeStatus;
+use App\Notifications\e2s\EmployerPracticeNotification;
 use App\Notifications\e2s\StartInternshipNotification;
-use App\Support\PermissionUtils;
-use DateTime;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\DataTables;
-use Exception;
 
 class Step5Controller extends Controller
 {
 	//
-	public function run()
+	public function run(Request $request)
 	{
 		$context = session('context');
+		$ids = $request->ids;
+
 		$view = 'services.e2s.start_internship.step5';
 
-		return view($view, compact('context'));
+		return view($view, compact('context', 'ids'));
 	}
 
 	// Создание
-	public function create(Request $request) {
+	public function create(Request $request): RedirectResponse
+	{
 		$context = session('context');
-		$history = History::create([
-			'timetable_id' => $context['timetable']->getKey(),
-			'student_id' => $context['student']->getKey(),
-			'status' => 'Планируется'
-		]);
+		$ids = $request->ids;
+
+		$history = new History();
+		$history->timetable()->associate($context['timetable']->getKey());
+		$history->status = HistoryStatus::NEW;
 		$history->save();
+		$history->students()
+			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW]);
 
-		$history->notify(new StartInternshipNotification($history));
+		foreach ($history->students as $trainee) {
+			$history->students()->updateExistingPivot($trainee, ['status' => TraineeStatus::ASKED->value]);
+			$trainee->notify(new EmployerPracticeNotification($trainee, $history, TraineeStatus::ASKED->value));
+			event(new ToastEvent('info', '', "Переслано письмо-предложение практики для учащегося: {$trainee->getTitle()}"));
+
+			// TODO инициировать событие Task от auth()->user()->email к $student->email
+		}
+
 		$id = $history->getKey();
-		session()->forget('context');
+		//session()->forget('context');
 
-		session()->put('success', "Стажировка № {$id} запланирована<br/>Письмо практиканту отправлено");
+		session()->put('success', "Стажировка № {$id} запланирована<br/>Письма отправлены");
 		return redirect()->route('history.show', ['history' => $id, 'sid' => session()->getId()]);
 	}
 }

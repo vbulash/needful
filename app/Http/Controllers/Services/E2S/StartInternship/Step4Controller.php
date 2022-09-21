@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Services\E2S\StartInternship;
 
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
+use App\Models\ActiveStatus;
 use App\Models\Employer;
 use App\Models\Internship;
 use App\Models\Student;
 use App\Models\Timetable;
 use App\Support\PermissionUtils;
 use DateTime;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -25,27 +30,19 @@ class Step4Controller extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request)
+	public function getData(Request $request): JsonResponse
 	{
-		$query = Student::all();
+		$query = Student::where('status', ActiveStatus::ACTIVE->value);
 
 		return Datatables::of($query)
 			->editColumn('fio', fn ($student) => $student->getTitle())
 			->editColumn('birthdate', fn ($student) => $student->birthdate->format('d.m.Y'))
 			->addColumn('action', function ($student) {
 				$showRoute = route('e2s.start_internship.step4.show', ['student' => $student->id, 'sid' => session()->getId()]);
-				$selectRoute = route('e2s.start_internship.step4.select', ['student' => $student->id, 'sid' => session()->getId()]);
-				$actions = '';
-
-				$actions .=
+				$actions =
 					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 					"<i class=\"fas fa-eye\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
 					"</a>\n";
 				return $actions;
 			})
@@ -53,27 +50,29 @@ class Step4Controller extends Controller
 	}
 
 	// Выбор
-	public function select(int $id)
+	public function select(Request $request): RedirectResponse
 	{
+		$ids = json_decode($request->ids);
+		$names = $request->names;
 		$context = session('context');
-		$student = Student::findOrFail($id);
-		$context['student'] = $student;
+		$context['ids'] = $ids;
+		$context['names'] = $names;
 
 		session()->forget('context');
 		session()->put('context', $context);
 
-		return redirect()->route('e2s.start_internship.step5', ['sid' => session()->getId()]);
+		return redirect()->route('e2s.start_internship.step5', ['ids' => json_encode($ids), 'sid' => session()->getId()]);
 	}
 
 	// Просмотр карточки стажировки
-	public function showStudent(int $id)
+	public function showStudent(int $id): Factory|View|Application
 	{
 		$student = Student::findOrFail($id);
 		return view('services.e2s.start_internship.show-student', compact('student'));
 	}
 
 	//
-	public function run()
+	public function run(): Factory|View|Application
 	{
 		$context = session('context');
 		unset($context['student']);

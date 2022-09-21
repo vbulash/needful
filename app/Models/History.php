@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 
 class History extends Model implements FormTemplate
@@ -12,16 +14,19 @@ class History extends Model implements FormTemplate
 
 	protected $fillable = [
 		'timetable_id',
-		'student_id',
 		'status'
 	];
 
-	public function timetable() {
+	public function timetable(): BelongsTo
+	{
 		return $this->belongsTo(Timetable::class);
 	}
 
-	public function student() {
-		return $this->belongsTo(Student::class);
+	public function students(): BelongsToMany
+	{
+		return $this->belongsToMany(Student::class, 'history_student')
+			->withPivot('status')
+			->withTimestamps();
 	}
 
 	public static function createTemplate(): array

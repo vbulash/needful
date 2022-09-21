@@ -9,13 +9,14 @@ use DateTime;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @method static findOrFail(mixed $student)
  */
 class Student extends Model implements FormTemplate
 {
-	use HasFactory, HasTitle;
+	use HasFactory, HasTitle, Notifiable;
 
 	protected $fillable = [
 		'status',	// Статус активности объекта
@@ -72,14 +73,16 @@ class Student extends Model implements FormTemplate
 		return $this->belongsTo(User::class);
 	}
 
-	public function histories(): HasMany
-	{
-		return $this->hasMany(History::class);
-	}
-
 	public function learns(): HasMany
 	{
 		return $this->hasMany(Learn::class);
+	}
+
+	public function histories(): BelongsToMany
+	{
+		return $this->belongsToMany(History::class, 'history_student')
+			->withPivot('status')
+			->withTimestamps();
 	}
 
 	public static function createTemplate(): array
@@ -100,5 +103,10 @@ class Student extends Model implements FormTemplate
 			'action' => route('students.update', ['student' => $this->getKey(), 'sid' => session()->getId()]),
 			'close' => route('students.index', ['sid' => session()->getId()]),
 		];
+	}
+
+	public function routeNotificationFor($driver, $notification = null): array
+	{
+		return [$this->email => $this->getTitle()];
 	}
 }

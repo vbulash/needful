@@ -70,7 +70,7 @@
 		let elToast = document.getElementById('livetoast');
 		let toast = new bootstrap.Toast(elToast);
 
-		toast.hide();
+		// toast.hide();
 
 		elToast.className = classList;
 		elToast.setAttribute('data-bs-autohide', autohide);

@@ -26,14 +26,10 @@
 									<div class="mb-4 text-sm text-gray-600">
 										Забыли пароль? Нет проблем. Введите адрес электронной почты пользователя платформы &laquo;{{ env('APP_NAME') }}&raquo;, на которую мы пришлем ссылку сброса пароля, что позволит ввести вам новый пароль
 									</div>
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<input type="email" class="form-control" id="email" name="email"
-												   placeholder="Электронная почта пользователя">
-											<span class="input-group-text">
-                                            <i class="fa fa-user-circle"></i>
-                                        </span>
-										</div>
+									<div class="form-floating mb-4">
+										<input type="email" class="form-control" id="email" name="email"
+											   placeholder="Электронная почта">
+										<label for="email">Электронная почта пользователя</label>
 									</div>
 									<div class="text-center mt-4 mb-4">
 										<button type="submit" class="btn btn-hero btn-primary">

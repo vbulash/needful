@@ -59,11 +59,6 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');
 	Route::get('/teachers.data', 'TeacherController@getData')->name('teachers.index.data');
-	Route::get('/teachers.select/{teacher}', 'TeacherController@select')->name('teachers.select');
-	// Практиканты
-	Route::resource('/tstudents', 'TeacherStudentController');
-	Route::get('/tstudents.data', 'TeacherStudentController@getData')->name('tstudents.index.data');
-	Route::post('/tstudents.source', 'TeacherStudentController@getSource')->name('tstudents.source');
 
 	// Словари
 	// Специальности
@@ -95,7 +90,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 	Route::get('/e2s.start_internship.step4', 'StartInternship\Step4Controller@run')->name('e2s.start_internship.step4');
 	Route::get('/e2s.start_internship.step4.data', 'StartInternship\Step4Controller@getData')->name('e2s.start_internship.step4.data');
 	Route::get('/e2s.start_internship.step4.show/{student}', 'StartInternship\Step4Controller@showStudent')->name('e2s.start_internship.step4.show');
-	Route::get('/e2s.start_internship.step4.select/{student}', 'StartInternship\Step4Controller@select')->name('e2s.start_internship.step4.select');
+	Route::post('/e2s.start_internship.step4.select', 'StartInternship\Step4Controller@select')->name('e2s.start_internship.step4.select');
 	// Подтверждение
 	Route::get('/e2s.start_internship.step5', 'StartInternship\Step5Controller@run')->name('e2s.start_internship.step5');
 	Route::get('/e2s.start_internship.step5.create', 'StartInternship\Step5Controller@create')->name('e2s.start_internship.step5.create');
