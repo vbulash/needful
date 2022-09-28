@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Events\UpdateSchoolTaskEvent;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Models\ActiveStatus;
 use App\Models\School;
@@ -61,7 +62,7 @@ class SchoolController extends Controller
 				if (auth()->user()->can('schools.destroy') || auth()->user()->can('schools.destroy.' . $school->getKey())) {
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$school->id}, '{$school->name}')\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$school->id}, '{$school->short}')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				}
@@ -232,8 +233,10 @@ class SchoolController extends Controller
 	public function update(StoreSchoolRequest $request, $id)
 	{
 		$school = School::findOrFail($id);
+		$oldStatus = $school->status;
 		$name = $school->name;
 		$school->update($request->all());
+		$newStatus = $school->status;
 
 		$permissions = [
 			'schools.list',
@@ -246,6 +249,8 @@ class SchoolController extends Controller
 		}
 
 		$school->user->notify(new UpdateSchool($school));
+		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
+			event(new UpdateSchoolTaskEvent($school));
 
 		session()->put('success', "Анкета учебного заведения \"{$name}\" обновлена");
 		return redirect()->route('schools.index', ['sid' => session()->getId()]);

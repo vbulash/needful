@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Events\UpdateStudentTaskEvent;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\ActiveStatus;
@@ -237,9 +238,11 @@ class StudentController extends Controller
 	public function update(UpdateStudentRequest $request, int $id)
 	{
 		$student = Student::findOrFail($id);
+		$oldStatus = $student->status;
 		$data = $request->all();
 		$student->update($data);
 		$name = $student->getTitle();
+		$newStatus = $student->status;
 
 		$permissions = [
 			'students.list',
@@ -252,6 +255,8 @@ class StudentController extends Controller
 		}
 
 		$student->user->notify(new UpdateStudent($student));
+		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
+			event(new UpdateStudentTaskEvent($student));
 
 		session()->put('success', "Анкета учащегося \"{$name}\" обновлена");
 		return redirect()->route('students.index', ['sid' => session()->getId()]);

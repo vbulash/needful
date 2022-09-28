@@ -38,3 +38,8 @@
 .table.dataTable thead {
 	background-color: rgba(0, 0, 0, 0.05);
 }
+
+.unread {
+	border-left-width: 4px;
+	border-left-color: $theme-xsmooth-primary !important;
+}

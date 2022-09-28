@@ -34,9 +34,10 @@ return new class extends Migration
 			$table->text('contestachievements')->comment('Участие в конкурсах, олимпиадах. Достижения')->nullable();
 			$table->text('dream')->comment('Чем хочется заниматься в жизни?')->nullable();
 			$table->string('documents')->comment('Документы')->nullable();
+			//
 			$table->unsignedBigInteger('user_id')->comment('Связанный пользователь')->nullable();
-			$table->foreign('user_id')->references('id')->on('users');
-
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+			//
             $table->timestamps();
         });
     }

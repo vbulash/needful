@@ -36,6 +36,7 @@
 				'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
 			]],
 			['name' => 'status', 'title' => 'Статус стажировки', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
+			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false],
 			['name' => 'program', 'title' => 'Программа стажировки', 'type' => 'editor', 'required' => true],
 			['name' => 'employer_id', 'type' => 'hidden', 'value' => $employer->getKey()],
 		];

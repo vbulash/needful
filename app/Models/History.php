@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @method static findOrFail(mixed $history)
+ */
 class History extends Model implements FormTemplate
 {
     use HasFactory, Notifiable;

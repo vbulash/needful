@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Events\UpdateEmployerTaskEvent;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Models\ActiveStatus;
 use App\Models\Employer;
@@ -10,6 +11,7 @@ use App\Models\User;
 use App\Notifications\NewEmployer;
 use App\Notifications\UpdateEmployer;
 use App\Support\PermissionUtils;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -18,7 +20,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
-use \Exception;
 
 class EmployerController extends Controller
 {
@@ -29,41 +30,46 @@ class EmployerController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request)
+	public function getData(Request $request): JsonResponse
 	{
-		$query = Employer::all();
-		if ($request->has('ids'))
-			$query = $query->whereIn('id', $request->ids);
+		$context = session('context');
+		if (isset($context['chain']))
+			$query = Employer::where('id' , $context['employer']);
+		else {
+			$query = Employer::all();
+			if ($request->has('ids'))
+				$query = $query->whereIn('id', $request->ids);
+		}
 
 		return Datatables::of($query)
-			->editColumn('link', function ($employer) {
-				return $employer->user->name;
-			})
-			->addColumn('action', function ($employer) {
+			->editColumn('link', fn ($employer) => $employer->user->name)
+			->addColumn('action', function ($employer) use ($context) {
 				$editRoute = route('employers.edit', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$showRoute = route('employers.show', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$selectRoute = route('employers.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				if (auth()->user()->can('employers.edit') || auth()->user()->can('employers.edit.' . $employer->getKey()))
-					$actions .=
-						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-						"<i class=\"fas fa-edit\"></i>\n" .
-						"</a>\n";
+				if (!isset($context['chain']))
+					if (auth()->user()->can('employers.edit') || auth()->user()->can('employers.edit.' . $employer->getKey()))
+						$actions .=
+							"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+							"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
+							"<i class=\"fas fa-edit\"></i>\n" .
+							"</a>\n";
 				if (auth()->user()->can('employers.show') || auth()->user()->can('employers.show.' . $employer->getKey()))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('employers.destroy') || auth()->user()->can('employers.destroy.' . $employer->getKey())) {
-					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
-						"<i class=\"fas fa-trash-alt\"></i>\n" .
-						"</a>\n";
-				}
+				if (!isset($context['chain']))
+					if (auth()->user()->can('employers.destroy') || auth()->user()->can('employers.destroy.' . $employer->getKey())) {
+						$actions .=
+							"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
+							"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->name}')\">\n" .
+							"<i class=\"fas fa-trash-alt\"></i>\n" .
+							"</a>\n";
+					}
 
 				if ($employer->status == ActiveStatus::ACTIVE->value)
 					$actions .=
@@ -76,13 +82,22 @@ class EmployerController extends Controller
 			->make(true);
 	}
 
-	public function select(int $id)
+	public function select(int $id): RedirectResponse
 	{
 		$employer = Employer::findOrFail($id);
-		session()->forget('context');
-		session()->put('context', ['employer' => $employer->getKey()]);
+		$context = session('context');
+		if (!isset($context['chain'])) {
+			session()->forget('context');
+			session()->put('context', ['employer' => $employer->getKey()]);
+		}
 
 		return redirect()->route('internships.index', ['sid' => session()->getId()]);
+	}
+
+	public function getClear(): RedirectResponse
+	{
+		session()->forget('context');
+		return redirect()->route('employers.index');
 	}
 
 	/**
@@ -90,10 +105,15 @@ class EmployerController extends Controller
 	 *
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function index()
+	public function index(): View|Factory|RedirectResponse|Application
 	{
-		session()->forget('context');
-		$count = Employer::all()->count();
+		$context = session('context');
+		if (isset($context['chain'])) {
+			$count = 1;
+		} else {
+			session()->forget('context');
+			$count = Employer::all()->count();
+		}
 		if (auth()->user()->can('employers.list')) {
 			return view('employers.index', compact('count'));
 		} elseif (PermissionUtils::can('employers.list.')) {
@@ -112,7 +132,7 @@ class EmployerController extends Controller
 	 *
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function create()
+	public function create(): View|Factory|RedirectResponse|Application
 	{
 		$mode = config('global.create');
 		$baseRight = "employers.create";
@@ -121,8 +141,7 @@ class EmployerController extends Controller
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Работодатель'))
-					;
+						($user->hasRole('Работодатель'));
 					if (!$collect) return null;
 
 					return [
@@ -130,7 +149,7 @@ class EmployerController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn ($value) => $value === null)
+				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('employers.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
@@ -173,9 +192,9 @@ class EmployerController extends Controller
 	 * Display the specified resource.
 	 *
 	 * @param int $id
-	 * @return Application|Factory|View
+	 * @return Factory|View|Application|RedirectResponse
 	 */
-	public function show($id)
+	public function show(int $id): Factory|View|Application|RedirectResponse
 	{
 		return $this->edit($id, true);
 	}
@@ -184,6 +203,7 @@ class EmployerController extends Controller
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param int $id
+	 * @param bool $show
 	 * @return Application|Factory|View|RedirectResponse
 	 */
 	public function edit(int $id, bool $show = false): View|Factory|RedirectResponse|Application
@@ -198,8 +218,7 @@ class EmployerController extends Controller
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Работодатель'))
-					;
+						($user->hasRole('Работодатель'));
 					if (!$collect) return null;
 
 					return [
@@ -207,7 +226,7 @@ class EmployerController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn ($value) => $value === null)
+				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('employers.edit', compact('employer', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
@@ -225,11 +244,13 @@ class EmployerController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(StoreEmployerRequest $request, $id)
+	public function update(StoreEmployerRequest $request, int $id): RedirectResponse
 	{
 		$employer = Employer::findOrFail($id);
 		$name = $employer->name;
+		$oldStatus = $employer->status;
 		$employer->update($request->all());
+		$newStatus = $employer->status;
 
 		$permissions = [
 			'employers.list',
@@ -242,6 +263,8 @@ class EmployerController extends Controller
 		}
 
 		$employer->user->notify(new UpdateEmployer($employer));
+		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
+			event(new UpdateEmployerTaskEvent($employer));
 
 		session()->put('success', "Анкета работодателя \"{$name}\" обновлена");
 		return redirect()->route('employers.index', ['sid' => session()->getId()]);
@@ -254,7 +277,7 @@ class EmployerController extends Controller
 	 * @param int $employer
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $employer)
+	public function destroy(Request $request, int $employer): bool
 	{
 		if ($employer == 0) {
 			$id = $request->id;

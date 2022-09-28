@@ -14,6 +14,7 @@ class Internship extends Model implements FormTemplate
 		'itype',
 		'status',
 		'program',
+		'short',
 		'employer_id'
 	];
 

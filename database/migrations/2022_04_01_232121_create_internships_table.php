@@ -20,8 +20,10 @@ return new class extends Migration
 			$table->enum('itype', ['Открытая стажировка', 'Закрытая стажировка'])->comment('Тип стажировки');
 			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
 			$table->text('program')->comment('Программа стажировки');
+			//
 			$table->unsignedBigInteger('employer_id')->comment('Связанный работодатель');
-			$table->foreign('employer_id')->references('id')->on('employers');
+			$table->foreign('employer_id')->references('id')->on('employers')->cascadeOnDelete();
+			//
             $table->timestamps();
         });
     }

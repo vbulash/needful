@@ -52,7 +52,7 @@
 							}
 					@endphp
 
-					<div class="col-md-6 col-xl-3 mb-3">
+					<div class="col-md-6 col-xl-3 mb-3 ps-0">
 						<a class="{!! $class !!}"
 						   href="{!! $link !!}">
 							<div

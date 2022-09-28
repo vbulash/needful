@@ -83,14 +83,15 @@
 
 	// Ошибки и сообщения
 	// Broadcast
-	var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+	const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
 		cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
 	});
 
-	var channel = pusher.subscribe('needful-channel-{!! $sid !!}');
-	channel.bind('toast-event', (data) => {
+	const channel = pusher.subscribe('needful-channel-{!! $sid !!}');
+	pusher.bind('toast-event', data => {
 		showToast(data.type, data.message, false);
 	});
+	// Pusher.logToConsole = true;
 
 	document.addEventListener("DOMContentLoaded", () => {
 		flatpickr('.flatpickr-input', {

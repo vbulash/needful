@@ -2,6 +2,9 @@
 
 @section('service')
 	Работа с работодателями
+	@if (isset(session('context')['chain']))
+		(только цепочка значений)
+	@endif
 @endsection
 
 @section('steps')
@@ -17,10 +20,14 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<a href="{{ route('timetables.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить запись графика стажировки</a>
-			<p>Вы также можете перейти на список специальностей по стажировке по ссылке
-				<a href="{{ route('especialties.index', ['sid' => session()->getId()]) }}">Список специальностей стажировки</a></p>
+			@if (isset(session('context')['chain']))
+				Отображается единственная запись по цепочке из входящего сообщения
+			@else
+				<a href="{{ route('timetables.create', ['sid' => session()->getId()]) }}"
+				   class="btn btn-primary mt-3 mb-3">Добавить запись графика стажировки</a>
+				<p>Вы также можете перейти на список специальностей по стажировке по ссылке
+					<a href="{{ route('especialties.index', ['sid' => session()->getId()]) }}">Список специальностей стажировки</a></p>
+			@endif
 		</div>
 	</div>
 	<div class="block-content p-4">

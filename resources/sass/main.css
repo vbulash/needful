@@ -31802,4 +31802,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.unread {
+  border-left-width: 4px;
+  border-left-color: #7351c0 !important;
+}
+
 /*# sourceMappingURL=main.css.map */

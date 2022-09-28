@@ -19,14 +19,14 @@
             ['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard'],
 
             ['title' => 'Стажировки', 'heading' => true],
-            ['title' => 'История стажировок', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*']],
+            ['title' => 'Стажировки', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*']],
         ];
 
         if ($employers || $students || $schools)
             $menu[] = ['title' => 'Субъекты', 'heading' => true];
 
         if ($employers)
-            $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
+            $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index.clear', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
         if ($schools)
             $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
         if ($schools || $employers)

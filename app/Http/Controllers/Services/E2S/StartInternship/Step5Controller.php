@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Services\E2S\StartInternship;
 
+use App\Events\InviteTraineeTaskEvent;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Models\History;
@@ -42,8 +43,7 @@ class Step5Controller extends Controller
 			$history->students()->updateExistingPivot($trainee, ['status' => TraineeStatus::ASKED->value]);
 			$trainee->notify(new EmployerPracticeNotification($trainee, $history, TraineeStatus::ASKED->value));
 			event(new ToastEvent('info', '', "Переслано письмо-предложение практики для учащегося: {$trainee->getTitle()}"));
-
-			// TODO инициировать событие Task от auth()->user()->email к $student->email
+			event(new InviteTraineeTaskEvent($history, $trainee));
 		}
 
 		$id = $history->getKey();

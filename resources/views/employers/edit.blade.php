@@ -2,14 +2,21 @@
 
 @section('service')
 	Работа с работодателями
+	@if (isset(session('context')['chain']))
+		(только цепочка значений)
+	@endif
 @endsection
 
 @section('steps')
 	@php
+		if (isset(session('context')['chain']))
+            $title = 'График стажировки';
+        else
+            $title = 'График стажировки или Специальности для стажировки';
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
 			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
-			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => $title, 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection

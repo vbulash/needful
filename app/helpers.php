@@ -10,6 +10,7 @@ use App\Models\School;
 use App\Models\Specialty;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Timetable;
 use App\Models\User;
 
 if (! function_exists('form')) {
@@ -36,6 +37,7 @@ if (! function_exists('classByContext')) {
 			'fspecialty' => Fspecialty::class,
 			'especialty' => Especialty::class,
 			'teacher' => Teacher::class,
+			'timetable' => Timetable::class,
 		};
 	}
 }

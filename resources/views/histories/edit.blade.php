@@ -1,11 +1,11 @@
 @extends('layouts.detail')
 
-@section('history') @endsection
+@section('header')<div class="mt-4"></div>@endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Истории стажировки', 'active' => true, 'context' => 'history', 'link' => route('history.index', ['sid' => session()->getId()])],
+			['title' => 'Стажировки', 'active' => true, 'context' => 'history', 'link' => route('history.index', ['sid' => session()->getId()])],
 		];
 	@endphp
 @endsection
@@ -30,11 +30,11 @@
 			['name' => 'employer', 'title' => 'Работодатель', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->employer->getTitle(), 'disabled' => true],
 			['name' => 'internship', 'title' => 'Стажировка', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->getTitle(), 'disabled' => true],
 			['name' => 'timetable', 'title' => 'График стажировки', 'required' => false, 'type' => 'text', 'value' => $history->timetable->getTitle(), 'disabled' => true],
-			['name' => 'student', 'title' => 'Практикант', 'required' => false, 'type' => 'text', 'value' => $history->student->getTitle(), 'disabled' => true],
 			['name' => 'status', 'title' => 'Статус стажировки', 'required' => true, 'type' => 'select', 'value' => $history->status, 'options' => [
-                'Планируется' => 'Планируется',
-                'Выполняется' => 'Выполняется',
-                'Закрыта' => 'Закрыта',
+                \App\Models\HistoryStatus::NEW->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::NEW->value),
+                \App\Models\HistoryStatus::PLANNED->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::PLANNED->value),
+                \App\Models\HistoryStatus::ACTIVE->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::ACTIVE->value),
+                \App\Models\HistoryStatus::CLOSED->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::CLOSED->value),
             ]],
 		];
 	@endphp

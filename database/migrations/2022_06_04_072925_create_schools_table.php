@@ -28,7 +28,8 @@ return new class extends Migration
 			$table->string('post_address')->comment('Почтовый адрес')->nullable();
 			//
 			$table->unsignedBigInteger('user_id')->comment('Связанный пользователь');
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+			//
             $table->timestamps();
         });
     }

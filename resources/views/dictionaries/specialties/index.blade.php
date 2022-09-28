@@ -1,6 +1,6 @@
 @extends('layouts.chain')
 
-@section('service') @endsection
+@section('header')<div class="mt-4"></div>@endsection
 
 @section('steps')
 	@php
@@ -76,6 +76,7 @@
 				ajax: '{!! route('specialties.index.data') !!}',
 				responsive: true,
 				pageLength: 100,
+				order: [[2, 'desc'], [1, 'asc']],
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},
 					{data: 'name', name: 'name', responsivePriority: 1},

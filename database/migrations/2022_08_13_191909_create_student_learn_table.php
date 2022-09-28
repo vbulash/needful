@@ -19,16 +19,16 @@ return new class extends Migration
 			$table->datetime('finish')->nullable()->comment('Дата завершения');
 			//
 			$table->unsignedBigInteger('student_id')->nullable()->comment('Связанный учащийся');
-			$table->foreign('student_id')->references('id')->on('students');
+			$table->foreign('student_id')->references('id')->on('students')->cascadeOnDelete();
 			//
 			// Блок учебного заведения
 			$table->string('new_school')->nullable()->comment('Новое учебное заведение');
 			$table->unsignedBigInteger('school_id')->nullable()->comment('Связанное учебное заведение');
-			$table->foreign('school_id')->references('id')->on('schools');
+			$table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete();
 			// Блок специальности
 			$table->string('new_specialty')->nullable()->comment('Новая специальность');
 			$table->unsignedBigInteger('specialty_id')->nullable()->comment('Связанная специальность');
-			$table->foreign('specialty_id')->references('id')->on('specialties');
+			$table->foreign('specialty_id')->references('id')->on('specialties')->cascadeOnDelete();
 			//
 			$table->tinyInteger('status')->default(0)->comment('Статус активности объекта');
             $table->timestamps();

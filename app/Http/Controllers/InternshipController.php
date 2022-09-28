@@ -30,7 +30,11 @@ class InternshipController extends Controller
 	 */
 	public function getData(Request $request, int $employer)
 	{
-		$query = Employer::findOrFail($employer)->internships()->get();
+		$context = session('context');
+		if (isset($context['chain']))
+			$query = Internship::where('id', $context['internship']);
+		else
+			$query = Employer::findOrFail($employer)->internships()->get();
 
 		return Datatables::of($query)
 			->editColumn('itype', function ($internship) {
@@ -42,7 +46,7 @@ class InternshipController extends Controller
 				}
 				return '';
 			})
-			->addColumn('action', function ($internship) {
+			->addColumn('action', function ($internship) use ($context) {
 				$editRoute = route('internships.edit', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$showRoute = route('internships.show', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$timetablesRoute = route('internships.timetables', ['internship' => $internship->id, 'sid' => session()->getId()]);
@@ -50,6 +54,7 @@ class InternshipController extends Controller
 
 				$actions = '';
 
+				if (!isset($context['chain']))
 				$actions .=
 					"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
@@ -60,22 +65,31 @@ class InternshipController extends Controller
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 					"<i class=\"fas fa-eye\"></i>\n" .
 					"</a>\n";
+				if (!isset($context['chain']))
 				$actions .=
 					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$internship->id}, '{$internship->iname}')\">\n" .
 					"<i class=\"fas fa-trash-alt\"></i>\n" .
 					"</a>\n";
 
-				$actions .=
-					"<a href=\"{$especialtiesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для стажировки\">\n" .
-					"<i class=\"fas fa-people-arrows\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики стажировки\">\n" .
-					"<i class=\"fas fa-calendar-check\"></i>\n" .
-					"</a>\n";
+				if (isset($context['chain'])) {
+					$actions .=
+						"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+						"<i class=\"fas fa-check\"></i>\n" .
+						"</a>\n";
+				} else {
+					$actions .=
+						"<a href=\"{$especialtiesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для стажировки\">\n" .
+						"<i class=\"fas fa-people-arrows\"></i>\n" .
+						"</a>\n";
+					$actions .=
+						"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики стажировки\">\n" .
+						"<i class=\"fas fa-calendar-check\"></i>\n" .
+						"</a>\n";
+				}
 				return $actions;
 			})
 			->make(true);
@@ -86,10 +100,13 @@ class InternshipController extends Controller
 		$internship = Internship::findOrFail($id);
 
 		$context = session('context');
-		unset($context['internship']);
-		unset($context['timetable']);
-		$context['internship'] = $internship->getKey();
-		session()->put('context', $context);
+		if (!isset($context['chain'])) {
+			$context = session('context');
+			unset($context['internship']);
+			unset($context['timetable']);
+			$context['internship'] = $internship->getKey();
+			session()->put('context', $context);
+		}
 
 		return redirect()->route($view, ['sid' => session()->getId()]);
 	}
@@ -110,14 +127,16 @@ class InternshipController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function index(Request $request)
+	public function index(Request $request): View|Factory|Application
 	{
 		$context = session('context');
-		unset($context['especialty']);
-		unset($context['timetable']);
 		$employer = Employer::findOrFail($context['employer']);
-		$count = $employer->internships()->count();
-		session()->put('context', $context);
+		if (!isset($context['chain'])) {
+			unset($context['especialty']);
+			unset($context['timetable']);
+			$count = $employer->internships()->count();
+			session()->put('context', $context);
+		} else $count = 1;
 
 		return view('internships.index', compact('employer', 'count'));
 	}
@@ -128,7 +147,7 @@ class InternshipController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function create(Request $request)
+	public function create(Request $request): View|Factory|Application
 	{
 		$mode = config('global.create');
 		$context = session('context');
@@ -142,7 +161,7 @@ class InternshipController extends Controller
 	 * @param StoreInternshipRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreInternshipRequest $request)
+	public function store(StoreInternshipRequest $request): RedirectResponse
 	{
 		$internship = Internship::create($request->all());
 		$internship->save();
@@ -159,7 +178,7 @@ class InternshipController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show(Request $request, int $id)
+	public function show(Request $request, int $id): View|Factory|Application
 	{
 		return $this->edit($request, $id, true);
 	}
@@ -172,7 +191,7 @@ class InternshipController extends Controller
 	 * @param bool $show
 	 * @return Application|Factory|View
 	 */
-	public function edit(Request $request, int $id, bool $show = false)
+	public function edit(Request $request, int $id, bool $show = false): View|Factory|Application
 	{
 		$mode = $show ? config('global.show') : config('global.edit');
 		$internship = Internship::findOrFail($id);
@@ -186,7 +205,7 @@ class InternshipController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateInternshipRequest $request, $id)
+	public function update(UpdateInternshipRequest $request, $id): RedirectResponse
 	{
 		$internship = Internship::findOrFail($id);
 		$name = $internship->iname;
@@ -203,7 +222,7 @@ class InternshipController extends Controller
 	 * @param int $internship
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $internship)
+	public function destroy(Request $request, int $internship): bool
 	{
 		if ($internship == 0) {
 			$id = $request->id;

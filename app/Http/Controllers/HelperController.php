@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UnreadCountEvent;
 use App\Models\Employer;
 use App\Models\School;
 use App\Models\Student;
 use App\Notifications\NewSupport;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class HelperController extends Controller
@@ -18,7 +23,7 @@ class HelperController extends Controller
 		];
 	}
 
-	public function uploadCKEditor(Request $request)
+	public function uploadCKEditor(Request $request): JsonResponse
 	{
 		if ($request->has('upload')) {
 			$folder = date('Y-m-d');
@@ -31,7 +36,8 @@ class HelperController extends Controller
 		]);
 	}
 
-	public function support(Request $request) {
+	public function support(Request $request): Response|Application|ResponseFactory
+	{
 		$message = $_POST['message'];
 		$user = auth()->user();
 		$user->notify(new NewSupport($message));

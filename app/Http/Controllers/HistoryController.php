@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Events\UnreadCountEvent;
 use App\Models\Employer;
 use App\Models\History;
+use App\Models\HistoryStatus;
 use App\Models\Student;
+use App\Models\Task;
 use App\Models\Timetable;
+use App\Models\TraineeStatus;
 use App\Models\User;
 use App\Notifications\e2s\StartInternshipNotification;
 use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -46,18 +51,11 @@ class HistoryController extends Controller
 		}
 
 		return Datatables::of($query)
-			->editColumn('employer', function ($history) {
-				return $history->timetable->internship->employer->getTitle();
-			})
-			->editColumn('internship', function ($history) {
-				return $history->timetable->internship->getTitle();
-			})
-			->editColumn('timetable', function ($history) {
-				return $history->timetable->getTitle();
-			})
-			->editColumn('student', function ($history) {
-				return $history->student->getTitle();
-			})
+			->editColumn('employer', fn ($history) => $history->timetable->internship->employer->getTitle())
+			->editColumn('internship', fn ($history) => $history->timetable->internship->getTitle())
+			->editColumn('timetable', fn ($history) => $history->timetable->getTitle())
+			->editColumn('trainees', fn ($history) => $this->traineeAllLetter($history->students()->count()))
+			->editColumn('status', fn ($history) => HistoryStatus::getName($history->status))
 			->addColumn('action', function ($history) {
 				$editRoute = route('history.edit', ['history' => $history->id, 'sid' => session()->getId()]);
 				$showRoute = route('history.show', ['history' => $history->id, 'sid' => session()->getId()]);
@@ -86,6 +84,19 @@ class HistoryController extends Controller
 			->make(true);
 	}
 
+	private function traineeAllLetter(int $count): string {
+		$letter = $count . ' ';
+		if(($count < 10) || ($count > 20)) {
+			$letter .= match ($count % 10) {
+				1 => 'практикант',
+				2, 3, 4 => 'практиканта',
+				default => 'практикантов',
+			};
+		} else $letter .= 'практикантов';
+
+		return $letter;
+	}
+
     /**
      * Display a listing of the resource.
      *
@@ -110,27 +121,6 @@ class HistoryController extends Controller
 			}
 		}
 		return view('histories.index', $params);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
-	{
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request): Response
-	{
-        //
     }
 
 	/**
@@ -193,5 +183,48 @@ class HistoryController extends Controller
 
 		event(new ToastEvent('success', '', "Запись истории стажировок № {$id} удалена"));
 		return true;
+	}
+
+	private function changeStatus(Request $request, int $toStatus): Response|Application|ResponseFactory
+	{
+		$history = History::findOrFail($request->history);
+		$trainee = Student::findOrFail($request->trainee);
+		$task = $request->has('task') ? $request->task : 0;
+		$status = $history->students()->findOrFail($request->trainee)->pivot->status;
+
+		$updated = false;
+		switch ($status) {
+			case TraineeStatus::ASKED->value:
+				$kind = 'success';
+				$message = match ($toStatus) {
+					TraineeStatus::ACCEPTED->value => 'Вы согласились участвовать в стажировке',
+					TraineeStatus::REJECTED->value => 'Вы отказались от участия в стажировке'
+				};
+				$history->students()->updateExistingPivot($trainee, ['status' => $toStatus]);
+				$updated = (Task::findOrFail($task))->update(['read' => true]);
+				$response = 200;
+				break;
+			default:
+				$kind = 'error';
+				$message = sprintf(
+					"Нельзя изменить статус записи стажировки практиканта с &laquo;%s&raquo; на &laquo;%s&raquo;",
+					TraineeStatus::getName($status), TraineeStatus::getName($toStatus));
+				$response = 204;
+		}
+		event(new ToastEvent($kind, '', $message));
+		if ($updated)
+			event(new UnreadCountEvent());
+		return response(content: $task, status: $response);
+
+	}
+
+	public function accept(Request $request): Response|Application|ResponseFactory
+	{
+		return $this->changeStatus($request, TraineeStatus::ACCEPTED->value);
+	}
+
+	public function reject(Request $request): Response|Application|ResponseFactory
+	{
+		return $this->changeStatus($request, TraineeStatus::REJECTED->value);
 	}
 }

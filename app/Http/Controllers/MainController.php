@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskEvent;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,6 +18,7 @@ class MainController extends Controller
 	 */
 	public function index()
 	{
+		//event(new TaskEvent('Описание задачи...', route('dashboard'), auth()->user(), null));
 		return view('main');
 	}
 }

@@ -63,6 +63,18 @@ class Employer extends Model implements FormTemplate
 		return $this->morphMany(Teacher::class, 'job');
 	}
 
+	/**
+	 * The "booted" method of the model.
+	 *
+	 * @return void
+	 */
+	protected static function booted()
+	{
+		static::deleting(function ($employer) {
+			$employer->teachers()->detach($employer);
+		});
+	}
+
 	public static function createTemplate(): array
 	{
 		return [

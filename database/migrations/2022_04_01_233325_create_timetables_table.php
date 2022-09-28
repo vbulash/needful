@@ -21,7 +21,8 @@ return new class extends Migration
 			$table->string('name')->comment('Наименование или тема графика стажировки')->nullable();
 			//
 			$table->unsignedBigInteger('internship_id')->comment('Связанная стажировка');
-			$table->foreign('internship_id')->references('id')->on('internships');
+			$table->foreign('internship_id')->references('id')->on('internships')->cascadeOnDelete();
+			//
             $table->timestamps();
         });
     }

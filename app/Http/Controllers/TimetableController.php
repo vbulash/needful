@@ -31,31 +31,43 @@ class TimetableController extends Controller
 	 */
 	public function getData(Request $request, int $internship)
 	{
-		$query = Internship::findOrFail($internship)->timetables()->get();
+		$context = session('context');
+		if (isset($context['chain']))
+			$query = Timetable::where('id', $context['timetable']);
+		else
+			$query = Internship::findOrFail($internship)->timetables()->get();
 
 		return Datatables::of($query)
 			->editColumn('start', fn($timetable) => $timetable->start->format('d.m.Y'))
 			->editColumn('end', fn($timetable) => $timetable->end->format('d.m.Y'))
-			->addColumn('action', function ($timetable) {
+			->addColumn('action', function ($timetable) use ($context) {
 				$editRoute = route('timetables.edit', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
 				$showRoute = route('timetables.show', ['timetable' => $timetable->id, 'sid' => session()->getId()]);
 				$actions = '';
 
-				$actions .=
-					"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-					"<i class=\"fas fa-edit\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-					"<i class=\"fas fa-eye\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$timetable->id}, '')\">\n" .
-					"<i class=\"fas fa-trash-alt\"></i>\n" .
-					"</a>\n";
+				if (isset($context['chain']))
+					$actions .=
+						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
+						"<i class=\"fas fa-eye\"></i>\n" .
+						"</a>\n";
+				else {
+					$actions .=
+						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
+						"<i class=\"fas fa-edit\"></i>\n" .
+						"</a>\n";
+					$actions .=
+						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
+						"<i class=\"fas fa-eye\"></i>\n" .
+						"</a>\n";
+					$actions .=
+						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$timetable->id}, '')\">\n" .
+						"<i class=\"fas fa-trash-alt\"></i>\n" .
+						"</a>\n";
+				}
 				return $actions;
 			})
 			->make(true);
@@ -71,10 +83,13 @@ class TimetableController extends Controller
 	{
 		$context = session('context');
 		$internship = Internship::findOrFail($context['internship']);
-		unset($context['timetable']);
-		session()->put('context', $context);
-
-		$count = $internship->timetables()->count();
+		if (isset($context['chain']))
+			$count = 1;
+		else {
+			unset($context['timetable']);
+			session()->put('context', $context);
+			$count = $internship->timetables()->count();
+		}
 		return view('timetables.index', compact('internship', 'count'));
 	}
 
@@ -84,7 +99,7 @@ class TimetableController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function create(Request $request)
+	public function create(Request $request): View|Factory|Application
 	{
 		$mode = config('global.create');
 		$context = session('context');
@@ -98,7 +113,7 @@ class TimetableController extends Controller
 	 * @param StoreTimetableRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreTimetableRequest $request)
+	public function store(StoreTimetableRequest $request): RedirectResponse
 	{
 		$timetable = Timetable::create($request->all());
 		$timetable->save();
@@ -115,7 +130,7 @@ class TimetableController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show(Request $request, int $id)
+	public function show(Request $request, int $id): View|Factory|Application
 	{
 		return $this->edit($request, $id, true);
 	}
@@ -128,7 +143,7 @@ class TimetableController extends Controller
 	 * @param bool $show
 	 * @return Application|Factory|View
 	 */
-	public function edit(Request $request, int $id, bool $show = false)
+	public function edit(Request $request, int $id, bool $show = false): View|Factory|Application
 	{
 		$mode = $show ? config('global.show') : config('global.edit');
 		$timetable = Timetable::findOrFail($id);
@@ -142,7 +157,7 @@ class TimetableController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateTimetableRequest $request, $id)
+	public function update(UpdateTimetableRequest $request, $id): RedirectResponse
 	{
 		$timetable = Timetable::findOrFail($id);
 		$name = $timetable->name;

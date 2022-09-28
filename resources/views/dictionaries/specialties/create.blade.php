@@ -1,6 +1,6 @@
 @extends('layouts.detail')
 
-@section('service') @endsection
+@section('header')<div class="mt-4"></div>@endsection
 
 @section('steps')
 	@php

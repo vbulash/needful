@@ -55,11 +55,11 @@
 
 					<!-- Open Search Section -->
 					<!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-					<button type="button" class="btn btn-alt-secondary me-5" data-toggle="layout"
-							data-action="header_search_on" disabled>
-						<i class="fa fa-fw opacity-50 fa-search"></i> <span
-							class="ms-1 d-none d-sm-inline-block">Поиск</span>
-					</button>
+{{--					<button type="button" class="btn btn-alt-secondary me-5" data-toggle="layout"--}}
+{{--							data-action="header_search_on" disabled>--}}
+{{--						<i class="fa fa-fw opacity-50 fa-search"></i> <span--}}
+{{--							class="ms-1 d-none d-sm-inline-block">Поиск</span>--}}
+{{--					</button>--}}
 					<!-- END Open Search Section -->
 					<a
 						href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal-support"
@@ -122,3 +122,25 @@
 	<!-- END Page Container -->
 @endsection
 
+@push('js_after')
+	<script>
+		function showCount(count) {
+			const topCount = document.getElementById('top-count');
+			topCount.innerText = count;
+			topCount.style.display = count === 0 ? 'none' : 'block';
+
+			const inboxCount = document.getElementById('inbox-count');
+			inboxCount.innerText = count;
+			inboxCount.style.display = count === 0 ? 'none' : 'block';
+		}
+
+		const inbox = pusher.subscribe('needful-inbox-{!! $sid !!}');
+		pusher.bind('unread-count-event', data => {
+			showCount(data.count);
+		});
+
+		document.addEventListener('DOMContentLoaded', () => {
+			showCount({{ (new \App\Events\UnreadCountEvent())->count }});
+		}, false);
+	</script>
+@endpush

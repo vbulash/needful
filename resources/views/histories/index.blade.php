@@ -1,11 +1,11 @@
 @extends('services.service')
 
-@section('header') @endsection
+@section('header')<div class="mt-4"></div>@endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Истории стажировки', 'active' => true, 'context' => 'history'],
+			['title' => 'Стажировки', 'active' => true, 'context' => 'history'],
 		];
 	@endphp
 @endsection
@@ -15,15 +15,11 @@
 		<span>Новая история стажировки создается через услугу на <a href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span>
 		@if(isset($sids))
 			<br/>
-			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых
-				доступны текущему
-				пользователю</p>
+			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых доступны текущему пользователю</p>
 		@endif
 		@if(isset($eids))
 			<br/>
-			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых
-				доступны текущему
-				пользователю</p>
+			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых доступны текущему пользователю</p>
 		@endif
 	</div>
 	<div class="block-content p-4">
@@ -37,7 +33,7 @@
 						<th>Работодатель</th>
 						<th>Стажировка</th>
 						<th>График стажировки</th>
-						<th>Практикант</th>
+						<th>Практиканты</th>
 						<th>Статус</th>
 						<th>Действия</th>
 					</tr>
@@ -45,7 +41,7 @@
 				</table>
 			</div>
 		@else
-			<p>Записей историй стажировок пока нет...</p>
+			<p>Записей стажировок пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -101,7 +97,7 @@
 						{data: 'employer', name: 'employer', responsivePriority: 1},
 						{data: 'internship', name: 'internship', responsivePriority: 3},
 						{data: 'timetable', name: 'timetable', responsivePriority: 2},
-						{data: 'student', name: 'student', responsivePriority: 2},
+						{data: 'trainees', name: 'trainees', responsivePriority: 2},
 						{
 							data: 'status', name: 'status', responsivePriority: 2, render: (data) => {
 								switch (data) {

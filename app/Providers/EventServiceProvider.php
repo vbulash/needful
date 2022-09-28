@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\InviteTraineeTaskEvent;
+use App\Events\TaskEvent;
+use App\Events\UnreadCountEvent;
+use App\Events\UpdateEmployerTaskEvent;
+use App\Events\UpdateSchoolTaskEvent;
+use App\Events\UpdateStudentTaskEvent;
+use App\Listeners\TaskRegisterListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +24,18 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+		UpdateEmployerTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		UpdateStudentTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		UpdateSchoolTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		InviteTraineeTaskEvent::class => [
+			TaskRegisterListener::class
+		]
     ];
 
     /**

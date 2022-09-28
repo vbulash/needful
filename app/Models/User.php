@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -43,14 +45,24 @@ class User extends Authenticatable implements FormTemplate
         'email_verified_at' => 'datetime',
     ];
 
-	public function student()
+	public function student(): HasOne
 	{
-		$this->hasOne(Student::class);
+		return $this->hasOne(Student::class);
 	}
 
-	public function employer()
+	public function employer(): HasOne
 	{
-		$this->hasOne(Employer::class);
+		return $this->hasOne(Employer::class);
+	}
+
+	public function tasksFrom(): HasMany
+	{
+		return $this->hasMany(Task::class, 'from_id');
+	}
+
+	public function tasksTo(): HasMany
+	{
+		return $this->hasMany(Task::class, 'to_id');
 	}
 
 	public static function createTemplate(): array

@@ -30,6 +30,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 
 	// Работодатели
 	Route::resource('/employers', 'EmployerController');
+	Route::get('/employers.clear.index', 'EmployerController@getClear')->name('employers.index.clear');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
 	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
 	// Стажировки
@@ -47,6 +48,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Истории стажировок
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
+	Route::post('/history.accept', 'HistoryController@accept')->name('history.accept');
+	Route::post('/history.reject', 'HistoryController@reject')->name('history.reject');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');
@@ -60,6 +63,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::resource('/teachers', 'TeacherController');
 	Route::get('/teachers.data', 'TeacherController@getData')->name('teachers.index.data');
 
+	// Сообщения
+	Route::get('/inbox', 'InboxController@index')->name('inbox.index');
+
 	// Словари
 	// Специальности
 	Route::resource('/specialties', 'SpecialtyController');
@@ -67,6 +73,10 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 
 	// Обращение к администратору платформы
 	Route::post('/support', 'HelperController@support')->name('support');
+
+	// Сообщения
+	Route::post('/message.read', 'TaskController@read')->name('message.read');
+	Route::get('/message.link', 'TaskController@link')->name('message.link');
 });
 
 // Маршруты "от работодателя" (E2S)

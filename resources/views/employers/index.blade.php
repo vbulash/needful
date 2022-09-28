@@ -2,14 +2,21 @@
 
 @section('service')
 	Работа с работодателями
+	@if (isset(session('context')['chain']))
+		(только цепочка значений)
+	@endif
 @endsection
 
 @section('steps')
 	@php
+		if (isset(session('context')['chain']))
+			$title = 'График стажировки';
+		else
+			$title = 'График стажировки или Специальности для стажировки';
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer'],
 			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
-			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => $title, 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection
@@ -17,13 +24,17 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			@hasrole('Администратор')
-			<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
-			@endhasrole
+			@if (isset(session('context')['chain']))
+				Отображается единственная запись по цепочке из входящего сообщения
+			@else
+				@hasrole('Администратор')
+				<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
+				   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
+				@endhasrole
 
-			<p>Красным цветом выделены неактивные работодатели. Активацию объектов выполняет администратор платформы<br/>
-			Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
+				<p>Красным цветом выделены неактивные работодатели. Активацию объектов выполняет администратор платформы<br/>
+					Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
+			@endif
 		</div>
 
 		<h3 class="block-title">
