@@ -35,7 +35,7 @@
 			<div role="separator" class="dropdown-divider"></div>
 			<a class="dropdown-item" href="{{ route('inbox.index') }}">
 				<div class="d-flex">
-					<i class="far fa-fw fa-envelope me-1"></i> Входящие сообщения
+					<i class="far fa-fw fa-envelope me-1"></i> Сообщения
 					<span class="ms-3 badge rounded-pill bg-danger" id="inbox-count" style="display: none;"></span>
 				</div>
 			</a>

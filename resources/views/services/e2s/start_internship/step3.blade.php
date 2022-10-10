@@ -32,6 +32,7 @@
 						<th>Начало</th>
 						<th>Завершение</th>
 						<th>Наименование записи графика стажировки</th>
+						<th>Требуется практикантов</th>
 						<th>Действия</th>
 					</tr>
 					</thead>
@@ -65,6 +66,7 @@
 						{data: 'start', name: 'start', responsivePriority: 2},
 						{data: 'end', name: 'end', responsivePriority: 2},
 						{data: 'name', name: 'name', responsivePriority: 3},
+						{data: 'planned', name: 'planned', responsivePriority: 2, className: 'dt-center'},
 						{
 							data: 'action',
 							name: 'action',

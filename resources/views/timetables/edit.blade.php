@@ -40,6 +40,7 @@
 			['name' => 'start', 'title' => 'Начало', 'required' => true, 'type' => 'date', 'value' => $timetable->start->format('d.m.Y')],
 			['name' => 'end', 'title' => 'Завершение', 'required' => true, 'type' => 'date', 'value' => $timetable->end->format('d.m.Y')],
 			['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'required' => false, 'type' => 'text', 'value' => $timetable->name],
+			['name' => 'planned', 'title' => 'Требуется практикантов', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $timetable->planned],
 			['name' => 'internship_id', 'type' => 'hidden', 'value' => $timetable->internship->getKey()],
 		];
 	@endphp

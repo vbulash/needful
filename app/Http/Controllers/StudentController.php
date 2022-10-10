@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Events\UpdateStudentTaskEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\ActiveStatus;
@@ -85,7 +86,7 @@ class StudentController extends Controller
 	 *
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function index()
+	public function index(): View|Factory|RedirectResponse|Application
 	{
 		session()->forget('context');
 
@@ -103,7 +104,7 @@ class StudentController extends Controller
 		}
 	}
 
-	public function select(int $id)
+	public function select(int $id): RedirectResponse
 	{
 		$student = Student::findOrFail($id);
 		session()->forget('context');
@@ -117,17 +118,17 @@ class StudentController extends Controller
 	 *
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function create()
+	public function create(): View|Factory|RedirectResponse|Application
 	{
 		$mode = config('global.create');
 		$baseRight = "students.create";
 
-		if (auth()->user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
+			$temp = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Практикант'));
+						($user->hasRole(RoleName::TRAINEE->value));
 					if (!$collect) return null;
 
 					return [
@@ -135,8 +136,14 @@ class StudentController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn($value) => $value === null)
-				->toArray();
+				->reject(fn($value) => $value === null);
+			if (env('SIMPLIFIED_USER_CREATION')) {
+				$special = User::special();
+				$users = collect([$special->getKey() => $special->name])
+					->map(fn($item, $key) => ['id' => $key, 'name' => $item])
+					->merge($temp)
+					->toArray();
+			} else $users = $temp;
 			return view('students.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
 			return view('students.create', compact('mode'));
@@ -152,8 +159,9 @@ class StudentController extends Controller
 	 * @param StoreStudentRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreStudentRequest $request)
+	public function store(StoreStudentRequest $request): RedirectResponse
 	{
+		$special = User::special()->getKey() == $request->user_id;
 		$student = Student::create($request->all());
 		$student->save();
 		$name = $student->getTitle();
@@ -171,7 +179,7 @@ class StudentController extends Controller
 		$student->user->notify(new NewStudent($student));
 
 		session()->put('success', "Учащийся \"{$name}\" создан");
-		return redirect()->route('students.index', ['sid' => session()->getId()]);
+		return $special ? redirect()->route('users.create', ['for' => $student->getKey()]) : redirect()->route('students.index');
 	}
 
 	/**
@@ -202,12 +210,13 @@ class StudentController extends Controller
 		$right = sprintf("%s.%d", $baseRight, $student->getKey());
 
 
-		if (auth()->user()->hasRole('Администратор')) {
-			$users = User::orderBy('name')->get()
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
+			$special = User::special();
+			$temp = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Практикант'));
+						($user->hasRole(RoleName::TRAINEE->value));
 					if (!$collect) return null;
 
 					return [
@@ -215,8 +224,16 @@ class StudentController extends Controller
 						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
 					];
 				})
-				->reject(fn($value) => $value === null)
-				->toArray();
+				->reject(fn($value) => $value === null);
+
+			if ($special->getKey() == $student->user->getKey())
+				$users = collect([$special->getKey() => $special->name])
+					->map(fn ($item, $key) => ['id' => $key, 'name' => $item])
+					->merge($temp)
+					->toArray();
+			else
+				$users = $temp->toArray();
+
 			return view('students.edit',
 				compact('student', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))

@@ -1,11 +1,14 @@
 @extends('layouts.detail')
 
-@section('header')<div class="mt-4"></div>@endsection
+@section('service')
+	Работа со стажировками
+@endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Стажировки', 'active' => true, 'context' => 'history', 'link' => route('history.index', ['sid' => session()->getId()])],
+			['title' => 'Стажировка', 'active' => true, 'context' => 'history', 'link' => route('history.index', ['sid' => session()->getId()])],
+			['title' => 'Практиканты', 'active' => false, 'context' => 'trainee'],
 		];
 	@endphp
 @endsection
@@ -27,9 +30,12 @@
 @section('form.fields')
 	@php
 		$fields = [
+            ['name' => 'history', 'type' => 'hidden', 'value' => $history->getKey()],
 			['name' => 'employer', 'title' => 'Работодатель', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->employer->getTitle(), 'disabled' => true],
 			['name' => 'internship', 'title' => 'Стажировка', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->getTitle(), 'disabled' => true],
 			['name' => 'timetable', 'title' => 'График стажировки', 'required' => false, 'type' => 'text', 'value' => $history->timetable->getTitle(), 'disabled' => true],
+			['name' => 'trainees', 'title' => 'Количество практикантов (подвердили участие / планируются)', 'required' => false, 'type' => 'text',
+				'value' => $history->students()->wherePivot('status', \App\Models\TraineeStatus::ACCEPTED->value)->count() . ' / ' . $history->timetable->planned, 'disabled' => true],
 			['name' => 'status', 'title' => 'Статус стажировки', 'required' => true, 'type' => 'select', 'value' => $history->status, 'options' => [
                 \App\Models\HistoryStatus::NEW->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::NEW->value),
                 \App\Models\HistoryStatus::PLANNED->value => \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::PLANNED->value),

@@ -47,9 +47,9 @@ class RegisteredUserController extends Controller
 			]);
 			$user->assignRole($role);
 			$rights = match ($role) {
-				'Работодатель' => ['employers.edit', 'employers.show'],
-				'Учебное заведение' => ['schools.edit', 'schools.show'],
-				'Практикант' => ['students.edit', 'students.show'],
+				RoleName::EMPLOYER->value => ['employers.edit', 'employers.show'],
+				RoleName::SCHOOL->value => ['schools.edit', 'schools.show'],
+				RoleName::TRAINEE->value => ['students.edit', 'students.show'],
 				default => []
 			};
 			foreach ($rights as $right) {

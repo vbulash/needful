@@ -26,19 +26,19 @@
 
 @section('form.fields')
 	@php
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
             $roles = [
-                'Администратор' => 'Администратор',
-                'Практикант' => 'Практикант',
-                'Работодатель' => 'Работодатель'
+            	\App\Http\Controllers\Auth\RoleName::ADMIN->value => \App\Http\Controllers\Auth\RoleName::ADMIN->value,
+            	\App\Http\Controllers\Auth\RoleName::TRAINEE->value => \App\Http\Controllers\Auth\RoleName::TRAINEE->value,
+            	\App\Http\Controllers\Auth\RoleName::EMPLOYER->value => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value,
 			];
-		} elseif (auth()->user()->hasRole('Практикант')) {
+		} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)) {
             $roles = [
-                'Практикант' => 'Практикант',
+                \App\Http\Controllers\Auth\RoleName::TRAINEE->value => \App\Http\Controllers\Auth\RoleName::TRAINEE->value,
 			];
-        } elseif (auth()->user()->hasRole('Работодатель')) {
+        } elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value)) {
             $roles = [
-                'Работодатель' => 'Работодатель'
+                \App\Http\Controllers\Auth\RoleName::EMPLOYER->value => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value,
 			];
 		}
 		$fields = [

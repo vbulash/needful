@@ -3,6 +3,7 @@
 use App\Models\Employer;
 use App\Models\Especialty;
 use App\Models\Fspecialty;
+use App\Models\History;
 use App\Models\Internship;
 use App\Models\Learn;
 use App\Models\Role;
@@ -33,11 +34,12 @@ if (! function_exists('classByContext')) {
 			'user' => User::class,
 			'school' => School::class,
 			'specialty' => Specialty::class,
-			'student' => Student::class,
+			'student', 'trainee' => Student::class,
 			'fspecialty' => Fspecialty::class,
 			'especialty' => Especialty::class,
 			'teacher' => Teacher::class,
 			'timetable' => Timetable::class,
+			'history' => History::class,
 		};
 	}
 }

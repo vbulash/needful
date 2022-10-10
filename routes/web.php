@@ -48,8 +48,16 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Истории стажировок
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
-	Route::post('/history.accept', 'HistoryController@accept')->name('history.accept');
-	Route::post('/history.reject', 'HistoryController@reject')->name('history.reject');
+	Route::get('/history.accept', 'HistoryController@accept')->name('history.accept');
+	Route::get('/history.reject', 'HistoryController@reject')->name('history.reject');
+	Route::get('/history.select/{history}', 'HistoryController@select')->name('history.select');
+	// Практиканты
+	Route::get('/trainees', 'TraineeController@index')->name('trainees.index');
+	Route::get('/trainees.data', 'TraineeController@getData')->name('trainees.index.data');
+	Route::get('/trainees/{trainee}', 'TraineeController@show')->name('trainees.show');
+	Route::post('/trainees.link', 'TraineeController@link')->name('trainees.link');
+	Route::post('/trainees.unlink', 'TraineeController@unlink')->name('trainees.unlink');
+	Route::post('/trainees.invite', 'TraineeController@invite')->name('trainees.invite');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');
@@ -63,8 +71,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::resource('/teachers', 'TeacherController');
 	Route::get('/teachers.data', 'TeacherController@getData')->name('teachers.index.data');
 
-	// Сообщения
+	// Почтовый ящик
 	Route::get('/inbox', 'InboxController@index')->name('inbox.index');
+	Route::get('/archive', 'InboxController@archive')->name('inbox.archive');
 
 	// Словари
 	// Специальности
@@ -77,6 +86,11 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Сообщения
 	Route::post('/message.read', 'TaskController@read')->name('message.read');
 	Route::get('/message.link', 'TaskController@link')->name('message.link');
+	Route::get('/message.archive', 'TaskController@archive')->name('message.archive');
+	Route::post('/message.dispatcher', 'TaskController@dispatcher')->name('message.dispatcher');
+
+	// Импорт
+	Route::get('/import', 'ImportController@index')->name('import.index');
 });
 
 // Маршруты "от работодателя" (E2S)

@@ -13,7 +13,7 @@ enum HistoryStatus: int
 	{
 		return match($hs) {
 			self::NEW->value => 'Новая',
-			self::PLANNED->value => 'Планируется',
+			self::PLANNED->value => 'Запланирована',
 			self::ACTIVE->value => 'Выполняется',
 			self::CLOSED->value => 'Закрыта',
 			default => 'Неизвестный статус практики'

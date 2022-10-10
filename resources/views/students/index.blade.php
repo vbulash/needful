@@ -14,10 +14,12 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			@hasrole('Администратор')
-			<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
-			@endhasrole
+			@if (!env('BLOCK_STUDENT_ADD'))
+				@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+				<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
+				   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
+				@endhasrole
+			@endif
 
 			<p>Красным цветом выделены неактивные учащиеся. Активацию объектов выполняет администратор
 				платформы<br/>

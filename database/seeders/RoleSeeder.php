@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\Auth\RoleName;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
@@ -19,9 +20,9 @@ class RoleSeeder extends Seeder
 		// Reset cached roles and permissions
 		app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-		Role::create(['name' => 'Администратор', 'selfassign' => false]);
-		Role::create(['name' => 'Работодатель', 'selfassign' => true]);
-		Role::create(['name' => 'Практикант', 'selfassign' => true]);
-		Role::create(['name' => 'Учебное заведение', 'selfassign' => true]);
+		Role::create(['name' => RoleName::ADMIN->value, 'selfassign' => false]);
+		Role::create(['name' => RoleName::EMPLOYER->value, 'selfassign' => true]);
+		Role::create(['name' => RoleName::TRAINEE->value, 'selfassign' => true]);
+		Role::create(['name' => RoleName::SCHOOL->value, 'selfassign' => true]);
 	}
 }

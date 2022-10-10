@@ -6,14 +6,14 @@
 			Свяжите данную анкету работодателя с записью
 			пользователя
 		@endif
-		@hasrole('Работодатель') (только текущий пользователь) @endhasrole
+		@hasrole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value) (только текущий пользователь) @endhasrole
 		@if($mode != config('global.show')) <span class="required">*</span> @endif
 	</label>
 	<div class="col-sm-5 col-form-label">
 		<select name="user_id" id="user_id" class="form-control select2"
 				@if($mode == config('global.show')) disabled @endif
 		>
-			@hasrole('Администратор')
+			@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 			<option selected disabled>Выберите пользователя</option>
 			@foreach($users as $user)
 				<option value="{{ $user['id'] }}"
@@ -28,7 +28,7 @@
 			@endforeach
 			@endhasrole
 
-			@hasrole('Работодатель')
+			@hasrole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value)
 			<option value="{{ auth()->user()->getKey() }}">
 				{{ auth()->user()->name }}
 			</option>

@@ -24,7 +24,7 @@
 		@endif специальности &laquo;{{ $especialty->specialty->name }}&raquo;
 		</p>
 		@if($mode == config('global.edit'))
-			@if (!auth()->user()->hasRole('Администратор'))
+			@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 				<p>Новые специальности может добавлять только администратор платформы</p>
 			@endif
 		@endif
@@ -57,7 +57,7 @@
             'name' => 'id', 'type' => 'hidden', 'value' => $especialty->getKey()
 		];
         if($mode == config('global.edit'))
-            if (auth()->user()->hasRole('Администратор'))
+            if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
             	$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
         $fields[] = ['name' => 'count', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $especialty->count];
 	@endphp

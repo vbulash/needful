@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * @method static findOrFail(mixed $history)
  */
 class History extends Model implements FormTemplate
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasTitle;
 
 	protected $fillable = [
 		'timetable_id',
@@ -28,7 +29,8 @@ class History extends Model implements FormTemplate
 	public function students(): BelongsToMany
 	{
 		return $this->belongsToMany(Student::class, 'history_student')
-			->withPivot('status')
+			->using(Trainee::class)
+			->withPivot(['id', 'status'])
 			->withTimestamps();
 	}
 
@@ -45,5 +47,14 @@ class History extends Model implements FormTemplate
 			'action' => route('history.update', ['history' => $this->getKey(), 'sid' => session()->getId()]),
 			'close' => route('history.index', ['sid' => session()->getId()]),
 		];
+	}
+
+	public function getTitle(): string
+	{
+		return sprintf("%s - %s (%s)",
+			$this->timetable->internship->employer->getTitle(),
+			$this->timetable->internship->getTitle(),
+			Str::lower($this->timetable->getTitle())
+		);
 	}
 }

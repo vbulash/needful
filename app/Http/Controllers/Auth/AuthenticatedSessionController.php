@@ -7,15 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Role;
 use \Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function create()
     {
@@ -25,8 +27,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param LoginRequest $request
+     * @return RedirectResponse
      */
     public function store(LoginRequest $request)
     {
@@ -35,8 +37,14 @@ class AuthenticatedSessionController extends Controller
             $request->session()->regenerate();
 			session()->put('success', "Вы успешно авторизовались");
 
-            //return redirect()->intended();
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
+				if (!auth()->user()->students)
+					return redirect()->route('students.index');
+			} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
+				if (!auth()->user()->employers)
+					return redirect()->route('employers.index');
+			}
+			return redirect()->route('dashboard');
         } catch(Exception $exc) {
 			session()->put('error', $exc->getMessage());
             event(new ToastEvent('error', '', $exc->getMessage()));
@@ -48,8 +56,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request)
     {

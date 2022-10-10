@@ -17,7 +17,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $read
  * @property string $context
  * @property string script
+ * @property bool $archive
  * @method static findOrFail(int $id)
+ * @method static where(string $string, false $false)
  */
 class Task extends Model
 {
@@ -35,6 +37,7 @@ class Task extends Model
 		'read',			// Сообщение прочтено (true) или не прочтено (false)
 		'context',		// Контекст объекта задачи
 		'script',		// Скрипт задачи
+		'archive',		// Признак архивной задачи
 	];
 
 	public function from(): BelongsTo

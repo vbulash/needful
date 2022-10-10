@@ -11,46 +11,46 @@ use Illuminate\Notifications\Notification;
 
 class EmployerPracticeNotification extends Notification
 {
-    use Queueable;
+	use Queueable;
 
 	private History $history;
 	private Student $trainee;
 	private int $status;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct(Student $trainee, History $history, int $status)
-    {
-        $this->history = $history;
+	/**
+	 * Create a new notification instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(Student $trainee, History $history, int $status)
+	{
+		$this->history = $history;
 		$this->trainee = $trainee;
 		$this->status = $status;
-    }
+	}
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
+	/**
+	 * Get the notification's delivery channels.
+	 *
+	 * @param mixed $notifiable
+	 * @return array
+	 */
+	public function via($notifiable)
+	{
+		return ['mail'];
+	}
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return MailMessage
-     */
-    public function toMail(mixed $notifiable): MailMessage
+	/**
+	 * Get the mail representation of the notification.
+	 *
+	 * @param mixed $notifiable
+	 * @return MailMessage
+	 */
+	public function toMail(mixed $notifiable): MailMessage
 	{
 		$subject = '';
 		$lines = [];
-		$lines[] = 'Уважаемый (уважаемая) ' . $this->trainee->getTitle(). '!';
+		$lines[] = 'Уважаемый (уважаемая) ' . $this->trainee->getTitle() . '!';
 		switch ($this->status) {
 			case TraineeStatus::ASKED->value:
 				$subject = 'Запланирована новая практика';
@@ -67,11 +67,16 @@ class EmployerPracticeNotification extends Notification
 		}
 		$lines[] = 'Работодатель: "' . $this->history->timetable->internship->employer->getTitle() . '"';
 		$lines[] = 'Стажировка: "' . $this->history->timetable->internship->getTitle() . '"';
+		if (isset($this->history->timetable->internship->short))
+			$lines[] = 'Краткая информация по стажировке: "' . $this->history->timetable->internship->short . '"';
 		$lines[] = 'График стажировки: ' . $this->history->timetable->getTitle();
 
 		switch ($this->status) {
 			case TraineeStatus::ASKED->value:
-				$lines[] = 'Пройдите, пожалуйста, по ссылке ... чтобы выразить свое согласие или несогласие с данным приглашением.';
+				$lines[] = sprintf(<<<EOS
+Войдите, пожалуйста в платформу по ссылке [%s](%s). Откройте входящие сообщения и в сообщении, соответствующем данному письму, выразите свое согласие или несогласие участия в практике.
+EOS,
+					env('APP_NAME'), env('APP_URL'));
 				$lines[] = 'В случае игнорирования приглашения через 10 дней оно будет аннулировано';
 				break;
 			default:
@@ -82,18 +87,18 @@ class EmployerPracticeNotification extends Notification
 		foreach ($lines as $line)
 			$message = $message->line($line);
 		return $message;
-    }
+	}
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
+	/**
+	 * Get the array representation of the notification.
+	 *
+	 * @param mixed $notifiable
+	 * @return array
+	 */
+	public function toArray($notifiable)
+	{
+		return [
+			//
+		];
+	}
 }

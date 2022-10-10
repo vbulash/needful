@@ -17,7 +17,7 @@
 @section('interior.header')
 	<div>
 		<p>Новая специальность по стажировке работодателя</p>
-		@if (!auth()->user()->hasRole('Администратор'))
+		@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 			<p>Новые специальности может добавлять только администратор платформы</p>
 		@endif
 	</div>
@@ -33,7 +33,7 @@
 		$fields = [
 			['name' => 'specialty_id', 'title' => 'Выбор специальности', 'required' => false, 'type' => 'select', 'placeholder' => 'Выберите специальность'],
 		];
-        if (auth()->user()->hasRole('Администратор'))
+        if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 			$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
         $fields[] = ['name' => 'count', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'min' => 1];
 	@endphp

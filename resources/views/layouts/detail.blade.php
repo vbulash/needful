@@ -4,12 +4,12 @@
 	<div class="col-sm-3 col-form-label">&nbsp;</div>
 	<div class="col-sm-5">
 		@if($mode == config('global.show'))
-			<a class="btn btn-primary pl-3"
+			<a class="btn btn-primary pl-3" id="button-close"
 			   href="@yield('form.close')"
 			   role="button">Закрыть</a>
 		@else
-			<button type="submit" class="btn btn-primary">Сохранить</button>
-			<a class="btn btn-secondary pl-3"
+			<button type="submit" class="btn btn-primary" id="button-save">Сохранить</button>
+			<a class="btn btn-secondary pl-3" id="button-close"
 			   href="@yield('form.close')"
 			   role="button">Закрыть</a>
 		@endif

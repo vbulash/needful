@@ -4,19 +4,19 @@
 	@php
 		$cards = [
     		[
-    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Запланировать стажировку практикантов', 'class' => 'bg-gd-sea', 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Отслеживать стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
-    			['role' => 'Работодатель', 'title' => 'Работодатель', 'subtitle' => 'Завершить стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fa fa-2x fa-business-time', 'link' => 'javascript:void(0)'],
+    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Запланировать стажировку практикантов', 'active' => true, 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1')],
+    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Отслеживать стажировку', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
+    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Завершить стажировку', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
     		],
     		[
-    			['role' => 'Практикант', 'title' => 'Практикант', 'subtitle' => 'Пройти стажировку', 'class' => 'bg-gray no-link', 'icon' => 'fas fa-2x fa-user-graduate', 'link' => 'javascript:void(0)'],
+    			['role' => \App\Http\Controllers\Auth\RoleName::TRAINEE->value, 'title' => 'Практикант', 'subtitle' => 'Пройти стажировку', 'active' => false, 'icon' => 'fas fa-2x fa-user-graduate'],
     		]
 		];
 	@endphp
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Платформа позволяет оказывать следующие услуги</h1>
+				<h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Платформа &laquo;{{ env('APP_NAME') }}&raquo; позволяет оказывать следующие услуги</h1>
 			</div>
 {{--			<div class="row items-push">Дополнительный блок</div>--}}
 		</div>
@@ -34,34 +34,31 @@
 								@foreach($row as $card)
 									@php
 										$allowed = false;
-										if (auth()->user()->hasRole('Администратор')) {
+										if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
 											$allowed = true;
-										} elseif (auth()->user()->hasRole('Работодатель') && $card['role'] == 'Работодатель') {
+										} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value) &&
+											$card['role'] == \App\Http\Controllers\Auth\RoleName::EMPLOYER->value) {
 											$allowed = true;
-										} elseif (auth()->user()->hasRole('Практикант') && $card['role'] == 'Практикант') {
+										} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value) &&
+											$card['role'] == \App\Http\Controllers\Auth\RoleName::TRAINEE->value) {
 											$allowed = true;
 										}
 									@endphp
 
-									@if(!$allowed)
+									@if (!$allowed)
+										@continue
+									@endif
+									@if (!env('SHOW_INACTIVE_TILES') && !$card['active'])
 										@continue
 									@endif
 
-									<div class="col-md-6 col-xl-4 mb-4">
-										<a class="block block-rounded block-transparent block-link-pop {{ $card['class'] }} h-100 mb-0"
-										   href="{{ $card['link'] }}">
-											<div
-												class="block-content block-content-full d-flex align-items-center justify-content-between">
-												<div>
-													<p class="fs-lg fw-semibold mb-0 text-white">{{ $card['title'] }}</p>
-													<p class="text-white-75 mb-0">{{ $card['subtitle'] }}</p>
-												</div>
-												<div class="ms-3 item">
-													<i class="{{ $card['icon'] }} text-white-50"></i>
-												</div>
-											</div>
-										</a>
-									</div>
+									<x-tile
+										title="{{ $card['title'] }}"
+										subtitle="{{ $card['subtitle'] }}"
+										active="{{ $card['active'] }}"
+										icon="{{ $card['icon'] }}"
+										link="{{ $card['link'] ?? '' }}">
+									</x-tile>
 								@endforeach
 							</div>
 						@endforeach

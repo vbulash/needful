@@ -4,22 +4,22 @@
         $students = false;
         $schools = false;
         $admin = false;
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
 			$employers = true;
 			$students = true;
             $schools = true;
             $admin = true;
 		} else {
-            $employers = auth()->user()->hasRole('Работодатель');
-			$students = auth()->user()->hasRole('Практикант');
-			$schools = auth()->user()->hasRole('Учебное заведение');
+            $employers = auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value);
+			$students = auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value);
+			$schools = auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::SCHOOL->value);
 		}
 
         $menu = [
             ['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard'],
 
             ['title' => 'Стажировки', 'heading' => true],
-            ['title' => 'Стажировки', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*']],
+            ['title' => 'Стажировки', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']],
         ];
 
         if ($employers || $students || $schools)
@@ -40,6 +40,7 @@
         if ($admin) {
             $menu[] = ['title' => 'Настройки', 'heading' => true];
             $menu[] = ['title' => 'Пользователи', 'icon' => 'fa fa-user-alt', 'route' => 'users.index', 'pattern' => 'users.*'];
+            $menu[] = ['title' => 'Импорт', 'icon' => 'fa-solid fa-file-import', 'route' => 'import.index', 'pattern' => 'import.*'];
             $menu[] = ['title' => 'Laravel Telescope', 'icon' => 'fa fa-gears', 'route' => 'telescope', 'pattern' => 'telescope'];
 		}
 	@endphp

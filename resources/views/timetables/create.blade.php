@@ -29,6 +29,7 @@
 			['name' => 'start', 'title' => 'Начало', 'required' => true, 'type' => 'date', 'placeholder' => 'Выберите дату'],
 			['name' => 'end', 'title' => 'Завершение', 'required' => true, 'type' => 'date', 'placeholder' => 'Выберите дату'],
 			['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'required' => false, 'type' => 'text'],
+			['name' => 'planned', 'title' => 'Требуется практикантов', 'required' => true, 'type' => 'number', 'min' => 1],
 			['name' => 'internship_id', 'type' => 'hidden', 'value' => $internship->getKey()],
 		];
 	@endphp

@@ -15,6 +15,7 @@ class Timetable extends Model implements FormTemplate
 		'start',
 		'end',
 		'name',
+		'planned',
 		'internship_id'
 	];
 

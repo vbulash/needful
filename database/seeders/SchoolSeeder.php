@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\Auth\RoleName;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -31,7 +32,7 @@ class SchoolSeeder extends Seeder
 		})->toArray();
 		Permission::insert($permissions);
 
-		$school = Role::where('name', 'Учебное заведение')->first();
+		$school = Role::where('name', RoleName::SCHOOL->value)->first();
 		$school->givePermissionTo([
 			'schools.create',
 			'students.list',

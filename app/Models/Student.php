@@ -81,6 +81,7 @@ class Student extends Model implements FormTemplate
 	public function histories(): BelongsToMany
 	{
 		return $this->belongsToMany(History::class, 'history_student')
+			->using(Trainee::class)
 			->withPivot('status')
 			->withTimestamps();
 	}

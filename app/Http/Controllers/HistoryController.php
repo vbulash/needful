@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Events\UnreadCountEvent;
+use App\Http\Controllers\Auth\RoleName;
+use App\Http\Requests\UpdateHistoryRequest;
 use App\Models\Employer;
 use App\Models\History;
 use App\Models\HistoryStatus;
@@ -54,34 +56,48 @@ class HistoryController extends Controller
 			->editColumn('employer', fn ($history) => $history->timetable->internship->employer->getTitle())
 			->editColumn('internship', fn ($history) => $history->timetable->internship->getTitle())
 			->editColumn('timetable', fn ($history) => $history->timetable->getTitle())
-			->editColumn('trainees', fn ($history) => $this->traineeAllLetter($history->students()->count()))
+			->editColumn('trainees', fn ($history) =>
+				$this->traineeAllLetter($history->students()->wherePivot('status', TraineeStatus::ACCEPTED->value)->count()) . ' из ' . $history->timetable->planned)
 			->editColumn('status', fn ($history) => HistoryStatus::getName($history->status))
 			->addColumn('action', function ($history) {
-				$editRoute = route('history.edit', ['history' => $history->id, 'sid' => session()->getId()]);
-				$showRoute = route('history.show', ['history' => $history->id, 'sid' => session()->getId()]);
+				$editRoute = route('history.edit', ['history' => $history->getKey(), 'sid' => session()->getId()]);
+				$showRoute = route('history.show', ['history' => $history->getKey(), 'sid' => session()->getId()]);
+				$selectRoute = route('history.select', ['history' => $history->getKey()]);
 				$actions = '';
 
-				if (!auth()->user()->hasRole('Практикант'))
+				if (!auth()->user()->hasRole(RoleName::TRAINEE->value))
 					$actions .=
-						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
 				$actions .=
-					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 					"<i class=\"fas fa-eye\"></i>\n" .
 					"</a>\n";
-				if (auth()->user()->hasRole('Администратор')) {
+				if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$history->id}, '')\">\n" .
+						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left\" " .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$history->getKey()}, '')\">\n" .
 						"<i class=\"fas fa-trash-alt\"></i>\n" .
 						"</a>\n";
 				}
+				$actions .=
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
+					"</a>\n";
 				return $actions;
 			})
 			->make(true);
+	}
+
+	public function select(int $history): RedirectResponse
+	{
+		session()->put('context', ['history' => $history]);
+
+		return redirect()->route('trainees.index');
 	}
 
 	private function traineeAllLetter(int $count): string {
@@ -104,16 +120,18 @@ class HistoryController extends Controller
 	 */
     public function index(): View|Factory|RedirectResponse|Application
 	{
+		session()->forget('context');
+
 		$params = [
 			'count' => History::all()->count()
 		];
-		if(auth()->user()->hasRole('Работодатель')) {
+		if(auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
 			if (auth()->user()->can('employers.list')) {
 				// Работодатель имеет право на полный список - ничего не делаем
 			} elseif (PermissionUtils::can('employers.list.')) {
 				$params['eids'] = PermissionUtils::getPermissionIDs('employers.list.');
 			}
-		} elseif(auth()->user()->hasRole('Практикант')) {
+		} elseif(auth()->user()->hasRole(RoleName::TRAINEE->value)) {
 			if (auth()->user()->can('students.list')) {
 				// Практикант имеет право на полный список - ничего не делаем
 			} elseif (PermissionUtils::can('students.list.')) {
@@ -147,21 +165,20 @@ class HistoryController extends Controller
 		return view('histories.edit', compact('history', 'mode'));
 	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param  int  $id
-     * @return RedirectResponse
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param UpdateHistoryRequest $request
+	 * @param int $id
+	 * @return RedirectResponse
 	 */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(UpdateHistoryRequest $request, $id): RedirectResponse
 	{
 		$history = History::findOrFail($id);
 		$history->update($request->all());
-		$history->notify(new StartInternshipNotification($history));
+		//$history->notify(new StartInternshipNotification($history));
 
-		session()->put('success', "Запись истории стажировки № " . $history->getKey() .
-			" обновлена<br/>Письмо практиканту отправлено");
+		session()->put('success', "Запись истории стажировки № " . $history->getKey() . " обновлена");
 		return redirect()->route('history.index', ['sid' => session()->getId()]);
     }
 
@@ -192,6 +209,7 @@ class HistoryController extends Controller
 		$task = $request->has('task') ? $request->task : 0;
 		$status = $history->students()->findOrFail($request->trainee)->pivot->status;
 
+		$redirect = null;
 		$updated = false;
 		switch ($status) {
 			case TraineeStatus::ASKED->value:
@@ -200,8 +218,12 @@ class HistoryController extends Controller
 					TraineeStatus::ACCEPTED->value => 'Вы согласились участвовать в стажировке',
 					TraineeStatus::REJECTED->value => 'Вы отказались от участия в стажировке'
 				};
+				$redirect = route('inbox.archive');
 				$history->students()->updateExistingPivot($trainee, ['status' => $toStatus]);
-				$updated = (Task::findOrFail($task))->update(['read' => true]);
+				$updated = (Task::findOrFail($task))->update([
+					'read' => true,
+					'archive' => true
+				]);
 				$response = 200;
 				break;
 			default:
@@ -214,7 +236,7 @@ class HistoryController extends Controller
 		event(new ToastEvent($kind, '', $message));
 		if ($updated)
 			event(new UnreadCountEvent());
-		return response(content: $task, status: $response);
+		return response(content: $redirect, status: $response);
 
 	}
 

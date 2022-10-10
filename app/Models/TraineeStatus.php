@@ -8,16 +8,20 @@ enum TraineeStatus: int
 	case ASKED = 1;
 	case ACCEPTED = 2;
 	case REJECTED = 3;
-	case CANCELLED = 4;
+	case APPROVED = 4;
+	case CANCELLED = 5;
+	case DESTROYED = 6;
 
 	public static function getName(int $hs): string
 	{
 		return match($hs) {
-			self::NEW->value => 'Новая',
-			self::ASKED->value => 'Запрошено',
-			self::ACCEPTED->value => 'Одобрено',
-			self::REJECTED->value => 'Отвергнуто',
-			self::CANCELLED->value => 'Отменено',
+			self::NEW->value => 'Новое приглашение',
+			self::ASKED->value => 'Кандидат интересен',
+			self::ACCEPTED->value => 'Кандидат подтвердил',
+			self::REJECTED->value => 'Кандидат отказался',
+			self::APPROVED->value => 'Кандидат утвержден',
+			self::CANCELLED->value => 'Приглашение отменено',
+			self::DESTROYED->value => 'Стажировка отменена',
 			default => 'Неизвестный статус запроса практиканту'
 		};
 	}

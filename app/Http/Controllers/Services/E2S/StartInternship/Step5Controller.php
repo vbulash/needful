@@ -39,12 +39,12 @@ class Step5Controller extends Controller
 		$history->students()
 			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW]);
 
-		foreach ($history->students as $trainee) {
-			$history->students()->updateExistingPivot($trainee, ['status' => TraineeStatus::ASKED->value]);
-			$trainee->notify(new EmployerPracticeNotification($trainee, $history, TraineeStatus::ASKED->value));
-			event(new ToastEvent('info', '', "Переслано письмо-предложение практики для учащегося: {$trainee->getTitle()}"));
-			event(new InviteTraineeTaskEvent($history, $trainee));
-		}
+//		foreach ($history->students as $trainee) {
+			//$history->students()->updateExistingPivot($trainee, ['status' => TraineeStatus::ASKED->value]);
+			//$trainee->notify(new EmployerPracticeNotification($trainee, $history, TraineeStatus::ASKED->value));
+//			event(new ToastEvent('info', '', "Переслано письмо-предложение практики для учащегося: {$trainee->getTitle()}"));
+//			event(new InviteTraineeTaskEvent($history, $trainee));
+//		}
 
 		$id = $history->getKey();
 		//session()->forget('context');

@@ -25,57 +25,39 @@
 
 								<form method="POST" action="{{ route('register') }}">
 									@csrf
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<input type="text" class="signup form-control" id="signup-username"
-												   name="name" placeholder="Фамилия, имя и отчество">
-											<span class="input-group-text">
-                          						<i class="fa fa-user-circle"></i>
-                        					</span>
-										</div>
+									<div class="form-floating mb-4">
+										<input type="text" class="form-control" id="signup-username" name="name"
+											   placeholder="Фамилия, имя и отчество">
+										<label for="name">Фамилия, имя и отчество</label>
 									</div>
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<input type="email" class="signup form-control" id="signup-email"
-												   name="email" placeholder="Электронная почта">
-											<span class="input-group-text">
-                          						<i class="fa fa-envelope-open"></i>
-                        					</span>
-										</div>
+									<div class="form-floating mb-4">
+										<input type="email" class="form-control" id="signup-email" name="email"
+											   placeholder="Электронная почта">
+										<label for="email">Электронная почта</label>
 									</div>
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<input type="password" class="signup form-control" id="signup-password"
-												   name="password" placeholder="Пароль">
-											<span class="input-group-text">
-                          						<i class="fa fa-asterisk"></i>
-                        					</span>
-										</div>
+									<div class="form-floating mb-4">
+										<input type="password" class="form-control" id="signup-password" name="password"
+											   placeholder="Пароль">
+										<label for="password">Пароль</label>
 									</div>
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<input type="password" class="signup form-control"
-												   id="password_confirmation"
-												   name="password_confirmation" placeholder="Подтверждение пароля">
-											<span class="input-group-text">
-                                                <i class="fa fa-asterisk"></i>
-                                            </span>
-										</div>
+									<div class="form-floating mb-4">
+										<input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+											   placeholder="Подтверждение пароля">
+										<label for="password_confirmation">Подтверждение пароля</label>
 									</div>
-									<div class="mb-4">
-										<div class="input-group input-group-lg">
-											<select name="role" id="role"
-													class="form-control">
-												<option selected disabled>Выберите роль нового пользователя из списка
-												</option>
-												@foreach($roles as $role)
-													<option value="{{ $role }}">{!! $role !!}</option>
-												@endforeach
-											</select>
-											<span class="input-group-text">
-												<i class="fa fa-chevron-down"></i>
-                                            </span>
-										</div>
+
+									<div class="form-floating mb-4">
+										<select name="role" id="role"
+												class="form-control">
+											@foreach($roles as $role)
+												<option value="{{ $role }}"
+														@if ($loop->first)
+															selected
+														@endif
+												>{!! $role !!}</option>
+											@endforeach
+										</select>
+										<label for="password_confirmation">Роль нового пользователя</label>
 									</div>
 
 									<div

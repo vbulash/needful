@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Events\UpdateEmployerTaskEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Models\ActiveStatus;
 use App\Models\Employer;
@@ -136,12 +137,12 @@ class EmployerController extends Controller
 	{
 		$mode = config('global.create');
 		$baseRight = "employers.create";
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Работодатель'));
+						($user->hasRole(RoleName::EMPLOYER->value));
 					if (!$collect) return null;
 
 					return [
@@ -213,12 +214,12 @@ class EmployerController extends Controller
 		$baseRight = sprintf("employers.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $employer->getKey());
 
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Работодатель'));
+						($user->hasRole(RoleName::EMPLOYER->value));
 					if (!$collect) return null;
 
 					return [

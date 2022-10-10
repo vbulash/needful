@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use App\Notifications\NewUser;
 use Exception;
@@ -66,7 +68,7 @@ class UserController extends Controller
 	 *
 	 * @return Application|Factory|View
 	 */
-	public function index()
+	public function index(): View|Factory|Application
 	{
 		$count = User::all()->count();
 		return view('users.index', compact('count'));
@@ -75,12 +77,14 @@ class UserController extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 *
+	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function create()
+	public function create(Request $request): View|Factory|Application
 	{
+		$for = $request->has('for') ? Student::findOrFail($request->for) : false;
 		$mode = config('global.create');
-		return view('users.create', compact('mode'));
+		return view('users.create', compact('mode', 'for'));
 	}
 
 	/**
@@ -89,7 +93,7 @@ class UserController extends Controller
 	 * @param UpdateUserRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(UpdateUserRequest $request)
+	public function store(UpdateUserRequest $request): RedirectResponse
 	{
 		$role = $request->role;
 		try {
@@ -98,20 +102,22 @@ class UserController extends Controller
 				'email' => $request->email,
 				'password' => Hash::make($request->password),
 			]);
-			$user->assignRole($role);
-			if ($request->role == 'Работодатель') {
-				$this->addWildcard($user, 'employers.create', $user->getKey());
-				$this->addWildcard($user, 'employers.edit', $user->getKey());
-				$this->addWildcard($user, 'employers.show', $user->getKey());
-			} elseif ($request->role == 'Практикант') {
-				$this->addWildcard($user, 'students.create', $user->getKey());
-				$this->addWildcard($user, 'students.edit', $user->getKey());
-				$this->addWildcard($user, 'students.show', $user->getKey());
-			} elseif ($request->role == 'Учебное заведение') {
-				$this->addWildcard($user, 'schools.create', $user->getKey());
-				$this->addWildcard($user, 'schools.edit', $user->getKey());
-				$this->addWildcard($user, 'schools.show', $user->getKey());
+			if ($request->for) {
+				$student = Student::findOrFail($request->for);
+				$student->user()->associate($user);
+				$student->save();
 			}
+
+			$user->assignRole($role);
+			$prefix = match ($request->role) {
+				RoleName::EMPLOYER->value => 'employers',
+				RoleName::TRAINEE->value => 'students',
+				RoleName::SCHOOL->value => 'schools',
+				default => null
+			};
+			if ($prefix)
+				foreach (['create', 'edit', 'show'] as $action)
+					$this->addWildcard($user, $prefix . '.' . $action, $user->getKey());
 
 			event(new Registered($user));
 			$user->notify(new NewUser($user));
@@ -127,7 +133,7 @@ class UserController extends Controller
 			session()->put('error',
 				"Ошибка регистрации нового пользователя: {$exc->getMessage()}");
 		}
-		return redirect()->route('users.index', ['sid' => session()->getId()]);
+		return redirect()->route($request->for ? 'students.index' : 'users.index');
 	}
 
 	/**
@@ -136,7 +142,7 @@ class UserController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show($id)
+	public function show(int $id): View|Factory|Application
 	{
 		$mode = config('global.show');
 		$user = User::findOrFail($id);
@@ -150,7 +156,7 @@ class UserController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function edit(Request $request, int $id)
+	public function edit(Request $request, int $id): View|Factory|Application
 	{
 		$mode = config('global.edit');
 		$user = User::findOrFail($id);
@@ -166,7 +172,7 @@ class UserController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateUserRequest $request, $id)
+	public function update(UpdateUserRequest $request, int $id): RedirectResponse
 	{
 		$role = $request->role;
 		$user = User::findOrFail($id);
@@ -178,19 +184,15 @@ class UserController extends Controller
 		$user->save();
 
 		$user->assignRole($role);
-		if ($request->role == 'Работодатель') {
-			$this->addWildcard($user, 'employers.create', $user->getKey());
-			$this->addWildcard($user, 'employers.edit', $user->getKey());
-			$this->addWildcard($user, 'employers.show', $user->getKey());
-		} elseif ($request->role == 'Практикант') {
-			$this->addWildcard($user, 'students.create', $user->getKey());
-			$this->addWildcard($user, 'students.edit', $user->getKey());
-			$this->addWildcard($user, 'students.show', $user->getKey());
-		} elseif ($request->role == 'Учебное заведение') {
-			$this->addWildcard($user, 'schools.create', $user->getKey());
-			$this->addWildcard($user, 'schools.edit', $user->getKey());
-			$this->addWildcard($user, 'schools.show', $user->getKey());
-		}
+		$prefix = match ($request->role) {
+			RoleName::EMPLOYER->value => 'employers',
+			RoleName::TRAINEE->value => 'students',
+			RoleName::SCHOOL->value => 'schools',
+			default => null
+		};
+		if ($prefix)
+			foreach (['create', 'edit', 'show'] as $action)
+				$this->addWildcard($user, $prefix . '.' . $action, $user->getKey());
 
 		session()->put('success',
 			"Пользователь \"{$name}\" обновлён");
@@ -205,7 +207,7 @@ class UserController extends Controller
 	 * @param int $user
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $user)
+	public function destroy(Request $request, int $user): bool
 	{
 		if ($user == 0) {
 			$id = $request->id;

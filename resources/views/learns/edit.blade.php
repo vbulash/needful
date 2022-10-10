@@ -29,7 +29,7 @@
 @section('form.fields')
 	@php
 		$fields = [];
-        if (auth()->user()->hasRole('Администратор')) {
+        if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
             $fields[] = ['name' => 'status', 'title' => 'Статус активности объекта', 'required' => false, 'type' => 'select', 'options' => [
                 \App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
                 \App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
@@ -42,10 +42,10 @@
         $fields[] = $item;
         if ($learn->status == \App\Models\ActiveStatus::ACTIVE->value) {
             $item = ['name' => 'school_id', 'title' => 'Учебное заведение', 'required' => false, 'type' => 'select', 'options' => $schools, 'value' => $learn->school->getKey()];
-            //if (!auth()->user()->hasRole('Администратор')) $item['disabled'] = true;
+            //if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) $item['disabled'] = true;
             $fields[] = $item;
             $item = ['name' => 'specialty_id', 'title' => 'Специальность', 'required' => false, 'type' => 'select', 'options' => $specialties, 'value' => $learn->specialty->getKey()];
-            //if (!auth()->user()->hasRole('Администратор')) $item['disabled'] = true;
+            //if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) $item['disabled'] = true;
             $fields[] = $item;
         } elseif ($learn->status == \App\Models\ActiveStatus::NEW->value) {
             $fields[] = ['title' => 'Учебное заведение', 'type' => 'heading'];

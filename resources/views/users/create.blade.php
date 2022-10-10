@@ -12,42 +12,61 @@
 
 @section('interior.header')
 	Новый пользователь
+	@if (isset($for) && $for)
+		<br/>
+		<small>Вы можете не сообщать пользователю его пароль. В этом случае он может воспользоваться функцией восстановления пароля при входе в &laquo;{{ env('APP_NAME') }}&raquo; -
+			соответствующее предложение будет направлено ему в письме по итогам создания данного пользователя</small>
+	@endif
 @endsection
 
 @section('form.params')
-	id="{{ form(\App\Models\User::class, $mode, 'id') }}" name="{{ form(App\Models\User::class, $mode, 'name') }}"
-	action="{{ form(App\Models\User::class, $mode, 'action') }}"
+	id="{{ form(\App\Models\User::class, $mode, 'id') }}" name="{{ form(\App\Models\User::class, $mode, 'name') }}"
+	action="{{ form(\App\Models\User::class, $mode, 'action') }}"
 @endsection
 
 @section('form.fields')
 	@php
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
             $roles = [
-                'Администратор' => 'Администратор',
-                'Практикант' => 'Практикант',
-                'Работодатель' => 'Работодатель'
+                \App\Http\Controllers\Auth\RoleName::ADMIN->value => \App\Http\Controllers\Auth\RoleName::ADMIN->value,
+                \App\Http\Controllers\Auth\RoleName::TRAINEE->value => \App\Http\Controllers\Auth\RoleName::TRAINEE->value,
+                \App\Http\Controllers\Auth\RoleName::EMPLOYER->value => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value,
 			];
-		} elseif (auth()->user()->hasRole('Практикант')) {
+		} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)) {
             $roles = [
-                'Практикант' => 'Практикант',
+                \App\Http\Controllers\Auth\RoleName::TRAINEE->value => \App\Http\Controllers\Auth\RoleName::TRAINEE->value,
 			];
-        } elseif (auth()->user()->hasRole('Работодатель')) {
+        } elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value)) {
             $roles = [
-                'Работодатель' => 'Работодатель'
+                \App\Http\Controllers\Auth\RoleName::EMPLOYER->value => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value,
 			];
 		}
-		$fields = [
-			['name' => 'name', 'title' => 'Фамилия, имя и отчество', 'required' => true, 'type' => 'text'],
-			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email'],
-			['name' => 'password', 'title' => 'Новый пароль', 'required' => true, 'type' => 'password', 'generate' => true],
-			['name' => 'password_confirmation', 'title' => 'Повторный ввод пароля', 'required' => true, 'type' => 'password'],
-			['name' => 'role', 'title' => 'Роль пользователя', 'required' => true, 'type' => 'select', 'options' => $roles],
+
+        $fields = [
+            ['name' => 'for', 'type' => 'hidden', 'value' => isset($for) && $for ? $for->getKey() : false]
 		];
+        if (isset($for) && $for) {
+            $fields[] = ['name' => 'name', 'title' => 'Фамилия, имя и отчество', 'required' => true, 'type' => 'text', 'value' => $for->getTitle()];
+            $fields[] = ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email', 'value' => $for->email];
+        } else {
+            $fields[] = ['name' => 'name', 'title' => 'Фамилия, имя и отчество', 'required' => true, 'type' => 'text'];
+            $fields[] = ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email'];
+        }
+		$fields[] = ['name' => 'password', 'title' => 'Новый пароль', 'required' => true, 'type' => 'password', 'generate' => true];
+        $fields[] = ['name' => 'password_confirmation', 'title' => 'Повторный ввод пароля', 'required' => true, 'type' => 'password'];
+        if (isset($for) && $for)
+			$fields[] = ['name' => 'role', 'title' => 'Роль пользователя', 'required' => true, 'type' => 'select', 'options' => $roles, 'value' => \App\Http\Controllers\Auth\RoleName::TRAINEE->value];
+        else
+            $fields[] = ['name' => 'role', 'title' => 'Роль пользователя', 'required' => true, 'type' => 'select', 'options' => $roles];
 	@endphp
 @endsection
 
 @section('form.close')
-	{{ form(App\Models\User::class, $mode, 'close') }}
+	@if (isset($for) && $for)
+		javascript:void(0)
+	@else
+		{{ form(App\Models\User::class, $mode, 'close') }}
+	@endif
 @endsection
 
 @push('js_after')
@@ -63,6 +82,18 @@
 					}
 				});
 			});
+
+			@if (isset($for) && $for)
+				$('#button-close').hide();
+				$.post({
+					url: "{{ route('api.get.password', ['length' => 20]) }}",
+					datatype: "json",
+					success: (helper) => {
+						$("#password").val(helper.password);
+						$("#password_confirmation").val(helper.password);
+					}
+				});
+			@endif
 		});
 	</script>
 @endpush

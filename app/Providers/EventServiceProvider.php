@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 use App\Events\InviteTraineeTaskEvent;
-use App\Events\TaskEvent;
-use App\Events\UnreadCountEvent;
 use App\Events\UpdateEmployerTaskEvent;
 use App\Events\UpdateSchoolTaskEvent;
 use App\Events\UpdateStudentTaskEvent;
 use App\Listeners\TaskRegisterListener;
+use App\Models\Trainee;
+use App\Observers\TraineeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -43,8 +43,8 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-        //
+    public function boot(): void
+	{
+		Trainee::observe(TraineeObserver::class);
     }
 }

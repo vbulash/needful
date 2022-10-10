@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Controllers\Auth\RoleName;
+use App\Rules\SpecialUserRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreStudentRequest extends FormRequest
@@ -30,8 +32,9 @@ class StoreStudentRequest extends FormRequest
 			'birthdate' => ['date', 'required', 'before:today'],
 			'phone' => ['required'],
 			'email' => ['required', 'email'],
+			'user_id' => [new SpecialUserRule($this)],
         ];
-		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = ['required'];
+//		if(auth()->user()->hasRole(RoleName::ADMIN->value)) $local['user_id'] = ['required'];
 
 		return $local;
     }
@@ -43,9 +46,10 @@ class StoreStudentRequest extends FormRequest
 			'firstname' => 'Имя',
 			'birthdate' => 'Дата рождения',
 			'phone' => 'Телефон',
-			'email' => 'Электронная почта'
+			'email' => 'Электронная почта',
+			'user_id' => 'Связанный пользователь'
 		];
-		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = 'Связанный пользователь';
+//		if(auth()->user()->hasRole(RoleName::ADMIN->value)) $local['user_id'] = 'Связанный пользователь';
 
 		return $local;
 	}

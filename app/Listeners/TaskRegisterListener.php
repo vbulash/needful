@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\TaskEvent;
 use App\Events\UnreadCountEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Models\Task;
 use Illuminate\Support\Str;
 
@@ -33,7 +34,7 @@ class TaskRegisterListener
 		$task->description = $event->description;
 		$task->route = $event->route;
 
-		if (auth()->user()->hasRole('Администратор'))
+		if (auth()->user()->hasRole(RoleName::ADMIN->value))
 			$task->fromadmin = true;
 		else
 			$task->from()->associate($event->from);

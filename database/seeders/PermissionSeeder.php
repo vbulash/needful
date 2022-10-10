@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\Auth\RoleName;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -44,7 +45,7 @@ class PermissionSeeder extends Seeder
 		});
 		Permission::insert($permissions->toArray());
 
-		$employer = Role::where('name', 'Работодатель')->first();
+		$employer = Role::where('name', RoleName::EMPLOYER->value)->first();
 		$employer->givePermissionTo([
 			'employers.create',
 			// При создании записи работодателя будет добавлены права на конкретный ID
@@ -53,7 +54,7 @@ class PermissionSeeder extends Seeder
 			'students.list',
 		]);
 
-		$student = Role::where('name', 'Практикант')->first();
+		$student = Role::where('name', RoleName::TRAINEE->value)->first();
 		$student->givePermissionTo([
 			'students.create',
 			// При создании записи практиканта будет добавлены права на конкретный ID

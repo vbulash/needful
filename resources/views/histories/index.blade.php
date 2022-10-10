@@ -1,11 +1,14 @@
-@extends('services.service')
+@extends('layouts.chain')
 
-@section('header')<div class="mt-4"></div>@endsection
+@section('service')
+	Работа со стажировками
+@endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Стажировки', 'active' => true, 'context' => 'history'],
+			['title' => 'Практиканты', 'active' => false, 'context' => 'trainee'],
 		];
 	@endphp
 @endsection
@@ -98,16 +101,7 @@
 						{data: 'internship', name: 'internship', responsivePriority: 3},
 						{data: 'timetable', name: 'timetable', responsivePriority: 2},
 						{data: 'trainees', name: 'trainees', responsivePriority: 2},
-						{
-							data: 'status', name: 'status', responsivePriority: 2, render: (data) => {
-								switch (data) {
-									case 'Планируется':
-										return "<b><span style='color: red;'>" + data + "</span></b>";
-									default:
-										return data;
-								}
-							}
-						},
+						{data: 'status', name: 'status', responsivePriority: 2},
 						{
 							data: 'action',
 							name: 'action',

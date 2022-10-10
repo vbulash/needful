@@ -16,7 +16,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			@hasrole('Администратор')
+			@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 			<a href="{{ route('schools.create', ['sid' => session()->getId()]) }}"
 			   class="btn btn-primary mt-3 mb-3">Добавить учебное заведение</a>
 			@endhasrole

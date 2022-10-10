@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -11,6 +12,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method static create(array $array)
+ * @method static findOrFail(int $id)
+ */
 class User extends Authenticatable implements FormTemplate
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable;
@@ -24,6 +29,7 @@ class User extends Authenticatable implements FormTemplate
         'name',
         'email',
         'password',
+		'special'
     ];
 
     /**
@@ -45,14 +51,14 @@ class User extends Authenticatable implements FormTemplate
         'email_verified_at' => 'datetime',
     ];
 
-	public function student(): HasOne
+	public function students(): HasMany
 	{
-		return $this->hasOne(Student::class);
+		return $this->hasMany(Student::class);
 	}
 
-	public function employer(): HasOne
+	public function employers(): HasMany
 	{
-		return $this->hasOne(Employer::class);
+		return $this->hasMany(Employer::class);
 	}
 
 	public function tasksFrom(): HasMany
@@ -83,5 +89,22 @@ class User extends Authenticatable implements FormTemplate
 			'action' => route('users.update', ['user' => $this->getKey(), 'sid' => session()->getId()]),
 			'close' => route('users.index', ['sid' => session()->getId()]),
 		];
+	}
+
+	public static function special()
+	{
+		return User::where('special', true)->first();
+	}
+
+	/**
+	 * Get all the models from the database.
+	 *
+	 * @param  array|string  $columns
+	 * @return Collection<int, static>
+	 */
+	public static function all($columns = ['*']): Collection
+	{
+		$special = User::special()->getKey();
+		return parent::all()->except($special);
 	}
 }

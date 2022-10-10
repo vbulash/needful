@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Events\UpdateSchoolTaskEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Models\ActiveStatus;
 use App\Models\School;
@@ -118,12 +119,12 @@ class SchoolController extends Controller
 	{
 		$mode = config('global.create');
 		$baseRight = "schools.create";
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Учебное заведение'))
+						($user->hasRole(RoleName::SCHOOL->value))
 					;
 					if (!$collect) return null;
 
@@ -198,12 +199,12 @@ class SchoolController extends Controller
 		$baseRight = sprintf("schools.%s", $show ? "show" : "edit");
 		$right = sprintf("%s.%d", $baseRight, $school->getKey());
 
-		if (auth()->user()->hasRole('Администратор')) {
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
 					$collect =
 						(auth()->user()->getKey() == $user->getKey()) ||
-						($user->hasRole('Учебное заведение'))
+						($user->hasRole(RoleName::SCHOOL->value))
 					;
 					if (!$collect) return null;
 

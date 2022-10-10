@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Controllers\Auth\RoleName;
+use App\Rules\ChangeStudentStatusRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateStudentRequest extends FormRequest
@@ -24,13 +26,14 @@ class UpdateStudentRequest extends FormRequest
 	public function rules()
 	{
 		$local = [
+			'status' => [new ChangeStudentStatusRule($this)],
 			'lastname' => ['required'],
 			'firstname' => ['required'],
 			'birthdate' => ['date', 'required', 'before:today'],
 			'phone' => ['required'],
 			'email' => ['required', 'email'],
 		];
-		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = ['required'];
+		if(auth()->user()->hasRole(RoleName::ADMIN->value)) $local['user_id'] = ['required'];
 
 		return $local;
 	}
@@ -38,13 +41,14 @@ class UpdateStudentRequest extends FormRequest
 	public function attributes()
 	{
 		$local = [
+			'status' => 'Статус',
 			'lastname' => 'Фамилия',
 			'firstname' => 'Имя',
 			'birthdate' => 'Дата рождения',
 			'phone' => 'Телефон',
 			'email' => 'Электронная почта'
 		];
-		if(auth()->user()->hasRole('Администратор')) $local['user_id'] = 'Связанный пользователь';
+		if(auth()->user()->hasRole(RoleName::ADMIN->value)) $local['user_id'] = 'Связанный пользователь';
 
 		return $local;
 	}

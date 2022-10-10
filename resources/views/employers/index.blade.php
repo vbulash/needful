@@ -27,7 +27,7 @@
 			@if (isset(session('context')['chain']))
 				Отображается единственная запись по цепочке из входящего сообщения
 			@else
-				@hasrole('Администратор')
+				@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 				<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
 				   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
 				@endhasrole

@@ -26,6 +26,7 @@ class UpdateTimetableRequest extends FormRequest
         return [
             'start' => ['required', 'date'],
 			'end' => ['required', 'date', 'after:start'],
+			'planned' => ['required'],
         ];
     }
 
@@ -33,7 +34,8 @@ class UpdateTimetableRequest extends FormRequest
 	{
 		return [
 			'start' => 'Начало',
-			'end' => 'Завершение'
+			'end' => 'Завершение',
+			'planned' => 'Требуется практикантов',
 		];
 	}
 }

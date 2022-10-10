@@ -12,7 +12,7 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		@hasrole('Администратор')
+		@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 		<a href="{{ route('users.create', ['sid' => session()->getId()]) }}"
 		   class="btn btn-primary mt-3 mb-3">Добавить пользователя</a>
 		@endhasrole
@@ -72,6 +72,7 @@
 				serverSide: true,
 				ajax: '{!! route('users.index.data') !!}',
 				responsive: true,
+				pageLength: 100,
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},
 					{data: 'name', name: 'name', responsivePriority: 2},
