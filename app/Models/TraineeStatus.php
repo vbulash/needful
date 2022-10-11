@@ -25,4 +25,38 @@ enum TraineeStatus: int
 			default => 'Неизвестный статус запроса практиканту'
 		};
 	}
+
+	public static function allowed(int $from, int $to): bool
+	{
+		$states = collect([
+			self::NEW->value => [self::ASKED->value],
+			self::ASKED->value => [self::ACCEPTED->value, self::REJECTED->value, self::APPROVED->value, self::CANCELLED->value, self::DESTROYED->value],
+			self::ACCEPTED->value => [self::APPROVED->value, self::CANCELLED->value, self::DESTROYED->value],
+			self::APPROVED->value => [self::DESTROYED->value],
+		]);
+
+		return in_array($to, $states->get($from) ?? []);
+	}
+
+	public static function getAdminButtons(): array
+	{
+		return [
+			['to' => self::ASKED->value, 'title' => 'Пригласить кандидата', 'icon' => 'fas fa-envelope'],
+//			['to' => self::ACCEPTED->value, 'title' => 'Одобрение со стороны кандидата', 'icon' => 'fas fa-user-plus'],
+//			['to' => self::REJECTED->value, 'title' => 'Отказ со стороны кандидата', 'icon' => 'fas fa-user-minus'],
+			['to' => self::APPROVED->value, 'title' => 'Одобрить кандидата', 'icon' => 'fas fa-check'],
+			['to' => self::CANCELLED->value, 'title' => 'Отменить приглашение', 'icon' => 'fa-solid fa-ban']
+		];
+	}
+
+	public static function getButtons(int $from): array|bool
+	{
+		$states = [
+			self::NEW->value => [self::ASKED->value => 'Кандидат интересен'],
+			self::ASKED->value => [self::CANCELLED->value => 'Отменить приглашение'],
+			self::ACCEPTED->value => [self::APPROVED->value => 'Одобрить кандидата', self::CANCELLED->value => 'Отменить приглашение'],
+		];
+
+		return $states[$from] ?? false;
+	}
 }

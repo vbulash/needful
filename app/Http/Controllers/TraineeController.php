@@ -68,21 +68,19 @@ SQL,
 </a>
 EOB;
 
-				$actions .= sprintf(<<<EOB
-<button class="btn btn-primary btn-sm float-left"
-	data-toggle="tooltip" data-placement="top" title="Пригласить" onclick="clickAsk({$trainee->stud_id})" %s>
-	<i class="fas fa-envelope"></i>
+				foreach (TraineeStatus::getAdminButtons() as $button) {
+					$actions .= sprintf(<<<EOB
+<button class="btn btn-primary btn-sm float-left ms-1 transition"
+	data-trainee="%s" data-student="%s" data-from="%s" data-to="%s"
+	data-toggle="tooltip" data-placement="top" title="%s" %s>
+	<i class="%s"></i>
 </button>
 EOB,
-					$trainee->status != TraineeStatus::NEW->value ? 'disabled' : '');
-
-				$actions .= sprintf(<<<EOB
-<button class="btn btn-primary btn-sm float-left ms-1"
-	data-toggle="tooltip" data-placement="top" title="Отменить" onclick="clickCancel({$trainee->stud_id}, {$trainee->id})" %s>
-	<i class="fas fa-ban"></i>
-</button>
-EOB,
-					$trainee->status == TraineeStatus::NEW->value ? 'disabled' : '');
+						$trainee->id, $trainee->stud_id, $trainee->status, $button['to'],
+						$button['title'], TraineeStatus::allowed($trainee->status, $button['to']) ? '' : 'disabled',
+						$button['icon']
+					);
+				};
 
 				$actions .= sprintf(<<<EOB
 <button class="btn btn-primary btn-sm float-left ms-5"
@@ -90,7 +88,7 @@ EOB,
 	<i class="fas fa-unlink"></i>
 </button>
 EOB,
-				$trainee->status != TraineeStatus::NEW->value ? 'disabled' : '');
+					$trainee->status != TraineeStatus::NEW->value ? 'disabled' : '');
 
 				return $actions;
 			})

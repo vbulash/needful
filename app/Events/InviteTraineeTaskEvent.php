@@ -15,48 +15,6 @@ class InviteTraineeTaskEvent extends TaskEvent
 			'timetable' => $history->timetable->getKey(),
 		];
 
-		$accept = sprintf(<<<EOS
-document.getElementById('accept').addEventListener('click', event => {
-	$.ajax({
-		method: 'POST',
-		url: '%s',
-		data: {
-			history: %d,
-			trainee: %d,
-			task: window.message
-		},
-		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-		success: data => {
-			if (data !== undefined) {
-				window.location.href = '%s';
-			}
-		}
-	});
-}, false);
-EOS,
-			route('history.accept'), $history->getKey(), $trainee->getKey(), route('inbox.archive'));
-
-		$reject = sprintf(<<<EOS
-document.getElementById('reject').addEventListener('click', event => {
-	$.ajax({
-		method: 'POST',
-		url: '%s',
-		data: {
-			history: %d,
-			trainee: %d,
-			task: window.message
-		},
-		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-		success: data => {
-			if (data !== undefined) {
-				window.location.href = '%s';
-			}
-		}
-	});
-}, false);
-EOS,
-			route('history.reject'), $history->getKey(), $trainee->getKey(), route('inbox.archive'));
-
 		parent::__construct(
 			title: 'Вы приглашены для участия в прохождении практики',
 			description: sprintf(<<<EOD
