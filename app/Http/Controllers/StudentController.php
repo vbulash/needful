@@ -8,11 +8,11 @@ use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\ActiveStatus;
+use App\Models\Right;
 use App\Models\Student;
 use App\Models\User;
 use App\Notifications\NewStudent;
 use App\Notifications\UpdateStudent;
-use App\Support\PermissionUtils;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -35,8 +35,6 @@ class StudentController extends Controller
 	public function getData(Request $request)
 	{
 		$query = Student::all();
-		if ($request->has('ids'))
-			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
 			->editColumn('fio', fn($student) => $student->getTitle())
@@ -91,17 +89,7 @@ class StudentController extends Controller
 		session()->forget('context');
 
 		$count = Student::all()->count();
-		if (auth()->user()->can('students.list')) {
-			return view('students.index', compact('count'));
-		} elseif (PermissionUtils::can('students.list.')) {
-			$ids = PermissionUtils::getPermissionIDs('students.list.');
-			return view('students.index', compact('count', 'ids'));
-		} elseif (auth()->user()->can('students.create')) {
-			return redirect()->route('students.create', ['sid' => session()->getId()]);
-		} else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учащегося'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
-		}
+		return view('students.index', compact('count'));
 	}
 
 	public function select(int $id): RedirectResponse
@@ -110,7 +98,7 @@ class StudentController extends Controller
 		session()->forget('context');
 		session()->put('context', ['student' => $student->getKey()]);
 
-		return redirect()->route('learns.index', ['sid' => session()->getId()]);
+		return redirect()->route('learns.index');
 	}
 
 	/**
@@ -166,15 +154,8 @@ class StudentController extends Controller
 		$student->save();
 		$name = $student->getTitle();
 
-		$permissions = [
-			'students.list',
-			'students.edit',
-			'students.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $student->getKey());
-			$student->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($student);
 
 		$student->user->notify(new NewStudent($student));
 
@@ -204,11 +185,7 @@ class StudentController extends Controller
 		$mode = $show ? config('global.show') : config('global.edit');
 
 		$student = Student::findOrFail($id);
-
-		//
 		$baseRight = sprintf("students.%s", $show ? "show" : "edit");
-		$right = sprintf("%s.%d", $baseRight, $student->getKey());
-
 
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$special = User::special();
@@ -236,7 +213,7 @@ class StudentController extends Controller
 
 			return view('students.edit',
 				compact('student', 'users', 'mode'));
-		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
+		} elseif (auth()->user()->can($baseRight) || auth()->user()->allowed($student))
 			return view('students.edit',
 				compact('student', 'mode'));
 		else {
@@ -261,15 +238,8 @@ class StudentController extends Controller
 		$name = $student->getTitle();
 		$newStatus = $student->status;
 
-		$permissions = [
-			'students.list',
-			'students.edit',
-			'students.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $student->getKey());
-			$student->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($student);
 
 		$student->user->notify(new UpdateStudent($student));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
@@ -294,6 +264,9 @@ class StudentController extends Controller
 
 		$student = Student::findOrFail($id);
 		$name = $student->getTitle();
+
+		auth()->user()->disallow($student);
+
 		$student->delete();
 
 		event(new ToastEvent('success', '', "Учащийся '{$name}' удалён"));

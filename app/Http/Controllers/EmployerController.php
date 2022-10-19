@@ -8,10 +8,10 @@ use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Models\ActiveStatus;
 use App\Models\Employer;
+use App\Models\Right;
 use App\Models\User;
 use App\Notifications\NewEmployer;
 use App\Notifications\UpdateEmployer;
-use App\Support\PermissionUtils;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -19,7 +19,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 
 class EmployerController extends Controller
@@ -36,11 +35,7 @@ class EmployerController extends Controller
 		$context = session('context');
 		if (isset($context['chain']))
 			$query = Employer::where('id' , $context['employer']);
-		else {
-			$query = Employer::all();
-			if ($request->has('ids'))
-				$query = $query->whereIn('id', $request->ids);
-		}
+		else $query = Employer::all();
 
 		return Datatables::of($query)
 			->editColumn('link', fn ($employer) => $employer->user->name)
@@ -117,14 +112,11 @@ class EmployerController extends Controller
 		}
 		if (auth()->user()->can('employers.list')) {
 			return view('employers.index', compact('count'));
-		} elseif (PermissionUtils::can('employers.list.')) {
-			$ids = PermissionUtils::getPermissionIDs('employers.list.');
-			return view('employers.index', compact('count', 'ids'));
 		} elseif (auth()->user()->can('employers.create')) {
-			return redirect()->route('employers.create', ['sid' => session()->getId()]);
+			return redirect()->route('employers.create');
 		} else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи работодателя'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+			return redirect()->route('dashboard');
 		}
 	}
 
@@ -173,15 +165,8 @@ class EmployerController extends Controller
 		$employer->save();
 		$name = $employer->name;
 
-		$permissions = [
-			'employers.list',
-			'employers.edit',
-			'employers.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $employer->getKey());
-			$employer->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($employer);
 
 		$employer->user->notify(new NewEmployer($employer));
 
@@ -253,15 +238,8 @@ class EmployerController extends Controller
 		$employer->update($request->all());
 		$newStatus = $employer->status;
 
-		$permissions = [
-			'employers.list',
-			'employers.edit',
-			'employers.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $employer->getKey());
-			$employer->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($employer);
 
 		$employer->user->notify(new UpdateEmployer($employer));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
@@ -286,6 +264,10 @@ class EmployerController extends Controller
 
 		$employer = Employer::findOrFail($id);
 		$name = $employer->name;
+
+		auth()->user()->disallow($employer);
+		$employer->user->disallow($employer);
+
 		$employer->delete();
 
 		event(new ToastEvent('success', '', "Работодатель '{$name}' удалён"));

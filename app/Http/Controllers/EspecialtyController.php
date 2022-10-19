@@ -37,8 +37,8 @@ class EspecialtyController extends Controller
 		return Datatables::of($query)
 			->addColumn('name', fn ($especialty) => $especialty->specialty->name)
 			->addColumn('action', function ($especialty) {
-				$editRoute = route('especialties.edit', ['especialty' => $especialty->getKey(), 'sid' => session()->getId()]);
-				$showRoute = route('especialties.show', ['especialty' => $especialty->getKey(), 'sid' => session()->getId()]);
+				$editRoute = route('especialties.edit', ['especialty' => $especialty->getKey()]);
+				$showRoute = route('especialties.show', ['especialty' => $especialty->getKey()]);
 				$actions = '';
 
 				$actions .=

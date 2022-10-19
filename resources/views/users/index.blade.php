@@ -73,6 +73,7 @@
 				ajax: '{!! route('users.index.data') !!}',
 				responsive: true,
 				pageLength: 100,
+				order: [[1, 'asc']],
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},
 					{data: 'name', name: 'name', responsivePriority: 2},

@@ -34,14 +34,11 @@ class TaskRegisterListener
 		$task->description = $event->description;
 		$task->route = $event->route;
 
-		if (auth()->user()->hasRole(RoleName::ADMIN->value))
-			$task->fromadmin = true;
-		else
-			$task->from()->associate($event->from);
-		if (isset($event->to))
-			$task->to()->associate($event->to);
-		else
-			$task->toadmin = true;
+		if ($event->from == null) $task->fromadmin = true;
+		else $task->from()->associate($event->from);
+		if ($event->to == null) $task->toadmin = true;
+		else $task->to()->associate($event->to);
+
 		$task->type = $event->type;
 		$task->context = $event->context ? json_encode($event->context) : null;
 		$task->script = $event->script ?? null;

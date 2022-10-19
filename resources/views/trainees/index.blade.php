@@ -1,7 +1,11 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа со стажировками
+	@if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
+		Мои стажировки
+	@else
+		Работа со стажировками
+	@endif
 @endsection
 
 @section('steps')
@@ -15,15 +19,17 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<div>
-			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-trainees"
-					data-bs-toggle="modal" data-bs-target="#trainee-list">
-				Привязать учащихся<br/>к практике
-			</button>
-			<button type="button" class="btn btn-primary ms-2 mt-3 mb-3" id="mail-new">Разослать приглашения<br/>новым
-				практикантам
-			</button>
-		</div>
+		@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
+			<div>
+				<button type="button" class="btn btn-primary mt-3 mb-3" id="add-trainees"
+						data-bs-toggle="modal" data-bs-target="#trainee-list">
+					Привязать учащихся<br/>к практике
+				</button>
+				<button type="button" class="btn btn-primary ms-2 mt-3 mb-3" id="mail-new">Разослать приглашения<br/>новым
+					практикантам
+				</button>
+			</div>
+		@endif
 	</div>
 	<div class="block-content p-4">
 		<div class="table-responsive">
@@ -33,6 +39,7 @@
 				<tr>
 					<th style="width: 30px">#</th>
 					<th>ФИО практиканта</th>
+					<th>Электронная почта практиканта</th>
 					<th>Статус приглашения на практику</th>
 					<th>Действия</th>
 				</tr>
@@ -77,13 +84,15 @@
 @push('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
-		function clickAsk(stud_id) {
+		function clickTransition(button) {
 			$.ajax({
 				method: 'POST',
-				url: "{{ route('trainees.invite') }}",
+				url: "{{ route('trainees.transition') }}",
 				data: {
-					all: false,
-					trainee: stud_id,
+					history: button.dataset.history,
+					student: button.dataset.student,
+					from: button.dataset.from,
+					to: button.dataset.to,
 				},
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: () => {
@@ -143,20 +152,22 @@
 			});
 		}, false);
 
-		document.getElementById('mail-new').addEventListener('click', (event) => {
-			$.ajax({
-				method: 'POST',
-				url: "{{ route('trainees.invite') }}",
-				data: {
-					all: false
-				},
-				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-				success: (data) => {
-					document.getElementById('mail-new').disabled = true;
-					window.datatable.ajax.reload();
-				}
-			});
-		}, false);
+		const mailNew = document.getElementById('mail-new');
+		if (mailNew)
+			document.getElementById('mail-new').addEventListener('click', (event) => {
+				$.ajax({
+					method: 'POST',
+					url: "{{ route('trainees.invite.all') }}",
+					data: {
+						all: false
+					},
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					success: (data) => {
+						document.getElementById('mail-new').disabled = true;
+						window.datatable.ajax.reload();
+					}
+				});
+			}, false);
 
 		document.getElementById('confirm-yes').addEventListener('click', (event) => {
 			$.ajax({
@@ -211,6 +222,7 @@
 				columns: [
 					{data: 'id', name: 'id', responsivePriority: 1},
 					{data: 'fio', name: 'fio', responsivePriority: 2},
+					{data: 'email', name: 'email', responsivePriority: 3},
 					{data: 'status', name: 'status', responsivePriority: 2},
 					{
 						data: 'action',

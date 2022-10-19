@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Services\E2S\StartInternship;
 
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Employer;
-use App\Models\Internship;
 use App\Models\Timetable;
-use App\Support\PermissionUtils;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

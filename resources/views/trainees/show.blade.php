@@ -1,6 +1,12 @@
 @extends('students.edit')
 
-@section('header') Работа со стажировками @endsection
+@section('header')
+	@if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
+		Мои стажировки
+	@else
+		Работа со стажировками
+	@endif
+@endsection
 
 @section('steps')
 	@php

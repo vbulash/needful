@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Auth\RoleName;
+
 enum TraineeStatus: int
 {
 	case NEW = 0;
@@ -40,11 +42,12 @@ enum TraineeStatus: int
 
 	public static function getAdminButtons(): array
 	{
-		return [
+		if (auth()->user()->hasRole(RoleName::TRAINEE->value)) return [];
+		else return [
 			['to' => self::ASKED->value, 'title' => 'Пригласить кандидата', 'icon' => 'fas fa-envelope', 'callback' => 'invite'],
 //			['to' => self::ACCEPTED->value, 'title' => 'Одобрение со стороны кандидата', 'icon' => 'fas fa-user-plus', 'callback' => 'accept'],
 //			['to' => self::REJECTED->value, 'title' => 'Отказ со стороны кандидата', 'icon' => 'fas fa-user-minus', 'callback' => 'reject'],
-			['to' => self::APPROVED->value, 'title' => 'Одобрить кандидата', 'icon' => 'fas fa-check', 'callback' => 'approve'],
+			['to' => self::APPROVED->value, 'title' => 'Утвердить кандидата', 'icon' => 'fas fa-check', 'callback' => 'approve'],
 			['to' => self::CANCELLED->value, 'title' => 'Отменить приглашение', 'icon' => 'fa-solid fa-ban', 'callback' => 'cancel']
 		];
 	}
@@ -54,7 +57,7 @@ enum TraineeStatus: int
 		$states = [
 			self::NEW->value => [self::ASKED->value => 'Кандидат интересен'],
 			self::ASKED->value => [self::CANCELLED->value => 'Отменить приглашение'],
-			self::ACCEPTED->value => [self::APPROVED->value => 'Одобрить кандидата', self::CANCELLED->value => 'Отменить приглашение'],
+			self::ACCEPTED->value => [self::APPROVED->value => 'Утвердить кандидата', self::CANCELLED->value => 'Отменить приглашение'],
 		];
 
 		return $states[$from] ?? false;

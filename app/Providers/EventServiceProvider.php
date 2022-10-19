@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\Asked2AcceptedTaskEvent;
+use App\Events\Asked2RejectedTaskEvent;
 use App\Events\InviteTraineeTaskEvent;
+use App\Events\New2AskedTaskEvent;
 use App\Events\UpdateEmployerTaskEvent;
 use App\Events\UpdateSchoolTaskEvent;
 use App\Events\UpdateStudentTaskEvent;
@@ -34,6 +37,15 @@ class EventServiceProvider extends ServiceProvider
 			TaskRegisterListener::class
 		],
 		InviteTraineeTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		Asked2AcceptedTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		Asked2RejectedTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		New2AskedTaskEvent::class => [
 			TaskRegisterListener::class
 		]
     ];

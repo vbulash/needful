@@ -5,7 +5,7 @@ namespace App\Events;
 use App\Models\History;
 use App\Models\Student;
 
-class InviteTraineeTaskEvent extends TaskEvent
+class Asked2RejectedTaskEvent extends TaskEvent
 {
 	public function __construct(History $history, Student $student)
 	{
@@ -14,22 +14,18 @@ class InviteTraineeTaskEvent extends TaskEvent
 			'internship' => $history->timetable->internship->getKey(),
 			'timetable' => $history->timetable->getKey(),
 		];
-
 		parent::__construct(
-			title: 'Вы приглашены для участия в прохождении практики',
+			title: 'Вам необходимо рассмотреть отрицательный ответ кандидата на приглашение на практику',
 			description: sprintf(<<<EOD
-<h5>Уважаемый (уважаемая) %s </h5>
-<p>Вас пригласили для прохождения практики. Информация по данной практике:</p>
+<h5>Кандидат &laquo;%s&raquo; отказался от участия в практике:</h5>
 <p>Работодатель: <strong>%s</strong><br/>
 Стажировка: <strong>%s</strong><br/>
 %s
 График стажировки: <strong>%s</strong></p>
-<p>Просим принять решение по стажировке:</p>
+<p>Необходимо отменить приглашение кандидата к участию в стажировке:</p>
 <div class='d-flex mb-5'>
 	<button class='btn btn-primary me-4' type='event' data-event-type=%d data-history=%d data-student=%d>
-		Да, принять участие</button>
-	<button class='btn btn-secondary' type='event' data-event-type=%d data-history=%d data-student=%d>
-		Нет, не принимать участие</button>
+		Отменить приглашение</button>
 </div>
 <p>Вы также можете проигнорировать данное сообщение, в этом случае предложение стажировки автоматически отменится через 10 дней.</p>
 <p>Более подробно вы сможете изучить данную информацию по ссылке ниже &darr;</p>
@@ -37,12 +33,11 @@ EOD,
 				$student->getTitle(), $history->timetable->internship->employer->getTitle(), $history->timetable->internship->getTitle(),
 				(isset($history->timetable->internship->short) ? 'Краткая информация по стажировке:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
 				$history->timetable->getTitle(),
-				EventType::TRAINEE_ACCEPTED->value, $history->getKey(), $student->getKey(),
-				EventType::TRAINEE_REJECTED->value, $history->getKey(), $student->getKey(),
+				EventType::CANCEL_REJECT->value, $history->getKey(), $student->getKey(),
 			),
 			route: route('timetables.show', ['timetable' => $history->timetable->getKey()]),
-			from: $history->timetable->internship->employer->user,
-			to: $student->user,
+			from: $student->user,
+			to: $history->timetable->internship->employer->user,
 			context: $context,
 			script: null
 		);

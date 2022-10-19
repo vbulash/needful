@@ -147,6 +147,20 @@
 
 @push('js_after')
 	<script>
+		document.getElementById('card-delete').addEventListener('click', (event) => {
+			$.ajax({
+				method: 'DELETE',
+				url: "{{ route('message.destroy') }}",
+				data: {
+					id: window.message,
+				},
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: () => {
+					window.location.reload();
+				}
+			});
+		}, false);
+
 		function drawCard() {
 			let card = {
 				id: window.message,
@@ -273,23 +287,68 @@
 		if (buttons)
 			buttons.forEach(button => {
 				button.addEventListener('click', event => {
+					let from;
+					let to;
+					switch (parseInt(event.target.dataset.eventType)) {
+						case {{ \App\Events\EventType::TRAINEE_ACCEPTED->value }}:
+							from = {{ \App\Models\TraineeStatus::ASKED->value }};
+							to = {{ \App\Models\TraineeStatus::ACCEPTED->value }};
+							break;
+						case {{ \App\Events\EventType::TRAINEE_REJECTED->value }}:
+							from = {{ \App\Models\TraineeStatus::ASKED->value }};
+							to = {{ \App\Models\TraineeStatus::REJECTED->value }};
+							break;
+						case {{ \App\Events\EventType::APPROVE_TRAINEE->value }}:
+							from = {{ \App\Models\TraineeStatus::ACCEPTED->value }};
+							to = {{ \App\Models\TraineeStatus::APPROVED->value }};
+							break;
+						case {{ \App\Events\EventType::CANCEL_TRAINEE->value }}:
+							from = {{ \App\Models\TraineeStatus::ACCEPTED->value }};
+							to = {{ \App\Models\TraineeStatus::CANCELLED->value }};
+							break;
+						case {{ \App\Events\EventType::CANCEL_REJECT->value }}:
+							from = {{ \App\Models\TraineeStatus::REJECTED->value }};
+							to = {{ \App\Models\TraineeStatus::CANCELLED->value }};
+							break;
+						default:
+							return;
+					}
+					const history = event.target.dataset.history;
+					const student = event.target.dataset.student;
+
 					$.ajax({
 						method: 'POST',
-						url: "{{ route('message.dispatcher') }}",
+						url: "{{ route('trainees.transition') }}",
 						data: {
-							data: JSON.stringify(event.target.dataset),
-							task: window.message,
+							history: history,
+							student: student,
+							from: from,
+							to: to,
 						},
 						headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 						success: data => {
-							if (data !== undefined) {
-								debugger
-								window.location.href = data;
-							}
+							$.ajax({
+								method: 'POST',
+								url: "{{ route('message.dispatcher') }}",
+								data: {
+									task: window.message,
+									read: true,
+									archive: true,
+								},
+								headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+								success: data => {
+									if (data !== undefined) {
+										window.location.href = '{{ route('inbox.archive') }}';
+									}
+								}
+							});
 						}
 					});
+
+
 				}, false);
 			});
+
 		document.addEventListener("DOMContentLoaded", () => {
 			//read.dispatchEvent(new Event('change'));
 		}, false);

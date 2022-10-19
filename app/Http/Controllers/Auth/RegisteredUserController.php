@@ -65,7 +65,17 @@ class RegisteredUserController extends Controller
 			session()->put('success',
 				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");
 
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
+				if (!auth()->user()->students()->count())
+					return redirect()->route('students.index');
+			} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
+				if (!auth()->user()->employers()->count())
+					return redirect()->route('employers.index');
+			} elseif (auth()->user()->hasRole(RoleName::SCHOOL->value)) {
+				if (!auth()->user()->schools()->count())
+					return redirect()->route('schools.index');
+			}
+			return redirect()->route('dashboard');
 		} catch (Exception $exc) {
 			session()->put('error',
 				"Ошибка регистрации нового пользователя: {$exc->getMessage()}");

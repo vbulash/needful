@@ -27,18 +27,24 @@ class PermissionSeeder extends Seeder
 			'users.edit',
 			'users.show',
 			'users.delete',
-			//
+			// Работодатели
 			'employers.list',
 			'employers.create',
 			'employers.edit',
 			'employers.show',
 			'employers.delete',
-			//
+			// Учащиеся
 			'students.list',
 			'students.create',
 			'students.edit',
 			'students.show',
 			'students.delete',
+			// Практики
+			'histories.list',
+			'histories.create',
+			'histories.edit',
+			'histories.show',
+			'histories.delete',
 		];
 		$permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
 			return ['name' => $permission, 'guard_name' => 'web'];
@@ -47,19 +53,43 @@ class PermissionSeeder extends Seeder
 
 		$employer = Role::where('name', RoleName::EMPLOYER->value)->first();
 		$employer->givePermissionTo([
+			// Пользователи
+			'users.list',
+			'users.show',
+			// Работодатели
+			'employers.list',
 			'employers.create',
-			// При создании записи работодателя будет добавлены права на конкретный ID
-			//'employers.edit',
-			//'employers.show',
+			'employers.edit',
+			'employers.show',
+			'employers.delete',
+			// Учащиеся
 			'students.list',
+			'students.show',
+			// Практики
+			'histories.list',
+			'histories.create',
+			'histories.edit',
+			'histories.show',
+			'histories.delete',
 		]);
 
 		$student = Role::where('name', RoleName::TRAINEE->value)->first();
 		$student->givePermissionTo([
+			// Пользователи
+			'users.list',
+			'users.show',
+			// Работодатели
+			'employers.list',
+			'employers.show',
+			// Учащиеся
+			'students.list',
 			'students.create',
-			// При создании записи практиканта будет добавлены права на конкретный ID
-			//'students.edit',
-			//'students.show',
+			'students.edit',
+			'students.show',
+			'students.delete',
+			// Практики
+			'histories.list',
+			'histories.show',
 		]);
     }
 }

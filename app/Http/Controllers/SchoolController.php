@@ -7,13 +7,12 @@ use App\Events\UpdateSchoolTaskEvent;
 use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Models\ActiveStatus;
+use App\Models\Right;
 use App\Models\School;
 use App\Models\SchoolType;
 use App\Models\User;
 use App\Notifications\NewSchool;
-use App\Notifications\NewUser;
 use App\Notifications\UpdateSchool;
-use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -33,34 +32,32 @@ class SchoolController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request)
+	public function getData(Request $request): JsonResponse
 	{
 		$query = School::all();
-		if ($request->has('ids'))
-			$query = $query->whereIn('id', $request->ids);
 
 		return Datatables::of($query)
 			->addColumn('type', fn ($school) => SchoolType::getName($school->type))
 			->editColumn('link', fn ($school) => $school->user->name)
 			->addColumn('action', function ($school) {
-				$editRoute = route('schools.edit', ['school' => $school->id, 'sid' => session()->getId()]);
-				$showRoute = route('schools.show', ['school' => $school->id, 'sid' => session()->getId()]);
-				$selectRoute = route('schools.select', ['school' => $school->id, 'sid' => session()->getId()]);
+				$editRoute = route('schools.edit', ['school' => $school->id]);
+				$showRoute = route('schools.show', ['school' => $school->id]);
+				$selectRoute = route('schools.select', ['school' => $school->id]);
 				$actions = '';
 
-				if (auth()->user()->can('schools.edit') || auth()->user()->can('schools.edit.' . $school->getKey()))
+				if (auth()->user()->can('schools.edit') || auth()->user()->allowed($school))
 					$actions .=
 						"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 						"<i class=\"fas fa-edit\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('schools.show') || auth()->user()->can('schools.show.' . $school->getKey()))
+				if (auth()->user()->can('schools.show') || auth()->user()->allowed($school))
 					$actions .=
 						"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 						"<i class=\"fas fa-eye\"></i>\n" .
 						"</a>\n";
-				if (auth()->user()->can('schools.destroy') || auth()->user()->can('schools.destroy.' . $school->getKey())) {
+				if (auth()->user()->can('schools.destroy') || auth()->user()->allowed($school)) {
 					$actions .=
 						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$school->id}, '{$school->short}')\">\n" .
@@ -90,24 +87,14 @@ class SchoolController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Application|Factory|View|RedirectResponse
+	 * @return Application|Factory|View
 	 */
-	public function index()
+	public function index(): View|Factory|Application
 	{
 		session()->forget('context');
 
 		$count = School::all()->count();
-		if (auth()->user()->can('schools.list')) {
-			return view('schools.index', compact('count'));
-		} elseif (PermissionUtils::can('schools.list.')) {
-			$ids = PermissionUtils::getPermissionIDs('schools.list.');
-			return view('schools.index', compact('count', 'ids'));
-		} elseif (auth()->user()->can('schools.create')) {
-			return redirect()->route('schools.create', ['sid' => session()->getId()]);
-		} else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учебного заведения'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
-		}
+		return view('schools.index', compact('count'));
 	}
 
 	/**
@@ -156,15 +143,8 @@ class SchoolController extends Controller
 		$school->save();
 		$name = $school->name;
 
-		$permissions = [
-			'schools.list',
-			'schools.edit',
-			'schools.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $school->getKey());
-			$school->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($school);
 
 		$school->user->notify(new NewSchool($school));
 
@@ -197,7 +177,6 @@ class SchoolController extends Controller
 		$mode = $show ? config('global.show') : config('global.edit');
 		$school = School::findOrFail($id);
 		$baseRight = sprintf("schools.%s", $show ? "show" : "edit");
-		$right = sprintf("%s.%d", $baseRight, $school->getKey());
 
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
@@ -216,7 +195,7 @@ class SchoolController extends Controller
 				->reject(fn ($value) => $value === null)
 				->toArray();
 			return view('schools.edit', compact('school', 'users', 'mode'));
-		} elseif (auth()->user()->can($baseRight) || auth()->user()->can($right))
+		} elseif (auth()->user()->can($baseRight) || auth()->user()->allowed($school))
 			return view('schools.edit', compact('school', 'mode'));
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи учебного заведения'));
@@ -231,7 +210,7 @@ class SchoolController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(StoreSchoolRequest $request, $id)
+	public function update(StoreSchoolRequest $request, $id): RedirectResponse
 	{
 		$school = School::findOrFail($id);
 		$oldStatus = $school->status;
@@ -239,15 +218,8 @@ class SchoolController extends Controller
 		$school->update($request->all());
 		$newStatus = $school->status;
 
-		$permissions = [
-			'schools.list',
-			'schools.edit',
-			'schools.show'
-		];
-		foreach ($permissions as $permission) {
-			$perm = Permission::findOrCreate($permission . '.' . $school->getKey());
-			$school->user->givePermissionTo($perm);
-		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($school);
 
 		$school->user->notify(new UpdateSchool($school));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
@@ -264,7 +236,7 @@ class SchoolController extends Controller
 	 * @param int $school
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $school)
+	public function destroy(Request $request, int $school): bool
 	{
 		if ($school == 0) {
 			$id = $request->id;
@@ -272,6 +244,10 @@ class SchoolController extends Controller
 
 		$school = School::findOrFail($id);
 		$name = $school->name;
+
+		auth()->user()->disallow($school);
+		$school->user->disallow($school);
+
 		$school->delete();
 
 		event(new ToastEvent('success', '', "Учебное заведение '{$name}' удалено"));

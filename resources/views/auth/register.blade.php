@@ -139,7 +139,12 @@
 
 @push('js_after')
 	<script>
+			document.getElementById('terms').addEventListener('change', event => {
+				document.getElementById('submit_btn').disabled = !event.target.checked;
+			}, false);
+
 		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById('terms').dispatchEvent(new Event('change'));
 		}, false);
 	</script>
 @endpush

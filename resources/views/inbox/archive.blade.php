@@ -110,6 +110,7 @@
 						</div>
 						<div class="col-sm-4">
 							<button type="button" class="btn btn-sm btn-primary ms-3" id="card-restore">Восстановить из архива</button>
+							<button type="button" class="btn btn-sm btn-primary mb-2" id="card-delete">Удалить</button>
 						</div>
 						<div class="col-sm-3 d-sm-flex align-items-sm-center">
 							<div class="fs-sm text-muted text-sm-end w-100 mt-2 mt-sm-0">

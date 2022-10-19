@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Models\Employer;
+use App\Models\Right;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -110,6 +112,8 @@ class TeacherController extends Controller
 			$employer = Employer::findOrFail($request->employer);
 			$teacher->job()->associate($employer);
 		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($teacher);
 		$teacher->save();
 
 		// О создании руководителя практики уведомить пользователя-владельца учебного заведения или работодателя
@@ -166,6 +170,8 @@ class TeacherController extends Controller
 			$employer = Employer::findOrFail($request->employer);
 			$teacher->job()->associate($employer);
 		}
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($teacher);
 		$teacher->update();
 
 		// О создании руководителя практики уведомить пользователя-владельца учебного заведения или работодателя
@@ -190,6 +196,9 @@ class TeacherController extends Controller
 
 		$teacher = Teacher::findOrFail($id);
 		$name = $teacher->getTitle();
+
+		auth()->user()->allow($teacher);
+
 		$teacher->delete();
 
 		event(new ToastEvent('success', '', "Руководитель практики &laquo;{$name}&raquo; удалён"));
