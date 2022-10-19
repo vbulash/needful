@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
  */
 class History extends Model implements FormTemplate
 {
-    use HasFactory, Notifiable, HasTitle;
+    use HasFactory, Notifiable, HasTitle, GrantedAll;
 
 	protected $fillable = [
 		'timetable_id',

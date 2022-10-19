@@ -16,7 +16,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class Student extends Model implements FormTemplate
 {
-	use HasFactory, HasTitle, Notifiable;
+	use HasFactory, HasTitle, Notifiable, GrantedAll;
 
 	protected $fillable = [
 		'status',	// Статус активности объекта
@@ -82,7 +82,7 @@ class Student extends Model implements FormTemplate
 	{
 		return $this->belongsToMany(History::class, 'history_student')
 			->using(Trainee::class)
-			->withPivot('status')
+			->withPivot('id', 'status')
 			->withTimestamps();
 	}
 

@@ -5,19 +5,13 @@ namespace App\Http\Controllers\Services\E2S\StartInternship;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Models\ActiveStatus;
-use App\Models\Employer;
-use App\Models\Internship;
 use App\Models\Student;
-use App\Models\Timetable;
-use App\Support\PermissionUtils;
-use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Exception;
 
@@ -61,7 +55,7 @@ class Step4Controller extends Controller
 		session()->forget('context');
 		session()->put('context', $context);
 
-		return redirect()->route('e2s.start_internship.step5', ['ids' => json_encode($ids), 'sid' => session()->getId()]);
+		return redirect()->route('e2s.start_internship.step5', ['ids' => json_encode($ids)]);
 	}
 
 	// Просмотр карточки стажировки

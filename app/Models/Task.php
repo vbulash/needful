@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Auth\RoleName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $uuid
@@ -48,5 +50,24 @@ class Task extends Model
 	public function to(): BelongsTo
 	{
 		return $this->belongsTo(User::class, 'to_id');
+	}
+
+	public static function getMyTasks(Collection $source): Collection
+	{
+		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
+			$tasks = $source->filter(function ($task) {
+				$user = User::find($task->to->getKey());
+				if ($user == null) return false;
+				return $user->hasRole(RoleName::ADMIN->value);
+			});
+		} else {
+			$tasks = $source->filter(function ($task) {
+				if ($task->to == null) return false;
+				$user = User::find($task->to->getKey());
+				if ($user == null) return false;
+				return $user->email == auth()->user()->email;
+			});
+		}
+		return $tasks;
 	}
 }

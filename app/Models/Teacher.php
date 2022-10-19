@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Teacher extends Model implements FormTemplate
 {
-    use HasFactory, HasTitle;
+    use HasFactory, HasTitle, GrantedAll;
 
 	protected $fillable = [
 		'name',		// ФИО преподавателя

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class School extends Model implements FormTemplate
 {
-    use HasFactory, HasTitle;
+    use HasFactory, HasTitle, GrantedAll;
 
 	protected $fillable = [
 		'short',	// Краткое наименование учебного заведения

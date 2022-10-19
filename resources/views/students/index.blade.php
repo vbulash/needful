@@ -14,24 +14,24 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			@if (!env('BLOCK_STUDENT_ADD'))
-				@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
-				<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
-				   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
-				@endhasrole
-			@endif
+			@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+				@if (env('BLOCK_STUDENT_ADD'))
+					<p>Записи учащихся добавляются в ходе самостоятельной регистрации</p>
+				@else
+					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
+					   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
+				@endif
+			@endhasrole
 
 			<p>Красным цветом выделены неактивные учащиеся. Активацию объектов выполняет администратор
 				платформы<br/>
 				Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
+			<p>
+				@if(isset($ids))
+					<small>Отображаются только записи учащихся, доступные текущему пользователю</small>
+				@endif
+			</p>
 		</div>
-
-		<h3 class="block-title">
-			@if(isset($ids))
-				<br/>
-				<small>Отображаются только записи учащихся, доступные текущему пользователю</small>
-			@endif
-		</h3>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)

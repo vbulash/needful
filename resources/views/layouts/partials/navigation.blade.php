@@ -17,15 +17,16 @@
 
         $menu = [
             ['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard'],
-
-            ['title' => 'Стажировки', 'heading' => true],
-            ['title' => 'Стажировки', 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']],
         ];
+
+		$menu[] = ['title' => 'Стажировки', 'heading' => true];
+        $name = auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value) ? 'Мои стажировки' : 'Стажировки';
+		$menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
 
         if ($employers || $students || $schools)
             $menu[] = ['title' => 'Субъекты', 'heading' => true];
 
-        if ($employers)
+        if ($employers || $students)
             $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index.clear', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
         if ($schools)
             $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
@@ -34,8 +35,10 @@
 		if ($students)
             $menu[] = ['title' => 'Учащиеся', 'icon' => 'fas fa-gear', 'route' => 'students.index', 'pattern' => ['students.*']];
 
-        $menu[] = ['title' => 'Справочники', 'heading' => true];
-        $menu[] = ['title' => 'Специальности', 'icon' => 'fas fa-book', 'route' => 'specialties.index', 'pattern' => ['specialties.*']];
+        if (!$students || $admin) {
+			$menu[] = ['title' => 'Справочники', 'heading' => true];
+			$menu[] = ['title' => 'Специальности', 'icon' => 'fas fa-book', 'route' => 'specialties.index', 'pattern' => ['specialties.*']];
+        }
 
         if ($admin) {
             $menu[] = ['title' => 'Настройки', 'heading' => true];

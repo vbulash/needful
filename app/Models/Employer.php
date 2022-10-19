@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @property string $short
@@ -25,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Employer extends Model implements FormTemplate
 {
-    use HasFactory, HasTitle;
+    use HasFactory, HasTitle, GrantedAll;
 
 	protected $fillable = [
 		'short',
@@ -58,7 +61,7 @@ class Employer extends Model implements FormTemplate
 		return $this->hasMany(Internship::class);
 	}
 
-	public function teachers()
+	public function teachers(): MorphMany
 	{
 		return $this->morphMany(Teacher::class, 'job');
 	}
@@ -93,5 +96,10 @@ class Employer extends Model implements FormTemplate
 			'action' => route('employers.update', ['employer' => $this->getKey(), 'sid' => session()->getId()]),
 			'close' => route('employers.index', ['sid' => session()->getId()]),
 		];
+	}
+
+	public function users(): MorphToMany
+	{
+		return $this->morphToMany(User::class, 'right');
 	}
 }

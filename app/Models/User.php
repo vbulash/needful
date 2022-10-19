@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -15,10 +17,11 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @method static create(array $array)
  * @method static findOrFail(int $id)
+ * @method static find($getKey)
  */
 class User extends Authenticatable implements FormTemplate
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable, Right;
 
     /**
      * The attributes that are mass assignable.
@@ -106,5 +109,13 @@ class User extends Authenticatable implements FormTemplate
 	{
 		$special = User::special()->getKey();
 		return parent::all()->except($special);
+	}
+
+	public function allowed(string|object $element): MorphToMany
+	{
+		$class = is_object($element) ? get_class($element) : $element;
+		return $this
+			->morphedByMany($class, 'right', 'rights')
+			->withTimestamps();
 	}
 }

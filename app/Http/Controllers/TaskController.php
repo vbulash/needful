@@ -46,42 +46,29 @@ class TaskController extends Controller
 
 	public function dispatcher(Request $request): Response|RedirectResponse|Application|ResponseFactory|null
 	{
-//		$type = EventType::MESSAGE->value;
-		if ($request->has('data')) {
-			$data = json_decode($request->data, true);
-			$task = $request->task;
+		$task = $request->task;
+		$read = $request->read == 'true';
+		$archive = $request->archive == 'true';
+		if ($archive) $read = true;
 
-			if ($data['eventType'] == EventType::INVITE_ATTENDEES->value) {
-				$route = match ($data['buttonType']) {
-					'accept' => 'history.accept',
-					'reject' => 'history.reject',
-					default => null
-				};
-				if (!$route) return null;
-
-				$history = $data['history'];
-				$trainee = $data['trainee'];
-				return redirect()->route($route, ['history' => $history, 'trainee' => $trainee, 'task' => $task]);
-//				return Route::dispatch(Request::create($route, 'POST', ['history' => $history, 'trainee' => $trainee, 'task' => $task]));
-			}
-		}
-		return response(status: 204);
+		$updated = (Task::findOrFail($task))->update([
+			'read' => $read,
+			'archive' => $archive,
+		]);
+		if ($updated)
+			event(new UnreadCountEvent());
+		return response(content: $updated, status: 200);
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param Request $request
-	 * @param int $task
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $task): bool
+	public function destroy(Request $request): bool
 	{
-		if ($task == 0) {
-			$id = $request->id;
-		} else $id = $task;
-
-		$task = Task::findOrFail($id);
+		$task = Task::findOrFail($request->id);
 		$task->delete();
 		return true;
 	}

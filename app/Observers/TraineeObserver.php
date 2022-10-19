@@ -2,62 +2,25 @@
 
 namespace App\Observers;
 
+use App\Models\History;
+use App\Models\Student;
 use App\Models\Trainee;
 
 class TraineeObserver
 {
-    /**
-     * Handle the Trainee "created" event.
-     *
-     * @param Trainee $trainee
-     * @return void
-     */
-    public function created(Trainee $trainee): void
+    public function creating(Trainee $trainee): void
 	{
-        $test = $trainee;
+		$from = null;
+		$to = $trainee->status;
+		$history = History::findOrFail($trainee->history_id);
+		$student = Student::findOrFail($trainee->student_id);
     }
 
-    /**
-     * Handle the Trainee "updated" event.
-     *
-     * @param Trainee $trainee
-     * @return void
-     */
-    public function updated(Trainee $trainee): void
+    public function updating(Trainee $trainee): void
 	{
-        $test = $trainee;
-    }
-
-    /**
-     * Handle the Trainee "deleted" event.
-     *
-     * @param Trainee $trainee
-     * @return void
-     */
-    public function deleted(Trainee $trainee): void
-	{
-        //
-    }
-
-    /**
-     * Handle the Trainee "restored" event.
-     *
-     * @param Trainee $trainee
-     * @return void
-     */
-    public function restored(Trainee $trainee): void
-	{
-        //
-    }
-
-    /**
-     * Handle the Trainee "force deleted" event.
-     *
-     * @param Trainee $trainee
-     * @return void
-     */
-    public function forceDeleted(Trainee $trainee): void
-	{
-        //
+		$from = $trainee->getOriginal('status');
+		$to = $trainee->status;
+		$history = History::findOrFail($trainee->history_id);
+		$student = Student::findOrFail($trainee->student_id);
     }
 }

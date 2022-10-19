@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use App\Http\Controllers\Auth\RoleName;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -14,14 +16,14 @@ class UnreadCountEvent implements ShouldBroadcast
 
 	public int $count;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
+	/**
+	 * Create a new event instance.
+	 *
+	 * @return void
+	 */
     public function __construct()
     {
-        $this->count = Task::where('read', false)->count();
+		$this->count = Task::getMyTasks(Task::all()->where('read', false))->count();
     }
 
 	public function broadcastOn()

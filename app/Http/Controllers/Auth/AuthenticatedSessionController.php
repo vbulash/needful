@@ -38,11 +38,14 @@ class AuthenticatedSessionController extends Controller
 			session()->put('success', "Вы успешно авторизовались");
 
 			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
-				if (!auth()->user()->students)
+				if (!auth()->user()->students()->count())
 					return redirect()->route('students.index');
 			} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
-				if (!auth()->user()->employers)
+				if (!auth()->user()->employers()->count())
 					return redirect()->route('employers.index');
+			} elseif (auth()->user()->hasRole(RoleName::SCHOOL->value)) {
+				if (!auth()->user()->schools()->count())
+					return redirect()->route('schools.index');
 			}
 			return redirect()->route('dashboard');
         } catch(Exception $exc) {

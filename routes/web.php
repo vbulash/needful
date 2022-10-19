@@ -48,16 +48,16 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Истории стажировок
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
-	Route::get('/history.accept', 'HistoryController@accept')->name('history.accept');
-	Route::get('/history.reject', 'HistoryController@reject')->name('history.reject');
 	Route::get('/history.select/{history}', 'HistoryController@select')->name('history.select');
+	Route::post('/history.can.destroy', 'HistoryController@canDestroy')->name('history.can.destroy');
 	// Практиканты
 	Route::get('/trainees', 'TraineeController@index')->name('trainees.index');
 	Route::get('/trainees.data', 'TraineeController@getData')->name('trainees.index.data');
 	Route::get('/trainees/{trainee}', 'TraineeController@show')->name('trainees.show');
 	Route::post('/trainees.link', 'TraineeController@link')->name('trainees.link');
 	Route::post('/trainees.unlink', 'TraineeController@unlink')->name('trainees.unlink');
-	Route::post('/trainees.invite', 'TraineeController@invite')->name('trainees.invite');
+	Route::post('/trainees.invite.all', 'TraineeController@inviteAll')->name('trainees.invite.all');
+	Route::post('/trainees.transition', 'TraineeController@transition')->name('trainees.transition');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');
@@ -88,6 +88,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/message.link', 'TaskController@link')->name('message.link');
 	Route::get('/message.archive', 'TaskController@archive')->name('message.archive');
 	Route::post('/message.dispatcher', 'TaskController@dispatcher')->name('message.dispatcher');
+	Route::delete('/message', 'TaskController@destroy')->name('message.destroy');
 
 	// Импорт
 	Route::get('/import', 'ImportController@index')->name('import.index');

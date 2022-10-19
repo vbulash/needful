@@ -9,13 +9,13 @@ use App\Http\Requests\UpdateHistoryRequest;
 use App\Models\Employer;
 use App\Models\History;
 use App\Models\HistoryStatus;
+use App\Models\Right;
 use App\Models\Student;
 use App\Models\Task;
 use App\Models\Timetable;
 use App\Models\TraineeStatus;
 use App\Models\User;
 use App\Notifications\e2s\StartInternshipNotification;
-use App\Support\PermissionUtils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
@@ -40,28 +40,17 @@ class HistoryController extends Controller
 	public function getData(Request $request): JsonResponse
 	{
 		$query = History::all();
-		if ($request->has('eids')) {
-			$timetables = [];
-			foreach (Employer::all()->whereIn('id', $request->eids) as $employer)
-				foreach ($employer->internships->timetables->toArray() as $timetable)
-					$timetables[] = $timetable;
-			$query = $query->whereIn('timetable_id', $timetables);
-		}
-		if ($request->has('sids')) {
-			$students = Student::all()->whereIn('id', $request->sids)->pluck('id')->toArray();
-			$query = $query->whereIn('student_id', $students);
-		}
 
 		return Datatables::of($query)
 			->editColumn('employer', fn ($history) => $history->timetable->internship->employer->getTitle())
 			->editColumn('internship', fn ($history) => $history->timetable->internship->getTitle())
 			->editColumn('timetable', fn ($history) => $history->timetable->getTitle())
 			->editColumn('trainees', fn ($history) =>
-				$this->traineeAllLetter($history->students()->wherePivot('status', TraineeStatus::ACCEPTED->value)->count()) . ' из ' . $history->timetable->planned)
+				$this->traineeAllLetter($history->students()->wherePivot('status', TraineeStatus::APPROVED->value)->count()) . ' из ' . $history->timetable->planned)
 			->editColumn('status', fn ($history) => HistoryStatus::getName($history->status))
 			->addColumn('action', function ($history) {
-				$editRoute = route('history.edit', ['history' => $history->getKey(), 'sid' => session()->getId()]);
-				$showRoute = route('history.show', ['history' => $history->getKey(), 'sid' => session()->getId()]);
+				$editRoute = route('history.edit', ['history' => $history->getKey()]);
+				$showRoute = route('history.show', ['history' => $history->getKey()]);
 				$selectRoute = route('history.select', ['history' => $history->getKey()]);
 				$actions = '';
 
@@ -125,29 +114,16 @@ class HistoryController extends Controller
 		$params = [
 			'count' => History::all()->count()
 		];
-		if(auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
-			if (auth()->user()->can('employers.list')) {
-				// Работодатель имеет право на полный список - ничего не делаем
-			} elseif (PermissionUtils::can('employers.list.')) {
-				$params['eids'] = PermissionUtils::getPermissionIDs('employers.list.');
-			}
-		} elseif(auth()->user()->hasRole(RoleName::TRAINEE->value)) {
-			if (auth()->user()->can('students.list')) {
-				// Практикант имеет право на полный список - ничего не делаем
-			} elseif (PermissionUtils::can('students.list.')) {
-				$params['sids'] = PermissionUtils::getPermissionIDs('students.list.');
-			}
-		}
 		return view('histories.index', $params);
     }
 
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
-	 * @return Application|Factory|View
+	 * @param int $id
+	 * @return Factory|View|Application|RedirectResponse
 	 */
-	public function show($id)
+	public function show(int $id): Factory|View|Application|RedirectResponse
 	{
 		return $this->edit($id, true);
 	}
@@ -155,10 +131,11 @@ class HistoryController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param int $id
+	 * @param bool $show
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function edit(int $id, bool $show = false)
+	public function edit(int $id, bool $show = false): View|Factory|RedirectResponse|Application
 	{
 		$mode = $show ? config('global.show') : config('global.edit');
 		$history = History::findOrFail($id);
@@ -172,11 +149,14 @@ class HistoryController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-    public function update(UpdateHistoryRequest $request, $id): RedirectResponse
+    public function update(UpdateHistoryRequest $request, int $id): RedirectResponse
 	{
 		$history = History::findOrFail($id);
 		$history->update($request->all());
 		//$history->notify(new StartInternshipNotification($history));
+
+		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
+			auth()->user()->allow($history);
 
 		session()->put('success', "Запись истории стажировки № " . $history->getKey() . " обновлена");
 		return redirect()->route('history.index', ['sid' => session()->getId()]);
@@ -196,57 +176,10 @@ class HistoryController extends Controller
 		} else $id = $history;
 
 		$history = History::findOrFail($id);
+		auth()->user()->disallow($history);
 		$history->delete();
 
 		event(new ToastEvent('success', '', "Запись истории стажировок № {$id} удалена"));
 		return true;
-	}
-
-	private function changeStatus(Request $request, int $toStatus): Response|Application|ResponseFactory
-	{
-		$history = History::findOrFail($request->history);
-		$trainee = Student::findOrFail($request->trainee);
-		$task = $request->has('task') ? $request->task : 0;
-		$status = $history->students()->findOrFail($request->trainee)->pivot->status;
-
-		$redirect = null;
-		$updated = false;
-		switch ($status) {
-			case TraineeStatus::ASKED->value:
-				$kind = 'success';
-				$message = match ($toStatus) {
-					TraineeStatus::ACCEPTED->value => 'Вы согласились участвовать в стажировке',
-					TraineeStatus::REJECTED->value => 'Вы отказались от участия в стажировке'
-				};
-				$redirect = route('inbox.archive');
-				$history->students()->updateExistingPivot($trainee, ['status' => $toStatus]);
-				$updated = (Task::findOrFail($task))->update([
-					'read' => true,
-					'archive' => true
-				]);
-				$response = 200;
-				break;
-			default:
-				$kind = 'error';
-				$message = sprintf(
-					"Нельзя изменить статус записи стажировки практиканта с &laquo;%s&raquo; на &laquo;%s&raquo;",
-					TraineeStatus::getName($status), TraineeStatus::getName($toStatus));
-				$response = 204;
-		}
-		event(new ToastEvent($kind, '', $message));
-		if ($updated)
-			event(new UnreadCountEvent());
-		return response(content: $redirect, status: $response);
-
-	}
-
-	public function accept(Request $request): Response|Application|ResponseFactory
-	{
-		return $this->changeStatus($request, TraineeStatus::ACCEPTED->value);
-	}
-
-	public function reject(Request $request): Response|Application|ResponseFactory
-	{
-		return $this->changeStatus($request, TraineeStatus::REJECTED->value);
 	}
 }

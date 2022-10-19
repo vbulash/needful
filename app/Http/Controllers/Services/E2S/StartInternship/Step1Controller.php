@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Services\E2S\StartInternship;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Employer;
-use App\Support\PermissionUtils;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Exception;
 
@@ -77,14 +75,6 @@ class Step1Controller extends Controller
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 
-		if (auth()->user()->can('employers.list')) {
-			return view($view, compact('count'));
-		} elseif (PermissionUtils::can('employers.list.')) {
-			$ids = PermissionUtils::getPermissionIDs('employers.list.');
-			return view($view, compact('count', 'ids'));
-		} else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для выбора работодателя'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
-		}
+		return view('services.e2s.start_internship.step1', compact('count'));
 	}
 }

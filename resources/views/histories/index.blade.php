@@ -1,7 +1,11 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа со стажировками
+	@if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
+		Мои стажировки
+	@else
+		Работа со стажировками
+	@endif
 @endsection
 
 @section('steps')
@@ -15,15 +19,10 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<span>Новая история стажировки создается через услугу на <a href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span>
-		@if(isset($sids))
-			<br/>
-			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, практиканты которых доступны текущему пользователю</p>
-		@endif
-		@if(isset($eids))
-			<br/>
-			<p class="mt-auto mb-auto">Отображаются только записи истории стажировок, работодатели которых доступны текущему пользователю</p>
-		@endif
+		<div>
+			<span>Новая история стажировки создается через услугу на <a href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span><br/>
+			<span><small>В поле &laquo;Практиканты&raquo; отображается общее количество утвержденных практикантов из общего числа запланированных</small></span>
+		</div>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
@@ -87,13 +86,7 @@
 					},
 					processing: true,
 					serverSide: true,
-					@if(isset($sids))
-					ajax: '{!! route('history.index.data', ['sids' => $sids]) !!}',
-					@elseif (isset($eids))
-					ajax: '{!! route('history.index.data', ['eids' => $eids]) !!}',
-					@else
 					ajax: '{!! route('history.index.data') !!}',
-					@endif
 					responsive: true,
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},

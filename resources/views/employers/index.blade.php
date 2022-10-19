@@ -36,13 +36,6 @@
 					Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
 			@endif
 		</div>
-
-		<h3 class="block-title">
-			@if(isset($ids))
-				<br/>
-				<small>Отображаются только записи работодателей, доступные текущему пользователю</small>
-			@endif
-		</h3>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
@@ -107,11 +100,7 @@
 					},
 					processing: true,
 					serverSide: true,
-					@if(isset($ids))
-					ajax: '{!! route('employers.index.data', ['ids' => $ids, 'sid' => session()->getId()]) !!}',
-					@else
-					ajax: '{!! route('employers.index.data', ['sid' => session()->getId()]) !!}',
-					@endif
+					ajax: '{!! route('employers.index.data') !!}',
 					createdRow: function (row, data, dataIndex) {
 						if (data.status === 0)
 							row.style.color = 'red';

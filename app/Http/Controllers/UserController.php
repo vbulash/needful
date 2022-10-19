@@ -104,7 +104,7 @@ class UserController extends Controller
 			]);
 			if ($request->for) {
 				$student = Student::findOrFail($request->for);
-				$student->user()->associate($user);
+				$student->user()->sync($user);
 				$student->save();
 			}
 
