@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f524b4239d3f66c79fca662b78b59c6",
+    "content-hash": "ff4ed539974b64356c24bfbedf06ea82",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4318,16 +4318,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "5.5.10",
+            "version": "5.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "5e96846341cb883bbe74f735502b743ee9898669"
+                "reference": "882e501e7ea4a92c70884d8f1dd2549a1c87d77c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/5e96846341cb883bbe74f735502b743ee9898669",
-                "reference": "5e96846341cb883bbe74f735502b743ee9898669",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/882e501e7ea4a92c70884d8f1dd2549a1c87d77c",
+                "reference": "882e501e7ea4a92c70884d8f1dd2549a1c87d77c",
                 "shasum": ""
             },
             "require": {
@@ -4388,7 +4388,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/5.5.10"
+                "source": "https://github.com/spatie/laravel-permission/tree/5.5.11"
             },
             "funding": [
                 {
@@ -4396,7 +4396,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-10-19T02:25:19+00:00"
+            "time": "2022-10-19T16:00:01+00:00"
         },
         {
             "name": "symfony/console",
@@ -7674,74 +7674,6 @@
             "time": "2022-09-28T13:13:22+00:00"
         },
         {
-            "name": "laravel/telescope",
-            "version": "v4.9.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/telescope.git",
-                "reference": "ca8bec380ecef80d00ce6daecac2dc17c7e35ccd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/telescope/zipball/ca8bec380ecef80d00ce6daecac2dc17c7e35ccd",
-                "reference": "ca8bec380ecef80d00ce6daecac2dc17c7e35ccd",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "laravel/framework": "^8.37|^9.0",
-                "php": "^7.3|^8.0",
-                "symfony/var-dumper": "^5.0|^6.0"
-            },
-            "require-dev": {
-                "ext-gd": "*",
-                "guzzlehttp/guzzle": "^6.0|^7.0",
-                "orchestra/testbench": "^6.0|^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.x-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Laravel\\Telescope\\TelescopeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laravel\\Telescope\\": "src/",
-                    "Laravel\\Telescope\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                },
-                {
-                    "name": "Mohamed Said",
-                    "email": "mohamed@laravel.com"
-                }
-            ],
-            "description": "An elegant debug assistant for the Laravel framework.",
-            "keywords": [
-                "debugging",
-                "laravel",
-                "monitoring"
-            ],
-            "support": {
-                "issues": "https://github.com/laravel/telescope/issues",
-                "source": "https://github.com/laravel/telescope/tree/v4.9.4"
-            },
-            "time": "2022-10-03T14:55:50+00:00"
-        },
-        {
             "name": "mockery/mockery",
             "version": "1.5.1",
             "source": {
@@ -9811,5 +9743,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.1.0"
 }

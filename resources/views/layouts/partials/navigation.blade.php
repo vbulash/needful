@@ -44,7 +44,7 @@
             $menu[] = ['title' => 'Настройки', 'heading' => true];
             $menu[] = ['title' => 'Пользователи', 'icon' => 'fa fa-user-alt', 'route' => 'users.index', 'pattern' => 'users.*'];
             $menu[] = ['title' => 'Импорт', 'icon' => 'fa-solid fa-file-import', 'route' => 'import.index', 'pattern' => 'import.*'];
-            $menu[] = ['title' => 'Laravel Telescope', 'icon' => 'fa fa-gears', 'route' => 'telescope', 'pattern' => 'telescope'];
+//            $menu[] = ['title' => 'Laravel Telescope', 'icon' => 'fa fa-gears', 'route' => 'telescope', 'pattern' => 'telescope'];
 		}
 	@endphp
 	<ul class="nav-main">

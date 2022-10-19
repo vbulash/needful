@@ -51,7 +51,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/sanctum" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/sail" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/telescope" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/serializable-closure" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/php-enum" />
