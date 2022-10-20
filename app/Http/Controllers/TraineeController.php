@@ -260,11 +260,11 @@ EOS,
 			case TraineeStatus::ACCEPTED->value:
 				switch ($to) {
 					case TraineeStatus::APPROVED->value:
-						$employer->user->notify(new Accepted2ApprovedNotification($history, $student));
+						$student->notify(new Accepted2ApprovedNotification($history, $student));
 						$message = "Учащийся &laquo;{$student->getTitle()}&raquo; утвержден для прохождения практики";
 						break;
 					case TraineeStatus::CANCELLED->value:
-						$employer->user->notify(new Accepted2CancelledNotification($history, $student));
+						$student->notify(new Accepted2CancelledNotification($history, $student));
 						$message = "Предложение практики для учащегося &laquo;{$student->getTitle()}&raquo; отменено";
 						break;
 				}
