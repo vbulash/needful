@@ -5,12 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\Role;
 use \Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -38,14 +34,14 @@ class AuthenticatedSessionController extends Controller
 			session()->put('success', "Вы успешно авторизовались");
 
 			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
-				if (!auth()->user()->students()->count())
-					return redirect()->route('students.index');
+				if (auth()->user()->students()->count() == 0)
+					return redirect()->route('students.create', ['for' => auth()->user()->email]);
 			} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
-				if (!auth()->user()->employers()->count())
-					return redirect()->route('employers.index');
+				if (auth()->user()->employers()->count() == 0)
+					return redirect()->route('employers.create');
 			} elseif (auth()->user()->hasRole(RoleName::SCHOOL->value)) {
-				if (!auth()->user()->schools()->count())
-					return redirect()->route('schools.index');
+				if (auth()->user()->schools()->count() == 0)
+					return redirect()->route('schools.create');
 			}
 			return redirect()->route('dashboard');
         } catch(Exception $exc) {

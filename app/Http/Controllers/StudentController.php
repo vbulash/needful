@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateStudentRequest;
 use App\Models\ActiveStatus;
 use App\Models\Right;
 use App\Models\Student;
+use App\Models\TraineeStatus;
 use App\Models\User;
 use App\Notifications\NewStudent;
 use App\Notifications\UpdateStudent;
@@ -87,7 +88,6 @@ class StudentController extends Controller
 	public function index(): View|Factory|RedirectResponse|Application
 	{
 		session()->forget('context');
-
 		$count = Student::all()->count();
 		return view('students.index', compact('count'));
 	}
@@ -104,13 +104,19 @@ class StudentController extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 *
+	 * @param Request $request
 	 * @return Application|Factory|View|RedirectResponse
 	 */
-	public function create(): View|Factory|RedirectResponse|Application
+	public function create(Request $request): View|Factory|RedirectResponse|Application
 	{
 		$mode = config('global.create');
 		$baseRight = "students.create";
 
+		$params = [
+			'mode' => $mode
+		];
+		if (isset($request->for))
+			$params['for'] = $request->for;
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$temp = User::orderBy('name')->get()
 				->map(function ($user) {
@@ -132,12 +138,13 @@ class StudentController extends Controller
 					->merge($temp)
 					->toArray();
 			} else $users = $temp;
-			return view('students.create', compact('users', 'mode'));
+			$params['users'] = $users;
+			return view('students.create', $params);
 		} elseif (auth()->user()->can($baseRight))
-			return view('students.create', compact('mode'));
+			return view('students.create', $params);
 		else {
 			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учащегося'));
-			return redirect()->route('dashboard', ['sid' => session()->getId()]);
+			return redirect()->route('dashboard');
 		}
 	}
 

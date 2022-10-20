@@ -26,7 +26,9 @@
 @endsection
 
 @section('form.fields')
-	@include('students.assign')
+	@if (isset(session('context')['chain']))
+		@include('students.assign')
+	@endif
 	@php
 		$fields = [];
         if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {

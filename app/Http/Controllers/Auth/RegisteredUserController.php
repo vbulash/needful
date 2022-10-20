@@ -46,15 +46,6 @@ class RegisteredUserController extends Controller
 				'password' => Hash::make($request->password),
 			]);
 			$user->assignRole($role);
-			$rights = match ($role) {
-				RoleName::EMPLOYER->value => ['employers.edit', 'employers.show'],
-				RoleName::SCHOOL->value => ['schools.edit', 'schools.show'],
-				RoleName::TRAINEE->value => ['students.edit', 'students.show'],
-				default => []
-			};
-			foreach ($rights as $right) {
-				$this->addWildcard($user, $right, $user->getKey());
-			}
 
 			event(new Registered($user));
 			$user->notify(new NewUser($user));
@@ -65,31 +56,22 @@ class RegisteredUserController extends Controller
 			session()->put('success',
 				"Зарегистрирован новый пользователь \"{$name}\" с ролью \"{$role}\"");
 
-			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
-				if (!auth()->user()->students()->count())
-					return redirect()->route('students.index');
-			} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
-				if (!auth()->user()->employers()->count())
-					return redirect()->route('employers.index');
-			} elseif (auth()->user()->hasRole(RoleName::SCHOOL->value)) {
-				if (!auth()->user()->schools()->count())
-					return redirect()->route('schools.index');
-			}
+				if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
+					if (auth()->user()->students()->count() == 0)
+					return redirect()->route('students.create', ['for' => auth()->user()->email]);
+				} elseif (auth()->user()->hasRole(RoleName::EMPLOYER->value)) {
+					if (auth()->user()->employers()->count() == 0)
+						return redirect()->route('employers.create');
+				} elseif (auth()->user()->hasRole(RoleName::SCHOOL->value)) {
+					if (auth()->user()->schools()->count() == 0)
+						return redirect()->route('schools.create');
+				}
 			return redirect()->route('dashboard');
 		} catch (Exception $exc) {
 			session()->put('error',
 				"Ошибка регистрации нового пользователя: {$exc->getMessage()}");
 
 			return redirect()->route('register');
-		}
-	}
-
-	private function addWildcard(User $user, string $right, int $id)
-	{
-		if ($user->hasPermissionTo($right)) {
-			$permission = "{$right}.{$id}";
-			Permission::findOrCreate($permission);
-			$user->givePermissionTo($permission);
 		}
 	}
 }

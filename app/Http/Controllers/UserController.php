@@ -184,15 +184,6 @@ class UserController extends Controller
 		$user->save();
 
 		$user->assignRole($role);
-		$prefix = match ($request->role) {
-			RoleName::EMPLOYER->value => 'employers',
-			RoleName::TRAINEE->value => 'students',
-			RoleName::SCHOOL->value => 'schools',
-			default => null
-		};
-		if ($prefix)
-			foreach (['create', 'edit', 'show'] as $action)
-				$this->addWildcard($user, $prefix . '.' . $action, $user->getKey());
 
 		session()->put('success',
 			"Пользователь \"{$name}\" обновлён");

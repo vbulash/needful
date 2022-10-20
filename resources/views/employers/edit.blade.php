@@ -36,7 +36,9 @@
 @endsection
 
 @section('form.fields')
-	@include('employers.assign')
+	@if (!isset(session('context')['chain']))
+		@include('employers.assign')
+	@endif
 	@php
 		$fields = [];
 		if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
