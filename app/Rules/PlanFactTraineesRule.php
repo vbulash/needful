@@ -32,7 +32,7 @@ class PlanFactTraineesRule implements Rule
 		if ($value == $this->history->status) return true;
 
         $plan = $this->history->timetable->planned;
-		$fact = $this->history->students()->wherePivot('status', TraineeStatus::ACCEPTED->value)->count();
+		$fact = $this->history->students()->wherePivot('status', TraineeStatus::APPROVED->value)->count();
 
 		return $plan == $fact;
     }
@@ -44,6 +44,6 @@ class PlanFactTraineesRule implements Rule
      */
     public function message()
     {
-        return 'Поле &laquo;Статус&raquo; не может быть изменено, пока плановое и фактическое количество одобренных практикантов не совпадают';
+        return 'Поле &laquo;Статус&raquo; не может быть изменено, пока плановое количество и количество утверждённых практикантов не совпадают';
     }
 }

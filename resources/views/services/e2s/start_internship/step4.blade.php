@@ -1,7 +1,7 @@
 @extends('services.service')
 
 @section('service')
-	Работодатель. Запланировать стажировку практикантов
+	Работодатель. Создать стажировку
 @endsection
 
 @section('steps')

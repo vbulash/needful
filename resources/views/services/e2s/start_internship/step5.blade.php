@@ -1,6 +1,6 @@
 @extends('services.service')
 
-@section('service')Работодатель. Запланировать стажировку практикантов@endsection
+@section('service')Работодатель. Создать стажировку@endsection
 
 @section('steps')
 	@php

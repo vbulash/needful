@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\All2DestroyedTaskEvent;
 use App\Events\Asked2AcceptedTaskEvent;
 use App\Events\Asked2RejectedTaskEvent;
 use App\Events\InviteTraineeTaskEvent;
@@ -47,7 +48,10 @@ class EventServiceProvider extends ServiceProvider
 		],
 		New2AskedTaskEvent::class => [
 			TaskRegisterListener::class
-		]
+		],
+		All2DestroyedTaskEvent::class => [
+			TaskRegisterListener::class
+		],
     ];
 
     /**

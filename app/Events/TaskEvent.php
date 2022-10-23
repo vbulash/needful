@@ -23,8 +23,8 @@ abstract class TaskEvent
 
 	public string $title;
 	public string $description;
-	public string $route;
-	public User $from;
+	public ?string $route;
+	public ?User $from;
 	public ?User $to;
 	public int $type;
 	public ?array $context;

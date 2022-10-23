@@ -22,7 +22,7 @@ class Step2Controller extends Controller
 	public function getData(Request $request)
 	{
 		$context = session('context');
-		$query = $context['employer']->internships()->whereNot('status', 'Закрыта')->get();
+		$query = $context['employer']->internships()->get();
 
 		return Datatables::of($query)
 			->editColumn('itype', function ($internship) {

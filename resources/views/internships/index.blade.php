@@ -39,7 +39,7 @@
 					<tr>
 						<th style="width: 30px">#</th>
 						<th>Название стажировки</th>
-						<th>Тип</th>
+						{{-- <th>Тип</th> --}}
 						<th>Статус</th>
 						<th>Действия</th>
 					</tr>
@@ -95,7 +95,7 @@
 					columns: [
 						{data: 'id', name: 'id', responsivePriority: 1},
 						{data: 'iname', name: 'iname', responsivePriority: 2},
-						{data: 'itype', name: 'itype', responsivePriority: 3},
+						// {data: 'itype', name: 'itype', responsivePriority: 3},
 						{data: 'status', name: 'status', responsivePriority: 3},
 						{
 							data: 'action',

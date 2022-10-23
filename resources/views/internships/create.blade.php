@@ -31,10 +31,11 @@
 	@php
 		$fields = [
 			['name' => 'iname', 'title' => 'Название стажировки', 'required' => true, 'type' => 'text'],
-			['name' => 'itype', 'title' => 'Тип стажировки', 'required' => true, 'type' => 'select', 'options' => [
-				'Открытая стажировка' => 'Открытая стажировка (практикант может записаться самостоятельно)',
-				'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
-			]],
+			// ['name' => 'itype', 'title' => 'Тип стажировки', 'required' => true, 'type' => 'select', 'options' => [
+			// 	'Открытая стажировка' => 'Открытая стажировка (практикант может записаться самостоятельно)',
+			// 	'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
+			// ]],
+			['name' => 'itype', 'type' => 'hidden', 'value' => 'Открытая стажировка'],
 			['name' => 'status', 'title' => 'Статус стажировки', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
 			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false],
 			['name' => 'program', 'title' => 'Программа стажировки', 'type' => 'editor', 'required' => true],
@@ -51,7 +52,7 @@
 	<link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
 @endpush
 
-@push('js_after')
+{{-- @push('js_after')
 	<script src="{{ asset('js/ckeditor.js') }}"></script>
 	<script type="module">
 		import {SimpleUploadAdapter} from '@ckeditor/ckeditor5-upload';
@@ -123,12 +124,12 @@
 			document.getElementById('program').value = editor.getData();
 		}, false);
 	</script>
-@endpush
+@endpush --}}
 
 @push('js_after')
 	<script src="{{ asset('js/ckeditor.js') }}"></script>
 	<script>
-		let formName = "{ form(\App\Models\Internship::class, $mode, 'name') }}";
+		let formName = "{{ form(\App\Models\Internship::class, $mode, 'name') }}";
 		let ckefield = 'program';
 
 		DecoupledDocumentEditor

@@ -5,12 +5,10 @@ namespace App\Notifications\e2s;
 use App\Models\History;
 use App\Models\Student;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class All2DestroyedNotification extends Notification
-{
+class New2AskedNotification extends Notification {
 	use Queueable;
 
 	private History $history;
@@ -21,8 +19,7 @@ class All2DestroyedNotification extends Notification
 	 *
 	 * @return void
 	 */
-	public function __construct(History $history, Student $student)
-	{
+	public function __construct(History $history, Student $student) {
 		$this->history = $history;
 		$this->student = $student;
 	}
@@ -33,8 +30,7 @@ class All2DestroyedNotification extends Notification
 	 * @param  mixed  $notifiable
 	 * @return array
 	 */
-	public function via($notifiable)
-	{
+	public function via($notifiable) {
 		return ['mail'];
 	}
 
@@ -44,15 +40,18 @@ class All2DestroyedNotification extends Notification
 	 * @param  mixed  $notifiable
 	 * @return MailMessage
 	 */
-	public function toMail(mixed $notifiable): MailMessage
-	{
-		$subject = 'Стажировка отменена';
+	public function toMail(mixed $notifiable): MailMessage {
+		$subject = 'Приглашение на стажировкиу';
 		$lines = [];
 		$lines[] = sprintf("Уважаемый (уважаемая) %s!", $this->student->getTitle());
-		$lines[] = "С сожалением сообщаем, что стажировка:";
+		$lines[] = "Вас пригласили для прохождения стажировки. Информация по данной стажировке:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "отменена и все приглашения кандидатам в практиканты отменены.";
-		$lines[] = "Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других стажировках";
+		$lines[] = sprintf(
+			"Войдите, пожалуйста в платформу по ссылке [%s](%s). " .
+			"Откройте входящие сообщения и в сообщении, соответствующем данному письму, " .
+			"выразите свое согласие или несогласие участия в практике.",
+			env('APP_NAME'), env('APP_URL'));
+		$lines[] = 'В случае игнорирования приглашения через 10 дней оно будет аннулировано';
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)
@@ -66,8 +65,7 @@ class All2DestroyedNotification extends Notification
 	 * @param  mixed  $notifiable
 	 * @return array
 	 */
-	public function toArray($notifiable)
-	{
+	public function toArray($notifiable) {
 		return [
 			//
 		];

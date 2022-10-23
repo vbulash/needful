@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-class New2AskedTaskEvent extends InviteTraineeTaskEvent
-{
+class New2AskedTaskEvent extends InviteTraineeTaskEvent {
 
 }

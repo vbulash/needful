@@ -4,7 +4,7 @@
 	@php
 		$cards = [
     		[
-    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Запланировать стажировку практикантов', 'active' => true, 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1')],
+    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Создать стажировку', 'active' => true, 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1')],
     			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Отслеживать стажировку', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
     			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Завершить стажировку', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
     		],

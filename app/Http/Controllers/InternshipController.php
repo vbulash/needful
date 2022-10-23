@@ -37,15 +37,15 @@ class InternshipController extends Controller
 			$query = Employer::findOrFail($employer)->internships()->get();
 
 		return Datatables::of($query)
-			->editColumn('itype', function ($internship) {
-				switch ($internship->itype) {
-					case 'Открытая стажировка':
-						return 'Открытая';
-					case 'Закрытая стажировка':
-						return 'Закрытая';
-				}
-				return '';
-			})
+			// ->editColumn('itype', function ($internship) {
+			// 	switch ($internship->itype) {
+			// 		case 'Открытая стажировка':
+			// 			return 'Открытая';
+			// 		case 'Закрытая стажировка':
+			// 			return 'Закрытая';
+			// 	}
+			// 	return '';
+			// })
 			->addColumn('action', function ($internship) use ($context) {
 				$editRoute = route('internships.edit', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$showRoute = route('internships.show', ['internship' => $internship->id, 'sid' => session()->getId()]);

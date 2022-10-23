@@ -10,8 +10,7 @@ use App\Models\History;
 use App\Models\HistoryStatus;
 use App\Models\Right;
 use App\Models\TraineeStatus;
-use App\Notifications\e2s\EmployerPracticeNotification;
-use App\Notifications\e2s\StartInternshipNotification;
+use App\Notifications\e2s\EmployerPracticeCreatedNotification;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -42,12 +41,8 @@ class Step5Controller extends Controller
 		$history->students()
 			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW]);
 
-//		foreach ($history->students as $trainee) {
-			//$history->students()->updateExistingPivot($trainee, ['status' => TraineeStatus::ASKED->value]);
-			//$trainee->notify(new EmployerPracticeNotification($trainee, $history, TraineeStatus::ASKED->value));
-//			event(new ToastEvent('info', '', "Переслано письмо-предложение практики для учащегося: {$trainee->getTitle()}"));
-//			event(new InviteTraineeTaskEvent($history, $trainee));
-//		}
+		$history->timetable->internship->employer->user->notify(new EmployerPracticeCreatedNotification($history));
+		event(new ToastEvent('info', '', 'Создана стажировка &laquo;' . $history->getTitle() . '&raquo;'));
 
 		if (!auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			auth()->user()->allow($history);
@@ -56,7 +51,7 @@ class Step5Controller extends Controller
 		$id = $history->getKey();
 		//session()->forget('context');
 
-		session()->put('success', "Стажировка № {$id} запланирована<br/>Письма отправлены");
-		return redirect()->route('history.show', ['history' => $id, 'sid' => session()->getId()]);
+		session()->put('success', "Стажировка № {$id} запланирована");
+		return redirect()->route('history.show', ['history' => $id]);
 	}
 }

@@ -3,28 +3,25 @@
 namespace App\Notifications\e2s;
 
 use App\Models\History;
-use App\Models\Student;
+use App\Notifications\e2s\HasInternship;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class All2DestroyedNotification extends Notification
+class EmployerPracticeCreatedNotification extends Notification
 {
-	use Queueable;
+    use Queueable;
 
 	private History $history;
-	private Student $student;
 
 	/**
 	 * Create a new notification instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(History $history, Student $student)
+	public function __construct(History $history)
 	{
 		$this->history = $history;
-		$this->student = $student;
 	}
 
 	/**
@@ -46,13 +43,11 @@ class All2DestroyedNotification extends Notification
 	 */
 	public function toMail(mixed $notifiable): MailMessage
 	{
-		$subject = 'Стажировка отменена';
+		$subject = 'Стажировка создана';
 		$lines = [];
-		$lines[] = sprintf("Уважаемый (уважаемая) %s!", $this->student->getTitle());
-		$lines[] = "С сожалением сообщаем, что стажировка:";
+		$lines[] = "Создана стажировка со следующими параметрами:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "отменена и все приглашения кандидатам в практиканты отменены.";
-		$lines[] = "Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других стажировках";
+		$lines[] = "Перед изменением статуса стажировки вам будет необходимо через интерфейс платформы набрать практикантов и утвердить их";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)
@@ -71,5 +66,5 @@ class All2DestroyedNotification extends Notification
 		return [
 			//
 		];
-	}
+    }
 }

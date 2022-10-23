@@ -50,6 +50,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
 	Route::get('/history.select/{history}', 'HistoryController@select')->name('history.select');
 	Route::post('/history.can.destroy', 'HistoryController@canDestroy')->name('history.can.destroy');
+	Route::post('/history.cancel', 'HistoryController@cancel')->name('history.cancel');
 	// Практиканты
 	Route::get('/trainees', 'TraineeController@index')->name('trainees.index');
 	Route::get('/trainees.data', 'TraineeController@getData')->name('trainees.index.data');
