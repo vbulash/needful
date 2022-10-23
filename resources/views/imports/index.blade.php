@@ -4,7 +4,7 @@
 	@php
 		$cards = [
     		[
-    			['title' => 'Пользователи', 'active' => true, 'icon' => 'fa-2x fa-solid fa-users', 'link' => route('dashboard')],
+    			['title' => 'Учащиеся', 'active' => true, 'icon' => 'fa-2x fa-solid fa-gear', 'link' => route('dashboard')],
     		],
 		];
 	@endphp
