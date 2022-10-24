@@ -11,7 +11,7 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Стажировка', 'active' => true, 'context' => 'history', 'link' => route('history.index', ['sid' => session()->getId()])],
+			['title' => 'Стажировка', 'active' => true, 'context' => 'history', 'link' => route('history.index')],
 			['title' => 'Практиканты', 'active' => false, 'context' => 'trainee'],
 		];
 	@endphp

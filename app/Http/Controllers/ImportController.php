@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-//use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
-class ImportController extends Controller
-{
-	public function index(): Factory|View|Application
-	{
+class ImportController extends Controller {
+	public function index(): Factory|View|Application {
 		return view('imports.index');
-    }
+	}
+
+	public function create(Request $request) {
+		return view('imports.create');
+	}
 }

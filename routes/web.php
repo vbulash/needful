@@ -93,6 +93,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 
 	// Импорт
 	Route::get('/import', 'ImportController@index')->name('import.index');
+	Route::get('/import.create', 'ImportController@create')->name('import.create');
 });
 
 // Маршруты "от работодателя" (E2S)

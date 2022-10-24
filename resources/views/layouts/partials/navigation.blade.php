@@ -57,12 +57,12 @@
             $menu[] = ['title' => 'Специальности', 'icon' => 'fas fa-book', 'route' => 'specialties.index', 'pattern' => ['specialties.*']];
         }
 
-        if ($admin || $employers) {
+        if ($admin || $schools) {
             $menu[] = ['title' => 'Настройки', 'heading' => true];
             if ($admin) {
                 $menu[] = ['title' => 'Пользователи', 'icon' => 'fa fa-user-alt', 'route' => 'users.index', 'pattern' => 'users.*'];
             }
-            if ($employers) {
+            if ($schools) {
                 $menu[] = ['title' => 'Импорт', 'icon' => 'fa-solid fa-file-import', 'route' => 'import.index', 'pattern' => 'import.*'];
             }
         }
