@@ -109,18 +109,9 @@ class UserController extends Controller
 			}
 
 			$user->assignRole($role);
-			$prefix = match ($request->role) {
-				RoleName::EMPLOYER->value => 'employers',
-				RoleName::TRAINEE->value => 'students',
-				RoleName::SCHOOL->value => 'schools',
-				default => null
-			};
-			if ($prefix)
-				foreach (['create', 'edit', 'show'] as $action)
-					$this->addWildcard($user, $prefix . '.' . $action, $user->getKey());
 
 			event(new Registered($user));
-			$user->notify(new NewUser($user));
+			$user->notify(new NewUser());
 			$name = $user->name;
 
 			//auth()->login($user);

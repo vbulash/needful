@@ -59,6 +59,7 @@ mix
 
 	// Данные
 	.copyDirectory('database/data', 'public/uploads/migrations')
+	.copyDirectory('resources/assets', 'public/uploads/assets')
 
 	// Разное
 	.copy('resources/plugins/datatables/lang/ru/datatables.json', 'public/lang/ru/datatables.json')

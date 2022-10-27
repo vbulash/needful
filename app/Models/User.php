@@ -54,6 +54,11 @@ class User extends Authenticatable implements FormTemplate
         'email_verified_at' => 'datetime',
     ];
 
+	public function schools(): HasMany
+	{
+		return $this->hasMany(School::class);
+	}
+
 	public function students(): HasMany
 	{
 		return $this->hasMany(Student::class);
