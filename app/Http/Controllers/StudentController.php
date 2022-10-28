@@ -45,19 +45,19 @@ class StudentController extends Controller {
 			    $selectRoute = route('students.select', ['student' => $student->id, 'sid' => session()->getId()]);
 			    $actions = '';
 
-			    if (auth()->user()->can('students.edit') || auth()->user()->can('students.edit.' . $student->getKey()))
+			    if (auth()->user()->can('students.edit'))
 				    $actions .=
 				    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 				    	"<i class=\"fas fa-edit\"></i>\n" .
 				    	"</a>\n";
-			    if (auth()->user()->can('students.show') || auth()->user()->can('students.show.' . $student->getKey()))
+			    if (auth()->user()->can('students.show'))
 				    $actions .=
 				    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
 				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 				    	"<i class=\"fas fa-eye\"></i>\n" .
 				    	"</a>\n";
-			    if (auth()->user()->can('students.destroy') || auth()->user()->can('students.destroy.' . $student->getKey())) {
+			    if (auth()->user()->can('students.destroy')) {
 				    $name = $student->getTitle();
 				    $actions .=
 				    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .

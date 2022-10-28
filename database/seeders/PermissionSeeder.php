@@ -8,15 +8,13 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
-class PermissionSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class PermissionSeeder extends Seeder {
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run() {
 		// Reset cached roles and permissions
 		app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
@@ -39,7 +37,13 @@ class PermissionSeeder extends Seeder
 			'students.edit',
 			'students.show',
 			'students.delete',
-			// Практики
+			// Учебные заведения
+			'schools.list',
+			'schools.create',
+			'schools.edit',
+			'schools.show',
+			'schools.delete',
+			// Стажировки
 			'histories.list',
 			'histories.create',
 			'histories.edit',
@@ -54,14 +58,12 @@ class PermissionSeeder extends Seeder
 		$employer = Role::where('name', RoleName::EMPLOYER->value)->first();
 		$employer->givePermissionTo([
 			// Пользователи
-			'users.list',
 			'users.show',
 			// Работодатели
 			'employers.list',
 			'employers.create',
 			'employers.edit',
 			'employers.show',
-			'employers.delete',
 			// Учащиеся
 			'students.list',
 			'students.show',
@@ -73,10 +75,26 @@ class PermissionSeeder extends Seeder
 			'histories.delete',
 		]);
 
+		$school = Role::where('name', RoleName::SCHOOL->value)->first();
+		$school->givePermissionTo([
+			// Пользователи
+			'users.show',
+			// Работодатели
+			'employers.list',
+			'employers.show',
+			// Учащиеся
+			'students.list',
+			'students.show',
+			// Практики
+			'histories.list',
+			'histories.create',
+			'histories.edit',
+			'histories.show',
+		]);
+
 		$student = Role::where('name', RoleName::TRAINEE->value)->first();
 		$student->givePermissionTo([
 			// Пользователи
-			'users.list',
 			'users.show',
 			// Работодатели
 			'employers.list',
@@ -91,5 +109,5 @@ class PermissionSeeder extends Seeder
 			'histories.list',
 			'histories.show',
 		]);
-    }
+	}
 }
