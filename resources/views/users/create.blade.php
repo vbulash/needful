@@ -31,6 +31,7 @@
                 \App\Http\Controllers\Auth\RoleName::ADMIN->value => \App\Http\Controllers\Auth\RoleName::ADMIN->value,
                 \App\Http\Controllers\Auth\RoleName::TRAINEE->value => \App\Http\Controllers\Auth\RoleName::TRAINEE->value,
                 \App\Http\Controllers\Auth\RoleName::EMPLOYER->value => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value,
+				\App\Http\Controllers\Auth\RoleName::SCHOOL->value => \App\Http\Controllers\Auth\RoleName::SCHOOL->value,
 			];
 		} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)) {
             $roles = [

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RoleName;
 use App\Models\ActiveStatus;
 use App\Models\Learn;
 use App\Models\School;
+use App\Models\Specialty;
 use App\Models\Student;
 use App\Models\User;
 use App\Notifications\NewStudent;
@@ -23,12 +24,15 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Throwable;
 use DateTime;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Writer\Exception as SpreadsheetException;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ImportController extends Controller {
 	private static array $checkMap = [
@@ -75,6 +79,37 @@ class ImportController extends Controller {
 	public function download(Request $request) {
 		return Storage::download('/assets/template-import-students.xlsx',
 			env('APP_NAME') . ' - Шаблон для импорта студентов.xlsx');
+	}
+
+	public function downloadSpecialties(Request $request) {
+		event(new ToastEvent('info', '', 'Экспорт справочника специальностей...'));
+
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setCellValue('A1', 'Наименование специальности');
+		$sheet->setCellValue('B1', 'Признак специальности');
+		$sheet->freezePane('A2');
+
+		$row = 2;
+		Specialty::all()
+			->sortBy('name')
+			->each(function ($specialty) use ($sheet, &$row) {
+			    $sheet->setCellValue('A' . $row, $specialty->name);
+				$sheet->setCellValue('B' . $row++, $specialty->federal ? 'Из федерального справочника' : 'Введена вручную');
+    		});
+
+		$filename = '/assets/export-specialties.xlsx';
+		$writer = new Xlsx($spreadsheet);
+		try {
+			$writer->save(public_path() . '/uploads' . $filename);
+			event(new ToastEvent('success', '', 'Справочник специальностей экспортирован'));
+			return Storage::download($filename, env('APP_NAME') . ' - Справочник специальностей.xlsx');
+		} catch (Throwable $exc) {
+			event(new ToastEvent('error', '', 'Ошибка экспорта справочника специальностей:<br/>' . $exc->getMessage()));
+		} finally {
+			$spreadsheet->disconnectWorksheets();
+			unset($spreadsheet);
+		}
 	}
 
 	public function upload(Request $request) {
@@ -223,6 +258,7 @@ class ImportController extends Controller {
 			$learn->student()->associate($student);
 			$learn->school()->associate($school);
 			$learn->save();
+			$student->user->allow($school);
 		}
 
 		//

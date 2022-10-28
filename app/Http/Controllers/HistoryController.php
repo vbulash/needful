@@ -175,8 +175,7 @@ EOB,
 		$history->update($request->all());
 		//$history->notify(new StartInternshipNotification($history));
 
-		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
-			auth()->user()->allow($history);
+		auth()->user()->allow($history);
 
 		session()->put('success', "Запись истории стажировки № " . $history->getKey() . " обновлена");
 		return redirect()->route('history.index', ['sid' => session()->getId()]);

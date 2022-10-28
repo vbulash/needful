@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Auth\RoleName;
+
 trait Right
 {
 
 	public function allow(object $element): void
 	{
+		if ($this->hasRole(RoleName::ADMIN->value)) return;
+
 		$user = $this;
 		$attached = false;
 		if (!$user->allowed($element)->find($element->getKey())) {
@@ -18,6 +22,8 @@ trait Right
 
 	public function disallow(object $element): void
 	{
+		if ($this->hasRole(RoleName::ADMIN->value)) return;
+
 		$user = $this;
 		$detached = false;
 		if ($user->allowed($element)->find($element->getKey())) {
@@ -29,6 +35,7 @@ trait Right
 
 	public function isAllowed(object $element): bool
 	{
+		if ($this->hasRole(RoleName::ADMIN->value)) return true;
 		$user = $this;
 		return $user->allowed($element)->find($element->getKey()) != null;
 	}

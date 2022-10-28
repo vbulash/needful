@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\StoreLearnRequest;
 use App\Models\Learn;
 use App\Models\School;
@@ -20,8 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
 
-class LearnController extends Controller
-{
+class LearnController extends Controller {
 	/**
 	 * Process datatables ajax request.
 	 *
@@ -29,8 +29,7 @@ class LearnController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request): JsonResponse
-	{
+	public function getData(Request $request): JsonResponse {
 		$context = session('context');
 		$query = Student::findOrFail($context['student'])->learns()->get();
 
@@ -40,29 +39,29 @@ class LearnController extends Controller
 			->editColumn('school', fn($learn) => $learn->school ? $learn->school->getTitle() : $learn->new_school)
 			->editColumn('specialty', fn($learn) => $learn->specialty ? $learn->specialty->getTitle() : $learn->new_specialty)
 			->addColumn('action', function ($learn) {
-				$editRoute = route('learns.edit', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
-				$showRoute = route('learns.show', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
-				$actions = '';
+			    $editRoute = route('learns.edit', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
+			    $showRoute = route('learns.show', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
+			    $actions = '';
 
-				$actions .=
-					"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-					"<i class=\"fas fa-edit\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-					"<i class=\"fas fa-eye\"></i>\n" .
-					"</a>\n";
-				$name = $learn->getTitle();
-				$actions .=
-					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$learn->getKey()}, '{$name}')\">\n" .
-					"<i class=\"fas fa-trash-alt\"></i>\n" .
-					"</a>\n";
+			    $actions .=
+			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
+			    	"<i class=\"fas fa-edit\"></i>\n" .
+			    	"</a>\n";
+			    $actions .=
+			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
+			    	"<i class=\"fas fa-eye\"></i>\n" .
+			    	"</a>\n";
+			    $name = $learn->getTitle();
+			    $actions .=
+			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$learn->getKey()}, '{$name}')\">\n" .
+			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
+			    	"</a>\n";
 
-				return $actions;
-			})
+			    return $actions;
+		    })
 			->make(true);
 	}
 
@@ -71,8 +70,7 @@ class LearnController extends Controller
 	 *
 	 * @return Application|Factory|View
 	 */
-	public function index(): View|Factory|Application
-	{
+	public function index(): View|Factory|Application {
 		$context = session('context');
 		unset($context['learn']);
 		session()->put('context', $context);
@@ -88,8 +86,7 @@ class LearnController extends Controller
 	 *
 	 * @return Application|Factory|View
 	 */
-	public function create(): View|Factory|Application
-	{
+	public function create(): View|Factory|Application {
 		$mode = config('global.create');
 		$schools = School::all()->pluck('short', 'id')->toArray();
 		$specialties = Specialty::all()->pluck('name', 'id')->toArray();
@@ -102,12 +99,12 @@ class LearnController extends Controller
 	 * @param StoreLearnRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreLearnRequest $request): RedirectResponse
-	{
+	public function store(StoreLearnRequest $request): RedirectResponse {
 		$learn = new Learn();
 
 		$learn->start = $request->start;
-		if ($request->has('finish') && $request->finish) $learn->finish = $request->finish;
+		if ($request->has('finish') && $request->finish)
+			$learn->finish = $request->finish;
 		$learn->status = $request->status;
 
 		$context = session('context');
@@ -129,6 +126,7 @@ class LearnController extends Controller
 		}
 
 		$learn->save();
+		$learn->student->user->allow($learn->school);
 
 		$learn->student->user->notify(new NewLearn($learn));
 
@@ -142,8 +140,7 @@ class LearnController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show(int $id): View|Factory|Application
-	{
+	public function show(int $id): View|Factory|Application {
 		return $this->edit($id, true);
 	}
 
@@ -154,8 +151,7 @@ class LearnController extends Controller
 	 * @param bool $show
 	 * @return Application|Factory|View
 	 */
-	public function edit(int $id, bool $show = false): View|Factory|Application
-	{
+	public function edit(int $id, bool $show = false): View|Factory|Application {
 		$mode = $show ? config('global.show') : config('global.edit');
 
 		$learn = Learn::findOrFail($id);
@@ -171,13 +167,14 @@ class LearnController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(StoreLearnRequest $request, int $id): RedirectResponse
-	{
+	public function update(StoreLearnRequest $request, int $id): RedirectResponse {
 		$learn = Learn::findOrFail($id);
 
 		$learn->start = $request->start;
-		if ($request->has('finish') && $request->finish) $learn->finish = $request->finish;
-		else $learn->finish = null;
+		if ($request->has('finish') && $request->finish)
+			$learn->finish = $request->finish;
+		else
+			$learn->finish = null;
 		$learn->status = $request->status;
 
 		if ($request->status == \App\Models\ActiveStatus::ACTIVE->value) {
@@ -187,16 +184,17 @@ class LearnController extends Controller
 			$learn->new_school = $request->new_school;
 			$learn->new_specialty = $request->new_specialty;
 		}
-		if (isset($request->school_id)) {
+		if (isset($request->school_id) && !isset($request->new_school)) {
 			$school = School::findOrFail($request->school_id);
 			$learn->school()->associate($school);
 		}
-		if (isset($request->specialty_id)) {
+		if (isset($request->specialty_id) && !isset($request->new_specialty)) {
 			$specialty = Specialty::findOrFail($request->specialty_id);
 			$learn->specialty()->associate($specialty);
 		}
 
 		$learn->update();
+		$learn->student->user->allow($learn->school);
 
 		$learn->student->user->notify(new UpdateLearn($learn));
 
@@ -211,14 +209,15 @@ class LearnController extends Controller
 	 * @param int $learn
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $learn): bool
-	{
+	public function destroy(Request $request, int $learn): bool {
 		if ($learn == 0) {
 			$id = $request->id;
-		} else $id = $learn;
+		} else
+			$id = $learn;
 
 		$learn = Learn::findOrFail($id);
 		$name = $learn->getTitle();
+		$learn->student->user->disallow($learn->school);
 		$learn->delete();
 
 		event(new ToastEvent('success', '', "Запись истории обучения '{$name}' удалена"));

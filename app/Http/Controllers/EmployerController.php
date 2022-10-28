@@ -160,8 +160,7 @@ class EmployerController extends Controller {
 		$employer->save();
 		$name = $employer->name;
 
-		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
-			auth()->user()->allow($employer);
+		auth()->user()->allow($employer);
 
 		$employer->user->notify(new NewEmployer($employer));
 
@@ -231,8 +230,7 @@ class EmployerController extends Controller {
 		$employer->update($request->all());
 		$newStatus = $employer->status;
 
-		if (!auth()->user()->hasRole(RoleName::ADMIN->value))
-			auth()->user()->allow($employer);
+		auth()->user()->allow($employer);
 
 		$employer->user->notify(new UpdateEmployer($employer));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)

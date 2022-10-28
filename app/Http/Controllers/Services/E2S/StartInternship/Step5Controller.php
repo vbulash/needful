@@ -18,19 +18,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
-class Step5Controller extends Controller
-{
+class Step5Controller extends Controller {
 	//
-	public function run(Request $request): Factory|View|Application
-	{
+	public function run(Request $request): Factory|View|Application {
 		$context = session('context');
 		$ids = $request->ids;
 		return view('services.e2s.start_internship.step5', compact('context', 'ids'));
 	}
 
 	// Создание
-	public function create(Request $request): RedirectResponse
-	{
+	public function create(Request $request): RedirectResponse {
 		$context = session('context');
 		$ids = $request->ids;
 
@@ -39,14 +36,12 @@ class Step5Controller extends Controller
 		$history->status = HistoryStatus::NEW;
 		$history->save();
 		$history->students()
-			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW]);
+			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW ]);
 
 		$history->timetable->internship->employer->user->notify(new EmployerPracticeCreatedNotification($history));
 		event(new ToastEvent('info', '', 'Создана стажировка &laquo;' . $history->getTitle() . '&raquo;'));
 
-		if (!auth()->user()->hasRole(RoleName::ADMIN->value)) {
-			auth()->user()->allow($history);
-		}
+		auth()->user()->allow($history);
 
 		$id = $history->getKey();
 		//session()->forget('context');

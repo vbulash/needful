@@ -48,7 +48,7 @@
         if ($schools || $employers) {
             $menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];
         }
-        if ($students) {
+        if ($students || $schools) {
             $menu[] = ['title' => 'Учащиеся', 'icon' => 'fas fa-gear', 'route' => 'students.index', 'pattern' => ['students.*']];
         }
 
