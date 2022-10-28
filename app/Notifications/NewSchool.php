@@ -76,7 +76,7 @@ class NewSchool extends Notification
 		foreach ($fields as $key => $value) {
 			if (!isset($value)) continue;
 
-			$lines[] = sprintf("**%s**: *%s*", $key, $value);
+			$lines[] = sprintf("- **%s**: *%s*", $key, $value);
 		}
 		return $lines;
 	}
