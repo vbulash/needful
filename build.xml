@@ -23,6 +23,8 @@
 
 		<echo message="#!/bin/bash ${line.separator}" file="tmp.sh"/>
 		<echo message="cd ${ftp.dir}/${project.folder} ${line.separator}" file="tmp.sh" append="true"/>
+		<echo message="unzip -uoq .tmp.zip ${line.separator}" file="tmp.sh" append="true"/>
+		<echo message="rm .tmp.zip ${line.separator}" file="tmp.sh" append="true"/>
 		<echo message="mv .env.temp .env ${line.separator}" file="tmp.sh" append="true"/>
 		<echo message="composer install --optimize-autoloader --no-dev ${line.separator}" file="tmp.sh" append="true"/>
 		<echo message="npm update ${line.separator}" file="tmp.sh" append="true"/>
@@ -38,14 +40,14 @@
 
 		<scp username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" todir="." file="tmp.sh" level="info" />
 		<delete file="tmp.sh" />
-		<ssh username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" display="yes" command="source /etc/profile; sh ./tmp.sh 2&gt;&amp;1" />
+		<ssh username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" display="yes" command="source /etc/profile; sh ./tmp.sh" />
 		<ssh username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" display="yes" command="rm tmp.sh" />
 	</target>
 
 	<target name="copy">
 		<echo message="Развёртывание платформы..."/>
 
-		<scp username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" todir="${ftp.dir}/${project.folder}" level="info">
+		<zip destfile=".tmp.zip">
 			<fileset dir=".">
 				<patternset>
 					<exclude name="**/.DS_Store"/>
@@ -66,8 +68,10 @@
 					<include name="storage/**/*"/>
 				</patternset>
 			</fileset>
-		</scp>
+		</zip>
+		<scp username="${ftp.username}" password="${ftp.password}" host="${ftp.server}" file=".tmp.zip" todir="${ftp.dir}/${project.folder}" level="info" />
 		<delete file=".env.temp" />
+		<delete file=".tmp.zip" />
 	</target>
 
 	<target name="modify.env">

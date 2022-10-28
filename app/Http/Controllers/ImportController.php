@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Auth\RoleName;
 use App\Models\ActiveStatus;
+use App\Models\Learn;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
@@ -16,6 +17,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -42,11 +44,12 @@ class ImportController extends Controller {
 		'J' => ['type' => 'textarea', 'field' => 'passport', 'title' => 'Данные документа, удостоверяющего личность (серия, номер, кем и когда выдан)'],
 		'K' => ['type' => 'textarea', 'field' => 'address', 'title' => 'Адрес проживания'],
 		'L' => ['type' => 'date', 'field' => '', 'key' => 'admission', 'title' => 'Дата поступления в учебное заведение', 'required' => true],
-		'M' => ['type' => 'text', 'field' => 'grade', 'title' => 'Класс / группа (на момент заполнения)'],
-		'N' => ['type' => 'textarea', 'field' => 'hobby', 'title' => 'Увлечения (хобби)'],
-		'O' => ['type' => 'text', 'field' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?'],
-		'P' => ['type' => 'textarea', 'field' => 'contestachievements', 'title' => 'Участие в конкурсах, олимпиадах. Достижения'],
-		'Q' => ['type' => 'textarea', 'field' => 'dream', 'title' => 'Чем хочется заниматься в жизни?'],
+		'M' => ['type' => 'text', 'field' => '', 'key' => 'specialty', 'title' => 'Специальность', 'required' => true],
+		'N' => ['type' => 'text', 'field' => 'grade', 'title' => 'Класс / группа (на момент заполнения)'],
+		'O' => ['type' => 'textarea', 'field' => 'hobby', 'title' => 'Увлечения (хобби)'],
+		'P' => ['type' => 'text', 'field' => 'hobbyyears', 'title' => 'Как давно занимается хобби (лет)?'],
+		'Q' => ['type' => 'textarea', 'field' => 'contestachievements', 'title' => 'Участие в конкурсах, олимпиадах. Достижения'],
+		'R' => ['type' => 'textarea', 'field' => 'dream', 'title' => 'Чем хочется заниматься в жизни?'],
 	];
 
 	public function index(): Factory|View|Application {
@@ -201,6 +204,25 @@ class ImportController extends Controller {
 				$student->user->allow($student);
 				$student->user->notify(new UpdateStudent($student));
 			} // Иначе просто пропускаем
+
+			$learn = Learn
+				::whereHas('student', function (Builder $query) use ($student) {
+				    $query->where('id', $student->getKey());
+			    })
+				->whereHas('school', function (Builder $query) use ($school) {
+				    $query->where('id', $school->getKey());
+			    })
+				->first();
+			if ($learn)
+				$learn->delete();
+
+			$learn = new Learn();
+			$learn->start = $special['admission'];
+			$learn->new_specialty = $special['specialty'];
+			$learn->status = ActiveStatus::NEW ->value;
+			$learn->student()->associate($student);
+			$learn->school()->associate($school);
+			$learn->save();
 		}
 
 		//
