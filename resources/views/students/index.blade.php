@@ -16,7 +16,7 @@
 		<div>
 			@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 				@if (env('BLOCK_STUDENT_ADD'))
-					<p>Записи учащихся добавляются в ходе самостоятельной регистрации</p>
+					<p>Записи учащихся добавляются в ходе самостоятельной регистрации или массового импорта учащихся</p>
 				@else
 					<a href="{{ route('students.create', ['sid' => session()->getId()]) }}"
 					   class="btn btn-primary mt-3 mb-3">Добавить учащегося</a>
