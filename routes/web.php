@@ -93,11 +93,13 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 
 	// Импорт
 	Route::get('/import', 'ImportController@index')->name('import.index');
-	Route::get('/import.create', 'ImportController@create')->name('import.create');
-	Route::get('import.download', 'ImportController@download')->name('import.download');
-	Route::get('import.download.specialties', 'ImportController@downloadSpecialties')->name('import.download.specialties');
-	Route::post('import.upload', 'ImportController@upload')->name('import.upload');
 	Route::get('/import.errors', 'ImportController@errors')->name('import.errors');
+	// Импорт учащихся
+	Route::get('/import.students.create', 'Imports\StudentImportController@create')->name('import.students.create');
+	Route::get('import.students.download', 'Imports\StudentImportController@download')->name('import.students.download');
+	Route::get('import.students.download.specialties', 'Imports\StudentImportController@downloadSpecialties')->name('import.students.download.specialties');
+	Route::post('import.students.upload', 'Imports\StudentImportController@upload')->name('import.students.upload');
+
 });
 
 // Маршруты "от работодателя" (E2S)

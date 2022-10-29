@@ -12,12 +12,12 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<form action="{{ route('import.download') }}" method="GET">
+			<form action="{{ route('import.students.download') }}" method="GET">
 				@csrf
 				<p>Здесь вы можете скачать таблицу-шаблон для заполнения данными учащихся:</p>
 				<button type="submit" class="btn btn-secondary mb-4">Скачать шаблон для заполнения</button>
 			</form>
-			<form action="{{ route('import.download.specialties') }}" method="GET">
+			<form action="{{ route('import.students.download.specialties') }}" method="GET">
 				@csrf
 				<p>В заполнении таблицы импорта учащихся поможет справочник специальностей:</p>
 				<button type="submit" class="btn btn-secondary">Экспортировать и скачать справочник специальностей</button>
@@ -26,7 +26,7 @@
 		</div>
 	</div>
 
-	<form action="{{ route('import.upload') }}" method="POST" enctype="multipart/form-data">
+	<form action="{{ route('import.students.upload') }}" method="POST" enctype="multipart/form-data">
 		@csrf
 		<div class="block-content p-4">
 			<div>

@@ -4,7 +4,7 @@
 	@php
 		$cards = [
     		[
-    			['title' => 'Учащиеся', 'active' => true, 'icon' => 'fa-2x fa-solid fa-gear', 'link' => route('import.create')],
+    			['title' => 'Учащиеся', 'active' => true, 'icon' => 'fa-2x fa-solid fa-gear', 'link' => route('import.students.create')],
     		],
 		];
 	@endphp
