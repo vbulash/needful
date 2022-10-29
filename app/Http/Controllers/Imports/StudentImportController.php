@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Imports;
 
 use App\Http\Controllers\ImportController;
+use App\Notifications\NewLearn;
 use Illuminate\Http\Request;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Auth\RoleName;
@@ -185,12 +186,20 @@ class StudentImportController extends ImportController {
 
 			$learn = new Learn();
 			$learn->start = $special['admission'];
-			$learn->new_specialty = $special['specialty'];
-			$learn->status = ActiveStatus::NEW ->value;
+			$specialty = Specialty::where('name', $special['specialty'])->first();
+			if ($specialty == null) {
+				$learn->new_specialty = $special['specialty'];
+				$learn->status = ActiveStatus::NEW ->value;
+			} else {
+				$learn->specialty()->associate($specialty);
+				$learn->status = ActiveStatus::ACTIVE->value;
+				$learn->new_specialty = null;
+			}
 			$learn->student()->associate($student);
 			$learn->school()->associate($school);
 			$learn->save();
-			$student->user->allow($school);
+			$learn->student->user->allow($school);
+			$learn->student->user->notify(new NewLearn($learn));
 		}
 
 		//
