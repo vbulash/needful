@@ -66,6 +66,9 @@
             if ($schools) {
                 $menu[] = ['title' => 'Импорт', 'icon' => 'fa-solid fa-file-import', 'route' => 'import.index', 'pattern' => 'import.*'];
             }
+			if ($admin) {
+                $menu[] = ['title' => 'Уведомления', 'icon' => 'fa fa-gears', 'route' => 'settings.notifications', 'pattern' => 'settings.notifications'];
+            }
         }
     @endphp
     <ul class="nav-main">

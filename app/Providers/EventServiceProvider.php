@@ -10,12 +10,14 @@ use App\Events\New2AskedTaskEvent;
 use App\Events\UpdateEmployerTaskEvent;
 use App\Events\UpdateSchoolTaskEvent;
 use App\Events\UpdateStudentTaskEvent;
+use App\Listeners\FilterNotificationsListener;
 use App\Listeners\TaskRegisterListener;
 use App\Models\Trainee;
 use App\Observers\TraineeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Events\NotificationSending;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -51,6 +53,10 @@ class EventServiceProvider extends ServiceProvider
 		],
 		All2DestroyedTaskEvent::class => [
 			TaskRegisterListener::class
+		],
+		// Фильтрация уведомлений перед отправкой
+		NotificationSending::class => [
+			FilterNotificationsListener::class
 		],
     ];
 

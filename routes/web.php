@@ -100,6 +100,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('import.students.download.specialties', 'Imports\StudentImportController@downloadSpecialties')->name('import.students.download.specialties');
 	Route::post('import.students.upload', 'Imports\StudentImportController@upload')->name('import.students.upload');
 
+	// Настройки
+	Route::get('/settings.notifications', 'SettingsController@notifications')->name('settings.notifications');
+	Route::post('/settings.notifications.store', 'SettingsController@notificationsStore')->name('settings.notifications.store');
 });
 
 // Маршруты "от работодателя" (E2S)
