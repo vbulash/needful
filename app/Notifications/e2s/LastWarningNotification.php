@@ -3,7 +3,6 @@
 namespace App\Notifications\e2s;
 
 use App\Models\TraineeStatus;
-use Dotenv\Parser\Lines;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Redis;
 
