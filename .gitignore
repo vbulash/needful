@@ -8,6 +8,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/.vscode
 /resources/plugins/ckeditor5/node_modules
 /**/.DS_Store
