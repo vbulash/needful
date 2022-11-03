@@ -18,9 +18,11 @@
     <div class="block-header block-header-default">
         <div>
             <span>Новая история стажировки создается через услугу на <a
-                    href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span><br />
+                    href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span><br/>
             <span><small>В поле &laquo;Практиканты&raquo; отображается общее количество утвержденных практикантов из общего
-                    числа запланированных</small></span>
+                    числа запланированных</small></span><br/><br/>
+			<span>После набора планового количества практикантов не забудьте назначить стажировке статус
+				&laquo;{{ \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::PLANNED->value) }}&raquo;</span>
         </div>
     </div>
     <div class="block-content p-4">

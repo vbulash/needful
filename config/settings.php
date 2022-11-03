@@ -6,8 +6,10 @@ use App\Notifications\e2s\All2DestroyedNotification;
 use App\Notifications\e2s\Asked2AcceptedNotification;
 use App\Notifications\e2s\Asked2CancelledNotification;
 use App\Notifications\e2s\Asked2RejectedNotification;
+use App\Notifications\e2s\CancelWarningNotification;
 use App\Notifications\e2s\EmployerPracticeCreatedNotification;
 use App\Notifications\e2s\EmployerPracticeDestroyedNotification;
+use App\Notifications\e2s\LastWarningNotification;
 use App\Notifications\e2s\New2AskedNotification;
 use App\Notifications\NewEmployer;
 use App\Notifications\NewLearn;
@@ -50,6 +52,8 @@ return [
 		]],
 		['group' => 'События стажировки', 'classes' => [
 			EmployerPracticeCreatedNotification::class => 'Стажировка создана',
+			CancelWarningNotification::class => 'Предварительное уведомление о стажировке',
+			LastWarningNotification::class => 'Последнее напоминание перед началом стажировки',
 			EmployerPracticeDestroyedNotification::class => 'Стажировка отменена (уведомление работодателю)',
 		]],
 		['group' => 'Разное', 'classes' => [

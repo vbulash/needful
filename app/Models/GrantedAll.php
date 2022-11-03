@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Controllers\Auth\RoleName;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 trait GrantedAll
 {
@@ -15,6 +16,8 @@ trait GrantedAll
 	 */
 	public static function all($columns = ['*']): Collection
 	{
+		if (!Auth::check()) return parent::all();
+
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) return parent::all();
 
 		$allowed = auth()->user()->getAllowed(self::class);

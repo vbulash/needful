@@ -46,7 +46,7 @@
             $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
         }
         if ($schools || $employers) {
-            $menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];
+            //$menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];
         }
 
 		if (auth()->user()->can('students.list')) {
@@ -68,6 +68,7 @@
             }
 			if ($admin) {
                 $menu[] = ['title' => 'Уведомления', 'icon' => 'fa fa-gears', 'route' => 'settings.notifications', 'pattern' => 'settings.notifications'];
+				$menu[] = ['title' => 'Письма перед началом стажировки', 'icon' => 'fa fa-calendar', 'route' => 'settings.early', 'pattern' => 'settings.early'];
             }
         }
     @endphp

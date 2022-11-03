@@ -103,6 +103,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Настройки
 	Route::get('/settings.notifications', 'SettingsController@notifications')->name('settings.notifications');
 	Route::post('/settings.notifications.store', 'SettingsController@notificationsStore')->name('settings.notifications.store');
+	Route::get('/settings.early.warnings', 'EarlyWarningsController@warnings')->name('settings.early');
+	Route::put('/settings.early.warnings.store', 'EarlyWarningsController@warningsStore')->name('settings.early.store');
 });
 
 // Маршруты "от работодателя" (E2S)

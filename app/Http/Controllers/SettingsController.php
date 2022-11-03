@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redis;
 class SettingsController extends Controller {
 	public function notifications(Request $request) {
 		$nstates = Redis::get('settings.notifications');
-		return view('settings.index', compact('nstates'));
+		return view('settings.nstates', compact('nstates'));
 	}
 
 	public function notificationsStore(Request $request) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\ProcessTrainings;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,7 +14,8 @@ class MainController extends Controller {
 	 * @return Application|Factory|View
 	 */
 	public function index(): Application|Factory|View {
-		//event(new TaskEvent('Описание задачи...', route('dashboard'), auth()->user(), null));
+		// $temp = new ProcessTrainings;
+		// $temp();
 		return view('main');
 	}
 }
