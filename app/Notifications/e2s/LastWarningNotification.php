@@ -37,7 +37,8 @@ class LastWarningNotification extends CancelWarningNotification {
 			$lines[] = "Пожалуйста, устраните данные проблемы!";
 		} else {
 			foreach ($this->history->students as $student) {
-				if ($student->pivot->status != TraineeStatus::APPROVED->value) continue;
+				if ($student->pivot->status != TraineeStatus::APPROVED->value)
+					continue;
 				$cc[] = $student->user->email;
 			}
 			$lines[] = "Напоминаем контактные данные работодателя:";
@@ -45,6 +46,11 @@ class LastWarningNotification extends CancelWarningNotification {
 			$lines[] = "- **Адрес:** " . $employer->address ?? '';
 			$lines[] = "- **Телефон:** " . $employer->phone ?? '';
 			$lines[] = "- **Электронная почта:** " . $employer->email ?? '';
+
+			$lines[] = 'Последние вопросы по стажировке вы можете задать руководителю стажировки:';
+			$lines[] = '- **Фамилия, имя и отчество**: ' . $this->history->teacher->getTitle();
+			$lines[] = '- **Телефон**: ' . $this->history->teacher->phone;
+			$lines[] = '- **Электронная почта**: ' . $this->history->teacher->email;
 		}
 
 		$message = (new MailMessage)->subject($subject);

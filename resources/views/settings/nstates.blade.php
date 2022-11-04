@@ -16,7 +16,7 @@
 		<form action="{{ route('settings.notifications.store') }}" method="post" enctype="multipart/form-data" id="states-form">
 			@csrf
 			<input type="hidden" value="" name="states" id="states">
-			<button href="" type="submit" class="btn btn-primary">Сохранить</button>
+			<button type="submit" class="btn btn-primary">Сохранить</button>
 			<a class="btn btn-secondary pl-3" id="button-close"
 			   href="{{ route('dashboard') }}"
 			   role="button">Закрыть</a>

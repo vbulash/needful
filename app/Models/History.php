@@ -34,6 +34,10 @@ class History extends Model implements FormTemplate
 			->withTimestamps();
 	}
 
+	public function teacher(): BelongsTo {
+		return $this->belongsTo(Teacher::class);
+	}
+
 	public static function createTemplate(): array
 	{
 		return [];	// Создать запись истории стажировок через CRUD нельзя

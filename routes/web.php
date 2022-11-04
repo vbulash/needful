@@ -129,6 +129,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 	Route::get('/e2s.start_internship.step4.data', 'StartInternship\Step4Controller@getData')->name('e2s.start_internship.step4.data');
 	Route::get('/e2s.start_internship.step4.show/{student}', 'StartInternship\Step4Controller@showStudent')->name('e2s.start_internship.step4.show');
 	Route::post('/e2s.start_internship.step4.select', 'StartInternship\Step4Controller@select')->name('e2s.start_internship.step4.select');
+	// Руководитель практики
+	Route::get('/e2s.start_internship.step4b', 'StartInternship\Step4bController@run')->name('e2s.start_internship.step4b');
+	Route::post('/e2s.start_internship.step4b.select', 'StartInternship\Step4bController@select')->name('e2s.start_internship.step4b.select');
 	// Подтверждение
 	Route::get('/e2s.start_internship.step5', 'StartInternship\Step5Controller@run')->name('e2s.start_internship.step5');
 	Route::get('/e2s.start_internship.step5.create', 'StartInternship\Step5Controller@create')->name('e2s.start_internship.step5.create');

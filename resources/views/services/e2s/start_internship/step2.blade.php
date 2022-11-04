@@ -9,6 +9,7 @@
 			['title' => 'Выбор стажировки', 'active' => true, 'context' => 'internship'],
 			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable'],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null],
+			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],
 		];
 	@endphp

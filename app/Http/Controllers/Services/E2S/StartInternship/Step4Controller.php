@@ -46,16 +46,12 @@ class Step4Controller extends Controller
 	// Выбор
 	public function select(Request $request): RedirectResponse
 	{
-		$ids = json_decode($request->ids);
-		$names = $request->names;
 		$context = session('context');
-		$context['ids'] = $ids;
-		$context['names'] = $names;
-
-		session()->forget('context');
+		$context['ids'] = json_decode($request->ids);
+		$context['names'] = $request->names;
 		session()->put('context', $context);
 
-		return redirect()->route('e2s.start_internship.step5', ['ids' => json_encode($ids)]);
+		return redirect()->route('e2s.start_internship.step4b');
 	}
 
 	// Просмотр карточки стажировки

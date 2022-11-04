@@ -6,8 +6,10 @@ use App\Events\All2DestroyedTaskEvent;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Auth\RoleName;
 use App\Http\Requests\UpdateHistoryRequest;
+use App\Models\Employer;
 use App\Models\History;
 use App\Models\HistoryStatus;
+use App\Models\Teacher;
 use App\Models\TraineeStatus;
 use App\Notifications\e2s\All2DestroyedNotification;
 use App\Notifications\e2s\EmployerPracticeDestroyedNotification;
@@ -19,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 
 class HistoryController extends Controller {
 	/**
@@ -35,6 +38,7 @@ class HistoryController extends Controller {
 			->editColumn('employer', fn($history) => $history->timetable->internship->employer->getTitle())
 			->editColumn('internship', fn($history) => $history->timetable->internship->getTitle())
 			->editColumn('timetable', fn($history) => $history->timetable->getTitle())
+			->editColumn('teacher', fn($history) => $history->teacher ? $history->teacher->getTitle() : '')
 			->editColumn('trainees', fn($history) =>
 				$history->status == HistoryStatus::DESTROYED->value ?
 				'--' :
@@ -160,7 +164,9 @@ EOB,
 	public function edit(int $id, bool $show = false): View|Factory|RedirectResponse|Application {
 		$mode = $show ? config('global.show') : config('global.edit');
 		$history = History::findOrFail($id);
-		return view('histories.edit', compact('history', 'mode'));
+		$teacher = $history->teacher ? $history->teacher->getTitle() : '';
+
+		return view('histories.edit', compact('history', 'mode', 'teacher'));
 	}
 
 	/**

@@ -5,10 +5,11 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
-			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
-			['title' => 'Выбор практикантов', 'active' => false, 'context' => null, 'link' => route('e2s.start_internship.step4', ['sid' => session()->getId()])],
+			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1')],
+			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2')],
+			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3')],
+			['title' => 'Выбор практикантов', 'active' => false, 'context' => null, 'link' => route('e2s.start_internship.step4')],
+			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher', 'link' => route('e2s.start_internship.step4b')],
 			['title' => 'Подтверждение выбора', 'active' => true],
 		];
 	@endphp
@@ -28,6 +29,7 @@
 				['name' => 'employer', 'title' => 'Работодатель'],
 				['name' => 'internship', 'title' => 'Стажировка'],
 				['name' => 'timetable', 'title' => 'График стажировки'],
+				['name' => 'teacher', 'title' => 'Руководитель стажировки'],
 				['name' => 'names', 'title' => 'Выбранные, но пока не подтверждённые практиканты'],
 			];
 		@endphp

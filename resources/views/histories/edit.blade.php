@@ -38,6 +38,7 @@
 			['name' => 'employer', 'title' => 'Работодатель', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->employer->getTitle(), 'disabled' => true],
 			['name' => 'internship', 'title' => 'Стажировка', 'required' => false, 'type' => 'text', 'value' => $history->timetable->internship->getTitle(), 'disabled' => true],
 			['name' => 'timetable', 'title' => 'График стажировки', 'required' => false, 'type' => 'text', 'value' => $history->timetable->getTitle(), 'disabled' => true],
+			['name' => 'teacher', 'title' => 'Руководитель практики', 'required' => false, 'type' => 'text', 'value' => $teacher, 'disabled' => true],
 			['name' => 'trainees', 'title' => 'Количество практикантов (утверждены / запланировано)', 'required' => false, 'type' => 'text',
 				'value' => $history->students()->wherePivot('status', \App\Models\TraineeStatus::APPROVED->value)->count() . ' / ' . $history->timetable->planned, 'disabled' => true],
 			['name' => 'status', 'title' => 'Статус стажировки', 'required' => true, 'type' => 'select', 'value' => $history->status, 'options' => [

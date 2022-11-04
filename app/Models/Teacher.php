@@ -5,40 +5,44 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @method static findOrFail(int $id)
  */
-class Teacher extends Model implements FormTemplate
-{
-    use HasFactory, HasTitle, GrantedAll;
+class Teacher extends Model implements FormTemplate {
+	use HasFactory, HasTitle, GrantedAll;
 
 	protected $fillable = [
-		'name',		// ФИО преподавателя
-		'position',	// Должность преподавателя
-		'phone',	// Телефон преподавателя
-		'email',	// Электронная почта преподавателя
+		'name',
+		// ФИО преподавателя
+		'position',
+		// Должность преподавателя
+		'phone',
+		// Телефон преподавателя
+		'email', // Электронная почта преподавателя
+
 	];
 
-	public function job(): MorphTo
-	{
+	public function job(): MorphTo {
 		return $this->morphTo();
 	}
 
-	public function learns(): BelongsToMany
-	{
+	public function learns(): BelongsToMany {
 		return $this->belongsToMany(Learn::class, 'teacher_learn')
-			->withTimestamps();
+		->withTimestamps();
 	}
 
-	public function getTitle(): string
-	{
+	public function histories(): HasMany {
+		return $this->hasMany(History::class);
+	}
+
+	public function getTitle(): string {
 		return $this->name;
 	}
 
-	public static function createTemplate(): array
-	{
+	public static function createTemplate(): array {
 		return [
 			'id' => 'teacher-create',
 			'name' => 'teacher-create',
@@ -47,8 +51,7 @@ class Teacher extends Model implements FormTemplate
 		];
 	}
 
-	public function editTemplate(): array
-	{
+	public function editTemplate(): array {
 		return [
 			'id' => 'teacher-edit',
 			'name' => 'teacher-edit',

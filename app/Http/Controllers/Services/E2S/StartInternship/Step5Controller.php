@@ -22,31 +22,33 @@ class Step5Controller extends Controller {
 	//
 	public function run(Request $request): Factory|View|Application {
 		$context = session('context');
-		$ids = $request->ids;
+		$ids = json_encode($context['ids']);
 		return view('services.e2s.start_internship.step5', compact('context', 'ids'));
 	}
 
 	// Создание
 	public function create(Request $request): RedirectResponse {
 		$context = session('context');
-		$ids = $request->ids;
+		$ids = $context['ids'];
 
 		$history = new History();
 		$history->timetable()->associate($context['timetable']->getKey());
 		$history->status = HistoryStatus::NEW;
+		$history->teacher()->associate($context['teacher']->getKey());
 		$history->save();
 		$history->students()
-			->syncWithPivotValues(json_decode($ids), ['status' => TraineeStatus::NEW ]);
+			->syncWithPivotValues($ids, ['status' => TraineeStatus::NEW ]);
 
-		$history->timetable->internship->employer->user->notify(new EmployerPracticeCreatedNotification($history));
+		$employer = $history->timetable->internship->employer;
+		$employer->user->notify(new EmployerPracticeCreatedNotification($history));
 		event(new ToastEvent('info', '', 'Создана стажировка &laquo;' . $history->getTitle() . '&raquo;'));
 
-		auth()->user()->allow($history);
+		$employer->user->allow($history);
 
 		$id = $history->getKey();
 		//session()->forget('context');
 
-		session()->put('success', "Стажировка № {$id} запланирована");
+		session()->put('success', "Стажировка № {$id} создана");
 		return redirect()->route('history.show', ['history' => $id]);
 	}
 }
