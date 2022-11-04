@@ -42,7 +42,7 @@ return [
 			UpdateStudent::class => 'Обновление учащегося',
 			UpdateTeacher::class => 'Обновление руководителя практики',
 		]],
-		['group' => 'Изменения состояний приглашения на практику', 'classes' => [
+		['group' => 'Изменения статуса кандидатов / практикантов', 'classes' => [
 			New2AskedNotification::class => 'Новое приглашение -> Кандидат интересен',
 			Asked2AcceptedNotification::class => 'Кандидат интересен -> Кандидат подтвердил',
 			Asked2RejectedNotification::class => 'Кандидат интересен -> Кандидат отказался',
