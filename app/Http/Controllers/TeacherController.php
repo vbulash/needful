@@ -100,6 +100,8 @@ class TeacherController extends Controller {
 		$teacher = new Teacher();
 		$teacher->name = $request->name;
 		$teacher->position = $request->position;
+		$teacher->phone = $request->phone;
+		$teacher->email = $request->email;
 		if ($request->has('in_school')) { // Руководитель практики работает в учебном заведении
 			$school = School::findOrFail($request->school);
 			$teacher->job()->associate($school);
@@ -154,14 +156,18 @@ class TeacherController extends Controller {
 		$teacher = Teacher::findOrFail($id);
 		$teacher->name = $request->name;
 		$teacher->position = $request->position;
+		$teacher->phone = $request->phone;
+		$teacher->email = $request->email;
 		if ($request->has('in_school')) { // Руководитель практики работает в учебном заведении
 			$school = School::findOrFail($request->school);
 			$teacher->job()->associate($school);
+			$school->user->allow($teacher);
 		} else { // Руководитель практики работает у работодателя
 			$employer = Employer::findOrFail($request->employer);
 			$teacher->job()->associate($employer);
+			$employer->user->allow($teacher);
 		}
-			auth()->user()->allow($teacher);
+		auth()->user()->allow($teacher);
 		$teacher->update();
 
 		// О создании руководителя практики уведомить пользователя-владельца учебного заведения или работодателя
@@ -187,7 +193,8 @@ class TeacherController extends Controller {
 		$teacher = Teacher::findOrFail($id);
 		$name = $teacher->getTitle();
 
-		auth()->user()->allow($teacher);
+		auth()->user()->disallow($teacher);
+		// TODO Убрать права у пользователя учебного заведения или школы - в зависимости от типа $teacher->job()
 
 		$teacher->delete();
 

@@ -17,6 +17,8 @@ class Teacher extends Model implements FormTemplate
 	protected $fillable = [
 		'name',		// ФИО преподавателя
 		'position',	// Должность преподавателя
+		'phone',	// Телефон преподавателя
+		'email',	// Электронная почта преподавателя
 	];
 
 	public function job(): MorphTo

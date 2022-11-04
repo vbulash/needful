@@ -30,6 +30,8 @@
 						<th>ФИО руководителя практики</th>
 						<th>Руководитель практики работает в</th>
 						<th>Должность</th>
+						<th>Телефон</th>
+						<th>Электронная почта</th>
 						<th>Действия</th>
 					</tr>
 					</thead>
@@ -89,7 +91,9 @@
 						{data: 'id', name: 'id', responsivePriority: 1},
 						{data: 'name', name: 'name', responsivePriority: 1},
 						{data: 'worksin', name: 'worksin', responsivePriority: 2},
-						{data: 'position', name: 'position', responsivePriority: 2},
+						{data: 'position', name: 'position', responsivePriority: 3},
+						{data: 'phone', name: 'phone', responsivePriority: 3},
+						{data: 'email', name: 'email', responsivePriority: 3},
 						{
 							data: 'action',
 							name: 'action',

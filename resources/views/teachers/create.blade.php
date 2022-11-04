@@ -29,6 +29,8 @@
 			['name' => 'school', 'title' => 'Работает в', 'required' => false, 'type' => 'select', 'options' => $schools, 'placeholder' => 'Выберите учебное заведение'],
 			['name' => 'employer', 'title' => 'Работает в', 'required' => false, 'type' => 'select', 'options' => $employers, 'placeholder' => 'Выберите работодателя'],
 			['name' => 'position', 'title' => 'Должность руководителя практики', 'required' => true, 'type' => 'text'],
+			['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text'],
+			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'email'],
 		];
 	@endphp
 @endsection

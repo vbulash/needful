@@ -26,6 +26,8 @@ class StoreTeacherRequest extends FormRequest
         return [
             'name' => 'required',
 			'position' => 'required',
+			'phone' => 'required',
+			'email' => ['required', 'email'],
         ];
     }
 
@@ -34,6 +36,8 @@ class StoreTeacherRequest extends FormRequest
 		return [
 			'name' => 'ФИО руководителя практики',
 			'position' => 'Должность руководителя практики',
+			'phone' => 'Телефон',
+			'email' => 'Электронная почта',
 		];
 	}
 }
