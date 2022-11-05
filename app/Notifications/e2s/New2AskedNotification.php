@@ -47,7 +47,7 @@ class New2AskedNotification extends Notification {
 		$lines[] = "Вас пригласили для прохождения стажировки. Информация по данной стажировке:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 
-		$lines[] = 'Все вопросы по стажировке вы можете задать руководителю стажировки:';
+		$lines[] = 'Все вопросы по стажировке вы можете задать руководителю практики:';
 		$lines[] = '- **Фамилия, имя и отчество**: ' . $this->history->teacher->getTitle();
 		$lines[] = '- **Телефон**: ' . $this->history->teacher->phone;
 		$lines[] = '- **Электронная почта**: ' . $this->history->teacher->email;

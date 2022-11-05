@@ -47,7 +47,7 @@ class LastWarningNotification extends CancelWarningNotification {
 			$lines[] = "- **Телефон:** " . $employer->phone ?? '';
 			$lines[] = "- **Электронная почта:** " . $employer->email ?? '';
 
-			$lines[] = 'Последние вопросы по стажировке вы можете задать руководителю стажировки:';
+			$lines[] = 'Последние вопросы по стажировке вы можете задать руководителю практики:';
 			$lines[] = '- **Фамилия, имя и отчество**: ' . $this->history->teacher->getTitle();
 			$lines[] = '- **Телефон**: ' . $this->history->teacher->phone;
 			$lines[] = '- **Электронная почта**: ' . $this->history->teacher->email;
