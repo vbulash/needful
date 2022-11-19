@@ -1,13 +1,13 @@
 @extends('services.service')
 
-@section('service')Работодатель. Создать стажировку@endsection
+@section('service')Работодатель. Создать практику@endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => true, 'context' => 'employer'],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship'],
-			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Выбор практики', 'active' => false, 'context' => 'internship'],
+			['title' => 'Выбор графика практики', 'active' => false, 'context' => 'timetable'],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],

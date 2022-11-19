@@ -49,14 +49,14 @@ return [
 			Asked2CancelledNotification::class => 'Кандидат интересен -> Приглашение отменено',
 			Accepted2ApprovedNotification::class => 'Кандидат подтвердил -> Кандидат утверждён',
 			Accepted2CancelledNotification::class => 'Кандидат подтвердил -> Кандидат отменён',
-			All2DestroyedNotification::class => 'Стажировка отменена (уведомление кандидатам)',
+			All2DestroyedNotification::class => 'Практика отменена (уведомление кандидатам)',
 		]],
-		['group' => 'События стажировки', 'classes' => [
-			EmployerPracticeCreatedNotification::class => 'Стажировка создана',
-			CancelWarningNotification::class => 'Предварительное уведомление о стажировке',
-			LastWarningNotification::class => 'Последнее напоминание перед началом стажировки',
-			EmployerPracticeStartedNotification::class => 'Стажировка начата',
-			EmployerPracticeDestroyedNotification::class => 'Стажировка отменена (уведомление работодателю)',
+		['group' => 'События практики', 'classes' => [
+			EmployerPracticeCreatedNotification::class => 'Практика создана',
+			CancelWarningNotification::class => 'Предварительное уведомление о практике',
+			LastWarningNotification::class => 'Последнее напоминание перед началом практики',
+			EmployerPracticeStartedNotification::class => 'Практика начата',
+			EmployerPracticeDestroyedNotification::class => 'Практика отменена (уведомление работодателю)',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',

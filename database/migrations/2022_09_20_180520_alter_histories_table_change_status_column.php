@@ -30,7 +30,7 @@ return new class extends Migration
 		Schema::table('histories', function (Blueprint $table) {
 			$table->unsignedBigInteger('student_id')->comment('Связанный практикант');
 			$table->foreign('student_id')->references('id')->on('students')->cascadeOnDelete();
-			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
+			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус практики');
 		});
     }
 };

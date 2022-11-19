@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-		// Графики стажировки
+		// Графики практики
         Schema::create('timetables', function (Blueprint $table) {
             $table->id();
 			$table->date('start')->comment('Начало');
 			$table->date('end')->comment('Завершение');
-			$table->string('name')->comment('Наименование или тема графика стажировки')->nullable();
+			$table->string('name')->comment('Наименование или тема графика практики')->nullable();
 			//
-			$table->unsignedBigInteger('internship_id')->comment('Связанная стажировка');
+			$table->unsignedBigInteger('internship_id')->comment('Связанная практика');
 			$table->foreign('internship_id')->references('id')->on('internships')->cascadeOnDelete();
 			//
             $table->timestamps();

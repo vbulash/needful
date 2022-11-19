@@ -43,7 +43,7 @@ class PermissionSeeder extends Seeder {
 			'schools.edit',
 			'schools.show',
 			'schools.delete',
-			// Стажировки
+			// Практики
 			'histories.list',
 			'histories.create',
 			'histories.edit',

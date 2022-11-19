@@ -10,10 +10,10 @@ class HasInternship
 	{
 		$lines = [];
 		$lines[] = "- **Работодатель**: \"{$history->timetable->internship->employer->getTitle()}\"";
-		$lines[] = "- **Стажировка**: \"{$history->timetable->internship->getTitle()}\"";
+		$lines[] = "- **Практика**: \"{$history->timetable->internship->getTitle()}\"";
 		if (isset($history->timetable->internship->short))
-			$lines[] = "- **Краткая информация по стажировке**: \"{$history->timetable->internship->short}\"";
-		$lines[] = "- **График стажировки**: {$history->timetable->getTitle()}";
+			$lines[] = "- **Краткая информация по практике**: \"{$history->timetable->internship->short}\"";
+		$lines[] = "- **График практики**: {$history->timetable->getTitle()}";
 		return $lines;
 	}
 }

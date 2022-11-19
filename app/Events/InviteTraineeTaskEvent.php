@@ -21,21 +21,21 @@ class InviteTraineeTaskEvent extends TaskEvent
 <h5>Уважаемый (уважаемая) %s </h5>
 <p>Вас пригласили для прохождения практики. Информация по данной практике:</p>
 <p>Работодатель: <strong>%s</strong><br/>
-Стажировка: <strong>%s</strong><br/>
+Практика: <strong>%s</strong><br/>
 %s
-График стажировки: <strong>%s</strong></p>
-<p>Просим принять решение по стажировке:</p>
+График практики: <strong>%s</strong></p>
+<p>Просим принять решение по практике:</p>
 <div class='d-flex mb-5'>
 	<button class='btn btn-primary me-4' type='event' data-event-type=%d data-history=%d data-student=%d>
 		Да, принять участие</button>
 	<button class='btn btn-secondary' type='event' data-event-type=%d data-history=%d data-student=%d>
 		Нет, не принимать участие</button>
 </div>
-<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение стажировки автоматически отменится через 10 дней.</p>
+<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение практики автоматически отменится через 10 дней.</p>
 <p>Более подробно вы сможете изучить данную информацию по ссылке ниже &darr;</p>
 EOD,
 				$student->getTitle(), $history->timetable->internship->employer->getTitle(), $history->timetable->internship->getTitle(),
-				(isset($history->timetable->internship->short) ? 'Краткая информация по стажировке:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
+				(isset($history->timetable->internship->short) ? 'Краткая информация по практике:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
 				$history->timetable->getTitle(),
 				EventType::TRAINEE_ACCEPTED->value, $history->getKey(), $student->getKey(),
 				EventType::TRAINEE_REJECTED->value, $history->getKey(), $student->getKey(),

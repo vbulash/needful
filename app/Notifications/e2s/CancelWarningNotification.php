@@ -52,14 +52,14 @@ class CancelWarningNotification extends Notification {
 		$temp = [];
 
 		if ($this->history->status == HistoryStatus::NEW ->value)
-			$temp[] = sprintf("- **Стажировка должна быть в статусе \"%s\"***, сейчас она в статусе \"%s\"",
+			$temp[] = sprintf("- **Практика должна быть в статусе \"%s\"***, сейчас она в статусе \"%s\"",
 				HistoryStatus::getName(HistoryStatus::PLANNED->value), HistoryStatus::getName(HistoryStatus::NEW ->value));
 
 		$approved = $this->history->students()->wherePivot('status', TraineeStatus::APPROVED->value)->count();
 		$planned = $this->history->timetable->planned;
 		if ($approved != $planned)
 			$temp[] = sprintf(
-				"- **Количество утверждённых (%d) практикантов не равно плановому количеству практикантов, необходимых по графику стажировки (%d).** Можно исправить плановое количество в графике стажировки (привести план к факту) или добавить / удалить + утвердить практикантов в интерфейсе правки участников стажировки (привести факт к плану)",
+				"- **Количество утверждённых (%d) практикантов не равно плановому количеству практикантов, необходимых по графику практики (%d).** Можно исправить плановое количество в графике практики (привести план к факту) или добавить / удалить + утвердить практикантов в интерфейсе правки участников практики (привести факт к плану)",
 				$approved, $planned);
 
 		return count($temp) == 0 ? null : $temp;
@@ -82,18 +82,18 @@ class CancelWarningNotification extends Notification {
 			];
 			Redis::set('settings.early', json_encode($early));
 		}
-		$subject = sprintf("Стажировка начинается через %d %s", $early->cancel, $this->daysLetter($early->cancel));
+		$subject = sprintf("Практика начинается через %d %s", $early->cancel, $this->daysLetter($early->cancel));
 		$lines = [];
-		$lines[] = sprintf("Через %d %s должна начаться стажировка со следующими параметрами:", $early->cancel, $this->daysLetter($early->cancel));
+		$lines[] = sprintf("Через %d %s должна начаться практика со следующими параметрами:", $early->cancel, $this->daysLetter($early->cancel));
 		;
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 		$problems = $this->checkProblems();
 		if (isset($problems)) {
-			$lines[] = "Стажировка не сможет начаться автоматически по следующим причинам:";
+			$lines[] = "Практика не сможет начаться автоматически по следующим причинам:";
 			$lines = array_merge($lines, $problems);
 			$lines[] = "Пожалуйста, устраните данные проблемы!";
 		} else
-			$lines[] = "Сейчас последний момент, когда при необходимости можно отменить стажировку полностью без репутационных рисков";
+			$lines[] = "Сейчас последний момент, когда при необходимости можно отменить практику полностью без репутационных рисков";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

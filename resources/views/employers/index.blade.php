@@ -10,12 +10,12 @@
 @section('steps')
 	@php
 		if (isset(session('context')['chain']))
-			$title = 'График стажировки';
+			$title = 'График практики';
 		else
-			$title = 'График стажировки или Специальности для стажировки';
+			$title = 'График практики или Специальности для практики';
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer'],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship'],
 			['title' => $title, 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp

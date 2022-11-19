@@ -45,7 +45,7 @@ class ProcessTrainings {
 					$user->notify(new EmployerPracticeStartedNotification($history));
 			}
 		} else {
-			Log::info(sprintf("Контроль стажировок: нет стажировок в статусе \"%s\" или \"%s\"",
+			Log::info(sprintf("Контроль практик: нет практик в статусе \"%s\" или \"%s\"",
 				HistoryStatus::getName(HistoryStatus::NEW ->value), HistoryStatus::getName(HistoryStatus::PLANNED->value)));
 		}
 	}

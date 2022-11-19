@@ -25,14 +25,14 @@ class LastWarningNotification extends CancelWarningNotification {
 			];
 			Redis::set('settings.early', json_encode($early));
 		}
-		$subject = sprintf("Стажировка начинается через %d %s", $early->last, $this->daysLetter($early->last));
+		$subject = sprintf("Практика начинается через %d %s", $early->last, $this->daysLetter($early->last));
 		$cc = [];
 		$lines = [];
-		$lines[] = sprintf("Напоминаем, что через %d %s должна начаться стажировка со следующими параметрами:", $early->last, $this->daysLetter($early->last));
+		$lines[] = sprintf("Напоминаем, что через %d %s должна начаться практика со следующими параметрами:", $early->last, $this->daysLetter($early->last));
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 		$problems = $this->checkProblems();
 		if (isset($problems)) {
-			$lines[] = "Стажировка не сможет начаться автоматически по следующим причинам:";
+			$lines[] = "Практика не сможет начаться автоматически по следующим причинам:";
 			$lines = array_merge($lines, $problems);
 			$lines[] = "Пожалуйста, устраните данные проблемы!";
 		} else {
@@ -47,7 +47,7 @@ class LastWarningNotification extends CancelWarningNotification {
 			$lines[] = "- **Телефон:** " . $employer->phone ?? '';
 			$lines[] = "- **Электронная почта:** " . $employer->email ?? '';
 
-			$lines[] = 'Последние вопросы по стажировке вы можете задать руководителю практики:';
+			$lines[] = 'Последние вопросы по практике вы можете задать руководителю практики:';
 			$lines[] = '- **Фамилия, имя и отчество**: ' . $this->history->teacher->getTitle();
 			$lines[] = '- **Телефон**: ' . $this->history->teacher->phone;
 			$lines[] = '- **Электронная почта**: ' . $this->history->teacher->email;

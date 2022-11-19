@@ -8,8 +8,8 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'Специальности для стажировки', 'active' => true, 'context' => 'especialty'],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'Специальности для практики', 'active' => true, 'context' => 'especialty'],
 		];
 	@endphp
 @endsection
@@ -20,9 +20,9 @@
 			<a href="{{ route('especialties.create', ['sid' => session()->getId()]) }}"
 			   class="btn btn-primary mt-3 mb-3">Добавить специальность</a>
 
-			<p>Вы также можете перейти на графики стажировки по ссылке
+			<p>Вы также можете перейти на графики практики по ссылке
 				<a href="{{ route('timetables.index', ['sid' => session()->getId()]) }}">Графики
-					стажировки</a></p>
+					практики</a></p>
 		</div>
 	</div>
 	<div class="block-content p-4">
@@ -41,7 +41,7 @@
 				</table>
 			</div>
 		@else
-			<p>Список специальностей по стажировке пока пуст...</p>
+			<p>Список специальностей по практике пока пуст...</p>
 		@endif
 	</div>
 @endsection

@@ -283,6 +283,6 @@ EOS,
 		$student->user->allow($history);
 		$student->user->allow($history->timetable->internship->employer);
 
-		event(new ToastEvent('info', '', "Переслано предложение участия в стажировке учащемуся &laquo;{$student->getTitle()}&raquo;"));
+		event(new ToastEvent('info', '', "Переслано предложение участия в практике учащемуся &laquo;{$student->getTitle()}&raquo;"));
 	}
 }

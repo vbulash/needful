@@ -48,9 +48,9 @@ class Asked2RejectedNotification extends Notification
 	{
 		$subject = 'Кандидат отказался от участия в практике';
 		$lines = [];
-		$lines[] = sprintf("Кандидат \"%s\" принял решение не участвовать в предлагаемой ему стажировке.", $this->student->getTitle());
+		$lines[] = sprintf("Кандидат \"%s\" принял решение не участвовать в предлагаемой ему практике.", $this->student->getTitle());
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "Необходимо отменить приглашение кандидата к участию в стажировке.";
+		$lines[] = "Необходимо отменить приглашение кандидата к участию в практике.";
 		$lines[] = "Через 10 дней отказ кандидата отменит приглашение автоматически";
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

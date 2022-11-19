@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-		// Стажировка
+		// Практика
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
-			$table->string('iname')->comment('Название стажировки');
-			$table->enum('itype', ['Открытая стажировка', 'Закрытая стажировка'])->comment('Тип стажировки');
-			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
-			$table->text('program')->comment('Программа стажировки');
+			$table->string('iname')->comment('Название практики');
+			$table->enum('itype', ['Открытая практика', 'Закрытая практика'])->comment('Тип практики');
+			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус практики');
+			$table->text('program')->comment('Программа практики');
 			//
 			$table->unsignedBigInteger('employer_id')->comment('Связанный работодатель');
 			$table->foreign('employer_id')->references('id')->on('employers')->cascadeOnDelete();

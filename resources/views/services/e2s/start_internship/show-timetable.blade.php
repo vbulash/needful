@@ -1,13 +1,13 @@
 @extends('services.service')
 
-@section('service')Работодатель. Создать стажировку@endsection
+@section('service')Работодатель. Создать практику@endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
-			['title' => 'Выбор графика стажировки', 'active' => true, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
+			['title' => 'Выбор практики', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
+			['title' => 'Выбор графика практики', 'active' => true, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],
@@ -17,7 +17,7 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<h3 class="block-title fw-semibold">Просмотр графика стажировки для стажировки &laquo;{{ $timetable->internship->iname }}&raquo;
+		<h3 class="block-title fw-semibold">Просмотр графика практики для практики &laquo;{{ $timetable->internship->iname }}&raquo;
 			у работодателя &laquo;{{ $timetable->internship->employer->name }}&raquo;</h3>
 	</div>
 	<div class="block-content p-4">
@@ -25,7 +25,7 @@
 			$fields = [
 				['name' => 'start', 'title' => 'Начало', 'type' => 'date', 'value' => $timetable->start->format('d.m.Y')],
 				['name' => 'end', 'title' => 'Завершение', 'type' => 'date', 'value' => $timetable->end->format('d.m.Y')],
-				['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'type' => 'text', 'value' => $timetable->name],
+				['name' => 'name', 'title' => 'Наименование записи графика практики', 'type' => 'text', 'value' => $timetable->name],
 			];
 		@endphp
 

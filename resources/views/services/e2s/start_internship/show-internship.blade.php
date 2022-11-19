@@ -1,6 +1,6 @@
 @extends('services.service')
 
-@section('service')Работодатель. Создать стажировку@endsection
+@section('service')Работодатель. Создать практику@endsection
 
 @section('body-params')
 	data-editor="DecoupledDocumentEditor" data-collaboration="false"
@@ -10,8 +10,8 @@
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => true, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
-			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Выбор практики', 'active' => true, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
+			['title' => 'Выбор графика практики', 'active' => false, 'context' => 'timetable'],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],
@@ -21,21 +21,21 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<h3 class="block-title fw-semibold">Просмотр стажировки &laquo;{{ $internship->iname }}&raquo; у работодателя
+		<h3 class="block-title fw-semibold">Просмотр практики &laquo;{{ $internship->iname }}&raquo; у работодателя
 			&laquo;{{ $internship->employer->name }}&raquo;</h3>
 	</div>
 	<div class="block-content p-4">
 		@php
 			$fields = [
-				['name' => 'iname', 'title' => 'Наименование стажировки', 'type' => 'text', 'value' => $internship->iname],
-				['name' => 'itype', 'title' => 'Тип стажировки', 'type' => 'text', 'value' => $internship->itype, 'cast' => function($key) {
+				['name' => 'iname', 'title' => 'Наименование практики', 'type' => 'text', 'value' => $internship->iname],
+				['name' => 'itype', 'title' => 'Тип практики', 'type' => 'text', 'value' => $internship->itype, 'cast' => function($key) {
     				$options = [
-                        'Открытая стажировка' => 'Открытая стажировка (практикант может записаться самостоятельно)',
-						'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
+                        'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
+						'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
 					];
                     return $options[$key];
 				}],
-				['name' => 'status', 'title' => 'Статус стажировки', 'type' => 'text', 'value' => $internship->status, 'cast' => function($key) {
+				['name' => 'status', 'title' => 'Статус практики', 'type' => 'text', 'value' => $internship->status, 'cast' => function($key) {
     				$options = [
 						'Планируется' => 'Планируется (нет практикантов)',
 						'Выполняется' => 'Выполняется (есть назначенные практиканты)',
@@ -43,7 +43,7 @@
 					];
                     return $options[$key];
 				}],
-				['name' => 'program', 'title' => 'Программа стажировки', 'type' => 'editor', 'value' => $internship->program],
+				['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'value' => $internship->program],
 			];
 		@endphp
 

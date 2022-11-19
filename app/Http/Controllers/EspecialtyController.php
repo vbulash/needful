@@ -137,7 +137,7 @@ class EspecialtyController extends Controller
 
 		session()->put('success', $created ?
 			"Специальность \"{$name}\" добавлена" :
-			"Список специальностей по стажировке работодателя изменён"
+			"Список специальностей по практике работодателя изменён"
 		);
 
 		return redirect()->route('especialties.index', ['sid' => session()->getId()]);
@@ -215,7 +215,7 @@ class EspecialtyController extends Controller
 		$especialty->internship()->associate($internship);
 		$especialty->count = $request->count;
 		$especialty->update();
-		$out[] = "Список специальностей стажировки работодателя обновлён";
+		$out[] = "Список специальностей практики работодателя обновлён";
 		session()->put('success', implode('<br/>', $out));
 
 		return redirect()->route('especialties.index', ['sid' => session()->getId()]);
@@ -238,7 +238,7 @@ class EspecialtyController extends Controller
 		$name = $especialty->specialty->name;
 		$especialty->delete();
 
-		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей стажировки работодателя"));
+		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей практики работодателя"));
 		return true;
 	}
 }

@@ -20,16 +20,16 @@ class All2DestroyedTaskEvent extends TaskEvent
 			title: 'Практика отменена',
 			description: sprintf(<<<EOD
 <h5>Уважаемый (уважаемая) %s </h5>
-<p>С сожалением сообщаем, что стажировка:</p>
+<p>С сожалением сообщаем, что практика:</p>
 <p>Работодатель: <strong>%s</strong><br/>
-Стажировка: <strong>%s</strong><br/>
+Практика: <strong>%s</strong><br/>
 %s
-График стажировки: <strong>%s</strong></p>
+График практики: <strong>%s</strong></p>
 <p>отменена и все приглашения кандидатам в практиканты отменены.</p>
-<p>Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других стажировках</p>
+<p>Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других практиках</p>
 EOD,
 				$student->getTitle(), $history->timetable->internship->employer->getTitle(), $history->timetable->internship->getTitle(),
-				(isset($history->timetable->internship->short) ? 'Краткая информация по стажировке:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
+				(isset($history->timetable->internship->short) ? 'Краткая информация по практике:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
 				$history->timetable->getTitle(),
 			),
 			route: null,

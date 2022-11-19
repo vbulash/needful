@@ -21,7 +21,7 @@ return new class extends Migration
 			//
 			$table->integer('count')->comment('Количество позиций по специальности');
 			//
-			$table->unsignedBigInteger('internship_id')->comment('Связанная стажировка');
+			$table->unsignedBigInteger('internship_id')->comment('Связанная практика');
 			$table->foreign('internship_id')->references('id')->on('internships')->cascadeOnDelete();
             $table->timestamps();
         });

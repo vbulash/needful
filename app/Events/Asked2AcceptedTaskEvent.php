@@ -19,21 +19,21 @@ class Asked2AcceptedTaskEvent extends TaskEvent
 			description: sprintf(<<<EOD
 <h5>Кандидат &laquo;%s&raquo; подтвердил участие в практике:</h5>
 <p>Работодатель: <strong>%s</strong><br/>
-Стажировка: <strong>%s</strong><br/>
+Практика: <strong>%s</strong><br/>
 %s
-График стажировки: <strong>%s</strong></p>
-<p>Необходимо принять решение об утверждении или неутверждении данного кандидата в окончательном составе участников стажировки:</p>
+График практики: <strong>%s</strong></p>
+<p>Необходимо принять решение об утверждении или неутверждении данного кандидата в окончательном составе участников практики:</p>
 <div class='d-flex mb-5'>
 	<button class='btn btn-primary me-4' type='event' data-event-type=%d data-history=%d data-student=%d>
 		Да, утвердить кандидата</button>
 	<button class='btn btn-secondary' type='event' data-event-type=%d data-history=%d data-student=%d>
 		Нет, отказаться от кандидата</button>
 </div>
-<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение стажировки автоматически отменится через 10 дней.</p>
+<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение практики автоматически отменится через 10 дней.</p>
 <p>Более подробно вы сможете изучить данную информацию по ссылке ниже &darr;</p>
 EOD,
 				$student->getTitle(), $history->timetable->internship->employer->getTitle(), $history->timetable->internship->getTitle(),
-				(isset($history->timetable->internship->short) ? 'Краткая информация по стажировке:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
+				(isset($history->timetable->internship->short) ? 'Краткая информация по практике:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
 				$history->timetable->getTitle(),
 				EventType::APPROVE_TRAINEE->value, $history->getKey(), $student->getKey(),
 				EventType::CANCEL_TRAINEE->value, $history->getKey(), $student->getKey(),

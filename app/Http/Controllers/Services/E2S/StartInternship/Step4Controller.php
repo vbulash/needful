@@ -54,7 +54,7 @@ class Step4Controller extends Controller
 		return redirect()->route('e2s.start_internship.step4b');
 	}
 
-	// Просмотр карточки стажировки
+	// Просмотр карточки практики
 	public function showStudent(int $id): Factory|View|Application
 	{
 		$student = Student::findOrFail($id);

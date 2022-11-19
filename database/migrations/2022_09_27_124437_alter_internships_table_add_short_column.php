@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
 		Schema::table('internships', function (Blueprint $table) {
-			$table->text('short')->nullable()->comment('Краткое содержание программы стажировки');
+			$table->text('short')->nullable()->comment('Краткое содержание программы практики');
 		});
     }
 

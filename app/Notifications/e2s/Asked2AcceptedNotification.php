@@ -47,9 +47,9 @@ class Asked2AcceptedNotification extends Notification
 	{
 		$subject = 'Кандидат подтвердил участие в практике';
 		$lines = [];
-		$lines[] = sprintf("Кандидат \"%s\" принял решение участвовать в предлагаемой ему стажировке.", $this->student->getTitle());
+		$lines[] = sprintf("Кандидат \"%s\" принял решение участвовать в предлагаемой ему практике.", $this->student->getTitle());
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "Необходимо принять решение об утверждении или неутверждении данного кандидата в окончательном составе участников стажировки";
+		$lines[] = "Необходимо принять решение об утверждении или неутверждении данного кандидата в окончательном составе участников практики";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

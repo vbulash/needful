@@ -183,7 +183,7 @@ EOB,
 
 		auth()->user()->allow($history);
 
-		session()->put('success', "Запись истории стажировки № " . $history->getKey() . " обновлена");
+		session()->put('success', "Запись истории практики № " . $history->getKey() . " обновлена");
 		return redirect()->route('history.index', ['sid' => session()->getId()]);
 	}
 
@@ -204,7 +204,7 @@ EOB,
 		auth()->user()->disallow($history);
 		$history->delete();
 
-		event(new ToastEvent('success', '', "Запись истории стажировок № {$id} удалена"));
+		event(new ToastEvent('success', '', "Запись истории практик № {$id} удалена"));
 		return true;
 	}
 
@@ -239,6 +239,6 @@ EOB,
 			}
 		}
 		$history->timetable->internship->employer->user->notify(new EmployerPracticeDestroyedNotification($history));
-		event(new ToastEvent('success', '', 'Стажировка № ' . $history->getKey() . ' отменена'));
+		event(new ToastEvent('success', '', 'Практика № ' . $history->getKey() . ' отменена'));
 	}
 }

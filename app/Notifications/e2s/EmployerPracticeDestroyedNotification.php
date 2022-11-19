@@ -42,9 +42,9 @@ class EmployerPracticeDestroyedNotification extends Notification
 	 */
 	public function toMail(mixed $notifiable): MailMessage
 	{
-		$subject = 'Стажировка отменена';
+		$subject = 'Практика отменена';
 		$lines = [];
-		$lines[] = "Оменена стажировка со следующими параметрами:";
+		$lines[] = "Оменена практика со следующими параметрами:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 
 		$message = (new MailMessage)->subject($subject);

@@ -23,7 +23,7 @@ enum TraineeStatus: int
 			self::REJECTED->value => 'Кандидат отказался',
 			self::APPROVED->value => 'Кандидат утвержден',
 			self::CANCELLED->value => 'Приглашение отменено',
-			self::DESTROYED->value => 'Стажировка отменена',
+			self::DESTROYED->value => 'Практика отменена',
 			default => 'Неизвестный статус запроса практиканту'
 		};
 	}

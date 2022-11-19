@@ -119,7 +119,7 @@ class TimetableController extends Controller
 		$timetable->save();
 		$name = $timetable->name;
 
-		session()->put('success', "Запись графика стажировки " . ($name ? "\"{$name}\" " : "") . "создана");
+		session()->put('success', "Запись графика практик " . ($name ? "\"{$name}\" " : "") . "создана");
 		return redirect()->route('timetables.index', ['internship' => $timetable->internship->getKey(), 'sid' => session()->getId()]);
 	}
 
@@ -163,8 +163,8 @@ class TimetableController extends Controller
 		$name = $timetable->name;
 		$timetable->update($request->all());
 
-		session()->put('success', "Запись графика стажировки " . ($name ? "\"{$name}\" " : "") . "обновлена");
-		return redirect()->route('timetables.index', ['internship' => $timetable->internship->getKey(), 'sid' => session()->getId()]);
+		session()->put('success', "Запись графика практики " . ($name ? "\"{$name}\" " : "") . "обновлена");
+		return redirect()->route('timetables.index', ['internship' => $timetable->internship->getKey()]);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class TimetableController extends Controller
 		$name = $timetable->iname;
 		$timetable->delete();
 
-		event(new ToastEvent('success', '', "Запись графика стажировки " . ($name ? "\"{$name}\" " : "") . "удалена"));
+		event(new ToastEvent('success', '', "Запись графика практики " . ($name ? "\"{$name}\" " : "") . "удалена"));
 		return true;
 	}
 }

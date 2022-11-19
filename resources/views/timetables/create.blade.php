@@ -8,14 +8,14 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'График стажировки', 'active' => true, 'context' => 'timetable', 'link' => route('timetables.index', ['sid' => session()->getId()])],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'График практики', 'active' => true, 'context' => 'timetable', 'link' => route('timetables.index', ['sid' => session()->getId()])],
 		];
 	@endphp
 @endsection
 
 @section('interior.header')
-	Новый график стажировки
+	Новый график практики
 @endsection
 
 @section('form.params')
@@ -28,7 +28,7 @@
 		$fields = [
 			['name' => 'start', 'title' => 'Начало', 'required' => true, 'type' => 'date', 'placeholder' => 'Выберите дату'],
 			['name' => 'end', 'title' => 'Завершение', 'required' => true, 'type' => 'date', 'placeholder' => 'Выберите дату'],
-			['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'required' => false, 'type' => 'text'],
+			['name' => 'name', 'title' => 'Наименование записи графика практики', 'required' => false, 'type' => 'text'],
 			['name' => 'planned', 'title' => 'Требуется практикантов', 'required' => true, 'type' => 'number', 'min' => 1],
 			['name' => 'internship_id', 'type' => 'hidden', 'value' => $internship->getKey()],
 		];

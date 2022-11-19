@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-			$table->unsignedBigInteger('timetable_id')->comment('Связанный график стажировки');
+			$table->unsignedBigInteger('timetable_id')->comment('Связанный график практики');
 			$table->foreign('timetable_id')->references('id')->on('timetables')->cascadeOnDelete();
 			$table->unsignedBigInteger('student_id')->comment('Связанный практикант');
 			$table->foreign('student_id')->references('id')->on('students')->cascadeOnDelete();
-			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
+			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус практики');
             $table->timestamps();
         });
     }

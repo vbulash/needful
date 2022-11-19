@@ -53,6 +53,6 @@ class OneSpecialtyOnInternshipRule implements Rule
 	 */
 	public function message()
 	{
-		return 'Такая специальность в списке специальностей стажировки работодателя уже есть';
+		return 'Такая специальность в списке специальностей практик работодателя уже есть';
 	}
 }

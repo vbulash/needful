@@ -14,12 +14,12 @@
 @section('steps')
 	@php
 		if (isset(session('context')['chain']))
-			$title = 'График стажировки';
+			$title = 'График практики';
 		else
-			$title = 'График стажировки или Специальности для стажировки';
+			$title = 'График практики или Специальности для практики';
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'Практика', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
 			['title' => $title, 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
@@ -30,7 +30,7 @@
 		Просмотр
 	@else
 		Редактирование
-	@endif стажировки &laquo;{{ $internship->iname }}&raquo;
+	@endif практики &laquo;{{ $internship->iname }}&raquo;
 @endsection
 
 @section('form.params')
@@ -41,19 +41,19 @@
 @section('form.fields')
 	@php
 		$fields = [
-			['name' => 'iname', 'title' => 'Название стажировки', 'required' => true, 'type' => 'text', 'value' => $internship->iname],
-			// ['name' => 'itype', 'title' => 'Тип стажировки', 'required' => true, 'type' => 'select', 'options' => [
-			// 	'Открытая стажировка' => 'Открытая стажировка (практикант может записаться самостоятельно)',
-			// 	'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
+			['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text', 'value' => $internship->iname],
+			// ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
+			// 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
+			// 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
 			// ], 'value' => $internship->itype],
 			['name' => 'itype', 'type' => 'hidden', 'value' => $internship->itype],
-			['name' => 'status', 'title' => 'Статус стажировки', 'required' => false, 'type' => 'select', 'options' => [
+			['name' => 'status', 'title' => 'Статус практики', 'required' => false, 'type' => 'select', 'options' => [
 				'Планируется' => 'Планируется',
 				'Выполняется' => 'Выполняется',
 				'Закрыта' => 'Завершена',
 			], 'value' => $internship->status],
 			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false, 'value' => $internship->short],
-			['name' => 'program', 'title' => 'Программа стажировки', 'type' => 'editor', 'required' => true, 'value' => $internship->program],
+			['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true, 'value' => $internship->program],
 			['name' => 'employer_id', 'type' => 'hidden', 'value' => $internship->employer->getKey()],
 		];
 	@endphp

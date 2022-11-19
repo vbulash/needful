@@ -39,9 +39,9 @@ class InternshipController extends Controller
 		return Datatables::of($query)
 			// ->editColumn('itype', function ($internship) {
 			// 	switch ($internship->itype) {
-			// 		case 'Открытая стажировка':
+			// 		case 'Открытая практика':
 			// 			return 'Открытая';
-			// 		case 'Закрытая стажировка':
+			// 		case 'Закрытая практика':
 			// 			return 'Закрытая';
 			// 	}
 			// 	return '';
@@ -81,12 +81,12 @@ class InternshipController extends Controller
 				} else {
 					$actions .=
 						"<a href=\"{$especialtiesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для стажировки\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для практик\">\n" .
 						"<i class=\"fas fa-people-arrows\"></i>\n" .
 						"</a>\n";
 					$actions .=
 						"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики стажировки\">\n" .
+						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики практик\">\n" .
 						"<i class=\"fas fa-calendar-check\"></i>\n" .
 						"</a>\n";
 				}
@@ -167,7 +167,7 @@ class InternshipController extends Controller
 		$internship->save();
 		$name = $internship->iname;
 
-		session()->put('success', "Стажировка \"{$name}\" создана");
+		session()->put('success', "Практика \"{$name}\" создана");
 		return redirect()->route('internships.index', ['employer' => $internship->employer->getKey(), 'sid' => session()->getId()]);
 	}
 
@@ -211,7 +211,7 @@ class InternshipController extends Controller
 		$name = $internship->iname;
 		$internship->update($request->all());
 
-		session()->put('success', "Стажировка \"{$name}\" обновлена");
+		session()->put('success', "Практика \"{$name}\" обновлена");
 		return redirect()->route('internships.index', ['employer' => $internship->employer->getKey(), 'sid' => session()->getId()]);
 	}
 
@@ -232,7 +232,7 @@ class InternshipController extends Controller
 		$name = $internship->iname;
 		$internship->delete();
 
-		event(new ToastEvent('success', '', "Стажировка '{$name}' удалена"));
+		event(new ToastEvent('success', '', "Практика '{$name}' удалена"));
 		return true;
 	}
 }

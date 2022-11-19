@@ -19,19 +19,19 @@ class Asked2RejectedTaskEvent extends TaskEvent
 			description: sprintf(<<<EOD
 <h5>Кандидат &laquo;%s&raquo; отказался от участия в практике:</h5>
 <p>Работодатель: <strong>%s</strong><br/>
-Стажировка: <strong>%s</strong><br/>
+Практика: <strong>%s</strong><br/>
 %s
-График стажировки: <strong>%s</strong></p>
-<p>Необходимо отменить приглашение кандидата к участию в стажировке:</p>
+График практики: <strong>%s</strong></p>
+<p>Необходимо отменить приглашение кандидата к участию в практике:</p>
 <div class='d-flex mb-5'>
 	<button class='btn btn-primary me-4' type='event' data-event-type=%d data-history=%d data-student=%d>
 		Отменить приглашение</button>
 </div>
-<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение стажировки автоматически отменится через 10 дней.</p>
+<p>Вы также можете проигнорировать данное сообщение, в этом случае предложение практики автоматически отменится через 10 дней.</p>
 <p>Более подробно вы сможете изучить данную информацию по ссылке ниже &darr;</p>
 EOD,
 				$student->getTitle(), $history->timetable->internship->employer->getTitle(), $history->timetable->internship->getTitle(),
-				(isset($history->timetable->internship->short) ? 'Краткая информация по стажировке:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
+				(isset($history->timetable->internship->short) ? 'Краткая информация по практике:<br/><strong>' . $history->timetable->internship->short . '</strong><br/>' : ''),
 				$history->timetable->getTitle(),
 				EventType::CANCEL_REJECT->value, $history->getKey(), $student->getKey(),
 			),

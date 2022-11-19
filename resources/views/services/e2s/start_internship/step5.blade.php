@@ -1,13 +1,13 @@
 @extends('services.service')
 
-@section('service')Работодатель. Создать стажировку@endsection
+@section('service')Работодатель. Создать практику@endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1')],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2')],
-			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3')],
+			['title' => 'Выбор практики', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2')],
+			['title' => 'Выбор графика практики', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3')],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null, 'link' => route('e2s.start_internship.step4')],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher', 'link' => route('e2s.start_internship.step4b')],
 			['title' => 'Подтверждение выбора', 'active' => true],
@@ -18,8 +18,8 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<h3 class="block-title fw-semibold">
-			Подтверждение параметров новой стажировки<br/>
-			<small>Выбраны следующие параметры прохождения стажировки:</small>
+			Подтверждение параметров новой практики<br/>
+			<small>Выбраны следующие параметры прохождения практики:</small>
 		</h3>
 	</div>
 	<div class="block-content p-4">
@@ -27,9 +27,9 @@
 			$context = session('context');
 			$fields = [
 				['name' => 'employer', 'title' => 'Работодатель'],
-				['name' => 'internship', 'title' => 'Стажировка'],
-				['name' => 'timetable', 'title' => 'График стажировки'],
-				['name' => 'teacher', 'title' => 'Руководитель стажировки'],
+				['name' => 'internship', 'title' => 'Практика'],
+				['name' => 'timetable', 'title' => 'График практики'],
+				['name' => 'teacher', 'title' => 'Руководитель практики'],
 				['name' => 'names', 'title' => 'Выбранные, но пока не подтверждённые практиканты'],
 			];
 		@endphp
@@ -50,9 +50,9 @@
 		@endforeach
 		<input type="hidden" name="ids" value="{{ $ids }}">
 
-		<p>Запланировать стажировку практикантов?</p>
+		<p>Запланировать практику практикантов?</p>
 		<p>
-			Нажатие &laquo;Да&raquo; зарегистрирует стажировку практикантов.<br/>
+			Нажатие &laquo;Да&raquo; зарегистрирует практику практикантов.<br/>
 			Нажатие &laquo;Нет&raquo; вернет вас на главную страницу сайта для выбора услуг
 		</p>
 	</div>

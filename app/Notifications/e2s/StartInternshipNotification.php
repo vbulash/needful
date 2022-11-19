@@ -45,21 +45,21 @@ class StartInternshipNotification extends Notification
 		$lines[] = 'Уважаемый (уважаемая) ' . $notifiable->student->getTitle(). '!';
 		switch ($notifiable->status) {
 			case 'Планируется':
-				$subject = 'Запланирована новая стажировка';
-				$lines[] = 'Для вас запланирована новая стажировка со следующими параметрами:';
+				$subject = 'Запланирована новая практика';
+				$lines[] = 'Для вас запланирована новая практика со следующими параметрами:';
 				break;
 			case 'Выполняется':
-				$subject = 'Начата стажировка';
-				$lines[] = 'Ваша стажировка началась. Напоминаем её параметры:';
+				$subject = 'Начата практика';
+				$lines[] = 'Ваша практика началась. Напоминаем её параметры:';
 				break;
 			case 'Закрыта':
-				$subject = 'Стажировка завершена';
-				$lines[] = 'Ваша стажировка завершена. Напоминаем её параметры:';
+				$subject = 'Практика завершена';
+				$lines[] = 'Ваша практика завершена. Напоминаем её параметры:';
 				break;
 		}
 		$lines[] = 'Работодатель: "' . $notifiable->timetable->internship->employer->getTitle() . '"';
-		$lines[] = 'Стажировка: "' . $notifiable->timetable->internship->getTitle() . '"';
-		$lines[] = 'График стажировки: ' . $notifiable->timetable->getTitle();
+		$lines[] = 'Практика: "' . $notifiable->timetable->internship->getTitle() . '"';
+		$lines[] = 'График практики: ' . $notifiable->timetable->getTitle();
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

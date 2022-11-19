@@ -34,10 +34,10 @@ class UpdateInternshipRequest extends FormRequest
 	public function attributes()
 	{
 		return [
-			'iname' => 'Название стажировки',
-			'itype' => 'Тип стажировки',
-			'status' => 'Статус стажировки',
-			'program' => 'Программа стажировки'
+			'iname' => 'Название практики',
+			'itype' => 'Тип практики',
+			'status' => 'Статус практики',
+			'program' => 'Программа практики'
 		];
 	}
 }

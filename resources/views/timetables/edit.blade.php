@@ -10,12 +10,12 @@
 @section('steps')
 	@php
 		if (isset(session('context')['chain']))
-			$title = 'График стажировки';
+			$title = 'График практики';
 		else
-			$title = 'График стажировки или Специальности для стажировки';
+			$title = 'График практики или Специальности для практики';
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
 			['title' => $title, 'active' => true, 'context' => 'timetable', 'link' => route('timetables.index', ['sid' => session()->getId()])],
 		];
 	@endphp
@@ -26,7 +26,7 @@
 		Просмотр
 	@else
 		Редактирование
-	@endif графика стажировки
+	@endif графика практики
 @endsection
 
 @section('form.params')
@@ -39,7 +39,7 @@
 		$fields = [
 			['name' => 'start', 'title' => 'Начало', 'required' => true, 'type' => 'date', 'value' => $timetable->start->format('d.m.Y')],
 			['name' => 'end', 'title' => 'Завершение', 'required' => true, 'type' => 'date', 'value' => $timetable->end->format('d.m.Y')],
-			['name' => 'name', 'title' => 'Наименование записи графика стажировки', 'required' => false, 'type' => 'text', 'value' => $timetable->name],
+			['name' => 'name', 'title' => 'Наименование записи графика практики', 'required' => false, 'type' => 'text', 'value' => $timetable->name],
 			['name' => 'planned', 'title' => 'Требуется практикантов', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $timetable->planned],
 			['name' => 'internship_id', 'type' => 'hidden', 'value' => $timetable->internship->getKey()],
 		];

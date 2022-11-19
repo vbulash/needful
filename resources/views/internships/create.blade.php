@@ -12,14 +12,14 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Практика', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'График практики или Специальности для практики', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection
 
 @section('interior.header')
-	Новая стажировка
+	Новая практика
 @endsection
 
 @section('form.params')
@@ -30,15 +30,15 @@
 @section('form.fields')
 	@php
 		$fields = [
-			['name' => 'iname', 'title' => 'Название стажировки', 'required' => true, 'type' => 'text'],
-			// ['name' => 'itype', 'title' => 'Тип стажировки', 'required' => true, 'type' => 'select', 'options' => [
-			// 	'Открытая стажировка' => 'Открытая стажировка (практикант может записаться самостоятельно)',
-			// 	'Закрытая стажировка' => 'Закрытая стажировка (практикантов выбирает работодатель)'
+			['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text'],
+			// ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
+			// 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
+			// 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
 			// ]],
-			['name' => 'itype', 'type' => 'hidden', 'value' => 'Открытая стажировка'],
-			['name' => 'status', 'title' => 'Статус стажировки', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
+			['name' => 'itype', 'type' => 'hidden', 'value' => 'Открытая практика'],
+			['name' => 'status', 'title' => 'Статус практики', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
 			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false],
-			['name' => 'program', 'title' => 'Программа стажировки', 'type' => 'editor', 'required' => true],
+			['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true],
 			['name' => 'employer_id', 'type' => 'hidden', 'value' => $employer->getKey()],
 		];
 	@endphp

@@ -2,26 +2,26 @@
 
 @section('service')
 	@if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
-		Мои стажировки
+		Мои практики
 	@else
-		Работа со стажировками
+		Работа с практиками
 	@endif
 @endsection
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Стажировки', 'active' => true, 'context' => 'history'], ['title' => 'Практиканты', 'active' => false, 'context' => 'trainee']];
+		$steps = [['title' => 'Практики', 'active' => true, 'context' => 'history'], ['title' => 'Практиканты', 'active' => false, 'context' => 'trainee']];
 	@endphp
 @endsection
 
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<span>Новая история стажировки создается через услугу на <a
+			<span>Новая история практики создается через услугу на <a
 					href="{{ route('dashboard', ['sid' => session()->getId()]) }}">главной странице</a></span><br />
 			<span><small>В поле &laquo;Практиканты&raquo; отображается общее количество утвержденных практикантов из общего
 					числа запланированных</small></span><br /><br />
-			<span>После набора планового количества практикантов не забудьте назначить стажировке статус
+			<span>После набора планового количества практикантов не забудьте назначить практике статус
 				&laquo;{{ \App\Models\HistoryStatus::getName(\App\Models\HistoryStatus::PLANNED->value) }}&raquo;</span>
 		</div>
 	</div>
@@ -33,8 +33,8 @@
 						<tr>
 							<th style="width: 30px">#</th>
 							<th>Работодатель</th>
-							<th>Стажировка</th>
-							<th>График стажировки</th>
+							<th>Практика</th>
+							<th>График практики</th>
 							<th>Руководитель практики</th>
 							<th>Практиканты</th>
 							<th>Статус</th>
@@ -44,7 +44,7 @@
 				</table>
 			</div>
 		@else
-			<p>Записей стажировок пока нет...</p>
+			<p>Записей практик пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -107,16 +107,16 @@
 						if (can === "true") {
 							document.getElementById('confirm-title').innerText = "Подтвердите удаление";
 							document.getElementById('confirm-body').innerHTML =
-								"Удалить запись истории стажировки № " + id + " ?";
+								"Удалить запись истории практики № " + id + " ?";
 							document.getElementById('confirm-yes').dataset.id = id;
 							document.getElementById('confirm-type').value = 'delete';
 						} else if (can === "false") {
-							document.getElementById('confirm-title').innerText = "Подтвердите отмену стажировки";
+							document.getElementById('confirm-title').innerText = "Подтвердите отмену практики";
 							document.getElementById('confirm-body').innerHTML =
-								"<p>Удалить запись истории стажировки № " + id +
+								"<p>Удалить запись истории практики № " + id +
 								" нельзя, поскольку уже рассылались приглашения учащимся.</p>" +
-								"<p>Такую стажировку можно только отменить, разослав извинительные письма всем участникам.</p>" +
-								"<p>Отменить стажировку?</p>";
+								"<p>Такую практику можно только отменить, разослав извинительные письма всем участникам.</p>" +
+								"<p>Отменить практику?</p>";
 							document.getElementById('confirm-yes').dataset.id = id;
 							document.getElementById('confirm-type').value = 'cancel';
 						}

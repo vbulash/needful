@@ -15,19 +15,19 @@ class EmployerPracticeStartedNotification extends CancelWarningNotification {
 	 */
 	public function toMail($notifiable) {
 		$lines = [];
-		$lines[] = "Стажировка со следующими параметрами:";
+		$lines[] = "Практика со следующими параметрами:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 		$problems = $this->checkProblems();
 		if (isset($problems)) {
-			$subject = "Стажировка не может начаться сегодня";
+			$subject = "Практика не может начаться сегодня";
 			$lines[] = "должна была стартовать сегодня, но не сможет начаться автоматически по следующим причинам:";
 			$lines = array_merge($lines, $problems);
-			$lines[] = sprintf("Пожалуйста, устраните данные проблемы и вручную назначьте стажировке статус \"%s\"", HistoryStatus::getName(HistoryStatus::ACTIVE->value));
+			$lines[] = sprintf("Пожалуйста, устраните данные проблемы и вручную назначьте практике статус \"%s\"", HistoryStatus::getName(HistoryStatus::ACTIVE->value));
 		} else {
 			$this->history->update([
 				'status' => HistoryStatus::ACTIVE->value
 			]);
-			$subject = "Стажировка началась сегодня";
+			$subject = "Практика началась сегодня";
 			$lines[] = "автоматически стартовала сегодня";
 		}
 

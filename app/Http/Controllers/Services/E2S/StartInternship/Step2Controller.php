@@ -27,9 +27,9 @@ class Step2Controller extends Controller
 		return Datatables::of($query)
 			->editColumn('itype', function ($internship) {
 				switch ($internship->itype) {
-					case 'Открытая стажировка':
+					case 'Открытая практика':
 						return 'Открытая';
-					case 'Закрытая стажировка':
+					case 'Закрытая практика':
 						return 'Закрытая';
 				}
 				return '';
@@ -67,7 +67,7 @@ class Step2Controller extends Controller
 		return redirect()->route('e2s.start_internship.step3', ['sid' => session()->getId()]);
 	}
 
-	// Просмотр карточки стажировки
+	// Просмотр карточки практики
 	public function showInternship(int $id)
 	{
 		$internship = Internship::findOrFail($id);
@@ -88,7 +88,7 @@ class Step2Controller extends Controller
 
 		if ($count == 0) {
 			event(new ToastEvent('info', '',
-				'Нет записей стажировок. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другим работодателем'));
+				'Нет записей практик. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другим работодателем'));
 			//return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 

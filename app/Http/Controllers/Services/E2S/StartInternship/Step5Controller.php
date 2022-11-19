@@ -41,14 +41,14 @@ class Step5Controller extends Controller {
 
 		$employer = $history->timetable->internship->employer;
 		$employer->user->notify(new EmployerPracticeCreatedNotification($history));
-		event(new ToastEvent('info', '', 'Создана стажировка &laquo;' . $history->getTitle() . '&raquo;'));
+		event(new ToastEvent('info', '', 'Создана практика &laquo;' . $history->getTitle() . '&raquo;'));
 
 		$employer->user->allow($history);
 
 		$id = $history->getKey();
 		//session()->forget('context');
 
-		session()->put('success', "Стажировка № {$id} создана");
+		session()->put('success', "Практика № {$id} создана");
 		return redirect()->route('history.show', ['history' => $id]);
 	}
 }

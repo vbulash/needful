@@ -61,7 +61,7 @@ class Step3Controller extends Controller
 		return redirect()->route('e2s.start_internship.step4', ['sid' => session()->getId()]);
 	}
 
-	// Просмотр карточки стажировки
+	// Просмотр карточки практики
 	public function showTimetable(int $id)
 	{
 		$timetable = Timetable::findOrFail($id);
@@ -81,7 +81,7 @@ class Step3Controller extends Controller
 
 		if ($count == 0) {
 			event(new ToastEvent('info', '',
-				'Нет записей графиков стажировок. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другой стажировкой'));
+				'Нет записей графиков практики. Необходимо их создать, либо вернуться на шаг назад и продолжить работу с другой практикой'));
 			//return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 

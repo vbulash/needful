@@ -43,11 +43,11 @@ class EmployerPracticeCreatedNotification extends Notification
 	 */
 	public function toMail(mixed $notifiable): MailMessage
 	{
-		$subject = 'Стажировка создана';
+		$subject = 'Практика создана';
 		$lines = [];
-		$lines[] = "Создана стажировка со следующими параметрами:";
+		$lines[] = "Создана практика со следующими параметрами:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "Перед изменением статуса стажировки вам будет необходимо через интерфейс платформы набрать практикантов и утвердить их";
+		$lines[] = "Перед изменением статуса практики вам будет необходимо через интерфейс платформы набрать практикантов и утвердить их";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

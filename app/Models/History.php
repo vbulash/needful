@@ -40,7 +40,7 @@ class History extends Model implements FormTemplate
 
 	public static function createTemplate(): array
 	{
-		return [];	// Создать запись истории стажировок через CRUD нельзя
+		return [];	// Создать запись истории практик через CRUD нельзя
 	}
 
 	public function editTemplate(): array

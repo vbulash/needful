@@ -41,13 +41,13 @@ class New2AskedNotification extends Notification {
 	 * @return MailMessage
 	 */
 	public function toMail(mixed $notifiable): MailMessage {
-		$subject = 'Приглашение на стажировку';
+		$subject = 'Приглашение на практику';
 		$lines = [];
 		$lines[] = sprintf("Уважаемый (уважаемая) %s!", $this->student->getTitle());
-		$lines[] = "Вас пригласили для прохождения стажировки. Информация по данной стажировке:";
+		$lines[] = "Вас пригласили для прохождения практику. Информация по данной практике:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 
-		$lines[] = 'Все вопросы по стажировке вы можете задать руководителю практики:';
+		$lines[] = 'Все вопросы по практике вы можете задать руководителю практики:';
 		$lines[] = '- **Фамилия, имя и отчество**: ' . $this->history->teacher->getTitle();
 		$lines[] = '- **Телефон**: ' . $this->history->teacher->phone;
 		$lines[] = '- **Электронная почта**: ' . $this->history->teacher->email;
@@ -55,7 +55,7 @@ class New2AskedNotification extends Notification {
 		$lines[] = sprintf(
 			"Войдите, пожалуйста в платформу по ссылке [%s](%s). " .
 			"Откройте входящие сообщения и в сообщении, соответствующем данному письму, " .
-			"выразите свое согласие или несогласие участию в стажировке.",
+			"выразите свое согласие или несогласие участию в практике.",
 			env('APP_NAME'), env('APP_URL'));
 		$lines[] = 'В случае игнорирования приглашения через 10 дней оно будет аннулировано';
 

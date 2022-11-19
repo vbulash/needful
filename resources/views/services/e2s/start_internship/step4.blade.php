@@ -1,15 +1,15 @@
 @extends('services.service')
 
 @section('service')
-	Работодатель. Создать стажировку
+	Работодатель. Создать практику
 @endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
-			['title' => 'Выбор графика стажировки', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
+			['title' => 'Выбор практики', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
+			['title' => 'Выбор графика практики', 'active' => false, 'context' => 'timetable', 'link' => route('e2s.start_internship.step3', ['sid' => session()->getId()])],
 			['title' => 'Выбор практикантов', 'active' => true, 'context' => null],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],

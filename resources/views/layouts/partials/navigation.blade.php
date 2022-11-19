@@ -27,12 +27,12 @@
 
         $menu = [['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard']];
 
-        $menu[] = ['title' => 'Стажировки', 'heading' => true];
+        $menu[] = ['title' => 'Практики', 'heading' => true];
         $name = auth()
             ->user()
             ->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)
-            ? 'Мои стажировки'
-            : 'Стажировки';
+            ? 'Мои практики'
+            : 'Практики';
         $menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
 
         if ($employers || $students || $schools) {
@@ -68,7 +68,7 @@
             }
 			if ($admin) {
                 $menu[] = ['title' => 'Уведомления', 'icon' => 'fa fa-gears', 'route' => 'settings.notifications', 'pattern' => 'settings.notifications'];
-				$menu[] = ['title' => 'Письма перед началом стажировки', 'icon' => 'fa fa-calendar', 'route' => 'settings.early', 'pattern' => 'settings.early'];
+				$menu[] = ['title' => 'Письма перед началом практики', 'icon' => 'fa fa-calendar', 'route' => 'settings.early', 'pattern' => 'settings.early'];
             }
         }
     @endphp

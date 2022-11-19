@@ -33,9 +33,9 @@ class StoreInternshipRequest extends FormRequest
 	public function attributes()
 	{
 		return [
-			'iname' => 'Название стажировки',
-			'itype' => 'Тип стажировки',
-			'program' => 'Программа стажировки'
+			'iname' => 'Название практики',
+			'itype' => 'Тип практики',
+			'program' => 'Программа практики'
 		];
 	}
 }

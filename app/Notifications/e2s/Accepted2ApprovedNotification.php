@@ -49,9 +49,9 @@ class Accepted2ApprovedNotification extends Notification
 		$subject = 'Ваша кандидатура утверждена для прохождения практики';
 		$lines = [];
 		$lines[] = sprintf("Уважаемый (уважаемая) %s!", $this->student->getTitle());
-		$lines[] = "Работодатель подтвердил ваше участие в стажировке:";
+		$lines[] = "Работодатель подтвердил ваше участие в практике:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
-		$lines[] = "Перед началом стажировки с вами дополнительно свяжется руководитель стажировки от работодателя.";
+		$lines[] = "Перед началом практики с вами дополнительно свяжется руководитель практики от работодателя.";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

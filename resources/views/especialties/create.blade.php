@@ -8,15 +8,15 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'Специальности для стажировки', 'active' => true, 'context' => 'especialty', 'link' => route('especialties.index', ['sid' => session()->getId()])],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'Специальности для практики', 'active' => true, 'context' => 'especialty', 'link' => route('especialties.index', ['sid' => session()->getId()])],
 		];
 	@endphp
 @endsection
 
 @section('interior.header')
 	<div>
-		<p>Новая специальность по стажировке работодателя</p>
+		<p>Новая специальность по практике работодателя</p>
 		@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 			<p>Новые специальности может добавлять только администратор платформы</p>
 		@endif

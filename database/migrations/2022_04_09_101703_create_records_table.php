@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 			$table->string('name')->comment('Наименование записи');
 			$table->text('report')->comment('Отчёт по записи')->nullable();
-			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус стажировки');
+			$table->enum('status', ['Планируется', 'Выполняется', 'Закрыта'])->comment('Статус практики');
 			$table->unsignedBigInteger('history_id')->comment('Связанная история');
 			$table->foreign('history_id')->references('id')->on('histories')->cascadeOnDelete();
             $table->timestamps();

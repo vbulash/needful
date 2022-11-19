@@ -11,8 +11,8 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'График стажировки', 'active' => true, 'context' => 'timetable'],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
+			['title' => 'График практики', 'active' => true, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection
@@ -24,9 +24,9 @@
 				Отображается единственная запись по цепочке из входящего сообщения
 			@else
 				<a href="{{ route('timetables.create', ['sid' => session()->getId()]) }}"
-				   class="btn btn-primary mt-3 mb-3">Добавить запись графика стажировки</a>
-				<p>Вы также можете перейти на список специальностей по стажировке по ссылке
-					<a href="{{ route('especialties.index', ['sid' => session()->getId()]) }}">Список специальностей стажировки</a></p>
+				   class="btn btn-primary mt-3 mb-3">Добавить запись графика практики</a>
+				<p>Вы также можете перейти на список специальностей по практике по ссылке
+					<a href="{{ route('especialties.index', ['sid' => session()->getId()]) }}">Список специальностей практики</a></p>
 			@endif
 		</div>
 	</div>
@@ -40,7 +40,7 @@
 						<th style="width: 30px">#</th>
 						<th>Начало</th>
 						<th>Завершение</th>
-						<th>Наименование записи графика стажировки</th>
+						<th>Наименование записи графика практики</th>
 						<th>Требуется практикантов</th>
 						<th>Действия</th>
 					</tr>
@@ -48,7 +48,7 @@
 				</table>
 			</div>
 		@else
-			<p>Графиков стажировки пока нет...</p>
+			<p>Графиков практики пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -77,7 +77,7 @@
 
 		function clickDelete(id, name) {
 			document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-			document.getElementById('confirm-body').innerHTML = "Удалить запись графика стажировки № " + id + " ?";
+			document.getElementById('confirm-body').innerHTML = "Удалить запись графика практики № " + id + " ?";
 			document.getElementById('confirm-yes').dataset.id = id;
 			let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 			confirmDialog.show();

@@ -33,19 +33,19 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.clear.index', 'EmployerController@getClear')->name('employers.index.clear');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
 	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
-	// Стажировки
+	// Практики
 	Route::resource('/internships', 'InternshipController');
 	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
 	Route::get('/internships.timetables/{internship}', 'InternshipController@timetables')->name('internships.timetables');
 	Route::get('/internships.especialties/{internship}', 'InternshipController@especialties')->name('internships.especialties');
-	// Графики стажировки
+	// Графики практики
 	Route::resource('/timetables', 'TimetableController');
 	Route::get('/timetables.data/{internship}', 'TimetableController@getData')->name('timetables.index.data');
 	// Специальности
 	Route::resource('/especialties', 'EspecialtyController');
 	Route::get('/especialties.data', 'EspecialtyController@getData')->name('especialties.index.data');
 
-	// Истории стажировок
+	// Истории практики
 	Route::resource('/history', 'HistoryController');
 	Route::get('/history.data', 'HistoryController@getData')->name('history.index.data');
 	Route::get('/history.select/{history}', 'HistoryController@select')->name('history.select');
@@ -114,12 +114,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 	Route::get('/e2s.start_internship.step1.data', 'StartInternship\Step1Controller@getData')->name('e2s.start_internship.step1.data');
 	Route::get('/e2s.start_internship.step1.show/{employer}', 'StartInternship\Step1Controller@showEmployer')->name('e2s.start_internship.step1.show');
 	Route::get('/e2s.start_internship.step1.select/{employer}', 'StartInternship\Step1Controller@select')->name('e2s.start_internship.step1.select');
-	// Стажировки
+	// Практики
 	Route::get('/e2s.start_internship.step2', 'StartInternship\Step2Controller@run')->name('e2s.start_internship.step2');
 	Route::get('/e2s.start_internship.step2.data', 'StartInternship\Step2Controller@getData')->name('e2s.start_internship.step2.data');
 	Route::get('/e2s.start_internship.step2.show/{internship}', 'StartInternship\Step2Controller@showInternship')->name('e2s.start_internship.step2.show');
 	Route::get('/e2s.start_internship.step2.select/{internship}', 'StartInternship\Step2Controller@select')->name('e2s.start_internship.step2.select');
-	// Графики стажировки
+	// Графики практики
 	Route::get('/e2s.start_internship.step3', 'StartInternship\Step3Controller@run')->name('e2s.start_internship.step3');
 	Route::get('/e2s.start_internship.step3.data', 'StartInternship\Step3Controller@getData')->name('e2s.start_internship.step3.data');
 	Route::get('/e2s.start_internship.step3.show/{timetable}', 'StartInternship\Step3Controller@showTimetable')->name('e2s.start_internship.step3.show');

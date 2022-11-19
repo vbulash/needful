@@ -8,8 +8,8 @@
 	@php
 		$steps = [
 			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => false, 'context' => 'internship'],
-			['title' => 'График стажировки или Специальности для стажировки', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Практика', 'active' => false, 'context' => 'internship'],
+			['title' => 'График практики или Специальности для практики', 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
 @endsection

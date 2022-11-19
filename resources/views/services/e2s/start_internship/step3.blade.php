@@ -1,13 +1,13 @@
 @extends('services.service')
 
-@section('service')Работодатель. Создать стажировку@endsection
+@section('service')Работодатель. Создать практику@endsection
 
 @section('steps')
 	@php
 		$steps = [
 			['title' => 'Выбор работодателя', 'active' => false, 'context' => 'employer', 'link' => route('e2s.start_internship.step1', ['sid' => session()->getId()])],
-			['title' => 'Выбор стажировки', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
-			['title' => 'Выбор графика стажировки', 'active' => true, 'context' => 'timetable'],
+			['title' => 'Выбор практики', 'active' => false, 'context' => 'internship', 'link' => route('e2s.start_internship.step2', ['sid' => session()->getId()])],
+			['title' => 'Выбор графика практики', 'active' => true, 'context' => 'timetable'],
 			['title' => 'Выбор практикантов', 'active' => false, 'context' => null],
 			['title' => 'Выбор руководителя практики', 'active' => false, 'context' => 'teacher'],
 			['title' => 'Подтверждение выбора', 'active' => false],
@@ -18,7 +18,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<h3 class="block-title fw-semibold">
-			Выбор графика стажировки по стажировке &laquo;{{ $internship->iname }}&raquo;
+			Выбор графика практики по практике &laquo;{{ $internship->iname }}&raquo;
 			у работодателя &laquo;{{ $internship->employer->name }}&raquo;
 		</h3>
 	</div>
@@ -32,7 +32,7 @@
 						<th style="width: 30px">#</th>
 						<th>Начало</th>
 						<th>Завершение</th>
-						<th>Наименование записи графика стажировки</th>
+						<th>Наименование записи графика практики</th>
 						<th>Требуется практикантов</th>
 						<th>Действия</th>
 					</tr>
@@ -40,7 +40,7 @@
 				</table>
 			</div>
 		@else
-			<p>Графиков стажировки пока нет...</p>
+			<p>Графиков практики пока нет...</p>
 		@endif
 	</div>
 @endsection

@@ -10,12 +10,12 @@
 @section('steps')
 	@php
 		if (isset(session('context')['chain']))
-			$title = 'График стажировки';
+			$title = 'График практики';
 		else
-			$title = 'График стажировки или Специальности для стажировки';
+			$title = 'График практики или Специальности для практики';
 		$steps = [
-			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Стажировка', 'active' => true, 'context' => 'internship'],
+			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index')],
+			['title' => 'Практика', 'active' => true, 'context' => 'internship'],
 			['title' => $title, 'active' => false, 'context' => 'timetable'],
 		];
 	@endphp
@@ -27,7 +27,7 @@
 			Отображается единственная запись по цепочке из входящего сообщения
 		@else
 			<a href="{{ route('internships.create', ['sid' => session()->getId()]) }}"
-			   class="btn btn-primary mt-3 mb-3">Добавить стажировку</a>
+			   class="btn btn-primary mt-3 mb-3">Добавить практику</a>
 		@endif
 	</div>
 	<div class="block-content p-4">
@@ -38,7 +38,7 @@
 					<thead>
 					<tr>
 						<th style="width: 30px">#</th>
-						<th>Название стажировки</th>
+						<th>Название практики</th>
 						{{-- <th>Тип</th> --}}
 						<th>Статус</th>
 						<th>Действия</th>
@@ -47,7 +47,7 @@
 				</table>
 			</div>
 		@else
-			<p>Стажировок пока нет...</p>
+			<p>Практик пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -77,7 +77,7 @@
 
 			function clickDelete(id, name) {
 				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить стажировку &laquo;" + name + "&raquo; ?";
+				document.getElementById('confirm-body').innerHTML = "Удалить практику &laquo;" + name + "&raquo; ?";
 				document.getElementById('confirm-yes').dataset.id = id;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 				confirmDialog.show();

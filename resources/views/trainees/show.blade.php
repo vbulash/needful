@@ -2,16 +2,16 @@
 
 @section('header')
 	@if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value))
-		Мои стажировки
+		Мои практики
 	@else
-		Работа со стажировками
+		Работа с практиками
 	@endif
 @endsection
 
 @section('steps')
 	@php
 //		$steps = [
-//			['title' => 'Стажировка', 'active' => false, 'context' => 'history', 'link' => route('history.index')],
+//			['title' => 'Практика', 'active' => false, 'context' => 'history', 'link' => route('history.index')],
 //			['title' => 'Практиканты', 'active' => true, 'context' => 'trainee', 'link' => route('trainees.index')],
 //		];
 	@endphp

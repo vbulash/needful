@@ -46,13 +46,13 @@ class All2DestroyedNotification extends Notification
 	 */
 	public function toMail(mixed $notifiable): MailMessage
 	{
-		$subject = 'Стажировка отменена';
+		$subject = 'Практика отменена';
 		$lines = [];
 		$lines[] = sprintf("Уважаемый (уважаемая) %s!", $this->student->getTitle());
-		$lines[] = "С сожалением сообщаем, что стажировка:";
+		$lines[] = "С сожалением сообщаем, что практика:";
 		$lines = array_merge($lines, HasInternship::getLines($this->history));
 		$lines[] = "отменена и все приглашения кандидатам в практиканты отменены.";
-		$lines[] = "Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других стажировках";
+		$lines[] = "Мы надеемся на плодотворное сотрудничество и планируем в дальнейшем предложить вам участие в других практиках";
 
 		$message = (new MailMessage)->subject($subject);
 		foreach ($lines as $line)

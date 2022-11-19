@@ -6,12 +6,12 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Письма перед началом стажировки', 'active' => true, 'context' => null]];
+		$steps = [['title' => 'Письма перед началом практики', 'active' => true, 'context' => null]];
 	@endphp
 @endsection
 
 @section('interior.header')
-	Перед началом стажировки отправляются специальные письма. Укажите здесь количество дней до начала стажировки = момент,
+	Перед началом практики отправляются специальные письма. Укажите здесь количество дней до начала практики = момент,
 	когда будет отправлено соответствующее письмо
 @endsection
 
@@ -34,8 +34,8 @@
 @section('form.fields')
 	@php
 		$fields = [
-			['name' => 'cancel', 'title' => 'Письмо работодателю о последней возможности отмены стажировки', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $cancel],
-			['name' => 'last', 'title' => 'Письмо-предупреждение работодателю и практикантам о начале стажировки', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $last],
+			['name' => 'cancel', 'title' => 'Письмо работодателю о последней возможности отмены практики', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $cancel],
+			['name' => 'last', 'title' => 'Письмо-предупреждение работодателю и практикантам о начале практики', 'required' => true, 'type' => 'number', 'min' => 1, 'value' => $last],
 		];
 	@endphp
 @endsection
