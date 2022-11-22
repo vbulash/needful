@@ -9,50 +9,61 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @method static findOrFail(mixed $school_id)
  */
-class School extends Model implements FormTemplate
-{
-    use HasFactory, HasTitle, GrantedAll;
+class School extends Model implements FormTemplate {
+	use HasFactory, HasTitle, GrantedAll;
 
 	protected $fillable = [
-		'short',	// Краткое наименование учебного заведения
-		'name',		// Наименование учебного заведения
-		'type',		// Тип учебного заведения
-		'status',	// Статус активности объекта
-		'contact',	// Контактное лицо
-		'phone',	// Телефон
-		'email',	// Электронная почта
-		'inn',		// ИНН
-		'kpp',		// КПП
-		'ogrn',		// ОГРН / ОГРНИП
-		'official_address',	// Юридический адрес
-		'post_address',		// Почтовый адрес
+		'short',
+		// Краткое наименование учебного заведения
+		'name',
+		// Наименование учебного заведения
+		'type',
+		// Тип учебного заведения
+		'status',
+		// Статус активности объекта
+		'contact',
+		// Контактное лицо
+		'phone',
+		// Телефон
+		'email',
+		// Электронная почта
+		'inn',
+		// ИНН
+		'kpp',
+		// КПП
+		'ogrn',
+		// ОГРН / ОГРНИП
+		'official_address',
+		// Юридический адрес
+		'post_address',
+		// Почтовый адрес
 		//
-		'user_id',	// Связанный пользователь
+		'user_id', // Связанный пользователь
+
 	];
 
-	public function getTitle(): string
-	{
+	public function getTitle(): string {
 		return $this->short;
 	}
 
-	public function user()
-	{
+	public function user() {
 		return $this->belongsTo(User::class);
 	}
 
-	public function fspecialties()
-	{
+	public function fspecialties() {
 		return $this->hasMany(Fspecialty::class);
 	}
 
-	public function learns(): HasMany
-	{
+	public function learns(): HasMany {
 		return $this->hasMany(Learn::class);
 	}
 
-	public function teachers()
-	{
+	public function teachers() {
 		return $this->morphMany(Teacher::class, 'job');
+	}
+
+	public function orders() {
+		return $this->hasMany(Order::class);
 	}
 
 	/**
@@ -60,15 +71,13 @@ class School extends Model implements FormTemplate
 	 *
 	 * @return void
 	 */
-	protected static function booted()
-	{
+	protected static function booted() {
 		static::deleting(function ($school) {
 			$school->teachers()->detach($school);
 		});
 	}
 
-	public static function createTemplate(): array
-	{
+	public static function createTemplate(): array {
 		return [
 			'id' => 'school-create',
 			'name' => 'school-create',
@@ -77,8 +86,7 @@ class School extends Model implements FormTemplate
 		];
 	}
 
-	public function editTemplate(): array
-	{
+	public function editTemplate(): array {
 		return [
 			'id' => 'school-edit',
 			'name' => 'school-edit',
