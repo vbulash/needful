@@ -16,6 +16,9 @@ return new class extends Migration
 		// Заявка на практику со стороны учебного заведения
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+			$table->date('start')->comment('Начало практики');
+			$table->date('end')->comment('Завершение практики');
+			$table->string('name')->comment('Наименование практики');
 			$table->foreignId('school_id')->constrained()->cascadeOnDelete()->comment('Связанное учебное заведение');
             $table->timestamps();
         });
@@ -40,7 +43,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
 		Schema::dropIfExists('orders_specialties');
+		Schema::dropIfExists('orders');
     }
 };

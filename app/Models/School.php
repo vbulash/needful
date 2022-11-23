@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @method static findOrFail(mixed $school_id)
+ * @method static mixed findOrFail(mixed $school_id)
  */
 class School extends Model implements FormTemplate {
 	use HasFactory, HasTitle, GrantedAll;

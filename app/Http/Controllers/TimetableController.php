@@ -120,7 +120,7 @@ class TimetableController extends Controller
 		$name = $timetable->name;
 
 		session()->put('success', "Запись графика практик " . ($name ? "\"{$name}\" " : "") . "создана");
-		return redirect()->route('timetables.index', ['internship' => $timetable->internship->getKey(), 'sid' => session()->getId()]);
+		return redirect()->route('timetables.index', ['internship' => $timetable->internship->getKey()]);
 	}
 
 	/**
