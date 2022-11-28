@@ -46,9 +46,12 @@
 						if(isset($step['context']))
                             if(isset($context[$step['context']])) {
                                 $modelClass = classByContext($step['context']);
-                            	$id = $context[$step['context']];
-                                $model = $modelClass::findOrFail($id);
-                            	$subtitle = $model->getTitle();
+
+								if (isset($modelClass)) {
+									$id = $context[$step['context']];
+									$model = $modelClass::findOrFail($id);
+									$subtitle = $model->getTitle();
+								} else $subtitle = $step['context'];
 							}
 					@endphp
 

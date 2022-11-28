@@ -7,15 +7,15 @@
 		   role="button">Закрыть</a>
 	</div>
 	<div class="col-sm-5">
-		@if ($buttons & \App\Http\Controllers\tests\WizardButtons::BACK->value)
+		@if ($buttons & \App\Http\Controllers\WizardButtons::BACK->value)
 			<a class="btn btn-primary pl-3" href="@yield('form.back')" role="button">
 				&lt; Назад
 			</a>
 		@endif
-		@if ($buttons & \App\Http\Controllers\tests\WizardButtons::NEXT->value)
+		@if ($buttons & \App\Http\Controllers\WizardButtons::NEXT->value)
 			<button type="submit" class="btn btn-primary pl-3">Вперед &gt;</button>
 		@endif
-		@if ($buttons & \App\Http\Controllers\tests\WizardButtons::FINISH->value)
+		@if ($buttons & \App\Http\Controllers\WizardButtons::FINISH->value)
 			<button type="submit" class="btn btn-primary pl-3">Сохранить</button>
 		@endif
 	</div>

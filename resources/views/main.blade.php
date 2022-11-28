@@ -8,6 +8,9 @@
     			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Отслеживать практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
     			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Завершить практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
     		],
+			[
+				['role' => \App\Http\Controllers\Auth\RoleName::SCHOOL->value, 'title' => 'Учебное заведение', 'subtitle' => 'Создать заявку на практику', 'active' => true, 'icon' => 'fa fa-2x fa-school', 'link' => route('orders.steps.play')],
+			],
     		[
     			['role' => \App\Http\Controllers\Auth\RoleName::TRAINEE->value, 'title' => 'Практикант', 'subtitle' => 'Пройти практику', 'active' => false, 'icon' => 'fas fa-2x fa-user-graduate'],
     		]
@@ -38,6 +41,9 @@
 											$allowed = true;
 										} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::EMPLOYER->value) &&
 											$card['role'] == \App\Http\Controllers\Auth\RoleName::EMPLOYER->value) {
+											$allowed = true;
+										} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::SCHOOL->value) &&
+											$card['role'] == \App\Http\Controllers\Auth\RoleName::SCHOOL->value) {
 											$allowed = true;
 										} elseif (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value) &&
 											$card['role'] == \App\Http\Controllers\Auth\RoleName::TRAINEE->value) {

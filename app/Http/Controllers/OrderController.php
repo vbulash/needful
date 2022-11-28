@@ -10,17 +10,16 @@ use Yajra\DataTables\DataTables;
 
 class OrderController extends Controller {
 	public function getData(Request $request) {
-		$context = session('context');
-		$school = School::findOrFail($context['school']);
-		$query = $school->orders;
+		$query = Order::all();
 
 		return DataTables::of($query)
-			->editColumn('start', fn($order) => $order->start->format('d.m.Y'))
-			->editColumn('end', fn($order) => $order->end->format('d.m.Y'))
-			->addColumn('action', function ($order) use ($context) {
+			->addColumn('school', fn($order) => $order->school->getTitle())
+			->addColumn('start', fn($order) => $order->start->format('d.m.Y'))
+			->addColumn('end', fn($order) => $order->end->format('d.m.Y'))
+			->addColumn('action', function ($order) {
 			    $editRoute = route('orders.edit', ['order' => $order->getKey()]);
 			    $showRoute = route('orders.show', ['order' => $order->getKey()]);
-			    $selectRoute = route('orders.select', ['order' => $order->id]);
+			    $selectRoute = route('orders.select', ['order' => $order->getKey()]);
 			    $actions = '';
 
 			    $actions .=
@@ -35,7 +34,7 @@ class OrderController extends Controller {
 			    	"</a>\n";
 			    $actions .=
 			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$order->getKey()}, '')\">\n" .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$order->getKey()}, '{$order->name}')\">\n" .
 			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
 			    	"</a>\n";
 			    $actions .=
@@ -50,43 +49,40 @@ class OrderController extends Controller {
 	}
 
 	public function select(int $id) {
-		$context = session('context');
-		$context['order'] = $id;
+		$context = ['order' => $id];
 		session()->put('context', $context);
 
 		//return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
 	}
 
 	public function index() {
-		$context = session('context');
-		$school = School::findOrFail($context['school']);
-		$count = $school->orders()->count();
+		$count = Order::all()->count();
 
 		return view('orders.index', compact('count'));
 	}
 
 	public function create() {
-		$mode = config('global.create');
-		$context = session('context');
-		$school = School::findOrFail($context['school']);
+		// $mode = config('global.create');
+		// $context = session('context');
+		// $school = School::findOrFail($context['school']);
 
-		return view('orders.create', compact('mode', 'school'));
+		// return view('orders.create', compact('mode', 'school'));
 	}
 
 	public function store(Request $request) {
-		$context = session('context');
-		$school = School::findOrFail($context['school']);
+		// $context = session('context');
+		// $school = School::findOrFail($context['school']);
 
-		$order = new Order([
-			'name' => $request->name,
-			'start' => $request->start,
-			'end' => $request->end
-		]);
-		$order->school()->associate($school);
-		$order->save();
+		// $order = new Order([
+		// 	'name' => $request->name,
+		// 	'start' => $request->start,
+		// 	'end' => $request->end
+		// ]);
+		// $order->school()->associate($school);
+		// $order->save();
 
-		session()->put('success', "Заявка на практику № {$order->getKey()} создана");
-		return redirect()->route('orders.index');
+		// session()->put('success', "Заявка на практику № {$order->getKey()} создана");
+		// return redirect()->route('orders.index');
 	}
 
 	public function show(Request $request, int $id) {

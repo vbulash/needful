@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\orders;
+
+use App\Models\ActiveStatus;
+use App\Models\School;
+use App\Models\SchoolType;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+
+class StepSchool implements Step {
+	public function isBrowse(): bool {
+		return true;
+	}
+
+	public function getBrowseData(Request $request) {
+		$query = School::where('status', ActiveStatus::ACTIVE);
+
+		return DataTables::of($query)
+			->addColumn('short', fn($school) => $school->short)
+			->addColumn('type', fn($school) => SchoolType::getName($school->type))
+			->addColumn('action', function ($school) use ($request) {
+			    $selectRoute = route('orders.steps.next', [
+			    	'school' => $school->getKey()
+			    ]);
+			    $actions =
+			    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+			    	"<i class=\"fas fa-check\"></i>\n" .
+			    	"</a>\n";
+			    return $actions;
+		    })
+			->make(true);
+	}
+
+	public function getTitle(): string {
+		return 'Учебное заведение';
+	}
+
+	public function getStoreRules(): array {
+		return [];
+	}
+
+	public function getStoreAttributes(): array {
+		return [];
+	}
+
+	public function run(Request $request) {
+		$mode = config('global.create');
+		$buttons = intval($request->buttons);
+		$count = School::where('status', ActiveStatus::ACTIVE)->count();
+
+		return view('orders.steps.school', compact('mode', 'buttons', 'count'));
+	}
+
+	public function store(Request $request): bool {
+		$heap = session('heap') ?? [];
+		$heap['school'] = $request->school;
+		session()->put('heap', $heap);
+		return true;
+	}
+	/**
+	 * @return string
+	 */
+	public function getContext(): string {
+		$heap = session('heap') ?? null;
+		if (isset($heap['school'])) {
+			$school = School::findOrFail($heap['school']);
+			return $school->getTitle();
+		}
+		return '';
+	}
+}

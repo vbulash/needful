@@ -16,13 +16,18 @@ use DateTime;
  */
 class Order extends Model implements FormTemplate
 {
-    use HasFactory, GrantedAll;
+    use HasFactory, GrantedAll, HasTitle;
 
 	protected $fillable = [
 		'name',		// Наименование практики
 		'start',	// Начало практики
 		'end',		// Завершение практики
 	];
+
+	public function getTitle(): string
+	{
+		return $this->name;
+	}
 
 	// Геттеры Laravel
 	private static function convert2Date($value): DateTime {

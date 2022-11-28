@@ -6,6 +6,7 @@ use App\Models\Fspecialty;
 use App\Models\History;
 use App\Models\Internship;
 use App\Models\Learn;
+use App\Models\Order;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\Specialty;
@@ -40,6 +41,8 @@ if (! function_exists('classByContext')) {
 			'teacher' => Teacher::class,
 			'timetable' => Timetable::class,
 			'history' => History::class,
+			'order' => Order::class,
+			default => null
 		};
 	}
 }
