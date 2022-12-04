@@ -13,6 +13,7 @@ class StepController extends Controller {
 	public static array $steps = [
 		StepSchool::class,
 		StepOrder::class,
+		StepSpecialties::class,
 	];
 
 	public function getData(Request $request) {
@@ -25,6 +26,9 @@ class StepController extends Controller {
 	 * Проигрывание хода мастера заявки на практику
 	 */
 	public function play(Request $request) {
+		if (!$request->has('continue'))
+			self::clearCurrentStep();
+
 		$stepClass = $this->getCurrentStepClass();
 		$step = new $stepClass();
 		$buttons = 0;
@@ -49,7 +53,7 @@ class StepController extends Controller {
 		if (self::getCurrentStep() > 0)
 			self::decrementCurrentStep();
 
-		return redirect()->route('orders.steps.play');
+		return redirect()->route('orders.steps.play', ['continue' => true]);
 	}
 
 	/**
@@ -70,12 +74,12 @@ class StepController extends Controller {
 		)->validate();
 
 		if (!$step->store($request))
-			return redirect()->route('orders.steps.play');
+			return redirect()->route('orders.steps.play', ['continue' => true]);
 
 		if (self::getCurrentStep() < count(self::$steps) - 1)
 			self::incrementCurrentStep();
 
-		return redirect()->route('orders.steps.play');
+		return redirect()->route('orders.steps.play', ['continue' => true]);
 	}
 
 	/**
@@ -106,6 +110,7 @@ class StepController extends Controller {
 		$order->name = $heap['name'];
 		$order->start = $heap['start'];
 		$order->end = $heap['end'];
+		$order->description = $heap['description'];
 		$order->save();
 
 		session()->forget('heap');

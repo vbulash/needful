@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string code
  * @property string $name
  * @property string degree
- * @method static findOrFail(mixed $specialty_id)
+ * @method static mixed findOrFail(mixed $specialty_id)
  */
 class Specialty extends Model implements FormTemplate
 {

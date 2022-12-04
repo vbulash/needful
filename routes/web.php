@@ -71,6 +71,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::resource('/orders', 'OrderController');
 	Route::get('/orders.data', 'OrderController@getData')->name('orders.index.data');
 	Route::get('/orders.select/{order}', 'OrderController@select')->name('orders.select');
+	// Специальности в заявке
+	Route::resource('/order.specialties', 'OrderSpecialtyController');
 
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');

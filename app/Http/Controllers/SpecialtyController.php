@@ -15,6 +15,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
+/**
+ * Контроллер специальностей
+ */
 class SpecialtyController extends Controller
 {
 	/**

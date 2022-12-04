@@ -54,6 +54,10 @@ class School extends Model implements FormTemplate {
 		return $this->hasMany(Fspecialty::class);
 	}
 
+	public function specialties() {
+		return $this->fspecialties();
+	}
+
 	public function learns(): HasMany {
 		return $this->hasMany(Learn::class);
 	}

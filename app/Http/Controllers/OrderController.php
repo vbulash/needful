@@ -52,7 +52,7 @@ class OrderController extends Controller {
 		$context = ['order' => $id];
 		session()->put('context', $context);
 
-		//return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
+		return redirect()->route('order.specialties.index', ['order' => $id]);
 	}
 
 	public function index() {
@@ -100,7 +100,8 @@ class OrderController extends Controller {
 		$order->update([
 			'name' => $request->name,
 			'start' => $request->start,
-			'end' => $request->end
+			'end' => $request->end,
+			'description' => $request->description,
 		]);
 
 		session()->put('success', "Заявка на практику № {$order->getKey()} обновлена");

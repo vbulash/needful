@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers\orders;
 
-use App\Models\ActiveStatus;
-use App\Models\School;
-use App\Models\SchoolType;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 
 class StepOrder implements Step {
 	public function isBrowse(): bool {
@@ -50,6 +46,7 @@ class StepOrder implements Step {
 		$heap['name'] = $request->name;
 		$heap['start'] = $request->start;
 		$heap['end'] = $request->end;
+		$heap['description'] = $request->description;
 		session()->put('heap', $heap);
 		return true;
 	}

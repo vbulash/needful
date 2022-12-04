@@ -22,6 +22,11 @@
 		if (isset($heap['end']))
 			$field['value'] = $heap['end']->format('d.m.Y');
 		$fields[] = $field;
+
+		$field = ['name' => 'description', 'title' => 'Дополнительная информация', 'required' => false, 'type' => 'textarea'];
+		if (isset($heap['description']))
+			$field['value'] = $heap['description'];
+		$fields[] = $field;
 	@endphp
 @endsection
 

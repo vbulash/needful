@@ -14,8 +14,8 @@ class MainController extends Controller {
 	 * @return Application|Factory|View
 	 */
 	public function index(): Application|Factory|View {
-		// $temp = new ProcessTrainings;
-		// $temp();
+		session()->forget('heap');
+		session()->forget('continue');
 		return view('main');
 	}
 }

@@ -13,11 +13,6 @@
 			];
 		}
 		$steps[] = [
-			'title' => 'Выбор специальностей',
-			'active' => false,
-			'context' => null
-		];
-		$steps[] = [
 			'title' => 'Уведомление работодателей',
 			'active' => false,
 			'context' => null

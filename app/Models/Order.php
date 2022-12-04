@@ -13,15 +13,17 @@ use DateTime;
  * @property string $name
  * @property DateTime $start
  * @property DateTime $end
+ * @property string $description
  */
 class Order extends Model implements FormTemplate
 {
     use HasFactory, GrantedAll, HasTitle;
 
 	protected $fillable = [
-		'name',		// Наименование практики
-		'start',	// Начало практики
-		'end',		// Завершение практики
+		'name',			// Наименование практики
+		'start',		// Начало практики
+		'end',			// Завершение практики
+		'description',	// Дополнительная информация
 	];
 
 	public function getTitle(): string
