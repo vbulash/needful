@@ -4,20 +4,29 @@
 	Создание заявки на практику
 @endsection
 
+@section('interior.header')
+	<div class="block-header block-header-default">
+		<div>
+			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-specialty" data-bs-toggle="modal"
+				data-bs-target="#specialties-list">
+				Добавить специальность к заявке на практику
+			</button>
+		</div>
+	</div>
+@endsection
+
+@section('interior.subheader')
+@endsection
+
 @section('form.fields')
 	@php
 		$fields = [];
 	@endphp
 @endsection
 
-@section('interior')
-	{{-- <div class="block-header block-header-default">
-		<h3 class="block-title">
-			Выберите учебное заведение для создания заявки на практику
-		</h3>
-	</div> --}}
+@section('form.body')
 	<div class="block-content p-4">
-		<div id="table-data">
+		<div id="table-data" style="display:none;">
 			<div class="table-responsive">
 				<table class="table table-bordered table-hover text-nowrap" id="specialties_table" style="width: 100%;">
 					<thead>
@@ -31,8 +40,30 @@
 				</table>
 			</div>
 		</div>
-		<div id="no-data">
+		<div id="no-data" style="display:none;">
 			<p>Специальностей в заявке на практику пока нет...</p>
+		</div>
+	</div>
+
+	<div class="modal fade" id="specialties-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+		data-bs-keyboard="false">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Выбор специальности для заявки на практику</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex align-items-start">
+						<select name="specialties" class="select2 form-control" style="width:100%;" id="specialties"></select>
+					</div>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Закрыть</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="link-specialty">Зафиксировать в
+						заявке</button>
+				</div>
+			</div>
 		</div>
 	</div>
 @endsection
@@ -44,15 +75,84 @@
 @push('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
+		function createArray(map) {
+			let arr = [];
+			for (let item of map.values())
+				arr.push({
+					'id': item.id,
+					'text': item.text,
+					'quantity': item.quantity,
+					'action': item.action
+				});
+			return arr;
+		}
+
+		function reloadSelect() {
+			if (window.enabled.size === 0) {
+				document.getElementById('add-specialty').disabled = true;
+			} else {
+				document.getElementById('add-specialty').disabled = false;
+				let select = $('#specialties');
+				select.select2('destroy');
+				select.select2({
+					language: 'ru',
+					dropdownParent: $('#specialties-list'),
+					data: window.enabledArray,
+					// placeholder: 'Выберите одного или нескольких учащихся из выпадающего списка',
+					// sorter: function(data) {
+					// 	return data.sort(function(a, b) {
+					// 		return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+					// 	});
+					// }
+				});
+			}
+		}
+
+		function clickDelete(self, id) {
+			const key = id;
+			const object = window.selected.get(parseInt(key));
+
+			debugger
+			window.selected.delete(object.id);
+			window.selectedArray = createArray(window.selected);
+
+			window.enabled.set(object.id, object);
+			window.enabledArray = createArray(window.enabled);
+
+			// reloadSelect();
+			window.datatable
+				.row($(self).parents('tr'))
+				.remove()
+				.draw();
+		}
+
+		$('#link-specialty').on('click', (event) => {
+			const key = $('#specialties').val();
+			const object = window.enabled.get(parseInt(key));
+
+			window.enabled.delete(object.id);
+			window.enabledArray = createArray(window.enabled);
+
+			window.selected.set(object.id, object);
+			window.selectedArray = createArray(window.selected);
+
+			// reloadSelect();
+			window.datatable.row.add(object).draw();
+		});
+
+		$('#specialties-list').on('show.bs.modal', () => {
+			reloadSelect();
+		});
+
 		$(function() {
 			// Все специальности
 			window.all = new Map();
 			window.allArray = [];
-			let source = JSON.parse('{!! json_encode($specialties) !!}');
+			let source = JSON.parse({!! json_encode($specialties) !!});
 			for (let item of source) {
 				let object = {
 					'id': item.id,
-					'name': item.name,
+					'text': item.name,
 					'quantity': 0,
 					'action': 0
 				};
@@ -63,11 +163,11 @@
 			window.selected = new Map();
 			window.selectedArray = [];
 			@if (isset($heap['specialties']))
-				source = JSON.parse('{!! json_encode($heap['specialties']) !!}');
+				source = JSON.parse({!! json_encode($heap['specialties']) !!});
 				for (let item of source) {
 					let object = {
 						'id': item.id,
-						'name': item.name,
+						'text': item.name,
 						'quantity': item.quantity,
 						'action': 0
 					};
@@ -75,6 +175,25 @@
 					window.selectedArray.push(object);
 				}
 			@endif
+			// Доступные специальности
+			window.enabledArray = [];
+			if (window.selected.size == 0) {
+				window.enabled = new Map(window.all);
+				window.enabledArray = [...window.allArray];
+			} else {
+				window.enabled = new Map();
+				for (let item of window.all.entries()) {
+					if (window.selected.get(item.id)) continue;
+					let object = {
+						'id': item.id,
+						'text': item.text,
+						'quantity': item.quantity,
+						'action': 0
+					};
+					window.enabled.set(item.id, object);
+					window.enabledArray.push(object);
+				}
+			}
 
 			window.datatable = $('#specialties_table').DataTable({
 				language: {
@@ -91,8 +210,8 @@
 						responsivePriority: 1
 					},
 					{
-						data: 'name',
-						name: 'name',
+						data: 'text',
+						name: 'text',
 						responsivePriority: 1
 					},
 					{
@@ -108,17 +227,32 @@
 						className: 'no-wrap dt-actions',
 						render: (data, type, row, meta) => {
 							let button =
-								`<a href="javascript:void(0)" class="btn btn-primary btn-sm float-left"
+								`<button class="btn btn-primary btn-sm float-left"
 									data-toggle="tooltip" data-placement="top" title="Удаление"
-									onclick="clickDelete(${row.id}, '${row.name}')">
+									onclick="clickDelete(this, ${row.id})">
 									<i class="fas fa-trash-alt"></i>
-								</a>
+								</button>
 								`;
 							return button;
 						}
 					}
 				]
 			});
+
+			if (window.all.size == 0) {
+				$('#table-data').hide();
+				$('#no-data').show();
+			} else {
+				$('#table-data').show();
+				$('#no-data').hide();
+			}
+			if (window.enabled.size == 0) {
+				$('#add-specialty').attr('disabled', true);
+			} else {
+				$('#add-specialty').removeAttr('disabled');
+			}
+
+			reloadSelect();
 		});
 	</script>
 @endpush

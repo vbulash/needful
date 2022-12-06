@@ -6,9 +6,10 @@
 		$steps = [];
 		foreach (\App\Http\Controllers\orders\StepController::$steps as $stepClass) {
             $step = new $stepClass();
+			$active = $index++ == \App\Http\Controllers\orders\StepController::getCurrentStep();
             $steps[] = [
                 'title' => $step->getTitle(),
-                'active' => ($index++ == \App\Http\Controllers\orders\StepController::getCurrentStep()),
+                'active' => $active,
                 'context' => $step->getContext(),
 			];
 		}

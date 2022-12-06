@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class StepSpecialties implements Step {
 	public function isBrowse(): bool {
-		return true;
+		return false;
 	}
 
 	public function getBrowseData(Request $request) {
@@ -39,6 +39,8 @@ class StepSpecialties implements Step {
 				'name' => $item->specialty->getTitle(),
 			];
 		});
+		usort($specialties, fn ($a, $b) => $a['name'] < $b['name'] ? -1 : ($a['name'] > $b['name'] ? 1 : 0));
+		$specialties = json_encode($specialties);
 
 		return view('orders.steps.specialties', compact('mode', 'buttons', 'heap', 'specialties'));
 	}
