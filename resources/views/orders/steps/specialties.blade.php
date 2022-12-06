@@ -119,7 +119,7 @@
 			window.enabled.set(object.id, object);
 			window.enabledArray = createArray(window.enabled);
 
-			// reloadSelect();
+			reloadSelect();
 			window.datatable
 				.row($(self).parents('tr'))
 				.remove()
@@ -136,12 +136,12 @@
 			window.selected.set(object.id, object);
 			window.selectedArray = createArray(window.selected);
 
-			// reloadSelect();
+			reloadSelect();
 			window.datatable.row.add(object).draw();
 		});
 
 		$('#specialties-list').on('show.bs.modal', () => {
-			reloadSelect();
+			// reloadSelect();
 		});
 
 		$(function() {
