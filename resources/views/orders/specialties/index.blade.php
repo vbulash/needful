@@ -7,8 +7,8 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'],
-			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
+			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
+			['title' => 'Специальности в заявке', 'active' => true, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection
@@ -19,21 +19,19 @@
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="orders_table" style="width: 100%;">
+				<table class="table table-bordered table-hover text-nowrap" id="order_specialties_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<th style="width: 30px">#</th>
-							<th>Учебное заведение</th>
-							<th>Название практики</th>
-							<th>Дата начала</th>
-							<th>Дата окончания</th>
+							<th>Название специальности</th>
+							<th>Количество позиций</th>
 							<th>Действия</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
 		@else
-			<p>Заявок на практику пока нет...</p>
+			<p>Специальностей в заявке на практику пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -49,7 +47,7 @@
 			document.getElementById('confirm-yes').addEventListener('click', (event) => {
 				$.ajax({
 					method: 'DELETE',
-					url: "{{ route('orders.destroy', ['order' => '0']) }}",
+					url: "{{ route('order.specialties.destroy', ['order' => $order, 'specialty' => '0']) }}",
 					data: {
 						id: event.target.dataset.id,
 					},
@@ -64,20 +62,20 @@
 
 			function clickDelete(id, name) {
 				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить заявку на практику &laquo;" + name + "&raquo; ?";
+				document.getElementById('confirm-body').innerHTML = "Удалить специальность из заявки на практику &laquo;" + name + "&raquo; ?";
 				document.getElementById('confirm-yes').dataset.id = id;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 				confirmDialog.show();
 			}
 
 			$(function() {
-				window.datatable = $('#orders_table').DataTable({
+				window.datatable = $('#order_specialties_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('orders.index.data') !!}',
+					ajax: '{!! route('order.specialties.index.data', ['order' => $order]) !!}',
 					responsive: true,
 					columns: [{
 							data: 'id',
@@ -85,23 +83,13 @@
 							responsivePriority: 1
 						},
 						{
-							data: 'school',
-							name: 'school',
+							data: 'specialty',
+							name: 'specialty',
 							responsivePriority: 1
 						},
 						{
-							data: 'name',
-							name: 'name',
-							responsivePriority: 2
-						},
-						{
-							data: 'start',
-							name: 'start',
-							responsivePriority: 1
-						},
-						{
-							data: 'end',
-							name: 'end',
+							data: 'quantity',
+							name: 'quantity',
 							responsivePriority: 1
 						},
 						{

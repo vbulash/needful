@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\orders;
 
 use Illuminate\Http\Request;
+use DateTime;
 
 class StepOrder implements Step {
 	public function isBrowse(): bool {
@@ -44,8 +45,8 @@ class StepOrder implements Step {
 	public function store(Request $request): bool {
 		$heap = session('heap') ?? [];
 		$heap['name'] = $request->name;
-		$heap['start'] = $request->start;
-		$heap['end'] = $request->end;
+		$heap['start'] = new DateTime($request->start);
+		$heap['end'] = new DateTime($request->end);
 		$heap['description'] = $request->description;
 		session()->put('heap', $heap);
 		return true;

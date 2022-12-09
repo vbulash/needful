@@ -8,7 +8,7 @@
 	@php
 		$steps = [
 			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'specialty']
+			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection

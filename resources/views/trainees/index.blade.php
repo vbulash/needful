@@ -106,8 +106,7 @@
             } else {
                 document.getElementById('add-trainees').disabled = false;
                 let select = $('#students');
-                select.select2('destroy');
-                select.select2({
+                select.empty().select2({
                     language: 'ru',
                     dropdownParent: $('#trainee-list'),
                     data: data.data,
@@ -115,6 +114,7 @@
                     multiple: true,
                     placeholder: 'Выберите одного или нескольких учащихся из выпадающего списка',
                 });
+				select.trigger('change');
             }
             document.getElementById('mail-new').disabled = data.new === 0;
         }

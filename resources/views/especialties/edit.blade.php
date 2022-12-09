@@ -85,8 +85,7 @@
 		$(document).ready(function () {
 			let data = {!! $specialties !!};
 			let select = $('#specialty_id');
-			select.select2('destroy');
-			select.select2({
+			select.empty().select2({
 				language: 'ru',
 				data: data,
 				templateResult: formatRecord,

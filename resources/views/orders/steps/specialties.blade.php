@@ -11,6 +11,7 @@
 				data-bs-target="#specialties-list">
 				Добавить специальность к заявке на практику
 			</button>
+			<p id="no-enabled-data" style="display: none;">Все специальности учебного заведения внесены в заявку на практику</p>
 		</div>
 	</div>
 @endsection
@@ -43,6 +44,7 @@
 		<div id="no-data" style="display:none;">
 			<p>Специальностей в заявке на практику пока нет...</p>
 		</div>
+		<input type="hidden" name="specs" id="specs">
 	</div>
 
 	<div class="modal fade" id="specialties-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
@@ -54,8 +56,12 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 				</div>
 				<div class="modal-body">
-					<div class="d-flex align-items-start">
+					<div class="mb-4">
 						<select name="specialties" class="select2 form-control" style="width:100%;" id="specialties"></select>
+					</div>
+					<div class="form-floating">
+						<input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1">
+						<label for="quantity">Количество позиций по специальности в заявке</label>
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
@@ -89,12 +95,12 @@
 
 		function reloadSelect() {
 			if (window.enabled.size === 0) {
-				document.getElementById('add-specialty').disabled = true;
+				document.getElementById('add-specialty').style.display = 'none';
+				document.getElementById('no-enabled-data').style.display = 'block';
 			} else {
-				document.getElementById('add-specialty').disabled = false;
+				document.getElementById('add-specialty').style.display = 'block';
 				let select = $('#specialties');
-				select.select2('destroy');
-				select.select2({
+				select.empty().select2({
 					language: 'ru',
 					dropdownParent: $('#specialties-list'),
 					data: window.enabledArray,
@@ -105,12 +111,16 @@
 					// 	});
 					// }
 				});
+				select.trigger('change');
+				document.getElementById('no-enabled-data').style.display = 'none';
 			}
+			document.getElementById('quantity').value = 1;
 		}
 
 		function clickDelete(self, id) {
 			const key = id;
 			const object = window.selected.get(parseInt(key));
+			object.quantity = 1;
 
 			debugger
 			window.selected.delete(object.id);
@@ -126,9 +136,25 @@
 				.draw();
 		}
 
+		document.getElementById('quantity').addEventListener('input', (event) => {
+			document.getElementById('link-specialty').disabled = event.target.value == '';
+		}, false);
+
+		document.getElementById('core-create').addEventListener('submit', (event) => {
+			if (window.selected.size == 0) {
+				event.preventDefault();
+                event.stopPropagation();
+				showToast('error', 'Не выбраны специальности для заявки', false);
+			} else {
+				document.getElementById('specs').value =
+					JSON.stringify(window.selectedArray);
+			}
+		}, false);
+
 		$('#link-specialty').on('click', (event) => {
 			const key = $('#specialties').val();
 			const object = window.enabled.get(parseInt(key));
+			object.quantity = $('#quantity').val();
 
 			window.enabled.delete(object.id);
 			window.enabledArray = createArray(window.enabled);

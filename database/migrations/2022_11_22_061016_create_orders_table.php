@@ -28,8 +28,8 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('order_id')->constrained()->cascadeOnDelete()->comment('Связанная заявка на практику');
 			//
-			$table->unsignedBigInteger('fspecialty_id');
-			$table->foreign('fspecialty_id')->references('id')->on('fspecialties')->cascadeOnDelete()->comment('Связанная специальность заявки');
+			$table->unsignedBigInteger('specialty_id');
+			$table->foreign('specialty_id')->references('id')->on('specialties')->cascadeOnDelete()->comment('Связанная специальность заявки');
 			$table->tinyInteger('quantity')->comment('Количество позиций по специальности');
 			//
 			$table->timestamps();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\orders;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WizardButtons;
 use App\Models\Order;
+use App\Models\OrderSpecialty;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -112,6 +113,13 @@ class StepController extends Controller {
 		$order->end = $heap['end'];
 		$order->description = $heap['description'];
 		$order->save();
+		foreach ($heap['specialties'] as $item) {
+			$orderSpecialty = new OrderSpecialty();
+			$orderSpecialty->quantity = $item->quantity;
+			$orderSpecialty->order()->associate($order);
+			$orderSpecialty->specialty()->associate($item->id);
+			$orderSpecialty->save();
+		}
 
 		session()->forget('heap');
 		session()->put('success', "Заявка на практику \"{$order->name}\" создана");

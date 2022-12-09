@@ -46,12 +46,9 @@ class StepSpecialties implements Step {
 	}
 
 	public function store(Request $request): bool {
-		// $heap = session('heap') ?? [];
-		// $heap['name'] = $request->name;
-		// $heap['start'] = $request->start;
-		// $heap['end'] = $request->end;
-		// $heap['description'] = $request->description;
-		// session()->put('heap', $heap);
+		$heap = session('heap') ?? [];
+		$heap['specialties'] = json_decode($request->specs);
+		session()->put('heap', $heap);
 		return true;
 	}
 	/**

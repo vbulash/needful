@@ -7,6 +7,7 @@ use App\Models\History;
 use App\Models\Internship;
 use App\Models\Learn;
 use App\Models\Order;
+use App\Models\OrderSpecialty;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\Specialty;
@@ -42,6 +43,7 @@ if (! function_exists('classByContext')) {
 			'timetable' => Timetable::class,
 			'history' => History::class,
 			'order' => Order::class,
+			'order.specialty' => OrderSpecialty::class,
 			default => null
 		};
 	}
