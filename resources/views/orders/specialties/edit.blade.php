@@ -30,7 +30,7 @@
 @section('form.fields')
 	@php
 		$fields = [];
-		$fields[] = ['name' => 'name', 'title' => 'Название специальности', 'required' => true, 'type' => 'text', 'value' => $specialty->getTitle(), 'disabled' => true];
+		$fields[] = ['name' => 'name', 'title' => 'Название специальности', 'required' => false, 'type' => 'text', 'value' => $specialty->getTitle(), 'disabled' => true];
 		$fields[] = ['name' => 'quantity', 'title' => 'Количество позиций', 'required' => true, 'type' => 'number', 'value' => $specialty->quantity, 'min' => 1];
 	@endphp
 @endsection
