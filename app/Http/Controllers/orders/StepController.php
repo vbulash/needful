@@ -5,6 +5,8 @@ namespace App\Http\Controllers\orders;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WizardButtons;
 use App\Models\Order;
+use App\Models\OrderEmployer;
+use App\Models\OrderEmployerStatus;
 use App\Models\OrderSpecialty;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +17,8 @@ class StepController extends Controller {
 		StepSchool::class,
 		StepOrder::class,
 		StepSpecialties::class,
+		StepEmployers::class,
+		StepFinal::class,
 	];
 
 	public function getData(Request $request) {
@@ -120,6 +124,14 @@ class StepController extends Controller {
 			$orderSpecialty->specialty()->associate($item->id);
 			$orderSpecialty->save();
 		}
+		foreach ($heap['employers'] as $item) {
+			$orderEmployer = new OrderEmployer();
+			$orderEmployer->status = OrderEmployerStatus::NEW ->value;
+			$orderEmployer->order()->associate($order);
+			$orderEmployer->employer()->associate($item->id);
+			$orderEmployer->save();
+		}
+		// TODO разослать нотификации добавленным работодателям и перевести OrderEmployer в SENT
 
 		session()->forget('heap');
 		session()->put('success', "Заявка на практику \"{$order->name}\" создана");

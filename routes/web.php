@@ -74,6 +74,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Специальности в заявке
 	Route::resource('/order.specialties', 'OrderSpecialtyController');
 	Route::get('/orders.specialties.data/{order}', 'OrderSpecialtyController@getData')->name('order.specialties.index.data');
+	// Уведомления работодателям в заявке
+	Route::resource('/order.employers', 'OrderEmployerController');
+	Route::get('/orders.employers.data/{order}', 'OrderEmployerController@getData')->name('order.employers.index.data');
 
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');

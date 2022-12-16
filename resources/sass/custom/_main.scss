@@ -65,3 +65,8 @@ button.select2-selection__choice__remove {
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
 	background-color: $theme-xsmooth-primary !important;
 }
+
+.flatpickr-input.form-control:disabled, .flatpickr-input.form-control[readonly] {
+	background-color: #e9ecef;
+	cursor: default;
+}

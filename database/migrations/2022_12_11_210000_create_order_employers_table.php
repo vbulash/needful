@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 			$table->foreignId('order_id')->constrained()->cascadeOnDelete()->comment('Связанная заявка на практику');
 			$table->foreignId('employer_id')->constrained()->cascadeOnDelete()->comment('Связанный работодатель');
-			$table->tinyInteger('status')->comment('Статус взаимодействия с работодателем');
+			$table->tinyInteger('status')->default(0)->comment('Статус взаимодействия с работодателем');
             $table->timestamps();
         });
     }

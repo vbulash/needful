@@ -13,16 +13,6 @@
                 'context' => $step->getContext(),
 			];
 		}
-		$steps[] = [
-			'title' => 'Уведомление работодателей',
-			'active' => false,
-			'context' => null
-		];
-		$steps[] = [
-			'title' => 'Подтверждение выбора',
-			'active' => false,
-			'context' => null
-		];
 	@endphp
 @endsection
 

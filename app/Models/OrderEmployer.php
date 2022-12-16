@@ -10,6 +10,8 @@ class OrderEmployer extends Model
 {
     use HasFactory;
 
+	protected $table = 'orders_employers';
+
 	protected $fillable = [
 		'status',	// Статус информирования работодателя
 	];
