@@ -19,28 +19,36 @@ class OrderController extends Controller {
 			->addColumn('action', function ($order) {
 			    $editRoute = route('orders.edit', ['order' => $order->getKey()]);
 			    $showRoute = route('orders.show', ['order' => $order->getKey()]);
-			    $selectRoute = route('orders.select', ['order' => $order->getKey()]);
+			    $specialtiesRoute = route('orders.select', [
+					'order' => $order->getKey(),
+					'kind' => 'specialties',
+				]);
 			    $actions = '';
 
 			    $actions .=
-			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
 			    	"<i class=\"fas fa-edit\"></i>\n" .
 			    	"</a>\n";
 			    $actions .=
-			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
 			    	"<i class=\"fas fa-eye\"></i>\n" .
 			    	"</a>\n";
 			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$order->getKey()}, '{$order->name}')\">\n" .
 			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
 			    	"</a>\n";
 			    $actions .=
-			    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-			    	"<i class=\"fas fa-check\"></i>\n" .
+			    	"<a href=\"{$specialtiesRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности\">\n" .
+			    	"<i class=\"fas fa-graduation-cap\"></i>\n" .
+			    	"</a>\n";
+			    $actions .=
+			    	"<a href=\"{$specialtiesRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
+			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Уведомления работодателей\">\n" .
+			    	"<i class=\"fas fa-building\"></i>\n" .
 			    	"</a>\n";
 
 			    return $actions;
@@ -48,11 +56,15 @@ class OrderController extends Controller {
 			->make(true);
 	}
 
-	public function select(int $id) {
+	public function select(Request $request, int $id) {
 		$context = ['order' => $id];
 		session()->put('context', $context);
+		$view = match ($request->kind) {
+			'specialties' => 'order.specialties.index',
+			'employers' => 'order.employers.index',
+		};
 
-		return redirect()->route('order.specialties.index', ['order' => $id]);
+		return redirect()->route($view, ['order' => $id]);
 	}
 
 	public function index() {

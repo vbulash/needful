@@ -8,7 +8,7 @@
 	@php
 		$steps = [
 			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'],
-			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
+			['title' => 'Специальности в заявке или Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection
