@@ -8,7 +8,7 @@
 	@php
 		$steps = [
 			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке', 'active' => true, 'context' => 'order.specialty']
+			['title' => 'Уведомления работодателей', 'active' => true, 'context' => 'order.employer']
 		];
 	@endphp
 @endsection
@@ -16,53 +16,49 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-specialty" data-bs-toggle="modal"
-				data-bs-target="#specialties-list">
-				Добавить специальность к заявке на практику
+			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-employer" data-bs-toggle="modal"
+				data-bs-target="#employers-list">
+				Добавить работодателя к заявке на практику
 			</button>
-			<p>Вы также можете перейти на уведомления работодателей по ссылке <a href="{{ route('order.employers.index', ['order' => $order]) }}">Уведомления работодателей</a></p>
-			<p id="no-enabled-data" style="display: none;">Все специальности учебного заведения внесены в заявку на практику</p>
+			<p>Вы также можете перейти на специальности в заявке по ссылке <a href="{{ route('order.specialties.index', ['order' => $order]) }}">Специальности в заявке</a></p>
+			<p id="no-enabled-data" style="display: none;">Все работодатели внесены в заявку на практику</p>
 		</div>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="order_specialties_table" style="width: 100%;">
+				<table class="table table-bordered table-hover text-nowrap" id="order_employers_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<th style="width: 30px"># в справочнике</th>
-							<th>Название специальности</th>
-							<th>Количество позиций</th>
+							<th style="width: 30px"># работодателя</th>
+							<th>Название работодателя</th>
+							<th>Статус уведомления</th>
 							<th>Действия</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
 		@else
-			<p>Специальностей в заявке на практику пока нет...</p>
+			<p>Работодателей в заявке на практику пока нет...</p>
 		@endif
 	</div>
 
-	<div class="modal fade" id="specialties-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+	<div class="modal fade" id="employers-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
 		data-bs-keyboard="false">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Выбор специальности для заявки на практику</h5>
+					<h5 class="modal-title">Выбор работодателя для заявки на практику</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 				</div>
 				<div class="modal-body">
 					<div class="mb-4">
-						<select name="specialties" class="select2 form-control" style="width:100%;" id="specialties"></select>
-					</div>
-					<div class="form-floating">
-						<input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1">
-						<label for="quantity">Количество позиций по специальности в заявке</label>
+						<select name="employers" class="select2 form-control" style="width:100%;" id="employers"></select>
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Закрыть</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="link-specialty">Зафиксировать в
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="link-employer">Зафиксировать в
 						заявке</button>
 				</div>
 			</div>
@@ -80,11 +76,11 @@
 		<script>
 			function reloadSelect() {
 				if (Object.keys(window.enabled).length === 0) {
-					document.getElementById('add-specialty').style.display = 'none';
+					document.getElementById('add-employer').style.display = 'none';
 					document.getElementById('no-enabled-data').style.display = 'block';
 				} else {
-					document.getElementById('add-specialty').style.display = 'block';
-					let select = $('#specialties');
+					document.getElementById('add-employer').style.display = 'block';
+					let select = $('#employers');
 
 					const data = [];
 					for (let object in window.enabled)
@@ -99,7 +95,7 @@
 					});
 					select.empty().select2({
 						language: 'ru',
-						dropdownParent: $('#specialties-list'),
+						dropdownParent: $('#employers-list'),
 						data: data,
 						// placeholder: 'Выберите одного или нескольких учащихся из выпадающего списка',
 						// sorter: function(data) {
@@ -111,13 +107,12 @@
 					//select.val('').trigger('change');
 					document.getElementById('no-enabled-data').style.display = 'none';
 				}
-				document.getElementById('quantity').value = 1;
 			}
 
 			document.getElementById('confirm-yes').addEventListener('click', (event) => {
 				$.ajax({
 					method: 'DELETE',
-					url: "{{ route('order.specialties.destroy', ['order' => $order, 'specialty' => '0']) }}",
+					url: "{{ route('order.employers.destroy', ['order' => $order, 'employer' => '0']) }}",
 					data: {
 						id: event.target.dataset.id,
 					},
@@ -125,7 +120,7 @@
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
 					success: () => {
-						const id = event.target.dataset.specialty;
+						const id = event.target.dataset.employer;
 						const text = window.selected[id];
 						delete window.selected[id];
 						window.enabled[id] = text;
@@ -136,28 +131,24 @@
 				});
 			}, false);
 
-			function clickDelete(id, name, specialty) {
+			function clickDelete(id, name, employer) {
 				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить специальность из заявки на практику &laquo;" + name +
+				document.getElementById('confirm-body').innerHTML = "Удалить работодателя из заявки на практику &laquo;" + name +
 					"&raquo; ?";
 				document.getElementById('confirm-yes').dataset.id = id;
-				document.getElementById('confirm-yes').dataset.specialty = specialty;
+				document.getElementById('confirm-yes').dataset.employer = employer;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 				confirmDialog.show();
 			}
 
-			document.getElementById('quantity').addEventListener('input', (event) => {
-				document.getElementById('link-specialty').disabled = event.target.value == '';
-			}, false);
-
 			$(function() {
-				window.datatable = $('#order_specialties_table').DataTable({
+				window.datatable = $('#order_employers_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('order.specialties.index.data', ['order' => $order]) !!}',
+					ajax: '{!! route('order.employers.index.data', ['order' => $order]) !!}',
 					responsive: true,
 					order: [
 						[1, 'asc']
@@ -168,13 +159,13 @@
 							responsivePriority: 1
 						},
 						{
-							data: 'specialty',
-							name: 'specialty',
+							data: 'name',
+							name: 'name',
 							responsivePriority: 1
 						},
 						{
-							data: 'quantity',
-							name: 'quantity',
+							data: 'status',
+							name: 'status',
 							responsivePriority: 1
 						},
 						{
@@ -191,18 +182,16 @@
 				window.enabled = {!! json_encode($enabled) !!};
 				reloadSelect();
 
-				$('#link-specialty').on('click', (event) => {
-					const id = $('#specialties').val();
+				$('#link-employer').on('click', (event) => {
+					const id = $('#employers').val();
 					const text = window.enabled[id];
-					const quantity = $('#quantity').val();
 
 					$.ajax({
 						method: 'POST',
-						url: "{{ route('order.specialties.store', ['order' => $order]) }}",
+						url: "{{ route('order.employers.store', ['order' => $order]) }}",
 						data: {
 							id: id,
 							text: text,
-							quantity: quantity,
 						},
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
