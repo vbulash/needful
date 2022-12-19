@@ -64,6 +64,10 @@ class Order extends Model implements FormTemplate
 		return $this->hasMany(OrderSpecialty::class);
 	}
 
+	public function employers() {
+		return $this->hasMany(OrderEmployer::class);
+	}
+
 	public static function createTemplate(): array {
 		return [
 			'id' => 'order-create',

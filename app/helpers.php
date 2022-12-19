@@ -7,6 +7,7 @@ use App\Models\History;
 use App\Models\Internship;
 use App\Models\Learn;
 use App\Models\Order;
+use App\Models\OrderEmployer;
 use App\Models\OrderSpecialty;
 use App\Models\Role;
 use App\Models\School;
@@ -44,6 +45,7 @@ if (! function_exists('classByContext')) {
 			'history' => History::class,
 			'order' => Order::class,
 			'order.specialty' => OrderSpecialty::class,
+			'order.employer' => OrderEmployer::class,
 			default => null
 		};
 	}
