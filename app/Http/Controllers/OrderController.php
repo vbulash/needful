@@ -68,6 +68,7 @@ class OrderController extends Controller {
 	}
 
 	public function index() {
+		session()->forget('context');
 		$count = Order::all()->count();
 
 		return view('orders.index', compact('count'));
