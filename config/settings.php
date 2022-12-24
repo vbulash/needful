@@ -14,6 +14,7 @@ use App\Notifications\e2s\LastWarningNotification;
 use App\Notifications\e2s\New2AskedNotification;
 use App\Notifications\NewEmployer;
 use App\Notifications\NewLearn;
+use App\Notifications\NewOrder;
 use App\Notifications\NewSchool;
 use App\Notifications\NewStudent;
 use App\Notifications\NewSupport;
@@ -57,6 +58,9 @@ return [
 			LastWarningNotification::class => 'Последнее напоминание перед началом практики',
 			EmployerPracticeStartedNotification::class => 'Практика начата',
 			EmployerPracticeDestroyedNotification::class => 'Практика отменена (уведомление работодателю)',
+		]],
+		['group' => 'Заявки на практику', 'classes' => [
+			NewOrder::class => 'Новая заявка на практику',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',
