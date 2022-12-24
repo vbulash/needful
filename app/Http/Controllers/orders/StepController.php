@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\orders;
 
+use App\Events\orders\New2SentTaskEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WizardButtons;
 use App\Models\Order;
@@ -9,6 +10,7 @@ use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
 use App\Models\OrderSpecialty;
 use App\Notifications\NewOrder;
+use App\Notifications\orders\New2Sent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -135,10 +137,11 @@ class StepController extends Controller {
 
 		$order->school->user->notify(new NewOrder($order));
 		foreach ($order->employers as $order_employer) {
-			// TODO разослать уведомление работодателю
+			$order_employer->employer->user->notify(new New2Sent($order));
 			$order_employer->update([
 				'status' => OrderEmployerStatus::SENT->value,
 			]);
+			event(new New2SentTaskEvent($order_employer));
 		}
 
 		session()->forget('heap');

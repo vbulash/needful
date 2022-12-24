@@ -77,6 +77,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Уведомления работодателям в заявке
 	Route::resource('/order.employers', 'OrderEmployerController');
 	Route::get('/orders.employers.data/{order}', 'OrderEmployerController@getData')->name('order.employers.index.data');
+	Route::post('/orders.employers.mail', 'OrderEmployerController@mail')->name('order.employers.mail');
 
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');

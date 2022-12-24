@@ -7,6 +7,7 @@ use App\Events\Asked2AcceptedTaskEvent;
 use App\Events\Asked2RejectedTaskEvent;
 use App\Events\InviteTraineeTaskEvent;
 use App\Events\New2AskedTaskEvent;
+use App\Events\orders\New2SentTaskEvent;
 use App\Events\UpdateEmployerTaskEvent;
 use App\Events\UpdateSchoolTaskEvent;
 use App\Events\UpdateStudentTaskEvent;
@@ -52,6 +53,10 @@ class EventServiceProvider extends ServiceProvider
 			TaskRegisterListener::class
 		],
 		All2DestroyedTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		// Заявки на практику
+		New2SentTaskEvent::class => [
 			TaskRegisterListener::class
 		],
 		// Фильтрация уведомлений перед отправкой

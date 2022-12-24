@@ -23,6 +23,10 @@ class OrderController extends Controller {
 					'order' => $order->getKey(),
 					'kind' => 'specialties',
 				]);
+			    $employersRoute = route('orders.select', [
+			    	'order' => $order->getKey(),
+			    	'kind' => 'employers',
+			    ]);
 			    $actions = '';
 
 			    $actions .=
@@ -46,7 +50,7 @@ class OrderController extends Controller {
 			    	"<i class=\"fas fa-graduation-cap\"></i>\n" .
 			    	"</a>\n";
 			    $actions .=
-			    	"<a href=\"{$specialtiesRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
+			    	"<a href=\"{$employersRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
 			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Уведомления работодателей\">\n" .
 			    	"<i class=\"fas fa-building\"></i>\n" .
 			    	"</a>\n";

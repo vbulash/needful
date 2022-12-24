@@ -141,6 +141,23 @@
 				confirmDialog.show();
 			}
 
+			function clickMail(order_employer_id) {
+				$.ajax({
+					method: 'POST',
+					url: "{{ route('order.employers.mail') }}",
+					data: {
+						order_employer: order_employer_id,
+						repeat: true,
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: () => {
+						window.datatable.ajax.reload();
+					}
+				});
+			}
+
 			$(function() {
 				window.datatable = $('#order_employers_table').DataTable({
 					language: {
@@ -148,7 +165,7 @@
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('order.employers.index.data', ['order' => $order]) !!}',
+					ajax: "{!! route('order.employers.index.data', ['order' => $order]) !!}",
 					responsive: true,
 					order: [
 						[1, 'asc']

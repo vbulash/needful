@@ -20,6 +20,7 @@ use App\Notifications\NewStudent;
 use App\Notifications\NewSupport;
 use App\Notifications\NewTeacher;
 use App\Notifications\NewUser;
+use App\Notifications\orders\New2Sent;
 use App\Notifications\UpdateEmployer;
 use App\Notifications\UpdateLearn;
 use App\Notifications\UpdateSchool;
@@ -61,6 +62,7 @@ return [
 		]],
 		['group' => 'Заявки на практику', 'classes' => [
 			NewOrder::class => 'Новая заявка на практику',
+			New2Sent::class => 'Уведомление работодателю',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',

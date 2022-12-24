@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\orders\New2SentTaskEvent;
 use App\Events\ToastEvent;
+use App\Events\UnreadCountEvent;
 use App\Http\Requests\StoreOrderEmployerRequest;
 use App\Http\Requests\UpdateOrderEmployerRequest;
 use App\Http\Requests\UpdateOrderSpecialtyRequest;
@@ -10,11 +12,11 @@ use App\Models\Employer;
 use App\Models\Order;
 use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
+use App\Notifications\orders\New2Sent;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class OrderEmployerController extends Controller
-{
+class OrderEmployerController extends Controller {
 	public function getData(int $order) {
 		$query = Order::findOrFail($order)->employers();
 
@@ -46,7 +48,7 @@ class OrderEmployerController extends Controller
 			    $actions .=
 			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
 			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Сообщение работодателю\" " .
-			    	"onclick=\"clickMail({$id}, '{$name}', {$employer_id})\">\n" .
+			    	"onclick=\"clickMail({$id})\">\n" .
 			    	"<i class=\"fas fa-envelope\"></i>\n" .
 			    	"</a>\n";
 
@@ -121,6 +123,20 @@ class OrderEmployerController extends Controller
 		$order_employer->delete();
 
 		event(new ToastEvent('success', '', "Работодатель &laquo;{$name}&raquo; удалён из заявки на практику"));
+		return true;
+	}
+
+	public function mail(Request $request) {
+		$repeat = $request->has('repeat');
+		$orderEmployer = OrderEmployer::findOrFail($request->order_employer);
+		$orderEmployer->employer->user->notify(new New2Sent($orderEmployer->order));
+		$orderEmployer->update(['status' => OrderEmployerStatus::SENT->value]);
+		event(new New2SentTaskEvent($orderEmployer));
+
+		if ($repeat) {
+			$name = $orderEmployer->employer->getTitle();
+			event(new ToastEvent('success', '', "Переслано повторное уведомление о практике для работодателя &laquo;{$name}&raquo;"));
+		}
 		return true;
 	}
 }
