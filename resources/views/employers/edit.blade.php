@@ -9,14 +9,9 @@
 
 @section('steps')
 	@php
-		if (isset(session('context')['chain']))
-            $title = 'График практики';
-        else
-            $title = 'График практики или Специальности для практики';
 		$steps = [
-			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Практика', 'active' => false, 'context' => 'internship'],
-			['title' => $title, 'active' => false, 'context' => 'timetable'],
+			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')],
+			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection

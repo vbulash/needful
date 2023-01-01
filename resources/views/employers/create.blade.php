@@ -7,9 +7,8 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Практика', 'active' => false, 'context' => 'internship'],
-			['title' => 'График практики или Специальности для практики', 'active' => false, 'context' => 'timetable'],
+			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')],
+			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection

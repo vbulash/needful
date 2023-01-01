@@ -44,6 +44,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Специальности
 	Route::resource('/especialties', 'EspecialtyController');
 	Route::get('/especialties.data', 'EspecialtyController@getData')->name('especialties.index.data');
+	// Специальности работодателя (новая ветка)
+	Route::resource('/employer.specialties', 'EmployerSpecialtyController');
+	Route::get('/employers.specialties.data/{employer}', 'EmployerSpecialtyController@getData')->name('employer.specialties.index.data');
 
 	// Истории практики
 	Route::resource('/history', 'HistoryController');

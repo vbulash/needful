@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Employer;
+use App\Models\EmployerSpecialty;
 use App\Models\Especialty;
 use App\Models\Fspecialty;
 use App\Models\History;
@@ -46,6 +47,7 @@ if (! function_exists('classByContext')) {
 			'order' => Order::class,
 			'order.specialty' => OrderSpecialty::class,
 			'order.employer' => OrderEmployer::class,
+			'employer.specialty' => EmployerSpecialty::class,
 			default => null
 		};
 	}

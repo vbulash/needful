@@ -102,4 +102,8 @@ class Employer extends Model implements FormTemplate
 	{
 		return $this->morphToMany(User::class, 'right');
 	}
+
+	public function specialties() {
+		return $this->hasMany(EmployerSpecialty::class);
+	}
 }

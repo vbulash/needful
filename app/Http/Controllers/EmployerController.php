@@ -39,9 +39,9 @@ class EmployerController extends Controller {
 		return Datatables::of($query)
 			->editColumn('link', fn($employer) => $employer->user->name)
 			->addColumn('action', function ($employer) use ($context) {
-			    $editRoute = route('employers.edit', ['employer' => $employer->id, 'sid' => session()->getId()]);
-			    $showRoute = route('employers.show', ['employer' => $employer->id, 'sid' => session()->getId()]);
-			    $selectRoute = route('employers.select', ['employer' => $employer->id, 'sid' => session()->getId()]);
+			    $editRoute = route('employers.edit', ['employer' => $employer->id]);
+			    $showRoute = route('employers.show', ['employer' => $employer->id]);
+			    $selectRoute = route('employers.select', ['employer' => $employer->id]);
 			    $actions = '';
 
 			    if (!isset($context['chain']))
@@ -85,7 +85,7 @@ class EmployerController extends Controller {
 			session()->put('context', ['employer' => $employer->getKey()]);
 		}
 
-		return redirect()->route('internships.index', ['sid' => session()->getId()]);
+		return redirect()->route('employer.specialties.index', ['employer' => $id]);
 	}
 
 	public function getClear(): RedirectResponse {

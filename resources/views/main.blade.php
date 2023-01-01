@@ -3,11 +3,11 @@
 @section('content')
 	@php
 		$cards = [
-    		[
-    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Создать практику', 'active' => true, 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1')],
-    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Отслеживать практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
-    			['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Завершить практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
-    		],
+    		// [
+    		// 	['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Создать практику', 'active' => true, 'icon' => 'fa fa-2x fa-business-time', 'link' => route('e2s.start_internship.step1')],
+    		// 	['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Отслеживать практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
+    		// 	['role' => \App\Http\Controllers\Auth\RoleName::EMPLOYER->value, 'title' => 'Работодатель', 'subtitle' => 'Завершить практику', 'active' => false, 'icon' => 'fa fa-2x fa-business-time'],
+    		// ],
 			[
 				['role' => \App\Http\Controllers\Auth\RoleName::SCHOOL->value, 'title' => 'Учебное заведение', 'subtitle' => 'Создать заявку на практику', 'active' => true, 'icon' => 'fa fa-2x fa-school', 'link' => route('orders.steps.play')],
 			],
