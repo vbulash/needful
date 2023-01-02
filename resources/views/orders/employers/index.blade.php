@@ -52,6 +52,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 				</div>
 				<div class="modal-body">
+					<p>Здесь доступны все работодатели, даже если у них нет пересечения по специальностям с учебным заведением.</p>
 					<div class="mb-4">
 						<select name="employers" class="select2 form-control" style="width:100%;" id="employers"></select>
 					</div>

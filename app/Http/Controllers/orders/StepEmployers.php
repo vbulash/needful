@@ -31,15 +31,22 @@ class StepEmployers implements Step {
 		$mode = config('global.create');
 		$buttons = intval($request->buttons);
 		$heap = session('heap') ?? [];
+		$specs_school = collect($heap['specialties'])->pluck('id')->toArray();
 
 		$employers = [];
-		Employer::all()->each(function ($item) use (&$employers) {
-			$employers[] = [
-				'id' => $item->getKey(),
-				'name' => $item->getTitle(),
-			];
+		Employer::all()->each(function ($item) use (&$employers, $specs_school) {
+			$specs_employer = [];
+			$item->specialties()->each(function ($item_specialty) use (&$specs_employer) {
+				$specs_employer[] = $item_specialty->specialty->getKey();
+			});
+			$specs = array_intersect($specs_school, $specs_employer);
+			if (count($specs) > 0)
+				$employers[] = [
+					'id' => $item->getKey(),
+					'name' => $item->getTitle(),
+				];
 		});
-		usort($employers, fn ($a, $b) => $a['name'] < $b['name'] ? -1 : ($a['name'] > $b['name'] ? 1 : 0));
+		usort($employers, fn($a, $b) => $a['name'] < $b['name'] ? -1 : ($a['name'] > $b['name'] ? 1 : 0));
 		$employers = json_encode($employers);
 
 		return view('orders.steps.employers', compact('mode', 'buttons', 'heap', 'employers'));

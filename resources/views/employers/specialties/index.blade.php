@@ -1,7 +1,7 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с заявками на практику
+	Работа с работодателями
 @endsection
 
 @section('steps')
