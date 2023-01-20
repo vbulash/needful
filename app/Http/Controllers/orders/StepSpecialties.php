@@ -30,6 +30,8 @@ class StepSpecialties implements Step {
 		$mode = config('global.create');
 		$buttons = intval($request->buttons);
 		$heap = session('heap') ?? [];
+		$heap[$this->getContext()] = '';
+		session()->put('heap', $heap);
 
 		$school = School::findOrFail($heap['school']);
 		$specialties = [];
@@ -48,6 +50,7 @@ class StepSpecialties implements Step {
 	public function store(Request $request): bool {
 		$heap = session('heap') ?? [];
 		$heap['specialties'] = json_decode($request->specs);
+		$heap[$this->getContext()] = (count($heap['specialties']) == 1 ? $heap['specialties'][0]->text : '[заполнено]');
 		session()->put('heap', $heap);
 		return true;
 	}
@@ -55,6 +58,6 @@ class StepSpecialties implements Step {
 	 * @return string
 	 */
 	public function getContext(): string {
-		return '';
+		return 'order.specialty';
 	}
 }

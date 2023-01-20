@@ -49,12 +49,17 @@ class StepEmployers implements Step {
 		usort($employers, fn($a, $b) => $a['name'] < $b['name'] ? -1 : ($a['name'] > $b['name'] ? 1 : 0));
 		$employers = json_encode($employers);
 
+		$heap = session('heap') ?? [];
+		$heap[$this->getContext()] = '';
+		session()->put('heap', $heap);
+
 		return view('orders.steps.employers', compact('mode', 'buttons', 'heap', 'employers'));
 	}
 
 	public function store(Request $request): bool {
 		$heap = session('heap') ?? [];
 		$heap['employers'] = json_decode($request->emps);
+		$heap[$this->getContext()] = (count($heap['employers']) == 1 ? $heap['employers'][0]->text : '[заполнено]');
 		session()->put('heap', $heap);
 		return true;
 	}
@@ -62,6 +67,6 @@ class StepEmployers implements Step {
 	 * @return string
 	 */
 	public function getContext(): string {
-		return '';
+		return 'order.employer';
 	}
 }

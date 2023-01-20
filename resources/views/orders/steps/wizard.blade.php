@@ -13,6 +13,7 @@
                 'context' => $step->getContext(),
 			];
 		}
+		// \Illuminate\Support\Facades\Log::info($steps);
 	@endphp
 @endsection
 

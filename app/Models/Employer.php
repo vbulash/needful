@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -103,7 +104,11 @@ class Employer extends Model implements FormTemplate
 		return $this->morphToMany(User::class, 'right');
 	}
 
-	public function specialties() {
+	public function specialties(): HasMany {
 		return $this->hasMany(EmployerSpecialty::class);
+	}
+
+	public function answers(): HasMany {
+		return $this->hasMany(Answer::class);
 	}
 }

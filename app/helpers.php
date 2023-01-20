@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Answer;
 use App\Models\Employer;
 use App\Models\EmployerSpecialty;
 use App\Models\Especialty;
@@ -48,6 +49,7 @@ if (! function_exists('classByContext')) {
 			'order.specialty' => OrderSpecialty::class,
 			'order.employer' => OrderEmployer::class,
 			'employer.specialty' => EmployerSpecialty::class,
+			'answer' => Answer::class,
 			default => null
 		};
 	}

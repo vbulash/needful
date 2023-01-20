@@ -189,11 +189,11 @@
 			window.selected = new Map();
 			window.selectedArray = [];
 			@if (isset($heap['specialties']))
-				source = JSON.parse({!! json_encode($heap['specialties']) !!});
+				source = JSON.parse('{!! json_encode($heap["specialties"]) !!}');
 				for (let item of source) {
 					let object = {
 						'id': item.id,
-						'text': item.name,
+						'text': item.text,
 						'quantity': item.quantity,
 						'action': 0
 					};

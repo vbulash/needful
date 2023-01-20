@@ -37,7 +37,10 @@ class StepOrder implements Step {
 	public function run(Request $request) {
 		$mode = config('global.create');
 		$buttons = intval($request->buttons);
+
 		$heap = session('heap') ?? [];
+		$heap[$this->getContext()] = '';
+		session()->put('heap', $heap);
 
 		return view('orders.steps.order', compact('mode', 'buttons', 'heap'));
 	}
@@ -48,6 +51,7 @@ class StepOrder implements Step {
 		$heap['start'] = new DateTime($request->start);
 		$heap['end'] = new DateTime($request->end);
 		$heap['description'] = $request->description;
+		$heap[$this->getContext()] = '[заполнено]';
 		session()->put('heap', $heap);
 		return true;
 	}
@@ -55,6 +59,6 @@ class StepOrder implements Step {
 	 * @return string
 	 */
 	public function getContext(): string {
-		return '[заполнены]';
+		return 'order';
 	}
 }

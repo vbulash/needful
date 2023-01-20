@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderSpecialty extends Model implements FormTemplate
 {
@@ -18,12 +20,16 @@ class OrderSpecialty extends Model implements FormTemplate
 		return $this->specialty->getTitle();
 	}
 
-	public function order() {
+	public function order(): BelongsTo {
 		return $this->belongsTo(Order::class);
 	}
 
-	public function specialty() {
+	public function specialty(): BelongsTo {
 		return $this->belongsTo(Specialty::class);
+	}
+
+	public function answers(): HasMany {
+		return $this->hasMany(Answer::class);
 	}
 
 	public static function createTemplate(): array {

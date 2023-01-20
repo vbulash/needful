@@ -4,6 +4,7 @@ namespace App\Http\Controllers\orders;
 
 use App\Models\School;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StepFinal implements Step {
 	public function isBrowse(): bool {
@@ -15,7 +16,7 @@ class StepFinal implements Step {
 	}
 
 	public function getTitle(): string {
-		return 'Уведомление работодателям';
+		return 'Подтверждение информации';
 	}
 
 	public function getStoreRules(): array {

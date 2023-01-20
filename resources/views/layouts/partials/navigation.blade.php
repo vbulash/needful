@@ -35,6 +35,8 @@
             : 'Практики';
         $menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
         $menu[] = ['title' => 'Заявки на практику', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.index', 'orders.edit', 'orders.show']];
+		// $menu[] = ['title' => 'Ответы работодателей', 'icon' => 'fas fa-history', 'route' => 'answers.index', 'pattern' => ['answers.*']];
+		$menu[] = ['title' => 'Ответы работодателей', 'icon' => 'fas fa-history', 'route' => 'dashboard', 'pattern' => ['answers.*']];
 
         if ($employers || $students || $schools) {
             $menu[] = ['title' => 'Субъекты', 'heading' => true];

@@ -179,11 +179,11 @@
 			window.selected = new Map();
 			window.selectedArray = [];
 			@if (isset($heap['employers']))
-				source = JSON.parse({!! json_encode($heap['employers']) !!});
+				source = JSON.parse('{!! json_encode($heap["employers"]) !!}');
 				for (let item of source) {
 					let object = {
 						'id': item.id,
-						'text': item.name,
+						'text': item.text,
 						'action': 0
 					};
 					window.selected.set(item.id, object);

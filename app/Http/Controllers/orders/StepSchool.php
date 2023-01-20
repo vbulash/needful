@@ -50,6 +50,11 @@ class StepSchool implements Step {
 		$buttons = intval($request->buttons);
 		$count = School::where('status', ActiveStatus::ACTIVE)->count();
 
+		session()->forget('context');
+		$heap = [];
+		$heap[$this->getContext()] = '';
+		session()->put('heap', $heap);
+
 		return view('orders.steps.school', compact('mode', 'buttons', 'count'));
 	}
 
@@ -57,17 +62,13 @@ class StepSchool implements Step {
 		$heap = session('heap') ?? [];
 		$heap['school'] = $request->school;
 		session()->put('heap', $heap);
+
 		return true;
 	}
 	/**
 	 * @return string
 	 */
 	public function getContext(): string {
-		$heap = session('heap') ?? null;
-		if (isset($heap['school'])) {
-			$school = School::findOrFail($heap['school']);
-			return $school->getTitle();
-		}
-		return '';
+		return 'school';
 	}
 }
