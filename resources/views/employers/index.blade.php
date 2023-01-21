@@ -10,9 +10,8 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index')],
-			['title' => 'Специальности', 'active' => true, 'context' => 'employer.specialty'],
-		];
+			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index')],
+			['title' => 'Специальности<br/>Ответы на заявки', 'active' => false, 'context' => 'employer.specialty']];
 	@endphp
 @endsection
 
@@ -23,11 +22,11 @@
 				Отображается единственная запись по цепочке из входящего сообщения
 			@else
 				@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
-				<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}"
-				   class="btn btn-primary mt-3 mb-3">Добавить работодателя</a>
+					<a href="{{ route('employers.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить
+						работодателя</a>
 				@endhasrole
 
-				<p>Красным цветом выделены неактивные работодатели. Активацию объектов выполняет администратор платформы<br/>
+				<p>Красным цветом выделены неактивные работодатели. Активацию объектов выполняет администратор платформы<br />
 					Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
 			@endif
 		</div>
@@ -35,19 +34,18 @@
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="employers_table"
-					   style="width: 100%;">
+				<table class="table table-bordered table-hover text-nowrap" id="employers_table" style="width: 100%;">
 					<thead>
-					<tr>
-						<th style="width: 30px">#</th>
-						<th>ИНН</th>
-						<th>Наименование</th>
-						<th>Почтовый адрес</th>
-						<th>Телефон</th>
-						<th>Электронная почта</th>
-						<th>Связан с пользователем</th>
-						<th>Действия</th>
-					</tr>
+						<tr>
+							<th style="width: 30px">#</th>
+							<th>ИНН</th>
+							<th>Наименование</th>
+							<th>Почтовый адрес</th>
+							<th>Телефон</th>
+							<th>Электронная почта</th>
+							<th>Связан с пользователем</th>
+							<th>&nbsp;</th>
+						</tr>
 					</thead>
 				</table>
 			</div>
@@ -65,7 +63,6 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
-
 			document.getElementById('confirm-yes').addEventListener('click', (event) => {
 				$.ajax({
 					method: 'DELETE',
@@ -73,7 +70,9 @@
 					data: {
 						id: event.target.dataset.id,
 					},
-					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
 					success: () => {
 						window.datatable.ajax.reload();
 					}
@@ -88,7 +87,7 @@
 				confirmDialog.show();
 			}
 
-			$(function () {
+			$(function() {
 				window.datatable = $('#employers_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
@@ -96,19 +95,46 @@
 					processing: true,
 					serverSide: true,
 					ajax: '{!! route('employers.index.data') !!}',
-					createdRow: function (row, data, dataIndex) {
+					createdRow: function(row, data, dataIndex) {
 						if (data.status === 0)
 							row.style.color = 'red';
 					},
 					responsive: true,
-					columns: [
-						{data: 'id', name: 'id', responsivePriority: 1},
-						{data: 'inn', name: 'inn', responsivePriority: 1},
-						{data: 'short', name: 'short', responsivePriority: 2},
-						{data: 'post_address', name: 'post_address', responsivePriority: 3},
-						{data: 'phone', name: 'phone', responsivePriority: 3},
-						{data: 'email', name: 'email', responsivePriority: 2},
-						{data: 'link', name: 'link', responsivePriority: 3},
+					columns: [{
+							data: 'id',
+							name: 'id',
+							responsivePriority: 1
+						},
+						{
+							data: 'inn',
+							name: 'inn',
+							responsivePriority: 1
+						},
+						{
+							data: 'short',
+							name: 'short',
+							responsivePriority: 2
+						},
+						{
+							data: 'post_address',
+							name: 'post_address',
+							responsivePriority: 3
+						},
+						{
+							data: 'phone',
+							name: 'phone',
+							responsivePriority: 3
+						},
+						{
+							data: 'email',
+							name: 'email',
+							responsivePriority: 2
+						},
+						{
+							data: 'link',
+							name: 'link',
+							responsivePriority: 3
+						},
 						{
 							data: 'action',
 							name: 'action',
@@ -117,6 +143,22 @@
 							className: 'no-wrap dt-actions'
 						}
 					]
+				});
+
+				window.datatable.on('draw', function() {
+					$('.dropdown-toggle.actions').on('shown.bs.dropdown', (event) => {
+						const menu = event.target.parentElement.querySelector('.dropdown-menu');
+						let parent = menu.closest('.dataTables_wrapper');
+						const parentRect = parent.getBoundingClientRect();
+						parentRect.top = Math.abs(parentRect.top);
+						const menuRect = menu.getBoundingClientRect();
+						const buttonRect = event.target.getBoundingClientRect();
+						const menuTop = Math.abs(buttonRect.top) + buttonRect.height + 4;
+						if (menuTop + menuRect.height > parentRect.top + parentRect.height) {
+							const clientHeight = parentRect.height + menuTop + menuRect.height - (parentRect.top + parentRect.height);
+							parent.style.height = clientHeight.toString() + 'px';
+						}
+					});
 				});
 			});
 		</script>

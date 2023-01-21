@@ -17,46 +17,27 @@ class OrderController extends Controller {
 			->addColumn('start', fn($order) => $order->start->format('d.m.Y'))
 			->addColumn('end', fn($order) => $order->end->format('d.m.Y'))
 			->addColumn('action', function ($order) {
-			    $editRoute = route('orders.edit', ['order' => $order->getKey()]);
-			    $showRoute = route('orders.show', ['order' => $order->getKey()]);
-			    $specialtiesRoute = route('orders.select', [
+				$editRoute = route('orders.edit', ['order' => $order->getKey()]);
+				$showRoute = route('orders.show', ['order' => $order->getKey()]);
+				$specialtiesRoute = route('orders.select', [
 					'order' => $order->getKey(),
 					'kind' => 'specialties',
 				]);
-			    $employersRoute = route('orders.select', [
-			    	'order' => $order->getKey(),
-			    	'kind' => 'employers',
-			    ]);
-			    $actions = '';
+				$employersRoute = route('orders.select', [
+					'order' => $order->getKey(),
+					'kind' => 'employers',
+				]);
+				$items = [];
 
-			    $actions .=
-			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-			    	"<i class=\"fas fa-edit\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-			    	"<i class=\"fas fa-eye\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$order->getKey()}, '{$order->name}')\">\n" .
-			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"{$specialtiesRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности\">\n" .
-			    	"<i class=\"fas fa-graduation-cap\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"{$employersRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Уведомления работодателей\">\n" .
-			    	"<i class=\"fas fa-building\"></i>\n" .
-			    	"</a>\n";
+				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$items[] = ['type' => 'item', 'click' => "clickDelete({$order->getKey()}, '{$order->name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+				$items[] = ['type' => 'divider'];
+				$items[] = ['type' => 'item', 'link' => $specialtiesRoute, 'icon' => 'fas fa-graduation-cap', 'title' => 'Специальности'];
+				$items[] = ['type' => 'item', 'link' => $employersRoute, 'icon' => 'fas fa-building', 'title' => 'Уведомления работодателей'];
 
-			    return $actions;
-		    })
+				return createDropdown('Действия', $items);
+			})
 			->make(true);
 	}
 

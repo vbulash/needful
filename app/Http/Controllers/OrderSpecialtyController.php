@@ -18,37 +18,24 @@ class OrderSpecialtyController extends Controller {
 			->editColumn('id', fn($order_specialty) => $order_specialty->specialty->getKey())
 			->addColumn('specialty', fn($order_specialty) => $order_specialty->specialty->getTitle())
 			->addColumn('action', function ($order_specialty) use ($order) {
-			  $editRoute = route('order.specialties.edit', [
-			  	'order' => $order,
-			  	'specialty' => $order_specialty->getKey()
-			  ]);
-			  $showRoute = route('order.specialties.show', [
-			  	'order' => $order,
-			  	'specialty' => $order_specialty->getKey()
-			  ]);
-			  $id = $order_specialty->specialty->getKey();
-			  $name = $order_specialty->specialty->getTitle();
-			  $actions = '';
+				$editRoute = route('order.specialties.edit', [
+					'order' => $order,
+					'specialty' => $order_specialty->getKey()
+				]);
+				$showRoute = route('order.specialties.show', [
+					'order' => $order,
+					'specialty' => $order_specialty->getKey()
+				]);
+				$id = $order_specialty->specialty->getKey();
+				$name = $order_specialty->specialty->getTitle();
+				$items = [];
 
-			  $actions .=
-			  	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			  	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-			  	"<i class=\"fas fa-edit\"></i>\n" .
-			  	"</a>\n";
-			  $actions .=
-			  	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			  	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-			  	"<i class=\"fas fa-eye\"></i>\n" .
-			  	"</a>\n";
-			  $actions .=
-			  	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-			  	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" " .
-			  	"onclick=\"clickDelete({$order_specialty->getKey()}, '{$name}', {$id})\">\n" .
-			  	"<i class=\"fas fa-trash-alt\"></i>\n" .
-			  	"</a>\n";
+				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$items[] = ['type' => 'item', 'click' => "clickDelete({$order_specialty->getKey()}, '{$name}', {$id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
-			  return $actions;
-		  })
+				return createDropdown('Действия', $items);
+			})
 			->make(true);
 	}
 

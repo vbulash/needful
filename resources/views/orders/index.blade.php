@@ -8,7 +8,7 @@
 	@php
 		$steps = [
 			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'],
-			['title' => 'Специальности в заявке или Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']
+			['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']
 		];
 	@endphp
 @endsection
@@ -27,7 +27,7 @@
 							<th>Название практики</th>
 							<th>Дата начала</th>
 							<th>Дата окончания</th>
-							<th>Действия</th>
+							<th>&nbsp;</th>
 						</tr>
 					</thead>
 				</table>
@@ -112,6 +112,23 @@
 							className: 'no-wrap dt-actions'
 						}
 					]
+				});
+
+				window.datatable.on('draw', function() {
+					$('.dropdown-toggle.actions').on('shown.bs.dropdown', (event) => {
+						const menu = event.target.parentElement.querySelector('.dropdown-menu');
+						let parent = menu.closest('.dataTables_wrapper');
+						const parentRect = parent.getBoundingClientRect();
+						parentRect.top = Math.abs(parentRect.top);
+						const menuRect = menu.getBoundingClientRect();
+						const buttonRect = event.target.getBoundingClientRect();
+						const menuTop = Math.abs(buttonRect.top) + buttonRect.height + 4;
+						if (menuTop + menuRect.height > parentRect.top + parentRect.height) {
+							const clientHeight = parentRect.height + menuTop + menuRect.height - (
+								parentRect.top + parentRect.height);
+							parent.style.height = clientHeight.toString() + 'px';
+						}
+					});
 				});
 			});
 		</script>

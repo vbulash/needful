@@ -8,7 +8,7 @@
 	@php
 		$steps = [
 			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Уведомления работодателей', 'active' => true, 'context' => 'order.employer']
+			['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => true, 'context' => 'order.employer']
 		];
 	@endphp
 @endsection
@@ -16,6 +16,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
+			<h3 class="block-title fw-semibold">Уведомления работодателей</h3>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-employer" data-bs-toggle="modal"
 				data-bs-target="#employers-list">
 				Добавить работодателя к заявке на практику
@@ -33,7 +34,7 @@
 							<th style="width: 30px"># работодателя</th>
 							<th>Название работодателя</th>
 							<th>Статус уведомления</th>
-							<th>Действия</th>
+							<th>&nbsp;</th>
 						</tr>
 					</thead>
 				</table>
@@ -194,6 +195,23 @@
 							className: 'no-wrap dt-actions'
 						}
 					]
+				});
+
+				window.datatable.on('draw', function() {
+					$('.dropdown-toggle.actions').on('shown.bs.dropdown', (event) => {
+						const menu = event.target.parentElement.querySelector('.dropdown-menu');
+						let parent = menu.closest('.dataTables_wrapper');
+						const parentRect = parent.getBoundingClientRect();
+						parentRect.top = Math.abs(parentRect.top);
+						const menuRect = menu.getBoundingClientRect();
+						const buttonRect = event.target.getBoundingClientRect();
+						const menuTop = Math.abs(buttonRect.top) + buttonRect.height + 4;
+						if (menuTop + menuRect.height > parentRect.top + parentRect.height) {
+							const clientHeight = parentRect.height + menuTop + menuRect.height - (
+								parentRect.top + parentRect.height);
+							parent.style.height = clientHeight.toString() + 'px';
+						}
+					});
 				});
 
 				window.selected = {!! json_encode($selected) !!};

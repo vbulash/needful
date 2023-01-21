@@ -32,27 +32,14 @@ class OrderEmployerController extends Controller {
 			    $id = $order_employer->getKey();
 			    $name = $order_employer->getTitle();
 			    $employer_id = $order_employer->employer->getKey();
-			    $actions = '';
+				$items = [];
 
-			    $actions .=
-			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-			    	"<i class=\"fas fa-eye\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" " .
-			    	"onclick=\"clickDelete({$id}, '{$name}', {$employer_id})\">\n" .
-			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Сообщение работодателю\" " .
-			    	"onclick=\"clickMail({$id})\">\n" .
-			    	"<i class=\"fas fa-envelope\"></i>\n" .
-			    	"</a>\n";
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$items[] = ['type' => 'item', 'click' => "clickDelete({$id}, '{$name}', {$employer_id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+				$items[] = ['type' => 'divider'];
+				$items[] = ['type' => 'item', 'click' => "clickMail({$id})", 'icon' => 'fas fa-envelope', 'title' => 'Сообщение работодателю'];
 
-			    return $actions;
+				return createDropdown('Действия', $items);
 		    })
 			->make(true);
 	}

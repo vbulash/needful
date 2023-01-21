@@ -7,8 +7,8 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Учебное заведение', 'active' => false, 'context' => 'school', 'link' => route('schools.index', ['sid' => session()->getId()])],
-			['title' => 'Специальность', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index', ['sid' => session()->getId()])],
+			['title' => 'Учебное заведение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')],
+			['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index')],
 		];
 	@endphp
 @endsection

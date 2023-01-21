@@ -39,41 +39,30 @@ class EmployerController extends Controller {
 		return Datatables::of($query)
 			->editColumn('link', fn($employer) => $employer->user->name)
 			->addColumn('action', function ($employer) use ($context) {
-			    $editRoute = route('employers.edit', ['employer' => $employer->id]);
-			    $showRoute = route('employers.show', ['employer' => $employer->id]);
-			    $selectRoute = route('employers.select', ['employer' => $employer->id]);
-			    $actions = '';
+				$editRoute = route('employers.edit', ['employer' => $employer->id]);
+				$showRoute = route('employers.show', ['employer' => $employer->id]);
+				$selectRoute = route('employers.select', ['employer' => $employer->id]);
+				$items = [];
 
-			    if (!isset($context['chain']))
-				    if (auth()->user()->can('employers.edit'))
-					    $actions .=
-					    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-					    	"<i class=\"fas fa-edit\"></i>\n" .
-					    	"</a>\n";
-			    if (auth()->user()->can('employers.show'))
-				    $actions .=
-				    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-				    	"<i class=\"fas fa-eye\"></i>\n" .
-				    	"</a>\n";
-			    if (!isset($context['chain']))
-				    if (auth()->user()->can('employers.delete')) {
-					    $actions .=
-					    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-					    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$employer->id}, '{$employer->short}')\">\n" .
-					    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-					    	"</a>\n";
-				    }
+				if (!isset($context['chain']))
+					if (auth()->user()->can('employers.edit'))
+						$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 
-			    if ($employer->status == ActiveStatus::ACTIVE->value)
-				    $actions .=
-				    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-				    	"<i class=\"fas fa-check\"></i>\n" .
-				    	"</a>\n";
-			    return $actions;
-		    })
+				if (auth()->user()->can('employers.show'))
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+
+				if (!isset($context['chain']))
+					if (auth()->user()->can('employers.delete'))
+						$items[] = ['type' => 'item', 'click' => "clickDelete({$employer->id}, '{$employer->short}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+
+				if ($employer->status == ActiveStatus::ACTIVE->value) {
+					$items[] = ['type' => 'divider'];
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Отзывы на заявки'];
+				}
+
+				return createDropdown('Действия', $items);
+			})
 			->make(true);
 	}
 
@@ -127,17 +116,17 @@ class EmployerController extends Controller {
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
-				    $collect =
-				    	(auth()->user()->getKey() == $user->getKey()) ||
-				    	($user->hasRole(RoleName::EMPLOYER->value));
-				    if (!$collect)
-					    return null;
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole(RoleName::EMPLOYER->value));
+					if (!$collect)
+						return null;
 
-				    return [
-				    	'id' => $user->getKey(),
-				    	'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
-				    ];
-			    })
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
 				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('employers.create', compact('users', 'mode'));
@@ -194,17 +183,17 @@ class EmployerController extends Controller {
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
-				    $collect =
-				    	(auth()->user()->getKey() == $user->getKey()) ||
-				    	($user->hasRole(RoleName::EMPLOYER->value));
-				    if (!$collect)
-					    return null;
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole(RoleName::EMPLOYER->value));
+					if (!$collect)
+						return null;
 
-				    return [
-				    	'id' => $user->getKey(),
-				    	'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
-				    ];
-			    })
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
 				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('employers.edit', compact('employer', 'users', 'mode'));

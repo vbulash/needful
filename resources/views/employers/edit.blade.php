@@ -10,8 +10,13 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
+		    [
+		        'title' => 'Работодатель',
+		        'active' => true,
+		        'context' => 'employer',
+		        'link' => route('employers.index'),
+		    ],
+		    ['title' => 'Специальности<br/>Ответы на заявки', 'active' => false, 'context' => 'employer.specialty'],
 		];
 	@endphp
 @endsection

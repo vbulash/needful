@@ -7,8 +7,13 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке', 'active' => false, 'context' => 'order.specialty']
+		    [
+		        'title' => 'Работодатель',
+		        'active' => true,
+		        'context' => 'employer',
+		        'link' => route('employers.index'),
+		    ],
+		    ['title' => 'Специальности<br/>Ответы на заявки', 'active' => false, 'context' => 'employer.specialty'],
 		];
 	@endphp
 @endsection
@@ -26,18 +31,18 @@
 	@include('employers.assign')
 	@php
 		$fields = [
-            ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40],
-			['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text'],
-			['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text'],
-			['name' => 'address', 'title' => 'Фактический адрес', 'required' => false, 'type' => 'text'],
-			['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text'],
-			['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'text'],
-			['name' => 'inn', 'title' => 'Индивидуальный номер налогоплательщика (ИНН)', 'required' => true, 'type' => 'text'],
-			['name' => 'kpp', 'title' => 'КПП', 'required' => false, 'type' => 'text'],
-			['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => true, 'type' => 'text'],
-			['name' => 'official_address', 'title' => 'Юридический адрес', 'required' => false, 'type' => 'text'],
-			['name' => 'post_address', 'title' => 'Почтовый адрес', 'required' => true, 'type' => 'text'],
-			['name' => 'status', 'type' => 'hidden', 'value' => \App\Models\ActiveStatus::NEW->value],
+		    ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40],
+		    ['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text'],
+		    ['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text'],
+		    ['name' => 'address', 'title' => 'Фактический адрес', 'required' => false, 'type' => 'text'],
+		    ['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text'],
+		    ['name' => 'email', 'title' => 'Электронная почта', 'required' => true, 'type' => 'text'],
+		    ['name' => 'inn', 'title' => 'Индивидуальный номер налогоплательщика (ИНН)', 'required' => true, 'type' => 'text'],
+		    ['name' => 'kpp', 'title' => 'КПП', 'required' => false, 'type' => 'text'],
+		    ['name' => 'ogrn', 'title' => 'ОГРН / ОГРНИП', 'required' => true, 'type' => 'text'],
+		    ['name' => 'official_address', 'title' => 'Юридический адрес', 'required' => false, 'type' => 'text'],
+		    ['name' => 'post_address', 'title' => 'Почтовый адрес', 'required' => true, 'type' => 'text'],
+		    ['name' => 'status', 'type' => 'hidden', 'value' => \App\Models\ActiveStatus::NEW->value],
 		];
 	@endphp
 @endsection

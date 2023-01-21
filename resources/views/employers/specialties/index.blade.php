@@ -7,8 +7,13 @@
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index')],
-			['title' => 'Специальности', 'active' => true, 'context' => 'order.specialty']
+		    [
+		        'title' => 'Работодатель',
+		        'active' => false,
+		        'context' => 'employer',
+		        'link' => route('employers.index'),
+		    ],
+		    ['title' => 'Специальности<br/>Ответы на заявки', 'active' => true, 'context' => 'employer.specialty'],
 		];
 	@endphp
 @endsection
@@ -16,6 +21,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
+			<h3 class="block-title fw-semibold">Специальности</h3>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-specialty" data-bs-toggle="modal"
 				data-bs-target="#specialties-list">
 				Добавить специальность работодателю
@@ -31,7 +37,7 @@
 						<tr>
 							<th style="width: 30px"># в справочнике</th>
 							<th>Название специальности</th>
-							<th>Действия</th>
+							<th>&nbsp;</th>
 						</tr>
 					</thead>
 				</table>
@@ -167,6 +173,23 @@
 						className: 'no-wrap dt-actions'
 					}
 				]
+			});
+
+			window.datatable.on('draw', function() {
+				$('.dropdown-toggle.actions').on('shown.bs.dropdown', (event) => {
+					const menu = event.target.parentElement.querySelector('.dropdown-menu');
+					let parent = menu.closest('.dataTables_wrapper');
+					const parentRect = parent.getBoundingClientRect();
+					parentRect.top = Math.abs(parentRect.top);
+					const menuRect = menu.getBoundingClientRect();
+					const buttonRect = event.target.getBoundingClientRect();
+					const menuTop = Math.abs(buttonRect.top) + buttonRect.height + 4;
+					if (menuTop + menuRect.height > parentRect.top + parentRect.height) {
+						const clientHeight = parentRect.height + menuTop + menuRect.height - (
+							parentRect.top + parentRect.height);
+						parent.style.height = clientHeight.toString() + 'px';
+					}
+				});
 			});
 
 			window.selected = {!! json_encode($selected) !!};

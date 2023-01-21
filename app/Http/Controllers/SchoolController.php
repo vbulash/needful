@@ -41,35 +41,21 @@ class SchoolController extends Controller {
 			    $editRoute = route('schools.edit', ['school' => $school->id]);
 			    $showRoute = route('schools.show', ['school' => $school->id]);
 			    $selectRoute = route('schools.select', ['school' => $school->id]);
-			    $actions = '';
+				$items = [];
 
 			    if (auth()->user()->can('schools.edit') || auth()->user()->allowed($school))
-				    $actions .=
-				    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-				    	"<i class=\"fas fa-edit\"></i>\n" .
-				    	"</a>\n";
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 			    if (auth()->user()->can('schools.show') || auth()->user()->allowed($school))
-				    $actions .=
-				    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left ms-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-				    	"<i class=\"fas fa-eye\"></i>\n" .
-				    	"</a>\n";
-			    if (auth()->user()->can('schools.destroy') || auth()->user()->allowed($school)) {
-				    $actions .=
-				    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$school->id}, '{$school->short}')\">\n" .
-				    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-				    	"</a>\n";
-			    }
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+			    if (auth()->user()->can('schools.destroy') || auth()->user()->allowed($school))
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$school->id}, '{$school->short}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
-			    if ($school->status == ActiveStatus::ACTIVE->value)
-				    $actions .=
-				    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-				    	"<i class=\"fas fa-check\"></i>\n" .
-				    	"</a>\n";
-			    return $actions;
+			    if ($school->status == ActiveStatus::ACTIVE->value) {
+					$items[] = ['type' => 'divider'];
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Заявки на практику'];
+				}
+			    return createDropdown('Действия', $items);
 		    })
 			->make(true);
 	}

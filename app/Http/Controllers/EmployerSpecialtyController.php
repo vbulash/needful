@@ -19,16 +19,10 @@ class EmployerSpecialtyController extends Controller {
 			->addColumn('action', function ($employer_specialty) use ($employer) {
 				$id = $employer_specialty->specialty->getKey();
 				$name = $employer_specialty->specialty->getTitle();
-				$actions = '';
+				$items = [];
+				$items[] = ['type' => 'item', 'click' => "clickDelete({$employer_specialty->getKey()}, '{$name}', {$id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
-				$actions .=
-					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" " .
-					"onclick=\"clickDelete({$employer_specialty->getKey()}, '{$name}', {$id})\">\n" .
-					"<i class=\"fas fa-trash-alt\"></i>\n" .
-					"</a>\n";
-
-				return $actions;
+				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}
