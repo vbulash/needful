@@ -42,6 +42,7 @@ class EmployerController extends Controller {
 				$editRoute = route('employers.edit', ['employer' => $employer->id]);
 				$showRoute = route('employers.show', ['employer' => $employer->id]);
 				$selectRoute = route('employers.select', ['employer' => $employer->id]);
+				$select2Route = route('employers.select2', ['employer' => $employer->id]);
 				$items = [];
 
 				if (!isset($context['chain']))
@@ -58,7 +59,7 @@ class EmployerController extends Controller {
 				if ($employer->status == ActiveStatus::ACTIVE->value) {
 					$items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
-					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Отзывы на заявки'];
+					$items[] = ['type' => 'item', 'link' => $select2Route, 'icon' => 'fas fa-check', 'title' => 'Заявки на практику'];
 				}
 
 				return createDropdown('Действия', $items);
@@ -66,15 +67,36 @@ class EmployerController extends Controller {
 			->make(true);
 	}
 
+	/**
+	 * Выбор специальности
+	 *
+	 * @param int $id Работодатель
+	 * @return RedirectResponse
+	 */
 	public function select(int $id): RedirectResponse {
-		$employer = Employer::findOrFail($id);
 		$context = session('context');
 		if (!isset($context['chain'])) {
 			session()->forget('context');
-			session()->put('context', ['employer' => $employer->getKey()]);
+			session()->put('context', ['employer' => $id]);
 		}
 
 		return redirect()->route('employer.specialties.index', ['employer' => $id]);
+	}
+
+	/**
+	 * Выбор заявки на практику
+	 *
+	 * @param int $id Работодатель
+	 * @return RedirectResponse|null
+	 */
+	public function select2(int $id): RedirectResponse {
+		$context = session('context');
+		if (!isset($context['chain'])) {
+			session()->forget('context');
+			session()->put('context', ['employer' => $id]);
+		}
+
+		return redirect()->route('employers.orders.index', ['employer' => $id]);
 	}
 
 	public function getClear(): RedirectResponse {

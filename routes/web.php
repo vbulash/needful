@@ -33,6 +33,12 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.clear.index', 'EmployerController@getClear')->name('employers.index.clear');
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
 	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
+	Route::get('/employers.select2/{employer}', 'EmployerController@select2')->name('employers.select2');
+	// Заявка на практику для работодателя
+	Route::get('/employers.orders/{employer}', 'EmployerOrderController@index')->name('employers.orders.index');
+	Route::get('/employers.orders.data/{employer}', 'EmployerOrderController@getData')->name('employers.orders.index.data');
+	Route::post('/employers.orders.cancel', 'EmployerOrderController@cancel')->name('employers.orders.cancel');
+
 	// Практики
 	Route::resource('/internships', 'InternshipController');
 	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
@@ -69,7 +75,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/schools.select/{school}', 'SchoolController@select')->name('schools.select');
 	// Специальности
 	Route::resource('/fspecialties', 'FspecialtyController');
-	Route::get('/fspecialties.data', 'FspecialtyController@getData')->name('fspecialties.index.data');
+	Route::get('/fspecialties.data', 'FspecialtyController@getData')->name('fspecialties.index.data'); // Заявки на практику от учебного заведения
+	// Route::get('/schools.orders', '')
+
 	// Заявки на практику
 	Route::resource('/orders', 'OrderController');
 	Route::get('/orders.data', 'OrderController@getData')->name('orders.index.data');

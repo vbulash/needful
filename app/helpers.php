@@ -58,22 +58,22 @@ if (!function_exists('classByContext')) {
 if (!function_exists('createDropdown')) {
 	function createDropdown(string $title, array $items) {
 		$out = '';
+		if (count($items) == 0)
+			return '';
 		if (count($items) == 1) {
 			$item = $items[0];
 			if (isset($item['click'])) {
 				return sprintf(<<<'EOT'
-<a href="javascript:void(0)" onclick="%s" class="btn btn-primary btn-sm float-left ms-1"
-	data-toggle="tooltip" data-placement="top" title="%s">
-	<i class="%s"></i>
+<a href="javascript:void(0)" onclick="%s" class="btn btn-primary btn-sm float-left ms-1">
+	<i class="%s"></i> %s
 </a>
-EOT, $item['click'], $item['title'], $item['icon'] ?? "fas fa-circle");
+EOT, $item['click'], $item['icon'] ?? "fas fa-circle", $item['title']);
 			} else {
 				return sprintf(<<<'EOT'
-<a href="%s" class="btn btn-primary btn-sm float-left ms-1"
-	data-toggle="tooltip" data-placement="top" title="%s">
-	<i class="%s"></i>
+<a href="%s" class="btn btn-primary btn-sm float-left ms-1">
+	<i class="%s"></i> %s
 </a>
-EOT, $item['link'], $item['title'], $item['icon'] ?? "fas fa-circle");
+EOT, $item['link'], $item['icon'] ?? "fas fa-circle", $item['title']);
 			}
 		} else {
 			foreach ($items as $item) {
