@@ -20,10 +20,14 @@ class EmployerOrderController extends Controller {
 			->addColumn('end', fn($order) => $order->end->format('d.m.Y'))
 			->editColumn('status', fn($order) => OrderEmployerStatus::getName($order->pivot->status))
 			->addColumn('action', function ($order) use ($employer) {
+				$showRoute = route('employers.orders.show', ['employer' => $employer, 'order' => $order->getKey()]);
 				$items = [];
 
-				if ($order->pivot->status != OrderEmployerStatus::REJECTED->value)
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				if ($order->pivot->status != OrderEmployerStatus::REJECTED->value) {
+					// $items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'click' => "clickCancel({$employer}, {$order->getKey()}, '{$order->getTitle()}')", 'icon' => 'fas fa-ban', 'title' => 'Отмена'];
+				}
 
 				return createDropdown('Действия', $items);
 			})
@@ -32,8 +36,20 @@ class EmployerOrderController extends Controller {
 
 	public function index(int $employer) {
 		$count = Employer::findOrFail($employer)->orders()->count();
-
 		return view('employers.orders.index', compact('employer', 'count'));
+	}
+
+	public function select(int $employer, int $order) {
+		$order = Order::findOrFail($order);
+		$context = session('context');
+		$context['employer.order'] = $order->getTitle();
+		session()->put('context', $context);
+	}
+
+	public function show(int $employer, int $order) {
+		$mode = config('global.show');
+		$order = Order::findOrFail($order);
+		return view('employers.orders.show', compact('employer', 'order', 'mode'));
 	}
 
 	public function cancel(Request $request) {

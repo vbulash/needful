@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employer;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
 {
-    public function index()
+	public function getData(int $employer) {
+		$query = Employer::findOrFail($employer)->orders;
+		// ->wherePivotNotIn('status', [OrderEmployerStatus::REJECTED->value]);
+	}
+
+    public function index(int $employer, int $order)
     {
         //
     }
