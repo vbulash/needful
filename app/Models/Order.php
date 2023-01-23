@@ -23,6 +23,7 @@ class Order extends Model implements FormTemplate
 		'name',			// Наименование практики
 		'start',		// Начало практики
 		'end',			// Завершение практики
+		'place',		// Населенный пункт прохождения практики
 		'description',	// Дополнительная информация
 	];
 

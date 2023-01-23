@@ -23,6 +23,11 @@
 			$field['value'] = $heap['end']->format('d.m.Y');
 		$fields[] = $field;
 
+		$field = ['name' => 'place', 'title' => 'Населённый пункт прохождения практики', 'required' => true, 'type' => 'text'];
+		if (isset($heap['place']))
+			$field['value'] = $heap['place'];
+		$fields[] = $field;
+
 		$field = ['name' => 'description', 'title' => 'Дополнительная информация', 'required' => false, 'type' => 'textarea'];
 		if (isset($heap['description']))
 			$field['value'] = $heap['description'];

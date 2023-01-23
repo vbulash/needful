@@ -26,8 +26,8 @@ class Answer extends Model implements FormTemplate
 		return [
 			'id' => 'answer-create',
 			'name' => 'answer-create',
-			'action' => route('answers.store'),
-			'close' => route('answers.index'),
+			'action' => '',
+			'close' => '',
 		];
 	}
 
@@ -35,8 +35,8 @@ class Answer extends Model implements FormTemplate
 		return [
 			'id' => 'answer-edit',
 			'name' => 'answer-edit',
-			'action' => route('answers.update'),
-			'close' => route('answers.index'),
+			'action' => route('employers.orders.answers.update', ['answer' => $this->getKey()]),
+			'close' => '',
 		];
 	}
 }

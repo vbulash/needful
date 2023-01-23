@@ -1,40 +1,52 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с заявками на практику
+	Работа с работодателями
 @endsection
 
 @section('steps')
 	@php
 		$steps = [
-			['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'],
-			['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']
+		    [
+		        'title' => 'Работодатель',
+		        'active' => false,
+		        'context' => 'employer',
+		        'link' => route('employers.index'),
+		    ],
+		    ['title' => 'Заявки на практику', 'active' => false, 'context' => 'order'],
+		    [
+		        'title' => 'Ответы на заявку',
+		        'active' => true,
+		        'context' => 'answer',
+		    ],
 		];
 	@endphp
 @endsection
 
 @section('interior')
 	<div class="block-header block-header-default">
+		<div>
+			<h3 class="block-title fw-semibold">Ответы на заявку на практику</h3>
+			<a href="#" class="btn btn-primary mt-3 mb-3">Отправить информацию в учебное заведение</a>
+		</div>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="orders_table" style="width: 100%;">
+				<table class="table table-bordered table-hover text-nowrap" id="answers_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<th style="width: 30px">#</th>
-							<th>Учебное заведение</th>
-							<th>Название практики</th>
-							<th>Дата начала</th>
-							<th>Дата окончания</th>
-							<th>Место практики</th>
+							<th>Название специальности</th>
+							<th>Запрос практикантов</th>
+							<th>Согласны принять</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
 		@else
-			<p>Заявок на практику пока нет...</p>
+			<p>Ответов на заявку на практику для текущего работодателя пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -47,38 +59,14 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
-			document.getElementById('confirm-yes').addEventListener('click', (event) => {
-				$.ajax({
-					method: 'DELETE',
-					url: "{{ route('orders.destroy', ['order' => '0']) }}",
-					data: {
-						id: event.target.dataset.id,
-					},
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}, false);
-
-			function clickDelete(id, name) {
-				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить заявку на практику &laquo;" + name + "&raquo; ?";
-				document.getElementById('confirm-yes').dataset.id = id;
-				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
-				confirmDialog.show();
-			}
-
 			$(function() {
-				window.datatable = $('#orders_table').DataTable({
+				window.datatable = $('#answers_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('orders.index.data') !!}',
+					ajax: '{!! route('employers.orders.answers.index.data', ['employer' => $employer, 'order' => $order]) !!}',
 					responsive: true,
 					columns: [{
 							data: 'id',
@@ -86,29 +74,19 @@
 							responsivePriority: 1
 						},
 						{
-							data: 'school',
-							name: 'school',
-							responsivePriority: 1
-						},
-						{
 							data: 'name',
 							name: 'name',
-							responsivePriority: 2
-						},
-						{
-							data: 'start',
-							name: 'start',
 							responsivePriority: 1
 						},
 						{
-							data: 'end',
-							name: 'end',
+							data: 'quantity',
+							name: 'quantity',
 							responsivePriority: 1
 						},
 						{
-							data: 'place',
-							name: 'place',
-							responsivePriority: 2
+							data: 'approved',
+							name: 'approved',
+							responsivePriority: 1
 						},
 						{
 							data: 'action',

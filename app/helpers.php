@@ -67,13 +67,13 @@ if (!function_exists('createDropdown')) {
 <a href="javascript:void(0)" onclick="%s" class="btn btn-primary btn-sm float-left ms-1">
 	<i class="%s"></i> %s
 </a>
-EOT, $item['click'], $item['icon'] ?? "fas fa-circle", $item['title']);
+EOT, $item['click'], $item['icon'] ?? "fas fa-check", $item['title']);
 			} else {
 				return sprintf(<<<'EOT'
 <a href="%s" class="btn btn-primary btn-sm float-left ms-1">
 	<i class="%s"></i> %s
 </a>
-EOT, $item['link'], $item['icon'] ?? "fas fa-circle", $item['title']);
+EOT, $item['link'], $item['icon'] ?? "fas fa-check", $item['title']);
 			}
 		} else {
 			foreach ($items as $item) {
@@ -81,10 +81,10 @@ EOT, $item['link'], $item['icon'] ?? "fas fa-circle", $item['title']);
 					$out .= "<div class=\"dropdown-divider\"></div>\n";
 				elseif (isset($item['click']))
 					$out .= sprintf("<li><a class=\"dropdown-item\" href=\"javascript:void(0)\" onclick=\"%s\"><i class=\"%s\"></i> %s</a></li>\n",
-						$item['click'], $item['icon'] ?? "fas fa-circle", $item['title']);
+						$item['click'], $item['icon'] ?? "fas fa-check", $item['title']);
 				else
 					$out .= sprintf("<li><a class=\"dropdown-item\" href=\"%s\"><i class=\"%s\"></i> %s</a></li>\n",
-						$item['link'], $item['icon'] ?? "fas fa-circle", $item['title']);
+						$item['link'], $item['icon'] ?? "fas fa-check", $item['title']);
 			}
 			return sprintf(<<<'EOT'
 <div class="dropdown">

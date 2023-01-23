@@ -22,7 +22,8 @@ class StepOrder implements Step {
 		return [
 			'name' => 'required',
 			'start' => 'required',
-			'end' => 'required'
+			'end' => 'required',
+			'place' => 'required',
 		];
 	}
 
@@ -30,7 +31,8 @@ class StepOrder implements Step {
 		return [
 			'name' => 'Название практики',
 			'start' => 'Дата начала',
-			'end' => 'Дата завершения'
+			'end' => 'Дата завершения',
+			'place' => 'Населённый пункт прохождения практики',
 		];
 	}
 
@@ -50,6 +52,7 @@ class StepOrder implements Step {
 		$heap['name'] = $request->name;
 		$heap['start'] = new DateTime($request->start);
 		$heap['end'] = new DateTime($request->end);
+		$heap['place'] = $request->place;
 		$heap['description'] = $request->description;
 		$heap[$this->getContext()] = '[заполнено]';
 		session()->put('heap', $heap);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\School;
 use Illuminate\Http\Request;
@@ -93,12 +94,13 @@ class OrderController extends Controller {
 		return view('orders.edit', compact('order', 'mode'));
 	}
 
-	public function update(Request $request, int $id) {
+	public function update(UpdateOrderRequest $request, int $id) {
 		$order = Order::findOrFail($id);
 		$order->update([
 			'name' => $request->name,
 			'start' => $request->start,
 			'end' => $request->end,
+			'place' => $request->place,
 			'description' => $request->description,
 		]);
 

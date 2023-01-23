@@ -33,6 +33,7 @@
 		$fields[] = ['name' => 'name', 'title' => 'Название практики', 'required' => true, 'type' => 'text', 'value' => $order->name];
 		$fields[] = ['name' => 'start', 'title' => 'Дата начала', 'required' => true, 'type' => 'date', 'value' => $order->start->format('d.m.Y')];
 		$fields[] = ['name' => 'end', 'title' => 'Дата завершения', 'required' => true, 'type' => 'date', 'value' => $order->end->format('d.m.Y')];
+		$fields[] = ['name' => 'place', 'title' => 'Населённый пункт прохождения практики', 'required' => true, 'type' => 'text', 'value' => $order->place];
 		$fields[] = ['name' => 'description', 'title' => 'Дополнительная информация', 'required' => false, 'type' => 'textarea', 'value' => $order->description];
 	@endphp
 @endsection

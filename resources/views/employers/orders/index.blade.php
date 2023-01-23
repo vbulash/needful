@@ -32,6 +32,7 @@
 							<th>Название практики</th>
 							<th>Дата начала</th>
 							<th>Дата окончания</th>
+							<th>Место практики</th>
 							<th>Статус приглашения</th>
 							<th>&nbsp;</th>
 						</tr>
@@ -106,6 +107,11 @@
 							data: 'end',
 							name: 'end',
 							responsivePriority: 1
+						},
+						{
+							data: 'place',
+							name: 'place',
+							responsivePriority: 2
 						},
 						{
 							data: 'status',

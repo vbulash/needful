@@ -21,13 +21,15 @@ class EmployerOrderController extends Controller {
 			->editColumn('status', fn($order) => OrderEmployerStatus::getName($order->pivot->status))
 			->addColumn('action', function ($order) use ($employer) {
 				$showRoute = route('employers.orders.show', ['employer' => $employer, 'order' => $order->getKey()]);
+				$answerRoute = route('employers.orders.select', ['employer' => $employer, 'order' => $order->getKey()]);
 				$items = [];
 
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
 				if ($order->pivot->status != OrderEmployerStatus::REJECTED->value) {
-					// $items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'click' => "clickCancel({$employer}, {$order->getKey()}, '{$order->getTitle()}')", 'icon' => 'fas fa-ban', 'title' => 'Отмена'];
 				}
+				$items[] = ['type' => 'divider'];
+				$items[] = ['type' => 'item', 'link' => $answerRoute, 'title' => 'Ответы работодателя'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -42,8 +44,10 @@ class EmployerOrderController extends Controller {
 	public function select(int $employer, int $order) {
 		$order = Order::findOrFail($order);
 		$context = session('context');
-		$context['employer.order'] = $order->getTitle();
+		$context['order'] = $order->getKey();
 		session()->put('context', $context);
+
+		return redirect()->route('employers.orders.answers.index', ['employer' => $employer, 'order' => $order->getKey()]);
 	}
 
 	public function show(int $employer, int $order) {
