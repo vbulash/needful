@@ -39,6 +39,7 @@ class StepFinal implements Step {
 		$total['name'] = $heap['name'];
 		$total['start'] = $heap['start'];
 		$total['end'] = $heap['end'];
+		$total['place'] = $heap['place'];
 		$total['description'] = $heap['description'];
 		//
 		$temp = [];

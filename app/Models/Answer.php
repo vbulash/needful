@@ -19,7 +19,7 @@ class Answer extends Model implements FormTemplate
 	}
 
 	public function orderSpecialty(): BelongsTo {
-		return $this->belongsTo(OrderSpecialty::class, 'orders_specialties');
+		return $this->belongsTo(OrderSpecialty::class, 'orders_specialties_id');
 	}
 
 	public static function createTemplate(): array {
