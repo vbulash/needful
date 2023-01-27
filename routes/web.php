@@ -44,8 +44,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.orders.answers/{employer}/{order}', 'AnswerController@index')->name('employers.orders.answers.index');
 	Route::get('/employers.orders.answers.data/{employer}/{order}', 'AnswerController@getData')->name('employers.orders.answers.index.data');
 	Route::get('/employers.orders.answers.edit/{answer}', 'AnswerController@edit')->name('employers.orders.answers.edit');
-	Route::post('/employers.orders.answers.update/{answer}', 'AnswerController@update')->name('employers.orders.answers.update');
-
+	Route::get('/employers.orders.answers.show/{answer}', 'AnswerController@show')->name('employers.orders.answers.show');
+	Route::put('/employers.orders.answers.update/{answer}', 'AnswerController@update')->name('employers.orders.answers.update');
 
 	// Практики
 	Route::resource('/internships', 'InternshipController');

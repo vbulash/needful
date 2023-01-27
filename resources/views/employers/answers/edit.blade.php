@@ -24,7 +24,11 @@
 @endsection
 
 @section('interior.header')
-	Редактирование ответа работодателя по специальности &laquo;{{ $answer->name }}&raquo;
+	@if ($mode == config('global.edit'))
+		Редактирование
+	@else
+		Просмотр
+	@endif ответа работодателя
 @endsection
 
 @section('form.params')
@@ -35,9 +39,9 @@
 @section('form.fields')
 	@php
 		$fields = [];
-		$fields[] = ['name' => 'name', 'title' => 'Наименование специальности', 'required' => false, 'type' => 'text', 'value' => $answer->name, 'disabled' => true];
-		$fields[] = ['name' => 'quantity', 'title' => 'Количество практикантов в заявке', 'required' => false, 'type' => 'text', 'value' => $answer->quantity, 'disabled' => true];
-		$fields[] = ['name' => 'approved', 'title' => 'Готовы принять практикантов', 'required' => true, 'type' => 'number', 'value' => $answer->approved];
+		$fields[] = ['name' => 'name', 'title' => 'Наименование специальности', 'required' => false, 'type' => 'text', 'value' => $answer->orderSpecialty->specialty->getTitle(), 'disabled' => true];
+		$fields[] = ['name' => 'quantity', 'title' => 'Количество практикантов в заявке', 'required' => false, 'type' => 'text', 'value' => $answer->orderSpecialty->quantity, 'disabled' => true];
+		$fields[] = ['name' => 'approved', 'title' => 'Готовы принять практикантов', 'required' => true, 'type' => 'number', 'value' => $answer->approved, 'min' => 0, 'max' => $answer->orderSpecialty->quantity];
 	@endphp
 @endsection
 

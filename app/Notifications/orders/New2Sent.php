@@ -84,6 +84,7 @@ class New2Sent extends Notification
 			'Название учебного заведения' => $this->order->school->getTitle(),
 			'Дата начала практики' => $this->order->start->format('d.m.Y'),
 			'Дата завершения практики' => $this->order->end->format('d.m.Y'),
+			'Место прохождения практики' => $this->order->place,
 			'Дополнительная информация' => $this->order->description,
 			'Информация по специальностям заявки - наименование: количество позиций в заявке' => null,
 		];
