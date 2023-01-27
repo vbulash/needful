@@ -5,6 +5,7 @@ namespace App\Http\Controllers\orders;
 use App\Events\orders\New2SentTaskEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WizardButtons;
+use App\Models\Answer;
 use App\Models\Order;
 use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
@@ -118,6 +119,7 @@ class StepController extends Controller {
 		$order->name = $heap['name'];
 		$order->start = $heap['start'];
 		$order->end = $heap['end'];
+		$order->place = $heap['place'];
 		$order->description = $heap['description'];
 		$order->save();
 		foreach ($heap['specialties'] as $item) {
@@ -133,6 +135,14 @@ class StepController extends Controller {
 			$orderEmployer->order()->associate($order);
 			$orderEmployer->employer()->associate($item->id);
 			$orderEmployer->save();
+
+			foreach (OrderSpecialty::all() as $orderSpecialty) {
+				$answer = new Answer();
+				$answer->approved = 0;
+				$answer->orderSpecialty()->associate($orderSpecialty);
+				$answer->employer()->associate($item->id);
+				$answer->save();
+			}
 		}
 
 		$order->school->user->notify(new NewOrder($order));
