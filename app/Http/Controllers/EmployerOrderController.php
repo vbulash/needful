@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\Order;
-use App\Models\OrderEmployer;
+use App\Models\Answer;
 use App\Models\OrderEmployerStatus;
+use App\Notifications\orders\Sent2Accept;
+use App\Notifications\orders\Sent2Reject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployerOrderController extends Controller {
@@ -65,5 +68,47 @@ class EmployerOrderController extends Controller {
 
 		event(new ToastEvent('success', '', "Приглашение работодателя на заявку &laquo;{$order->getTitle()}&raquo; отменено"));
 		return true;
+	}
+
+	public function reject(int $employer, int $order) {
+		$_employer = Employer::findOrFail($employer);
+		$_employer->orders()->updateExistingPivot($order, [
+			'status' => OrderEmployerStatus::REJECTED->value,
+		]);
+		$query = DB::select(<<<'EOS'
+SELECT
+    answers.id
+FROM
+    answers,
+    orders_specialties AS os,
+    orders,
+    employers
+WHERE
+  employers.id = :employer AND
+    orders.id = :order AND
+    answers.employer_id = employers.id AND
+    answers.orders_specialties_id = os.id AND
+    os.order_id = orders.id;
+EOS, ['employer' => $employer, 'order' => $order]);
+		foreach ($query as $answer) {
+			Answer::find($answer->id)->update(['approved' => 0]);
+		};
+		$_order = Order::findOrFail($order);
+
+		$_order->school->user->notify(new Sent2Reject($_order, $_employer));
+		session()->put('success', "Вы отказались от участия в практике");
+		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
+	}
+
+	public function accept(int $employer, int $order) {
+		$_employer = Employer::findOrFail($employer);
+		$_employer->orders()->updateExistingPivot($order, [
+			'status' => OrderEmployerStatus::ACCEPTED->value,
+		]);
+		$_order = Order::findOrFail($order);
+
+		$_order->school->user->notify(new Sent2Accept($_order, $_employer));
+		session()->put('success', "Вы согласились принять практикантов");
+		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}
 }

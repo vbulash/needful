@@ -40,6 +40,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::post('/employers.orders.cancel', 'EmployerOrderController@cancel')->name('employers.orders.cancel');
 	Route::get('/employers.orders/{employer}/{order}', 'EmployerOrderController@show')->name('employers.orders.show');
 	Route::get('/employers.orders.select/{employer}/{order}', 'EmployerOrderController@select')->name('employers.orders.select');
+	Route::get('/employers.orders.reject/{employer}/{order}', 'EmployerOrderController@reject')->name('employers.orders.reject');
+	Route::get('/employers.orders.accept/{employer}/{order}', 'EmployerOrderController@accept')->name('employers.orders.accept');
 	// Ответы работодателя на приглашение
 	Route::get('/employers.orders.answers/{employer}/{order}', 'AnswerController@index')->name('employers.orders.answers.index');
 	Route::get('/employers.orders.answers.data/{employer}/{order}', 'AnswerController@getData')->name('employers.orders.answers.index.data');

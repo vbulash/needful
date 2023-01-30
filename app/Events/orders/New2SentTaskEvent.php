@@ -14,15 +14,7 @@ class New2SentTaskEvent extends TaskEvent {
 		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrderContent($order_employer->order));
 		$lines[] = "</ul>";
-		$lines[] = sprintf(<<<EOD
-<p>Просим принять решение по практике:</p>
-<div class='d-flex mb-5'>
-	<button class='btn btn-primary me-4' type='event' data-order-employer=%d>
-		Да, принять практику
-	</button>
-</div>
-EOD,
-			$order_employer->getKey());
+		$lines[] = "<p>Просим принять решение по практике,  которой вы сможете изучить по ссылке ниже. Ваш ответ по практике можно также откорректировать, если у вас нет возможности принять всех предлагаемых практикантов.</p>";
 		$lines[] = '<p>Если у вас нет необходимости или возможности принять практикантов - проигнорируйте данное сообщение.</p>';
 
 		$context = [
@@ -33,7 +25,7 @@ EOD,
 		parent::__construct(
 		title: 'Ваша организация / компания приглашена для принятия практики',
 		description: implode("\n", $lines),
-		route: route('employers.orders.show', ['employer' => $context['employer'], 'order' => $context['order']]),
+		route: route('employers.orders.answers.index', ['employer' => $context['employer'], 'order' => $context['order']]),
 		from: auth()->user(),
 		to: $order_employer->employer->user,
 		context: $context,

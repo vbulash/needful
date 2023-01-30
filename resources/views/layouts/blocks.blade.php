@@ -68,10 +68,7 @@
 						<a class="{!! $class !!}" href="{!! $link !!}">
 							<div class="block-content block-content-full d-flex align-items-center justify-content-between">
 								<div>
-									<p class="{!! $text !!}">{!! $step['title'] !!}
-										@if ($subtitle)
-											:<br /><br /><small>{!! $subtitle !!}</small>
-										@endif
+									<p class="{!! $text !!}">{!! $step['title'] !!}@if ($subtitle):<br /><br /><small>{!! $subtitle !!}</small>@endif
 									</p>
 								</div>
 

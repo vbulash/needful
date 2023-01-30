@@ -20,14 +20,21 @@
 		        'context' => 'answer',
 		    ],
 		];
+		$_employer = App\Models\Employer::findOrFail($employer);
+		$_order = $_employer->orders()->find($order);
 	@endphp
 @endsection
 
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<h3 class="block-title fw-semibold">Ответы на заявку на практику</h3>
-			<a href="#" class="btn btn-primary mt-3 mb-3">Отправить информацию в учебное заведение</a>
+			<h3 class="block-title fw-semibold">Ответы на заявку на практику &laquo;{{ $_order->getTitle() }}&raquo;</h3>
+			<p>Статус заявки: {{ App\Models\OrderEmployerStatus::getName($_order->pivot->status) }}</p>
+			<a href="{{ route('employers.orders.reject', compact('employer', 'order')) }}" class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
+			<a href="{{ route('employers.orders.accept', compact('employer', 'order')) }}" class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
+			<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
+				Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
+				</small></p>
 		</div>
 	</div>
 	<div class="block-content p-4">
