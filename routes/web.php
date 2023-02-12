@@ -34,6 +34,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.data', 'EmployerController@getData')->name('employers.index.data');
 	Route::get('/employers.select/{employer}', 'EmployerController@select')->name('employers.select');
 	Route::get('/employers.select2/{employer}', 'EmployerController@select2')->name('employers.select2');
+	Route::get('/employers.select3/{employer}', 'EmployerController@select3')->name('employers.select3');
 	// Заявка на практику для работодателя
 	Route::get('/employers.orders/{employer}', 'EmployerOrderController@index')->name('employers.orders.index');
 	Route::get('/employers.orders.data/{employer}', 'EmployerOrderController@getData')->name('employers.orders.index.data');
@@ -179,4 +180,4 @@ Route::group(['namespace' => 'App\Http\Controllers\orders', 'middleware' => ['au
 	Route::get('/orders.steps.data', 'StepController@getData')->name('orders.steps.index.data');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

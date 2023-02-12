@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use \Exception;
 
-class InternshipController extends Controller
-{
+class InternshipController extends Controller {
 	/**
 	 * Process datatables ajax request.
 	 *
@@ -28,8 +27,7 @@ class InternshipController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request, int $employer)
-	{
+	public function getData(Request $request, int $employer) {
 		$context = session('context');
 		if (isset($context['chain']))
 			$query = Internship::where('id', $context['internship']);
@@ -52,51 +50,30 @@ class InternshipController extends Controller
 				$timetablesRoute = route('internships.timetables', ['internship' => $internship->id, 'sid' => session()->getId()]);
 				$especialtiesRoute = route('internships.especialties', ['internship' => $internship->id, 'sid' => session()->getId()]);
 
-				$actions = '';
+				$items = [];
 
 				if (!isset($context['chain']))
-				$actions .=
-					"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-					"<i class=\"fas fa-edit\"></i>\n" .
-					"</a>\n";
-				$actions .=
-					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-					"<i class=\"fas fa-eye\"></i>\n" .
-					"</a>\n";
-				if (!isset($context['chain']))
-				$actions .=
-					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$internship->id}, '{$internship->iname}')\">\n" .
-					"<i class=\"fas fa-trash-alt\"></i>\n" .
-					"</a>\n";
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 
-				if (isset($context['chain'])) {
-					$actions .=
-						"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-						"<i class=\"fas fa-check\"></i>\n" .
-						"</a>\n";
-				} else {
-					$actions .=
-						"<a href=\"{$especialtiesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Специальности для практик\">\n" .
-						"<i class=\"fas fa-people-arrows\"></i>\n" .
-						"</a>\n";
-					$actions .=
-						"<a href=\"{$timetablesRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Графики практик\">\n" .
-						"<i class=\"fas fa-calendar-check\"></i>\n" .
-						"</a>\n";
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+
+				if (!isset($context['chain']))
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$internship->id}, '{$internship->iname}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+
+				if (isset($context['chain']))
+					$items[] = ['type' => 'item', 'link' => $timetablesRoute, 'icon' => 'fas fa-check', 'title' => 'Выбор'];
+				else {
+					$items[] = ['type' => 'divider'];
+					$items[] = ['type' => 'item', 'link' => $especialtiesRoute, 'icon' => 'fas fa-people-arrows', 'title' => 'Специальности для практик'];
+					$items[] = ['type' => 'item', 'link' => $timetablesRoute, 'icon' => 'fas fa-calendar-check', 'title' => 'Графики практик'];
 				}
-				return $actions;
+
+				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}
 
-	private function next(string $view, int $id)
-	{
+	private function next(string $view, int $id) {
 		$internship = Internship::findOrFail($id);
 
 		$context = session('context');
@@ -111,13 +88,11 @@ class InternshipController extends Controller
 		return redirect()->route($view, ['sid' => session()->getId()]);
 	}
 
-	public function timetables(int $id)
-	{
+	public function timetables(int $id) {
 		return $this->next('timetables.index', $id);
 	}
 
-	public function especialties(int $id)
-	{
+	public function especialties(int $id) {
 		return $this->next('especialties.index', $id);
 	}
 
@@ -127,16 +102,17 @@ class InternshipController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function index(Request $request): View|Factory|Application
-	{
+	public function index(Request $request): View|Factory|Application {
 		$context = session('context');
 		$employer = Employer::findOrFail($context['employer']);
 		if (!isset($context['chain'])) {
+			unset($context['internship']);
 			unset($context['especialty']);
 			unset($context['timetable']);
 			$count = $employer->internships()->count();
 			session()->put('context', $context);
-		} else $count = 1;
+		} else
+			$count = 1;
 
 		return view('internships.index', compact('employer', 'count'));
 	}
@@ -147,8 +123,7 @@ class InternshipController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function create(Request $request): View|Factory|Application
-	{
+	public function create(Request $request): View|Factory|Application {
 		$mode = config('global.create');
 		$context = session('context');
 		$employer = Employer::findOrFail($context['employer']);
@@ -161,8 +136,7 @@ class InternshipController extends Controller
 	 * @param StoreInternshipRequest $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreInternshipRequest $request): RedirectResponse
-	{
+	public function store(StoreInternshipRequest $request): RedirectResponse {
 		$internship = Internship::create($request->all());
 		$internship->save();
 		$name = $internship->iname;
@@ -178,8 +152,7 @@ class InternshipController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show(Request $request, int $id): View|Factory|Application
-	{
+	public function show(Request $request, int $id): View|Factory|Application {
 		return $this->edit($request, $id, true);
 	}
 
@@ -191,8 +164,7 @@ class InternshipController extends Controller
 	 * @param bool $show
 	 * @return Application|Factory|View
 	 */
-	public function edit(Request $request, int $id, bool $show = false): View|Factory|Application
-	{
+	public function edit(Request $request, int $id, bool $show = false): View|Factory|Application {
 		$mode = $show ? config('global.show') : config('global.edit');
 		$internship = Internship::findOrFail($id);
 		return view('internships.edit', compact('internship', 'mode'));
@@ -205,8 +177,7 @@ class InternshipController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateInternshipRequest $request, $id): RedirectResponse
-	{
+	public function update(UpdateInternshipRequest $request, $id): RedirectResponse {
 		$internship = Internship::findOrFail($id);
 		$name = $internship->iname;
 		$internship->update($request->all());
@@ -222,11 +193,11 @@ class InternshipController extends Controller
 	 * @param int $internship
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $internship): bool
-	{
+	public function destroy(Request $request, int $internship): bool {
 		if ($internship == 0) {
 			$id = $request->id;
-		} else $id = $internship;
+		} else
+			$id = $internship;
 
 		$internship = Internship::findOrFail($id);
 		$name = $internship->iname;

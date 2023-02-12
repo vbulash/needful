@@ -13,20 +13,17 @@
 
 @section('steps')
 	@php
-		if (isset(session('context')['chain']))
-			$title = 'График практики';
-		else
-			$title = 'График практики или Специальности для практики';
-		$steps = [
-			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Практика', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => $title, 'active' => false, 'context' => 'timetable'],
-		];
+		if (isset(session('context')['chain'])) {
+		    $title = 'График практики';
+		} else {
+		    $title = 'График практики<br/>Специальности для практики';
+		}
+		$steps = [['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])], ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])], ['title' => $title, 'active' => false, 'context' => 'timetable']];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
+	@if ($mode == config('global.show'))
 		Просмотр
 	@else
 		Редактирование
@@ -41,20 +38,27 @@
 @section('form.fields')
 	@php
 		$fields = [
-			['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text', 'value' => $internship->iname],
-			// ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
-			// 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
-			// 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
-			// ], 'value' => $internship->itype],
-			['name' => 'itype', 'type' => 'hidden', 'value' => $internship->itype],
-			['name' => 'status', 'title' => 'Статус практики', 'required' => false, 'type' => 'select', 'options' => [
-				'Планируется' => 'Планируется',
-				'Выполняется' => 'Выполняется',
-				'Закрыта' => 'Завершена',
-			], 'value' => $internship->status],
-			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false, 'value' => $internship->short],
-			['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true, 'value' => $internship->program],
-			['name' => 'employer_id', 'type' => 'hidden', 'value' => $internship->employer->getKey()],
+		    ['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text', 'value' => $internship->iname],
+		    // ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
+		    // 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
+		    // 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
+		    // ], 'value' => $internship->itype],
+		    ['name' => 'itype', 'type' => 'hidden', 'value' => $internship->itype],
+		    [
+		        'name' => 'status',
+		        'title' => 'Статус практики',
+		        'required' => false,
+		        'type' => 'select',
+		        'options' => [
+		            'Планируется' => 'Планируется',
+		            'Выполняется' => 'Выполняется',
+		            'Закрыта' => 'Завершена',
+		        ],
+		        'value' => $internship->status,
+		    ],
+		    ['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false, 'value' => $internship->short],
+		    ['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true, 'value' => $internship->program],
+		    ['name' => 'employer_id', 'type' => 'hidden', 'value' => $internship->employer->getKey()],
 		];
 	@endphp
 @endsection
@@ -87,7 +91,9 @@
 			})
 			.catch(error => {
 				console.error('Oops, something went wrong!');
-				console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+				console.error(
+					'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:'
+				);
 				console.warn('Build id: 7qp6pd211rg0-qmvmsysb38gy');
 				console.error(error);
 			});

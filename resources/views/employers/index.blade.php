@@ -9,9 +9,7 @@
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index')],
-			['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'employer.specialty']];
+		$steps = [['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index')], ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => false, 'context' => 'employer.specialty']];
 	@endphp
 @endsection
 
@@ -155,7 +153,8 @@
 						const buttonRect = event.target.getBoundingClientRect();
 						const menuTop = Math.abs(buttonRect.top) + buttonRect.height + 4;
 						if (menuTop + menuRect.height > parentRect.top + parentRect.height) {
-							const clientHeight = parentRect.height + menuTop + menuRect.height - (parentRect.top + parentRect.height);
+							const clientHeight = parentRect.height + menuTop + menuRect.height - (
+								parentRect.top + parentRect.height);
 							parent.style.height = clientHeight.toString() + 'px';
 						}
 					});

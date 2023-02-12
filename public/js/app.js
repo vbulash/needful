@@ -6413,8 +6413,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _modules_template__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/template */ "./resources/js/dashmix/modules/template.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
@@ -6504,9 +6506,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Helpers)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 /*
  *  Document   : helpers.js
  *  Author     : pixelcave
@@ -7707,9 +7712,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /* harmony import */ var simplebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! simplebar */ "./node_modules/simplebar/dist/simplebar.esm.js");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./resources/js/dashmix/modules/helpers.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 /*
  *  Document   : template.js
  *  Author     : pixelcave
@@ -8548,25 +8556,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
 
   var _e = function e() {
     return (_e = Object.assign || function (e) {
-      for (var n, t = 1, a = arguments.length; t < a; t++) {
-        for (var i in n = arguments[t]) {
-          Object.prototype.hasOwnProperty.call(n, i) && (e[i] = n[i]);
-        }
-      }
+      for (var n, t = 1, a = arguments.length; t < a; t++) for (var i in n = arguments[t]) Object.prototype.hasOwnProperty.call(n, i) && (e[i] = n[i]);
       return e;
     }).apply(this, arguments);
   };
   function n() {
-    for (var e = 0, n = 0, t = arguments.length; n < t; n++) {
-      e += arguments[n].length;
-    }
+    for (var e = 0, n = 0, t = arguments.length; n < t; n++) e += arguments[n].length;
     var a = Array(e),
       i = 0;
-    for (n = 0; n < t; n++) {
-      for (var o = arguments[n], r = 0, l = o.length; r < l; r++, i++) {
-        a[i] = o[r];
-      }
-    }
+    for (n = 0; n < t; n++) for (var o = arguments[n], r = 0, l = o.length; r < l; r++, i++) a[i] = o[r];
     return a;
   }
   var t = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange", "onPreCalendarPosition"],
@@ -8697,9 +8695,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
     return n = n || "", t = t || "", a.className = n, void 0 !== t && (a.textContent = t), a;
   }
   function u(e) {
-    for (; e.firstChild;) {
-      e.removeChild(e.firstChild);
-    }
+    for (; e.firstChild;) e.removeChild(e.firstChild);
   }
   function f(e, n) {
     return n(e) ? e : e.parentNode ? f(e.parentNode, n) : void 0;
@@ -8709,9 +8705,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
       a = d("input", "numInput " + e),
       i = d("span", "arrowUp"),
       o = d("span", "arrowDown");
-    if (-1 === navigator.userAgent.indexOf("MSIE 9.0") ? a.type = "number" : (a.type = "text", a.pattern = "\\d*"), void 0 !== n) for (var r in n) {
-      a.setAttribute(r, n[r]);
-    }
+    if (-1 === navigator.userAgent.indexOf("MSIE 9.0") ? a.type = "number" : (a.type = "text", a.pattern = "\\d*"), void 0 !== n) for (var r in n) a.setAttribute(r, n[r]);
     return t.appendChild(a), t.appendChild(i), t.appendChild(o), t;
   }
   function g(e) {
@@ -8970,9 +8964,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
     };
   }
   "function" != typeof Object.assign && (Object.assign = function (e) {
-    for (var n = [], t = 1; t < arguments.length; t++) {
-      n[t - 1] = arguments[t];
-    }
+    for (var n = [], t = 1; t < arguments.length; t++) n[t - 1] = arguments[t];
     if (!e) throw TypeError("Cannot convert undefined or null to object");
     for (var a = function a(n) {
         n && Object.keys(n).forEach(function (t) {
@@ -9125,11 +9117,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
       e.focus(), "range" === w.config.mode && oe(e);
     }
     function B(e) {
-      for (var n = e > 0 ? 0 : w.config.showMonths - 1, t = e > 0 ? w.config.showMonths : -1, a = n; a != t; a += e) {
-        for (var i = w.daysContainer.children[a], o = e > 0 ? 0 : i.children.length - 1, r = e > 0 ? i.children.length : -1, l = o; l != r; l += e) {
-          var c = i.children[l];
-          if (-1 === c.className.indexOf("hidden") && ne(c.dateObj)) return c;
-        }
+      for (var n = e > 0 ? 0 : w.config.showMonths - 1, t = e > 0 ? w.config.showMonths : -1, a = n; a != t; a += e) for (var i = w.daysContainer.children[a], o = e > 0 ? 0 : i.children.length - 1, r = e > 0 ? i.children.length : -1, l = o; l != r; l += e) {
+        var c = i.children[l];
+        if (-1 === c.className.indexOf("hidden") && ne(c.dateObj)) return c;
       }
     }
     function J(e, n) {
@@ -9137,25 +9127,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
         a = te(t || document.body),
         i = void 0 !== e ? e : a ? t : void 0 !== w.selectedDateElem && te(w.selectedDateElem) ? w.selectedDateElem : void 0 !== w.todayDateElem && te(w.todayDateElem) ? w.todayDateElem : B(n > 0 ? 1 : -1);
       void 0 === i ? w._input.focus() : a ? function (e, n) {
-        for (var t = -1 === e.className.indexOf("Month") ? e.dateObj.getMonth() : w.currentMonth, a = n > 0 ? w.config.showMonths : -1, i = n > 0 ? 1 : -1, o = t - w.currentMonth; o != a; o += i) {
-          for (var r = w.daysContainer.children[o], l = t - w.currentMonth === o ? e.$i + n : n < 0 ? r.children.length - 1 : 0, c = r.children.length, s = l; s >= 0 && s < c && s != (n > 0 ? c : -1); s += i) {
-            var d = r.children[s];
-            if (-1 === d.className.indexOf("hidden") && ne(d.dateObj) && Math.abs(e.$i - s) >= Math.abs(n)) return W(d);
-          }
+        for (var t = -1 === e.className.indexOf("Month") ? e.dateObj.getMonth() : w.currentMonth, a = n > 0 ? w.config.showMonths : -1, i = n > 0 ? 1 : -1, o = t - w.currentMonth; o != a; o += i) for (var r = w.daysContainer.children[o], l = t - w.currentMonth === o ? e.$i + n : n < 0 ? r.children.length - 1 : 0, c = r.children.length, s = l; s >= 0 && s < c && s != (n > 0 ? c : -1); s += i) {
+          var d = r.children[s];
+          if (-1 === d.className.indexOf("hidden") && ne(d.dateObj) && Math.abs(e.$i - s) >= Math.abs(n)) return W(d);
         }
         w.changeMonth(i), J(B(i), 0);
       }(i, n) : W(i);
     }
     function K(e, n) {
-      for (var t = (new Date(e, n, 1).getDay() - w.l10n.firstDayOfWeek + 7) % 7, a = w.utils.getDaysInMonth((n - 1 + 12) % 12, e), i = w.utils.getDaysInMonth(n, e), o = window.document.createDocumentFragment(), r = w.config.showMonths > 1, l = r ? "prevMonthDay hidden" : "prevMonthDay", c = r ? "nextMonthDay hidden" : "nextMonthDay", s = a + 1 - t, u = 0; s <= a; s++, u++) {
-        o.appendChild(R("flatpickr-day " + l, new Date(e, n - 1, s), s, u));
-      }
-      for (s = 1; s <= i; s++, u++) {
-        o.appendChild(R("flatpickr-day", new Date(e, n, s), s, u));
-      }
-      for (var f = i + 1; f <= 42 - t && (1 === w.config.showMonths || u % 7 != 0); f++, u++) {
-        o.appendChild(R("flatpickr-day " + c, new Date(e, n + 1, f % i), f, u));
-      }
+      for (var t = (new Date(e, n, 1).getDay() - w.l10n.firstDayOfWeek + 7) % 7, a = w.utils.getDaysInMonth((n - 1 + 12) % 12, e), i = w.utils.getDaysInMonth(n, e), o = window.document.createDocumentFragment(), r = w.config.showMonths > 1, l = r ? "prevMonthDay hidden" : "prevMonthDay", c = r ? "nextMonthDay hidden" : "nextMonthDay", s = a + 1 - t, u = 0; s <= a; s++, u++) o.appendChild(R("flatpickr-day " + l, new Date(e, n - 1, s), s, u));
+      for (s = 1; s <= i; s++, u++) o.appendChild(R("flatpickr-day", new Date(e, n, s), s, u));
+      for (var f = i + 1; f <= 42 - t && (1 === w.config.showMonths || u % 7 != 0); f++, u++) o.appendChild(R("flatpickr-day " + c, new Date(e, n + 1, f % i), f, u));
       var m = d("div", "dayContainer");
       return m.appendChild(o), m;
     }
@@ -9175,11 +9157,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
           return !(void 0 !== w.config.minDate && w.currentYear === w.config.minDate.getFullYear() && _e2 < w.config.minDate.getMonth()) && !(void 0 !== w.config.maxDate && w.currentYear === w.config.maxDate.getFullYear() && _e2 > w.config.maxDate.getMonth());
         };
         w.monthsDropdownContainer.tabIndex = -1, w.monthsDropdownContainer.innerHTML = "";
-        for (var n = 0; n < 12; n++) {
-          if (e(n)) {
-            var t = d("option", "flatpickr-monthDropdown-month");
-            t.value = new Date(w.currentYear, n).getMonth().toString(), t.textContent = h(n, w.config.shorthandCurrentMonth, w.l10n), t.tabIndex = -1, w.currentMonth === n && (t.selected = !0), w.monthsDropdownContainer.appendChild(t);
-          }
+        for (var n = 0; n < 12; n++) if (e(n)) {
+          var t = d("option", "flatpickr-monthDropdown-month");
+          t.value = new Date(w.currentYear, n).getMonth().toString(), t.textContent = h(n, w.config.shorthandCurrentMonth, w.l10n), t.tabIndex = -1, w.currentMonth === n && (t.selected = !0), w.monthsDropdownContainer.appendChild(t);
         }
       }
     }
@@ -9225,9 +9205,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
         var e = w.l10n.firstDayOfWeek,
           t = n(w.l10n.weekdays.shorthand);
         e > 0 && e < t.length && (t = n(t.splice(e, t.length), t.splice(0, e)));
-        for (var a = w.config.showMonths; a--;) {
-          w.weekdayContainer.children[a].innerHTML = "\n      <span class='flatpickr-weekday'>\n        " + t.join("</span><span class='flatpickr-weekday'>") + "\n      </span>\n      ";
-        }
+        for (var a = w.config.showMonths; a--;) w.weekdayContainer.children[a].innerHTML = "\n      <span class='flatpickr-weekday'>\n        " + t.join("</span><span class='flatpickr-weekday'>") + "\n      </span>\n      ";
       }
     }
     function Z(e, n) {
@@ -9345,9 +9323,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
     }
     function oe(e, n) {
       if (void 0 === n && (n = "flatpickr-day"), 1 === w.selectedDates.length && (!e || e.classList.contains(n) && !e.classList.contains("flatpickr-disabled"))) {
-        for (var t = e ? e.dateObj.getTime() : w.days.firstElementChild.dateObj.getTime(), a = w.parseDate(w.selectedDates[0], void 0, !0).getTime(), i = Math.min(t, w.selectedDates[0].getTime()), o = Math.max(t, w.selectedDates[0].getTime()), r = !1, l = 0, c = 0, s = i; s < o; s += x) {
-          ne(new Date(s), !0) || (r = r || s > i && s < o, s < a && (!l || s > l) ? l = s : s > a && (!c || s < c) && (c = s));
-        }
+        for (var t = e ? e.dateObj.getTime() : w.days.firstElementChild.dateObj.getTime(), a = w.parseDate(w.selectedDates[0], void 0, !0).getTime(), i = Math.min(t, w.selectedDates[0].getTime()), o = Math.max(t, w.selectedDates[0].getTime()), r = !1, l = 0, c = 0, s = i; s < o; s += x) ne(new Date(s), !0) || (r = r || s > i && s < o, s < a && (!l || s > l) ? l = s : s > a && (!c || s < c) && (c = s));
         Array.from(w.rContainer.querySelectorAll("*:nth-child(-n+" + w.config.showMonths + ") > ." + n)).forEach(function (n) {
           var i,
             o,
@@ -9493,15 +9469,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
       De("onClose");
     }, w.onMouseOver = oe, w._createElement = d, w.createDay = R, w.destroy = function () {
       void 0 !== w.config && De("onDestroy");
-      for (var e = w._handlers.length; e--;) {
-        w._handlers[e].remove();
-      }
+      for (var e = w._handlers.length; e--;) w._handlers[e].remove();
       if (w._handlers = [], w.mobileInput) w.mobileInput.parentNode && w.mobileInput.parentNode.removeChild(w.mobileInput), w.mobileInput = void 0;else if (w.calendarContainer && w.calendarContainer.parentNode) if (w.config["static"] && w.calendarContainer.parentNode) {
         var n = w.calendarContainer.parentNode;
         if (n.lastChild && n.removeChild(n.lastChild), n.parentNode) {
-          for (; n.firstChild;) {
-            n.parentNode.insertBefore(n.firstChild, n);
-          }
+          for (; n.firstChild;) n.parentNode.insertBefore(n.firstChild, n);
           n.parentNode.removeChild(n);
         }
       } else w.calendarContainer.parentNode.removeChild(w.calendarContainer);
@@ -9529,11 +9501,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
         return w.hourElement.select();
       }, 50));
     }, w.redraw = ue, w.set = function (e, n) {
-      if (null !== e && "object" == _typeof(e)) for (var a in Object.assign(w.config, e), e) {
-        void 0 !== ge[a] && ge[a].forEach(function (e) {
-          return e();
-        });
-      } else w.config[e] = n, void 0 !== ge[e] ? ge[e].forEach(function (e) {
+      if (null !== e && "object" == _typeof(e)) for (var a in Object.assign(w.config, e), e) void 0 !== ge[a] && ge[a].forEach(function (e) {
+        return e();
+      });else w.config[e] = n, void 0 !== ge[e] ? ge[e].forEach(function (e) {
         return e();
       }) : t.indexOf(e) > -1 && (w.config[e] = c(n));
       w.redraw(), ye(!0);
@@ -9598,9 +9568,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
     function De(e, n) {
       if (void 0 !== w.config) {
         var t = w.config[e];
-        if (void 0 !== t && t.length > 0) for (var a = 0; t[a] && a < t.length; a++) {
-          t[a](w.selectedDates, w.input.value, w, n);
-        }
+        if (void 0 !== t && t.length > 0) for (var a = 0; t[a] && a < t.length; a++) t[a](w.selectedDates, w.input.value, w, n);
         "onChange" === e && (w.input.dispatchEvent(we("change")), w.input.dispatchEvent(we("input")));
       }
     }
@@ -9694,9 +9662,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
           set: d("max")
         }), "time" === i.mode && (w.config.noCalendar = !0, w.config.enableTime = !0);
         Object.assign(w.config, o, i);
-        for (var u = 0; u < n.length; u++) {
-          w.config[n[u]] = !0 === w.config[n[u]] || "true" === w.config[n[u]];
-        }
+        for (var u = 0; u < n.length; u++) w.config[n[u]] = !0 === w.config[n[u]] || "true" === w.config[n[u]];
         t.filter(function (e) {
           return void 0 !== w.config[e];
         }).forEach(function (e) {
@@ -9704,9 +9670,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
         }), w.isMobile = !w.config.disableMobile && !w.config.inline && "single" === w.config.mode && !w.config.disable.length && !w.config.enable && !w.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         for (u = 0; u < w.config.plugins.length; u++) {
           var f = w.config.plugins[u](w) || {};
-          for (var m in f) {
-            t.indexOf(m) > -1 ? w.config[m] = c(f[m]).map(T).concat(w.config[m]) : void 0 === i[m] && (w.config[m] = f[m]);
-          }
+          for (var m in f) t.indexOf(m) > -1 ? w.config[m] = c(f[m]).map(T).concat(w.config[m]) : void 0 === i[m] && (w.config[m] = f[m]);
         }
         i.altInputClass || (w.config.altInputClass = ce().className + " " + w.config.altInputClass);
         De("onParseConfig");
@@ -9984,11 +9948,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       if (n.r(o), Object.defineProperty(o, "default", {
         enumerable: !0,
         value: t
-      }), 2 & e && "string" != typeof t) for (var r in t) {
-        n.d(o, r, function (e) {
-          return t[e];
-        }.bind(null, r));
-      }
+      }), 2 & e && "string" != typeof t) for (var r in t) n.d(o, r, function (e) {
+        return t[e];
+      }.bind(null, r));
       return o;
     }, n.n = function (t) {
       var e = t && t.__esModule ? function () {
@@ -10010,9 +9972,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         } instanceof Array && function (t, e) {
           t.__proto__ = e;
         } || function (t, e) {
-          for (var n in e) {
-            e.hasOwnProperty(n) && (t[n] = e[n]);
-          }
+          for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
         })(t, e);
       }, function (t, e) {
         function n() {
@@ -10046,9 +10006,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         return this.maxDecodedLength(t.length - this._getPaddingLength(t));
       }, t.prototype.decode = function (t) {
         if (0 === t.length) return new Uint8Array(0);
-        for (var e = this._getPaddingLength(t), n = t.length - e, o = new Uint8Array(this.maxDecodedLength(n)), r = 0, i = 0, s = 0, c = 0, a = 0, u = 0, h = 0; i < n - 4; i += 4) {
-          c = this._decodeChar(t.charCodeAt(i + 0)), a = this._decodeChar(t.charCodeAt(i + 1)), u = this._decodeChar(t.charCodeAt(i + 2)), h = this._decodeChar(t.charCodeAt(i + 3)), o[r++] = c << 2 | a >>> 4, o[r++] = a << 4 | u >>> 2, o[r++] = u << 6 | h, s |= 256 & c, s |= 256 & a, s |= 256 & u, s |= 256 & h;
-        }
+        for (var e = this._getPaddingLength(t), n = t.length - e, o = new Uint8Array(this.maxDecodedLength(n)), r = 0, i = 0, s = 0, c = 0, a = 0, u = 0, h = 0; i < n - 4; i += 4) c = this._decodeChar(t.charCodeAt(i + 0)), a = this._decodeChar(t.charCodeAt(i + 1)), u = this._decodeChar(t.charCodeAt(i + 2)), h = this._decodeChar(t.charCodeAt(i + 3)), o[r++] = c << 2 | a >>> 4, o[r++] = a << 4 | u >>> 2, o[r++] = u << 6 | h, s |= 256 & c, s |= 256 & a, s |= 256 & u, s |= 256 & h;
         if (i < n - 1 && (c = this._decodeChar(t.charCodeAt(i)), a = this._decodeChar(t.charCodeAt(i + 1)), o[r++] = c << 2 | a >>> 4, s |= 256 & c, s |= 256 & a), i < n - 2 && (u = this._decodeChar(t.charCodeAt(i + 2)), o[r++] = a << 4 | u >>> 2, s |= 256 & u), i < n - 3 && (h = this._decodeChar(t.charCodeAt(i + 3)), o[r++] = u << 6 | h, s |= 256 & h), 0 !== s) throw new Error("Base64Coder: incorrect characters for decoding");
         return o;
       }, t.prototype._encodeByte = function (t) {
@@ -10060,9 +10018,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, t.prototype._getPaddingLength = function (t) {
         var e = 0;
         if (this._paddingCharacter) {
-          for (var n = t.length - 1; n >= 0 && t[n] === this._paddingCharacter; n--) {
-            e++;
-          }
+          for (var n = t.length - 1; n >= 0 && t[n] === this._paddingCharacter; n--) e++;
           if (t.length < 4 || e > 2) throw new Error("Base64Coder: incorrect padding");
         }
         return e;
@@ -10224,9 +10180,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
                   delete o.loading[t];
                   for (var s = function s(t) {
                       t || r.cleanup();
-                    }, c = 0; c < n.length; c++) {
-                    n[c](e, s);
-                  }
+                    }, c = 0; c < n.length; c++) n[c](e, s);
                 }
               });
             r.send(i);
@@ -10274,9 +10228,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         } instanceof Array && function (t, e) {
           t.__proto__ = e;
         } || function (t, e) {
-          for (var n in e) {
-            e.hasOwnProperty(n) && (t[n] = e[n]);
-          }
+          for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
         })(t, e);
       }, function (t, e) {
         function n() {
@@ -10351,9 +10303,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       _ = function _(t, e, n) {
         var o,
           r = this;
-        for (var i in (o = _e.createXHR()).open("POST", r.options.authEndpoint, !0), o.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"), this.authOptions.headers) {
-          o.setRequestHeader(i, this.authOptions.headers[i]);
-        }
+        for (var i in (o = _e.createXHR()).open("POST", r.options.authEndpoint, !0), o.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"), this.authOptions.headers) o.setRequestHeader(i, this.authOptions.headers[i]);
         return o.onreadystatechange = function () {
           if (4 === o.readyState) if (200 === o.status) {
             var t = void 0,
@@ -10374,9 +10324,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           }
         }, o.send(this.composeQuery(e)), o;
       };
-    for (var S = String.fromCharCode, k = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", C = {}, T = 0, P = k.length; T < P; T++) {
-      C[k.charAt(T)] = T;
-    }
+    for (var S = String.fromCharCode, k = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", C = {}, T = 0, P = k.length; T < P; T++) C[k.charAt(T)] = T;
     var O = function O(t) {
         var e = t.charCodeAt(0);
         return e < 128 ? t : e < 2048 ? S(192 | e >>> 6) + S(128 | 63 & e) : S(224 | e >>> 12 & 15) + S(128 | e >>> 6 & 63) + S(128 | 63 & e);
@@ -10412,9 +10360,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -10454,9 +10400,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           return new I(0, t);
         },
         method: function method(t) {
-          for (var e = [], n = 1; n < arguments.length; n++) {
-            e[n - 1] = arguments[n];
-          }
+          for (var e = [], n = 1; n < arguments.length; n++) e[n - 1] = arguments[n];
           var o = Array.prototype.slice.call(arguments, 1);
           return function (e) {
             return e[t].apply(e, o.concat(arguments));
@@ -10464,36 +10408,26 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         }
       };
     function H(t) {
-      for (var e = [], n = 1; n < arguments.length; n++) {
-        e[n - 1] = arguments[n];
-      }
+      for (var e = [], n = 1; n < arguments.length; n++) e[n - 1] = arguments[n];
       for (var o = 0; o < e.length; o++) {
         var r = e[o];
-        for (var i in r) {
-          r[i] && r[i].constructor && r[i].constructor === Object ? t[i] = H(t[i] || {}, r[i]) : t[i] = r[i];
-        }
+        for (var i in r) r[i] && r[i].constructor && r[i].constructor === Object ? t[i] = H(t[i] || {}, r[i]) : t[i] = r[i];
       }
       return t;
     }
     function q() {
-      for (var t = ["Pusher"], e = 0; e < arguments.length; e++) {
-        "string" == typeof arguments[e] ? t.push(arguments[e]) : t.push(Y(arguments[e]));
-      }
+      for (var t = ["Pusher"], e = 0; e < arguments.length; e++) "string" == typeof arguments[e] ? t.push(arguments[e]) : t.push(Y(arguments[e]));
       return t.join(" : ");
     }
     function B(t, e) {
       var n = Array.prototype.indexOf;
       if (null === t) return -1;
       if (n && t.indexOf === n) return t.indexOf(e);
-      for (var o = 0, r = t.length; o < r; o++) {
-        if (t[o] === e) return o;
-      }
+      for (var o = 0, r = t.length; o < r; o++) if (t[o] === e) return o;
       return -1;
     }
     function z(t, e) {
-      for (var n in t) {
-        Object.prototype.hasOwnProperty.call(t, n) && e(t[n], n, t);
-      }
+      for (var n in t) Object.prototype.hasOwnProperty.call(t, n) && e(t[n], n, t);
     }
     function U(t) {
       var e = [];
@@ -10502,23 +10436,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }), e;
     }
     function F(t, e, n) {
-      for (var o = 0; o < t.length; o++) {
-        e.call(n || window, t[o], o, t);
-      }
+      for (var o = 0; o < t.length; o++) e.call(n || window, t[o], o, t);
     }
     function X(t, e) {
-      for (var n = [], o = 0; o < t.length; o++) {
-        n.push(e(t[o], o, t, n));
-      }
+      for (var n = [], o = 0; o < t.length; o++) n.push(e(t[o], o, t, n));
       return n;
     }
     function J(t, e) {
       e = e || function (t) {
         return !!t;
       };
-      for (var n = [], o = 0; o < t.length; o++) {
-        e(t[o], o, t, n) && n.push(t[o]);
-      }
+      for (var n = [], o = 0; o < t.length; o++) e(t[o], o, t, n) && n.push(t[o]);
       return n;
     }
     function W(t, e) {
@@ -10528,9 +10456,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }), n;
     }
     function G(t, e) {
-      for (var n = 0; n < t.length; n++) {
-        if (e(t[n], n, t)) return !0;
-      }
+      for (var n = 0; n < t.length; n++) if (e(t[n], n, t)) return !0;
       return !1;
     }
     function Q(t) {
@@ -10561,16 +10487,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           switch (_typeof(o)) {
             case "object":
               if (!o) return null;
-              for (i = 0; i < e.length; i += 1) {
-                if (e[i] === o) return {
-                  $ref: n[i]
-                };
-              }
-              if (e.push(o), n.push(r), "[object Array]" === Object.prototype.toString.apply(o)) for (c = [], i = 0; i < o.length; i += 1) {
-                c[i] = t(o[i], r + "[" + i + "]");
-              } else for (s in c = {}, o) {
-                Object.prototype.hasOwnProperty.call(o, s) && (c[s] = t(o[s], r + "[" + JSON.stringify(s) + "]"));
-              }
+              for (i = 0; i < e.length; i += 1) if (e[i] === o) return {
+                $ref: n[i]
+              };
+              if (e.push(o), n.push(r), "[object Array]" === Object.prototype.toString.apply(o)) for (c = [], i = 0; i < o.length; i += 1) c[i] = t(o[i], r + "[" + i + "]");else for (s in c = {}, o) Object.prototype.hasOwnProperty.call(o, s) && (c[s] = t(o[s], r + "[" + JSON.stringify(s) + "]"));
               return c;
             case "number":
             case "string":
@@ -10588,28 +10508,20 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           };
         }
         return t.prototype.debug = function () {
-          for (var t = [], e = 0; e < arguments.length; e++) {
-            t[e] = arguments[e];
-          }
+          for (var t = [], e = 0; e < arguments.length; e++) t[e] = arguments[e];
           this.log(this.globalLog, t);
         }, t.prototype.warn = function () {
-          for (var t = [], e = 0; e < arguments.length; e++) {
-            t[e] = arguments[e];
-          }
+          for (var t = [], e = 0; e < arguments.length; e++) t[e] = arguments[e];
           this.log(this.globalLogWarn, t);
         }, t.prototype.error = function () {
-          for (var t = [], e = 0; e < arguments.length; e++) {
-            t[e] = arguments[e];
-          }
+          for (var t = [], e = 0; e < arguments.length; e++) t[e] = arguments[e];
           this.log(this.globalLogError, t);
         }, t.prototype.globalLogWarn = function (t) {
           window.console && window.console.warn ? window.console.warn(t) : this.globalLog(t);
         }, t.prototype.globalLogError = function (t) {
           window.console && window.console.error ? window.console.error(t) : this.globalLogWarn(t);
         }, t.prototype.log = function (t) {
-          for (var e = [], n = 1; n < arguments.length; n++) {
-            e[n - 1] = arguments[n];
-          }
+          for (var e = [], n = 1; n < arguments.length; n++) e[n - 1] = arguments[n];
           var o = q.apply(this, arguments);
           if (Ie.log) Ie.log(o);else if (Ie.logToConsole) {
             var r = t.bind(this);
@@ -10751,14 +10663,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         }, t.prototype.unbind_all = function () {
           return this.unbind(), this.unbind_global(), this;
         }, t.prototype.emit = function (t, e, n) {
-          for (var o = 0; o < this.global_callbacks.length; o++) {
-            this.global_callbacks[o](t, e);
-          }
+          for (var o = 0; o < this.global_callbacks.length; o++) this.global_callbacks[o](t, e);
           var r = this.callbacks.get(t),
             i = [];
-          if (n ? i.push(e, n) : e && i.push(e), r && r.length > 0) for (o = 0; o < r.length; o++) {
-            r[o].fn.apply(r[o].context || window, i);
-          } else this.failThrough && this.failThrough(t, e);
+          if (n ? i.push(e, n) : e && i.push(e), r && r.length > 0) for (o = 0; o < r.length; o++) r[o].fn.apply(r[o].context || window, i);else this.failThrough && this.failThrough(t, e);
           return this;
         }, t;
       }(),
@@ -10769,9 +10677,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -10952,9 +10858,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11065,9 +10969,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11204,9 +11106,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         }
         return t.prototype.composeQuery = function (t) {
           var e = "socket_id=" + encodeURIComponent(t) + "&channel_name=" + encodeURIComponent(this.channel.name);
-          for (var n in this.authOptions.params) {
-            e += "&" + encodeURIComponent(n) + "=" + encodeURIComponent(this.authOptions.params[n]);
-          }
+          for (var n in this.authOptions.params) e += "&" + encodeURIComponent(n) + "=" + encodeURIComponent(this.authOptions.params[n]);
           return e;
         }, t.prototype.authorize = function (e, n) {
           t.authorizers = t.authorizers || _e.getAuthorizers(), t.authorizers[this.type].call(this, _e, e, n);
@@ -11227,9 +11127,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11298,9 +11196,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11352,9 +11248,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11419,9 +11313,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11483,9 +11375,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -11625,15 +11515,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
             })
           };
         }, e.prototype.setConnection = function (t) {
-          for (var e in this.connection = t, this.connectionCallbacks) {
-            this.connection.bind(e, this.connectionCallbacks[e]);
-          }
+          for (var e in this.connection = t, this.connectionCallbacks) this.connection.bind(e, this.connectionCallbacks[e]);
           this.resetActivityCheck();
         }, e.prototype.abandonConnection = function () {
           if (this.connection) {
-            for (var t in this.stopActivityCheck(), this.connectionCallbacks) {
-              this.connection.unbind(t, this.connectionCallbacks[t]);
-            }
+            for (var t in this.stopActivityCheck(), this.connectionCallbacks) this.connection.unbind(t, this.connectionCallbacks[t]);
             var e = this.connection;
             return this.connection = null, e;
           }
@@ -11802,9 +11688,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
             return function (o, r) {
               n[t].error = o, o ? function (t) {
                 return function (t, e) {
-                  for (var n = 0; n < t.length; n++) {
-                    if (!e(t[n], n, t)) return !1;
-                  }
+                  for (var n = 0; n < t.length; n++) if (!e(t[n], n, t)) return !1;
                   return !0;
                 }(t, function (t) {
                   return Boolean(t.error);
@@ -12022,9 +11906,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           } instanceof Array && function (t, e) {
             t.__proto__ = e;
           } || function (t, e) {
-            for (var n in e) {
-              e.hasOwnProperty(n) && (t[n] = e[n]);
-            }
+            for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n]);
           })(e, n);
         };
         return function (e, n) {
@@ -12080,9 +11962,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       ge = function () {
         function t(t, e) {
           this.hooks = t, this.session = de(1e3) + "/" + function (t) {
-            for (var e = [], n = 0; n < t; n++) {
-              e.push(de(32).toString(32));
-            }
+            for (var e = [], n = 0; n < t; n++) e.push(de(32).toString(32));
             return e.join("");
           }(8), this.location = function (t) {
             var e = /([^\?]*)\/*(\??.*)/.exec(t);
@@ -12122,9 +12002,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
               break;
             case "a":
               e = JSON.parse(t.data.slice(1) || "[]");
-              for (var n = 0; n < e.length; n++) {
-                this.onEvent(e[n]);
-              }
+              for (var n = 0; n < e.length; n++) this.onEvent(e[n]);
               break;
             case "m":
               e = JSON.parse(t.data.slice(1) || "null"), this.onEvent(e);
@@ -12529,9 +12407,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         }
         return t.ready = function () {
           t.isReady = !0;
-          for (var e = 0, n = t.instances.length; e < n; e++) {
-            t.instances[e].connect();
-          }
+          for (var e = 0, n = t.instances.length; e < n; e++) t.instances[e].connect();
         }, t.getClientFeatures = function () {
           return U(W({
             ws: _e.Transports.ws
@@ -12564,9 +12440,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           return this.global_emitter.unbind_all(), this;
         }, t.prototype.subscribeAll = function () {
           var t;
-          for (t in this.channels.channels) {
-            this.channels.channels.hasOwnProperty(t) && this.subscribe(t);
-          }
+          for (t in this.channels.channels) this.channels.channels.hasOwnProperty(t) && this.subscribe(t);
         }, t.prototype.subscribe = function (t) {
           var e = this.channels.add(t, this);
           return e.subscriptionPending && e.subscriptionCancelled ? e.reinstateSubscription() : e.subscriptionPending || "connected" !== this.connection.state || e.subscribe(), e;
@@ -12611,7 +12485,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _popperjs_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @popperjs/core */ "./node_modules/@popperjs/core/lib/index.js");
 /* harmony import */ var _popperjs_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @popperjs/core */ "./node_modules/@popperjs/core/lib/popper.js");
 /*!
-  * Bootstrap v5.2.2 (https://getbootstrap.com/)
+  * Bootstrap v5.2.3 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -12619,7 +12493,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/index.js
+ * Bootstrap (v5.2.3): util/index.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -12934,7 +12808,7 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): dom/event-handler.js
+ * Bootstrap (v5.2.3): dom/event-handler.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13203,7 +13077,7 @@ function hydrateObj(obj, meta) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): dom/data.js
+ * Bootstrap (v5.2.3): dom/data.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13255,7 +13129,7 @@ const Data = {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): dom/manipulator.js
+ * Bootstrap (v5.2.3): dom/manipulator.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13325,7 +13199,7 @@ const Manipulator = {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/config.js
+ * Bootstrap (v5.2.3): util/config.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13386,7 +13260,7 @@ class Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): base-component.js
+ * Bootstrap (v5.2.3): base-component.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13394,7 +13268,7 @@ class Config {
  * Constants
  */
 
-const VERSION = '5.2.2';
+const VERSION = '5.2.3';
 /**
  * Class definition
  */
@@ -13465,7 +13339,7 @@ class BaseComponent extends Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/component-functions.js
+ * Bootstrap (v5.2.3): util/component-functions.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13491,7 +13365,7 @@ const enableDismissTrigger = (component, method = 'hide') => {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): alert.js
+ * Bootstrap (v5.2.3): alert.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13571,7 +13445,7 @@ defineJQueryPlugin(Alert);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): button.js
+ * Bootstrap (v5.2.3): button.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13633,7 +13507,7 @@ defineJQueryPlugin(Button);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): dom/selector-engine.js
+ * Bootstrap (v5.2.3): dom/selector-engine.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13704,7 +13578,7 @@ const SelectorEngine = {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/swipe.js
+ * Bootstrap (v5.2.3): util/swipe.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -13840,7 +13714,7 @@ class Swipe extends Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): carousel.js
+ * Bootstrap (v5.2.3): carousel.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -14288,7 +14162,7 @@ defineJQueryPlugin(Carousel);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): collapse.js
+ * Bootstrap (v5.2.3): collapse.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -14578,7 +14452,7 @@ defineJQueryPlugin(Collapse);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): dropdown.js
+ * Bootstrap (v5.2.3): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15010,7 +14884,7 @@ defineJQueryPlugin(Dropdown);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/scrollBar.js
+ * Bootstrap (v5.2.3): util/scrollBar.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15129,7 +15003,7 @@ class ScrollBarHelper {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/backdrop.js
+ * Bootstrap (v5.2.3): util/backdrop.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15275,7 +15149,7 @@ class Backdrop extends Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/focustrap.js
+ * Bootstrap (v5.2.3): util/focustrap.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15384,7 +15258,7 @@ class FocusTrap extends Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): modal.js
+ * Bootstrap (v5.2.3): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15760,7 +15634,7 @@ defineJQueryPlugin(Modal);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): offcanvas.js
+ * Bootstrap (v5.2.3): offcanvas.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16034,7 +15908,7 @@ defineJQueryPlugin(Offcanvas);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/sanitizer.js
+ * Bootstrap (v5.2.3): util/sanitizer.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16139,7 +16013,7 @@ function sanitizeHtml(unsafeHtml, allowList, sanitizeFunction) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): util/template-factory.js
+ * Bootstrap (v5.2.3): util/template-factory.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16297,7 +16171,7 @@ class TemplateFactory extends Config {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): tooltip.js
+ * Bootstrap (v5.2.3): tooltip.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16447,10 +16321,6 @@ class Tooltip extends BaseComponent {
     clearTimeout(this._timeout);
     EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
-    if (this.tip) {
-      this.tip.remove();
-    }
-
     if (this._element.getAttribute('data-bs-original-title')) {
       this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
     }
@@ -16479,10 +16349,7 @@ class Tooltip extends BaseComponent {
     } // todo v6 remove this OR make it optional
 
 
-    if (this.tip) {
-      this.tip.remove();
-      this.tip = null;
-    }
+    this._disposePopper();
 
     const tip = this._getTipElement();
 
@@ -16497,12 +16364,7 @@ class Tooltip extends BaseComponent {
       EventHandler.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
     }
 
-    if (this._popper) {
-      this._popper.update();
-    } else {
-      this._popper = this._createPopper(tip);
-    }
-
+    this._popper = this._createPopper(tip);
     tip.classList.add(CLASS_NAME_SHOW$2); // If this is a touch-enabled device we add extra
     // empty mouseover listeners to the body's immediate children;
     // only needed because of broken event delegation on iOS
@@ -16560,14 +16422,12 @@ class Tooltip extends BaseComponent {
       }
 
       if (!this._isHovered) {
-        tip.remove();
+        this._disposePopper();
       }
 
       this._element.removeAttribute('aria-describedby');
 
       EventHandler.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN$2));
-
-      this._disposePopper();
     };
 
     this._queueCallback(complete, this.tip, this._isAnimated());
@@ -16884,6 +16744,11 @@ class Tooltip extends BaseComponent {
 
       this._popper = null;
     }
+
+    if (this.tip) {
+      this.tip.remove();
+      this.tip = null;
+    }
   } // Static
 
 
@@ -16913,7 +16778,7 @@ defineJQueryPlugin(Tooltip);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): popover.js
+ * Bootstrap (v5.2.3): popover.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16996,7 +16861,7 @@ defineJQueryPlugin(Popover);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): scrollspy.js
+ * Bootstrap (v5.2.3): scrollspy.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -17287,7 +17152,7 @@ defineJQueryPlugin(ScrollSpy);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): tab.js
+ * Bootstrap (v5.2.3): tab.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -17600,7 +17465,7 @@ defineJQueryPlugin(Tab);
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v5.2.2): toast.js
+ * Bootstrap (v5.2.3): toast.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -18366,10 +18231,10 @@ module.exports = function (exec, SKIP_CLOSING) {
   \*******************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "./node_modules/core-js/internals/function-uncurry-this-raw.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
 
-var toString = uncurryThisRaw({}.toString);
-var stringSlice = uncurryThisRaw(''.slice);
+var toString = uncurryThis({}.toString);
+var stringSlice = uncurryThis(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
@@ -18445,8 +18310,8 @@ var splice = uncurryThis([].splice);
 var id = 0;
 
 // fallback for uncaught frozen keys
-var uncaughtFrozenStore = function (store) {
-  return store.frozen || (store.frozen = new UncaughtFrozenStore());
+var uncaughtFrozenStore = function (state) {
+  return state.frozen || (state.frozen = new UncaughtFrozenStore());
 };
 
 var UncaughtFrozenStore = function () {
@@ -18895,6 +18760,7 @@ module.exports = !fails(function () {
 var documentAll = typeof document == 'object' && document.all;
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
 
 module.exports = {
@@ -18993,10 +18859,10 @@ module.exports = DOMTokenListPrototype === Object.prototype ? undefined : DOMTok
   \**********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
-var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js/internals/global.js");
 
-module.exports = classof(global.process) == 'process';
+module.exports = typeof process != 'undefined' && classof(process) == 'process';
 
 
 /***/ }),
@@ -19005,11 +18871,9 @@ module.exports = classof(global.process) == 'process';
 /*!*************************************************************!*\
   !*** ./node_modules/core-js/internals/engine-user-agent.js ***!
   \*************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
-var getBuiltIn = __webpack_require__(/*! ../internals/get-built-in */ "./node_modules/core-js/internals/get-built-in.js");
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -19162,7 +19026,7 @@ module.exports = function (exec) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 __webpack_require__(/*! ../modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var defineBuiltIn = __webpack_require__(/*! ../internals/define-built-in */ "./node_modules/core-js/internals/define-built-in.js");
 var regexpExec = __webpack_require__(/*! ../internals/regexp-exec */ "./node_modules/core-js/internals/regexp-exec.js");
 var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
@@ -19279,7 +19143,7 @@ module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? c
   \*****************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
 var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "./node_modules/core-js/internals/function-bind-native.js");
 
@@ -19358,10 +19222,29 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/core-js/internals/function-uncurry-this-raw.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/internals/function-uncurry-this-raw.js ***!
-  \*********************************************************************/
+/***/ "./node_modules/core-js/internals/function-uncurry-this-clause.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/core-js/internals/function-uncurry-this-clause.js ***!
+  \************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/function-uncurry-this.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js/internals/function-uncurry-this.js ***!
+  \*****************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "./node_modules/core-js/internals/function-bind-native.js");
@@ -19374,25 +19257,6 @@ module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
   return function () {
     return call.apply(fn, arguments);
   };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/internals/function-uncurry-this.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/internals/function-uncurry-this.js ***!
-  \*****************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
-var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "./node_modules/core-js/internals/function-uncurry-this-raw.js");
-
-module.exports = function (fn) {
-  // Nashorn bug:
-  //   https://github.com/zloirock/core-js/issues/1128
-  //   https://github.com/zloirock/core-js/issues/1130
-  if (classofRaw(fn) === 'Function') return uncurryThisRaw(fn);
 };
 
 
@@ -20447,6 +20311,7 @@ module.exports = function (obj) {
   \*********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
 var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
 var isCallable = __webpack_require__(/*! ../internals/is-callable */ "./node_modules/core-js/internals/is-callable.js");
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "./node_modules/core-js/internals/has-own-property.js");
@@ -20457,8 +20322,12 @@ var InternalStateModule = __webpack_require__(/*! ../internals/internal-state */
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
+var $String = String;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -20467,8 +20336,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -20487,7 +20356,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -21501,10 +21370,10 @@ var store = __webpack_require__(/*! ../internals/shared-store */ "./node_modules
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.26.0',
+  version: '3.27.2',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -21912,21 +21781,15 @@ var uid = __webpack_require__(/*! ../internals/uid */ "./node_modules/core-js/in
 var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "./node_modules/core-js/internals/symbol-constructor-detection.js");
 var USE_SYMBOL_AS_UID = __webpack_require__(/*! ../internals/use-symbol-as-uid */ "./node_modules/core-js/internals/use-symbol-as-uid.js");
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 
@@ -22059,14 +21922,14 @@ var arrayMethodIsStrict = __webpack_require__(/*! ../internals/array-method-is-s
 var CHROME_VERSION = __webpack_require__(/*! ../internals/engine-v8-version */ "./node_modules/core-js/internals/engine-v8-version.js");
 var IS_NODE = __webpack_require__(/*! ../internals/engine-is-node */ "./node_modules/core-js/internals/engine-is-node.js");
 
-var STRICT_METHOD = arrayMethodIsStrict('reduce');
 // Chrome 80-82 has a critical bug
 // https://bugs.chromium.org/p/chromium/issues/detail?id=1049982
 var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
+var FORCED = CHROME_BUG || !arrayMethodIsStrict('reduce');
 
 // `Array.prototype.reduce` method
 // https://tc39.es/ecma262/#sec-array.prototype.reduce
-$({ target: 'Array', proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   reduce: function reduce(callbackfn /* , initialValue */) {
     var length = arguments.length;
     return $reduce(this, callbackfn, length, length > 1 ? arguments[1] : undefined);
@@ -22444,6 +22307,7 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
 
 "use strict";
 
+var FREEZING = __webpack_require__(/*! ../internals/freezing */ "./node_modules/core-js/internals/freezing.js");
 var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js/internals/global.js");
 var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
 var defineBuiltIns = __webpack_require__(/*! ../internals/define-built-ins */ "./node_modules/core-js/internals/define-built-ins.js");
@@ -22451,10 +22315,26 @@ var InternalMetadataModule = __webpack_require__(/*! ../internals/internal-metad
 var collection = __webpack_require__(/*! ../internals/collection */ "./node_modules/core-js/internals/collection.js");
 var collectionWeak = __webpack_require__(/*! ../internals/collection-weak */ "./node_modules/core-js/internals/collection-weak.js");
 var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
-var isExtensible = __webpack_require__(/*! ../internals/object-is-extensible */ "./node_modules/core-js/internals/object-is-extensible.js");
 var enforceInternalState = (__webpack_require__(/*! ../internals/internal-state */ "./node_modules/core-js/internals/internal-state.js").enforce);
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
 var NATIVE_WEAK_MAP = __webpack_require__(/*! ../internals/weak-map-basic-detection */ "./node_modules/core-js/internals/weak-map-basic-detection.js");
 
+var $Object = Object;
+// eslint-disable-next-line es/no-array-isarray -- safe
+var isArray = Array.isArray;
+// eslint-disable-next-line es/no-object-isextensible -- safe
+var isExtensible = $Object.isExtensible;
+// eslint-disable-next-line es/no-object-isfrozen -- safe
+var isFrozen = $Object.isFrozen;
+// eslint-disable-next-line es/no-object-issealed -- safe
+var isSealed = $Object.isSealed;
+// eslint-disable-next-line es/no-object-freeze -- safe
+var freeze = $Object.freeze;
+// eslint-disable-next-line es/no-object-seal -- safe
+var seal = $Object.seal;
+
+var FROZEN = {};
+var SEALED = {};
 var IS_IE11 = !global.ActiveXObject && 'ActiveXObject' in global;
 var InternalWeakMap;
 
@@ -22467,18 +22347,27 @@ var wrapper = function (init) {
 // `WeakMap` constructor
 // https://tc39.es/ecma262/#sec-weakmap-constructor
 var $WeakMap = collection('WeakMap', wrapper, collectionWeak);
+var WeakMapPrototype = $WeakMap.prototype;
+var nativeSet = uncurryThis(WeakMapPrototype.set);
+
+// Chakra Edge bug: adding frozen arrays to WeakMap unfreeze them
+var hasMSEdgeFreezingBug = function () {
+  return FREEZING && fails(function () {
+    var frozenArray = freeze([]);
+    nativeSet(new $WeakMap(), frozenArray, 1);
+    return !isFrozen(frozenArray);
+  });
+};
 
 // IE11 WeakMap frozen keys fix
 // We can't use feature detection because it crash some old IE builds
 // https://github.com/zloirock/core-js/issues/485
-if (NATIVE_WEAK_MAP && IS_IE11) {
+if (NATIVE_WEAK_MAP) if (IS_IE11) {
   InternalWeakMap = collectionWeak.getConstructor(wrapper, 'WeakMap', true);
   InternalMetadataModule.enable();
-  var WeakMapPrototype = $WeakMap.prototype;
   var nativeDelete = uncurryThis(WeakMapPrototype['delete']);
   var nativeHas = uncurryThis(WeakMapPrototype.has);
   var nativeGet = uncurryThis(WeakMapPrototype.get);
-  var nativeSet = uncurryThis(WeakMapPrototype.set);
   defineBuiltIns(WeakMapPrototype, {
     'delete': function (key) {
       if (isObject(key) && !isExtensible(key)) {
@@ -22507,6 +22396,21 @@ if (NATIVE_WEAK_MAP && IS_IE11) {
         if (!state.frozen) state.frozen = new InternalWeakMap();
         nativeHas(this, key) ? nativeSet(this, key, value) : state.frozen.set(key, value);
       } else nativeSet(this, key, value);
+      return this;
+    }
+  });
+// Chakra Edge frozen keys fix
+} else if (hasMSEdgeFreezingBug()) {
+  defineBuiltIns(WeakMapPrototype, {
+    set: function set(key, value) {
+      var arrayIntegrityLevel;
+      if (isArray(key)) {
+        if (isFrozen(key)) arrayIntegrityLevel = FROZEN;
+        else if (isSealed(key)) arrayIntegrityLevel = SEALED;
+      }
+      nativeSet(this, key, value);
+      if (arrayIntegrityLevel == FROZEN) freeze(key);
+      if (arrayIntegrityLevel == SEALED) seal(key);
       return this;
     }
   });

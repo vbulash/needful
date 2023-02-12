@@ -13,7 +13,7 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'employer.order'],
+		    ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'employer.order'],
 		];
 	@endphp
 @endsection
@@ -72,7 +72,8 @@
 
 			function clickCancel(employer, order, name) {
 				document.getElementById('confirm-title').innerText = "Подтвердите отмену приглашения";
-				document.getElementById('confirm-body').innerHTML = "Отменить приглашение работодателя на заявку &laquo;" + name + "&raquo; ?";
+				document.getElementById('confirm-body').innerHTML = "Отменить приглашение работодателя на заявку &laquo;" + name +
+					"&raquo; ?";
 				document.getElementById('confirm-yes').dataset.employer = employer;
 				document.getElementById('confirm-yes').dataset.order = order;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));

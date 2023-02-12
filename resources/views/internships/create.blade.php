@@ -10,11 +10,7 @@
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])],
-			['title' => 'Практика', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])],
-			['title' => 'График практики или Специальности для практики', 'active' => false, 'context' => 'timetable'],
-		];
+		$steps = [['title' => 'Работодатель', 'active' => false, 'context' => 'employer', 'link' => route('employers.index', ['sid' => session()->getId()])], ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'internship', 'link' => route('internships.index', ['sid' => session()->getId()])], ['title' => 'График практики<br/>Специальности для практики', 'active' => false, 'context' => 'timetable']];
 	@endphp
 @endsection
 
@@ -23,23 +19,24 @@
 @endsection
 
 @section('form.params')
-	id="{{ form(\App\Models\Internship::class, $mode, 'id') }}" name="{{ form(\App\Models\Internship::class, $mode, 'name') }}"
+	id="{{ form(\App\Models\Internship::class, $mode, 'id') }}"
+	name="{{ form(\App\Models\Internship::class, $mode, 'name') }}"
 	action="{{ form(\App\Models\Internship::class, $mode, 'action') }}"
 @endsection
 
 @section('form.fields')
 	@php
 		$fields = [
-			['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text'],
-			// ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
-			// 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
-			// 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
-			// ]],
-			['name' => 'itype', 'type' => 'hidden', 'value' => 'Открытая практика'],
-			['name' => 'status', 'title' => 'Статус практики', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
-			['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false],
-			['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true],
-			['name' => 'employer_id', 'type' => 'hidden', 'value' => $employer->getKey()],
+		    ['name' => 'iname', 'title' => 'Название практики', 'required' => true, 'type' => 'text'],
+		    // ['name' => 'itype', 'title' => 'Тип практики', 'required' => true, 'type' => 'select', 'options' => [
+		    // 	'Открытая практика' => 'Открытая практика (практикант может записаться самостоятельно)',
+		    // 	'Закрытая практика' => 'Закрытая практика (практикантов выбирает работодатель)'
+		    // ]],
+		    ['name' => 'itype', 'type' => 'hidden', 'value' => 'Открытая практика'],
+		    ['name' => 'status', 'title' => 'Статус практики', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Планируется'],
+		    ['name' => 'short', 'title' => 'Краткая программа (для писем и сообщений)', 'type' => 'textarea', 'required' => false],
+		    ['name' => 'program', 'title' => 'Программа практики', 'type' => 'editor', 'required' => true],
+		    ['name' => 'employer_id', 'type' => 'hidden', 'value' => $employer->getKey()],
 		];
 	@endphp
 @endsection
@@ -142,7 +139,9 @@
 			})
 			.catch(error => {
 				console.error('Oops, something went wrong!');
-				console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+				console.error(
+					'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:'
+				);
 				console.warn('Build id: 7qp6pd211rg0-qmvmsysb38gy');
 				console.error(error);
 			});

@@ -16,13 +16,13 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'employer.specialty'],
+		    ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => false, 'context' => 'employer.specialty'],
 		];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
+	@if ($mode == config('global.show'))
 		Просмотр
 	@else
 		Редактирование
@@ -41,14 +41,25 @@
 	@endif
 	@php
 		$fields = [];
-		if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
-			$fields[] = ['name' => 'status', 'title' => 'Статус активности объекта', 'required' => false, 'type' => 'select', 'options' => [
-				\App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
-				\App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
-				\App\Models\ActiveStatus::FROZEN->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::FROZEN->value),
-			], 'value' => $employer->status];
+		if (
+		    auth()
+		        ->user()
+		        ->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+		) {
+		    $fields[] = [
+		        'name' => 'status',
+		        'title' => 'Статус активности объекта',
+		        'required' => false,
+		        'type' => 'select',
+		        'options' => [
+		            \App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
+		            \App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
+		            \App\Models\ActiveStatus::FROZEN->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::FROZEN->value),
+		        ],
+		        'value' => $employer->status,
+		    ];
 		}
-        $fields[] = ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40, 'value' => $employer->short];
+		$fields[] = ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40, 'value' => $employer->short];
 		$fields[] = ['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'text', 'value' => $employer->name];
 		$fields[] = ['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text', 'value' => $employer->contact];
 		$fields[] = ['name' => 'address', 'title' => 'Фактический адрес', 'required' => false, 'type' => 'text', 'value' => $employer->address];

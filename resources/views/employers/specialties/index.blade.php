@@ -13,7 +13,7 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'employer.specialty'],
+		    ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'employer.specialty'],
 		];
 	@endphp
 @endsection

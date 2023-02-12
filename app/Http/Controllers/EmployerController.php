@@ -43,6 +43,7 @@ class EmployerController extends Controller {
 				$showRoute = route('employers.show', ['employer' => $employer->id]);
 				$selectRoute = route('employers.select', ['employer' => $employer->id]);
 				$select2Route = route('employers.select2', ['employer' => $employer->id]);
+				$select3Route = route('employers.select3', ['employer' => $employer->id]);
 				$items = [];
 
 				if (!isset($context['chain']))
@@ -59,7 +60,8 @@ class EmployerController extends Controller {
 				if ($employer->status == ActiveStatus::ACTIVE->value) {
 					$items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
-					$items[] = ['type' => 'item', 'link' => $select2Route, 'icon' => 'fas fa-check', 'title' => 'Заявки на практику'];
+					$items[] = ['type' => 'item', 'link' => $select2Route, 'icon' => 'fas fa-check', 'title' => 'Заявки от ОУ'];
+					$items[] = ['type' => 'item', 'link' => $select3Route, 'icon' => 'fas fa-check', 'title' => 'Практики работодателей'];
 				}
 
 				return createDropdown('Действия', $items);
@@ -97,6 +99,22 @@ class EmployerController extends Controller {
 		}
 
 		return redirect()->route('employers.orders.index', ['employer' => $id]);
+	}
+
+	/**
+	 * Выбор практики работодателя
+	 *
+	 * @param int $id Работодатель
+	 * @return RedirectResponse|null
+	 */
+	public function select3(int $id): RedirectResponse {
+		$context = session('context');
+		if (!isset($context['chain'])) {
+			session()->forget('context');
+			session()->put('context', ['employer' => $id]);
+		}
+
+		return redirect()->route('internships.index');
 	}
 
 	public function getClear(): RedirectResponse {
