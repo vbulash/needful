@@ -21,7 +21,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<h3 class="block-title fw-semibold">Специальности</h3>
+			<h3 class="block-title fw-semibold">Детали заявки на практику от образовательного учреждения</h3>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-specialty" data-bs-toggle="modal"
 				data-bs-target="#specialties-list">
 				Добавить специальность работодателю

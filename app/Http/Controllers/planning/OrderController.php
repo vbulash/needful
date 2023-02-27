@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\planning;
 
+use App\Http\Controllers\Controller;
 use App\Events\ToastEvent;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
@@ -18,46 +19,32 @@ class OrderController extends Controller {
 			->addColumn('start', fn($order) => $order->start->format('d.m.Y'))
 			->addColumn('end', fn($order) => $order->end->format('d.m.Y'))
 			->addColumn('action', function ($order) {
-				$editRoute = route('orders.edit', ['order' => $order->getKey()]);
-				$showRoute = route('orders.show', ['order' => $order->getKey()]);
-				$specialtiesRoute = route('orders.select', [
-					'order' => $order->getKey(),
-					'kind' => 'specialties',
-				]);
-				$employersRoute = route('orders.select', [
-					'order' => $order->getKey(),
-					'kind' => 'employers',
-				]);
+				$showRoute = route('planning.orders.show', ['order' => $order->getKey()]);
+				$selectRoute = route('planning.orders.select', ['order' => $order->getKey()]);
+
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'item', 'click' => "clickDelete({$order->getKey()}, '{$order->name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 				$items[] = ['type' => 'divider'];
-				$items[] = ['type' => 'item', 'link' => $specialtiesRoute, 'icon' => 'fas fa-graduation-cap', 'title' => 'Детали заявки'];
-				$items[] = ['type' => 'item', 'link' => $employersRoute, 'icon' => 'fas fa-building', 'title' => 'Уведомления работодателям'];
+				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Ответы работодателей'];
 
 				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}
 
-	public function select(Request $request, int $id) {
-		$context = ['order' => $id];
+	public function select(int $order) {
+		$context = ['order' => $order];
 		session()->put('context', $context);
-		$view = match ($request->kind) {
-			'specialties' => 'order.specialties.index',
-			'employers' => 'order.employers.index',
-		};
 
-		return redirect()->route($view, ['order' => $id]);
+		return redirect()->route('planning.answers.index', ['order' => $order]);
 	}
 
 	public function index() {
 		session()->forget('context');
 		$count = Order::all()->count();
 
-		return view('orders.index', compact('count'));
+		return view('planning.orders.index', compact('count'));
 	}
 
 	public function create() {
@@ -85,13 +72,16 @@ class OrderController extends Controller {
 	}
 
 	public function show(Request $request, int $id) {
-		return $this->edit($request, $id, true);
+		$mode = config('global.show');
+		$order = Order::findOrFail($id);
+		return view('planning.orders.show', compact('order', 'mode'));
+		// return $this->edit($request, $id, true);
 	}
 
 	public function edit(Request $request, int $id, bool $show = false) {
-		$mode = $show ? config('global.show') : config('global.edit');
-		$order = Order::findOrFail($id);
-		return view('orders.edit', compact('order', 'mode'));
+		// $mode = $show ? config('global.show') : config('global.edit');
+		// $order = Order::findOrFail($id);
+		// return view('orders.edit', compact('order', 'mode'));
 	}
 
 	public function update(UpdateOrderRequest $request, int $id) {
@@ -109,15 +99,15 @@ class OrderController extends Controller {
 	}
 
 	public function destroy(Request $request, int $order) {
-		if ($order == 0) {
-			$id = $request->id;
-		} else
-			$id = $order;
+		// if ($order == 0) {
+		// 	$id = $request->id;
+		// } else
+		// 	$id = $order;
 
-		$order = Order::findOrFail($id);
-		$order->delete();
+		// $order = Order::findOrFail($id);
+		// $order->delete();
 
-		event(new ToastEvent('success', '', "Заявка на практику № {$id} удалена"));
-		return true;
+		// event(new ToastEvent('success', '', "Заявка на практику № {$id} удалена"));
+		// return true;
 	}
 }

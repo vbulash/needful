@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Models\Answer;
+use App\Models\Employer;
+use App\Models\OrderEmployerStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,15 +36,18 @@ SQL,
 	}
 
 	public function getData(int $employer, int $order) {
+		$_employer = Employer::find($employer);
+		$_order = $_employer->orders()->find($order);
 		$query = $this->getQuery($employer, $order);
 		return DataTables::of($query)
-			->addColumn('action', function ($answer) use ($employer) {
+			->addColumn('action', function ($answer) use ($employer, $_order) {
 				// Route::get('/employers.orders.answers.edit/{answer}', 'AnswerController@edit')->name('employers.orders.answers.edit');
 				$showRoute = route('employers.orders.answers.show', ['answer' => $answer->id]);
 				$editRoute = route('employers.orders.answers.edit', ['answer' => $answer->id]);
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				if ($_order->pivot->status != OrderEmployerStatus::ACCEPTED->value && $_order->pivot->status != OrderEmployerStatus::REJECTED->value)
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
 
 				return createDropdown('Действия', $items);

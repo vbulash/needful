@@ -1,12 +1,12 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с заявками на практику
+	Планирование практикантов по заявкам на практику от образовательных учреждений
 @endsection
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'], ['title' => 'Детали заявки<br/>Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']];
+		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order'], ['title' => 'Ответы работодателей', 'active' => false, 'context' => 'answer']];
 	@endphp
 @endsection
 
@@ -45,30 +45,6 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
-			document.getElementById('confirm-yes').addEventListener('click', (event) => {
-				$.ajax({
-					method: 'DELETE',
-					url: "{{ route('orders.destroy', ['order' => '0']) }}",
-					data: {
-						id: event.target.dataset.id,
-					},
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}, false);
-
-			function clickDelete(id, name) {
-				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить заявку на практику &laquo;" + name + "&raquo; ?";
-				document.getElementById('confirm-yes').dataset.id = id;
-				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
-				confirmDialog.show();
-			}
-
 			$(function() {
 				window.datatable = $('#orders_table').DataTable({
 					language: {
@@ -76,7 +52,7 @@
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('orders.index.data') !!}',
+					ajax: '{!! route('planning.orders.index.data') !!}',
 					responsive: true,
 					columns: [{
 							data: 'id',

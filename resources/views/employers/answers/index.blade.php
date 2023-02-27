@@ -13,7 +13,12 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Заявки на практику', 'active' => false, 'context' => 'order'],
+		    [
+		        'title' => 'Заявки на практику',
+		        'active' => false,
+		        'context' => 'order',
+		        'link' => route('employers.orders.index', compact('employer')),
+		    ],
 		    [
 		        'title' => 'Ответы на заявку',
 		        'active' => true,
@@ -29,12 +34,23 @@
 	<div class="block-header block-header-default">
 		<div>
 			<h3 class="block-title fw-semibold">Ответы на заявку на практику &laquo;{{ $_order->getTitle() }}&raquo;</h3>
-			<p>Статус заявки: {{ App\Models\OrderEmployerStatus::getName($_order->pivot->status) }}</p>
-			<a href="{{ route('employers.orders.reject', compact('employer', 'order')) }}" class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
-			<a href="{{ route('employers.orders.accept', compact('employer', 'order')) }}" class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
-			<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
-				Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
-				</small></p>
+			<p class='mb-4'>Статус заявки: {{ App\Models\OrderEmployerStatus::getName($_order->pivot->status) }}</p>
+			@if (
+				$_order->pivot->status != App\Models\OrderEmployerStatus::ACCEPTED->value &&
+					$_order->pivot->status != App\Models\OrderEmployerStatus::REJECTED->value)
+				<a href="{{ route('employers.orders.reject', compact('employer', 'order')) }}"
+					class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
+				<a href="{{ route('employers.orders.accept', compact('employer', 'order')) }}"
+					class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
+				<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
+						Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
+					</small></p>
+			@else
+				<p><small>
+						Статус заявки &laquo;{{ App\Models\OrderEmployerStatus::getName($_order->pivot->status) }}&raquo; конечный - ответ
+						(количество практикантов, которое вы согласны принять) уже нельзя отредактировать
+					</small></p>
+			@endif
 		</div>
 	</div>
 	<div class="block-content p-4">

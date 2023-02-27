@@ -13,7 +13,12 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Заявки на практику', 'active' => false, 'context' => 'order'],
+		    [
+		        'title' => 'Заявки на практику',
+		        'active' => false,
+		        'context' => 'order',
+		        'link' => route('employers.orders.index', compact('employer')),
+		    ],
 		    [
 		        'title' => 'Ответы на заявку',
 		        'active' => true,

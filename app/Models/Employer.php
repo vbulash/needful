@@ -14,15 +14,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property string $short
  * @property string $name
  * @property int $status
- * @property string contact
- * @property string address
- * @property string phone
- * @property string email
- * @property string inn
- * @property string kpp
- * @property string ogrn
- * @property string official_address
- * @property string post_address
  * @property int $user_id
  *
  * @method static create(array $data)

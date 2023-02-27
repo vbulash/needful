@@ -32,7 +32,7 @@ class EmployerOrderController extends Controller {
 					$items[] = ['type' => 'item', 'click' => "clickCancel({$employer}, {$order->getKey()}, '{$order->getTitle()}')", 'icon' => 'fas fa-ban', 'title' => 'Отмена'];
 				}
 				$items[] = ['type' => 'divider'];
-				$items[] = ['type' => 'item', 'link' => $answerRoute, 'title' => 'Ответы работодателя'];
+				$items[] = ['type' => 'item', 'link' => $answerRoute, 'title' => 'Ответы на заявку'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -92,7 +92,8 @@ WHERE
 EOS, ['employer' => $employer, 'order' => $order]);
 		foreach ($query as $answer) {
 			Answer::find($answer->id)->update(['approved' => 0]);
-		};
+		}
+		;
 		$_order = Order::findOrFail($order);
 
 		$_order->school->user->notify(new Sent2Reject($_order, $_employer));

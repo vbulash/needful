@@ -1,27 +1,22 @@
 @extends('layouts.detail')
 
 @section('service')
-	Работа с заявками на практику
+	Планирование практикантов по заявкам на практику от образовательных учреждений
 @endsection
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Детали заявки<br/>Уведомления работодателей', 'active' => false, 'context' => 'order.specialty']];
+		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => false, 'context' => 'answer']];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if ($mode == config('global.show'))
-		Просмотр
-	@else
-		Редактирование
-	@endif
-	заявки на практику &laquo;{{ $order->name }}&raquo;
+	Просмотр заявки на практику &laquo;{{ $order->name }}&raquo;
 @endsection
 
 @section('form.params')
-	id="{{ form($order, $mode, 'id') }}" name="{{ form($order, $mode, 'name') }}"
-	action="{{ form($order, $mode, 'action') }}"
+	id="planning-orders-show" name="planning-orders-show"
+	action=""
 @endsection
 
 @section('form.fields')
@@ -36,5 +31,5 @@
 @endsection
 
 @section('form.close')
-	{{ form($order, $mode, 'close') }}
+	{{ route('planning.orders.index') }}
 @endsection

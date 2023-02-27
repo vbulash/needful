@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTime;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Заявка на практику
@@ -15,20 +16,18 @@ use DateTime;
  * @property DateTime $end
  * @property string $description
  */
-class Order extends Model implements FormTemplate
-{
-    use HasFactory, GrantedAll, HasTitle;
+class Order extends Model implements FormTemplate {
+	use HasFactory, GrantedAll, HasTitle;
 
 	protected $fillable = [
-		'name',			// Наименование практики
-		'start',		// Начало практики
-		'end',			// Завершение практики
-		'place',		// Населенный пункт прохождения практики
-		'description',	// Дополнительная информация
+		'name', // Наименование практики
+		'start', // Начало практики
+		'end', // Завершение практики
+		'place', // Населенный пункт прохождения практики
+		'description', // Дополнительная информация
 	];
 
-	public function getTitle(): string
-	{
+	public function getTitle(): string {
 		return $this->name;
 	}
 
@@ -68,6 +67,11 @@ class Order extends Model implements FormTemplate
 	public function employers() {
 		return $this->hasMany(OrderEmployer::class);
 	}
+	// public function employers(): BelongsToMany {
+	// 	return $this->belongsToMany(Employer::class, 'orders_employers')
+	// 		->withTimestamps()
+	// 		->withPivot(['status']);
+	// }
 
 	public static function createTemplate(): array {
 		return [

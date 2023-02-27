@@ -35,7 +35,8 @@
 		    : 'Практики от работодателей';
 		$menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
 		if ($admin) {
-		    $menu[] = ['title' => 'Заявки от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
+		    $menu[] = ['title' => 'Заявки на практику от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
+		    $menu[] = ['title' => 'Планирование практикантов от ОУ', 'icon' => 'fas fa-history', 'route' => 'planning.orders.index', 'pattern' => ['planning.*']];
 		}
 		
 		if ($employers || $students || $schools) {

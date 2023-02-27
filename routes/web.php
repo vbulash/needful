@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\planning\OrderController as PlanningOrderController;
+use App\Http\Controllers\planning\AnswerController as PlanningAnswerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,7 +53,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.orders.answers.show/{answer}', 'AnswerController@show')->name('employers.orders.answers.show');
 	Route::put('/employers.orders.answers.update/{answer}', 'AnswerController@update')->name('employers.orders.answers.update');
 
-	// Практики
+	// Практики от работодателей
 	Route::resource('/internships', 'InternshipController');
 	Route::get('/internships.data/{employer}', 'InternshipController@getData')->name('internships.index.data');
 	Route::get('/internships.timetables/{internship}', 'InternshipController@timetables')->name('internships.timetables');
@@ -79,6 +82,17 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::post('/trainees.unlink', 'TraineeController@unlink')->name('trainees.unlink');
 	Route::post('/trainees.invite.all', 'TraineeController@inviteAll')->name('trainees.invite.all');
 	Route::post('/trainees.transition', 'TraineeController@transition')->name('trainees.transition');
+
+	// Планирование практикантов от учебного заведения
+	// Заявки образовательного учреждения
+	Route::get('/planning.orders', [PlanningOrderController::class, 'index'])->name('planning.orders.index');
+	Route::get('/planning.orders.data', [PlanningOrderController::class, 'getData'])->name('planning.orders.index.data');
+	Route::get('/planning.orders/{order}', [PlanningOrderController::class, 'show'])->name('planning.orders.show');
+	Route::get('/planning.orders.select/{order}', [PlanningOrderController::class, 'select'])->name('planning.orders.select');
+	// Ответы работодателей
+	Route::get('/planning.answers/{order}', [PlanningAnswerController::class, 'index'])->name('planning.answers.index');
+	Route::get('/planning.answers.data/{order}', [PlanningAnswerController::class, 'getData'])->name('planning.answers.index.data');
+	Route::get('/planning.answers/{answer}', [PlanningAnswerController::class, 'show'])->name('planning.answers.show');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');

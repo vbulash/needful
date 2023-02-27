@@ -6,15 +6,12 @@
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке', 'active' => true, 'context' => 'order.specialty', 'link' => route('order.specialties.index', ['order' => $order])]
-		];
+		$steps = [['title' => 'Заявка на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Детали заявки', 'active' => true, 'context' => 'order.specialty', 'link' => route('order.specialties.index', ['order' => $order])]];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
+	@if ($mode == config('global.show'))
 		Просмотр
 	@else
 		Редактирование
