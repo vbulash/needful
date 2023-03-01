@@ -13,7 +13,7 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'employer.order'],
+		    ['title' => 'Специальности<br/>Заявки от ОУ' . (env('BRANCH_EMPLOYER') ? '<br/>Практики работодателей' : ''), 'active' => true, 'context' => 'employer.order'],
 		];
 	@endphp
 @endsection
@@ -36,6 +36,7 @@
 					<thead>
 						<tr>
 							<th style="width: 30px">#</th>
+							<th>Образовательное учреждение</th>
 							<th>Название практики</th>
 							<th>Дата начала</th>
 							<th>Дата окончания</th>
@@ -100,6 +101,11 @@
 							data: 'id',
 							name: 'id',
 							responsivePriority: 1
+						},
+						{
+							data: 'school',
+							name: 'school',
+							responsivePriority: 3
 						},
 						{
 							data: 'name',

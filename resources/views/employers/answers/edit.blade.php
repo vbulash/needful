@@ -24,6 +24,11 @@
 		        'active' => true,
 		        'context' => 'answer',
 		    ],
+		    [
+		        'title' => 'Выбор практикантов',
+		        'active' => false,
+		        'context' => 'employer.students',
+		    ],
 		];
 	@endphp
 @endsection

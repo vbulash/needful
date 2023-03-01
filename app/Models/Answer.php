@@ -5,14 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Answer extends Model implements FormTemplate
-{
-    use HasFactory;
+class Answer extends Model implements FormTemplate {
+	use HasFactory, HasTitle;
 
 	protected $fillable = [
-		'approved',	// Одобренное количество практикантов
+		'approved', // Одобренное количество практикантов
 	];
+
+	public function getTitle(): string {
+		return sprintf("%s (%d)",
+			$this->orderSpecialty->specialty->getTitle(),
+			$this->approved
+		);
+	}
 
 	public function employer(): BelongsTo {
 		return $this->belongsTo(Employer::class);
@@ -20,6 +27,12 @@ class Answer extends Model implements FormTemplate
 
 	public function orderSpecialty(): BelongsTo {
 		return $this->belongsTo(OrderSpecialty::class, 'orders_specialties_id');
+	}
+
+	public function students(): BelongsToMany {
+		return $this->belongsToMany(Student::class, 'answers_students')
+			->withTimestamps()
+			->withPivot(['status']);
 	}
 
 	public static function createTemplate(): array {

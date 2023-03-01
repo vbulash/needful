@@ -9,7 +9,7 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index')], ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => false, 'context' => 'employer.specialty']];
+		$steps = [['title' => 'Работодатель', 'active' => true, 'context' => 'employer', 'link' => route('employers.index')], ['title' => 'Специальности<br/>Заявки от ОУ' . (env('BRANCH_EMPLOYER') ? '<br/>Практики работодателей' : ''), 'active' => false, 'context' => 'employer.specialty']];
 	@endphp
 @endsection
 

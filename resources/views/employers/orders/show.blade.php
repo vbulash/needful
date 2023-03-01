@@ -13,7 +13,7 @@
 		        'context' => 'employer',
 		        'link' => route('employers.index'),
 		    ],
-		    ['title' => 'Специальности<br/>Заявки от ОУ<br/>Практики работодателей', 'active' => true, 'context' => 'employer.order', 'link' => route('employers.orders.index', ['employer' => $employer])],
+		    ['title' => 'Специальности<br/>Заявки от ОУ' . (env('BRANCH_EMPLOYER') ? '<br/>Практики работодателей' : ''), 'active' => true, 'context' => 'employer.order', 'link' => route('employers.orders.index', ['employer' => $employer])],
 		];
 	@endphp
 @endsection

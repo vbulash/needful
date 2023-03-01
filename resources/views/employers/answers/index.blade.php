@@ -24,6 +24,11 @@
 		        'active' => true,
 		        'context' => 'answer',
 		    ],
+		    [
+		        'title' => 'Выбор практикантов',
+		        'active' => false,
+		        'context' => 'employer.students',
+		    ],
 		];
 		$_employer = App\Models\Employer::findOrFail($employer);
 		$_order = $_employer->orders()->find($order);

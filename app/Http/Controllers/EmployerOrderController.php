@@ -19,6 +19,7 @@ class EmployerOrderController extends Controller {
 		// ->wherePivotNotIn('status', [OrderEmployerStatus::REJECTED->value]);
 
 		return DataTables::of($query)
+			->addColumn('school', fn($order) => $order->school->getTitle())
 			->addColumn('start', fn($order) => $order->start->format('d.m.Y'))
 			->addColumn('end', fn($order) => $order->end->format('d.m.Y'))
 			->editColumn('status', fn($order) => OrderEmployerStatus::getName($order->pivot->status))

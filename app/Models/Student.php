@@ -14,12 +14,11 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @method static findOrFail(mixed $student)
  */
-class Student extends Model implements FormTemplate
-{
+class Student extends Model implements FormTemplate {
 	use HasFactory, HasTitle, Notifiable, GrantedAll;
 
 	protected $fillable = [
-		'status',	// Статус активности объекта
+		'status', // Статус активности объекта
 		'lastname',
 		'firstname',
 		'surname',
@@ -43,9 +42,8 @@ class Student extends Model implements FormTemplate
 	];
 
 	// Геттеры Laravel
-	private static function convert2Date($value): DateTime
-	{
-		if($value instanceof DateTime)
+	private static function convert2Date($value): DateTime {
+		if ($value instanceof DateTime)
 			return $value;
 		else {
 			$temp = new DateTime($value);
@@ -53,41 +51,41 @@ class Student extends Model implements FormTemplate
 		}
 	}
 
-	protected function birthdate(): Attribute
-	{
+	protected function birthdate(): Attribute {
 		return Attribute::make(
-			get: fn($value) => self::convert2Date($value),
-			set: fn($value) => self::convert2Date($value),
+		get: fn($value) => self::convert2Date($value),
+		set: fn($value) => self::convert2Date($value),
 		);
 
 	}
 
-	public function getTitle(): string
-	{
+	public function getTitle(): string {
 		return sprintf("%s %s%s",
 			$this->lastname, $this->firstname, $this->surname ? ' ' . $this->surname : '');
 	}
 
-	public function user(): BelongsTo
-	{
+	public function user(): BelongsTo {
 		return $this->belongsTo(User::class);
 	}
 
-	public function learns(): HasMany
-	{
+	public function learns(): HasMany {
 		return $this->hasMany(Learn::class);
 	}
 
-	public function histories(): BelongsToMany
-	{
+	public function histories(): BelongsToMany {
 		return $this->belongsToMany(History::class, 'history_student')
 			->using(Trainee::class)
 			->withPivot('id', 'status')
 			->withTimestamps();
 	}
 
-	public static function createTemplate(): array
-	{
+	public function answers(): BelongsToMany {
+		return $this->belongsToMany(Answer::class, 'answers_students')
+			->withTimestamps()
+			->withPivot(['status']);
+	}
+
+	public static function createTemplate(): array {
 		return [
 			'id' => 'student-create',
 			'name' => 'student-create',
@@ -96,8 +94,7 @@ class Student extends Model implements FormTemplate
 		];
 	}
 
-	public function editTemplate(): array
-	{
+	public function editTemplate(): array {
 		return [
 			'id' => 'student-edit',
 			'name' => 'student-edit',
@@ -106,8 +103,7 @@ class Student extends Model implements FormTemplate
 		];
 	}
 
-	public function routeNotificationFor($driver, $notification = null): array
-	{
+	public function routeNotificationFor($driver, $notification = null): array {
 		return [$this->email => $this->getTitle()];
 	}
 }

@@ -3,6 +3,8 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\planning\OrderController as PlanningOrderController;
 use App\Http\Controllers\planning\AnswerController as PlanningAnswerController;
+use App\Http\Controllers\planning\StudentController as PlanningStudentController;
+use App\Http\Controllers\planning\EmployerStudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +54,12 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.orders.answers.edit/{answer}', 'AnswerController@edit')->name('employers.orders.answers.edit');
 	Route::get('/employers.orders.answers.show/{answer}', 'AnswerController@show')->name('employers.orders.answers.show');
 	Route::put('/employers.orders.answers.update/{answer}', 'AnswerController@update')->name('employers.orders.answers.update');
+	Route::get('/employers.orders.answers.select/{answer}', 'AnswerController@select')->name('employers.orders.answers.select');
+	// Учащиеся
+	Route::get('/employers.students', [EmployerStudentController::class, 'index'])->name('employers.students.index');
+	Route::get('/employers.students.data', [EmployerStudentController::class, 'getData'])->name('employers.students.index.data');
+	Route::get('/employers.students/{student}', [EmployerStudentController::class, 'show'])->name('employers.students.show');
+	Route::post('/employers.students.status', [EmployerStudentController::class, 'changeStatus'])->name('employers.students.status');
 
 	// Практики от работодателей
 	Route::resource('/internships', 'InternshipController');
@@ -93,6 +101,14 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/planning.answers/{order}', [PlanningAnswerController::class, 'index'])->name('planning.answers.index');
 	Route::get('/planning.answers.data/{order}', [PlanningAnswerController::class, 'getData'])->name('planning.answers.index.data');
 	Route::get('/planning.answers/{answer}', [PlanningAnswerController::class, 'show'])->name('planning.answers.show');
+	Route::get('/planning.answers.select/{answer}', [PlanningAnswerController::class, 'select'])->name('planning.answers.select');
+	// Учащиеся
+	Route::get('/planning.students', [PlanningStudentController::class, 'index'])->name('planning.students.index');
+	Route::get('/planning.students.data', [PlanningStudentController::class, 'getData'])->name('planning.students.index.data');
+	Route::get('/planning.students/{student}', [PlanningStudentController::class, 'show'])->name('planning.students.show');
+	Route::post('/planning.students', [PlanningStudentController::class, 'store'])->name('planning.students.store');
+	Route::delete('/planning.students', [PlanningStudentController::class, 'destroy'])->name('planning.students.destroy');
+	Route::post('/planning.students.send/{answer}', [PlanningStudentController::class, 'send'])->name('planning.students.send');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');

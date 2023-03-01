@@ -28,12 +28,14 @@
 		$menu = [['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard']];
 		
 		$menu[] = ['title' => 'Практики', 'heading' => true];
-		$name = auth()
-		    ->user()
-		    ->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)
-		    ? 'Мои практики'
-		    : 'Практики от работодателей';
-		$menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
+		if (env('BRANCH_EMPLOYER')) {
+		    $name = auth()
+		        ->user()
+		        ->hasRole(\App\Http\Controllers\Auth\RoleName::TRAINEE->value)
+		        ? 'Мои практики'
+		        : 'Практики от работодателей';
+		    $menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
+		}
 		if ($admin) {
 		    $menu[] = ['title' => 'Заявки на практику от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
 		    $menu[] = ['title' => 'Планирование практикантов от ОУ', 'icon' => 'fas fa-history', 'route' => 'planning.orders.index', 'pattern' => ['planning.*']];

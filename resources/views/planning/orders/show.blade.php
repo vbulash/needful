@@ -6,7 +6,7 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => false, 'context' => 'answer']];
+		$steps = [['title' => 'Заявки на практику', 'active' => true, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => false, 'context' => 'answer'], ['title' => 'Практиканты', 'active' => false, 'context' => 'answer.students']];
 	@endphp
 @endsection
 

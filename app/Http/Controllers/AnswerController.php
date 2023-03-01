@@ -41,14 +41,17 @@ SQL,
 		$query = $this->getQuery($employer, $order);
 		return DataTables::of($query)
 			->addColumn('action', function ($answer) use ($employer, $_order) {
-				// Route::get('/employers.orders.answers.edit/{answer}', 'AnswerController@edit')->name('employers.orders.answers.edit');
 				$showRoute = route('employers.orders.answers.show', ['answer' => $answer->id]);
 				$editRoute = route('employers.orders.answers.edit', ['answer' => $answer->id]);
+				// Route::get('/employers.orders.answers.select/{answer}', 'AnswerController@select')->name('employers.orders.answers.select');
+				$selectRoute = route('employers.orders.answers.select', ['answer' => $answer->id]);
 				$items = [];
 
 				if ($_order->pivot->status != OrderEmployerStatus::ACCEPTED->value && $_order->pivot->status != OrderEmployerStatus::REJECTED->value)
 					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$items[] = ['type' => 'divider'];
+				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Выбор практикантов'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -56,10 +59,22 @@ SQL,
 	}
 
 	public function index(int $employer, int $order) {
+		$context = session('context');
+		unset($context['answer']);
+		session()->put('context', $context);
+
 		$query = $this->getQuery($employer, $order);
 		$count = count($query);
 
 		return view('employers.answers.index', compact('count', 'employer', 'order'));
+	}
+
+	public function select(int $answer) {
+		$context = session('context');
+		$context['answer'] = $answer;
+		session()->put('context', $context);
+
+		return redirect()->route('employers.students.index');
 	}
 
 	public function create() {

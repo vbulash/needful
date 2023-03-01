@@ -61,7 +61,8 @@ class EmployerController extends Controller {
 					$items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
 					$items[] = ['type' => 'item', 'link' => $select2Route, 'icon' => 'fas fa-check', 'title' => 'Заявки от ОУ'];
-					$items[] = ['type' => 'item', 'link' => $select3Route, 'icon' => 'fas fa-check', 'title' => 'Практики работодателей'];
+					if (env('BRANCH_EMPLOYER'))
+						$items[] = ['type' => 'item', 'link' => $select3Route, 'icon' => 'fas fa-check', 'title' => 'Практики работодателей'];
 				}
 
 				return createDropdown('Действия', $items);

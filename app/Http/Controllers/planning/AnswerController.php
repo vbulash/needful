@@ -53,24 +53,22 @@ EOS;
 
 		return DataTables::of($query)
 			->addColumn('action', function ($answer) {
-				$showRoute = route('dashboard');
+				$selectRoute = route('planning.answers.select', ['answer' => $answer->aid]);
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				// $items[] = ['type' => 'divider'];
-				// $items[] = ['type' => 'item', 'link' => $specialtiesRoute, 'icon' => 'fas fa-graduation-cap', 'title' => 'Детали заявки'];
-				// $items[] = ['type' => 'item', 'link' => $employersRoute, 'icon' => 'fas fa-building', 'title' => 'Уведомления работодателям'];
-	
+				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Практиканты'];
+
 				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}
 
-	public function select(Request $request, int $id) {
-		// $context = ['order' => $id];
-		// session()->put('context', $context);
+	public function select(int $answer) {
+		$context = session('context');
+		$context['answer'] = $answer;
+		session()->put('context', $context);
 
-		// return redirect()->route('dashboard', ['order' => $id]);
+		return redirect()->route('planning.students.index');
 	}
 
 	public function index(int $order) {
@@ -120,17 +118,17 @@ EOS;
 	}
 
 	public function update(UpdateOrderRequest $request, int $id) {
-		$order = Order::findOrFail($id);
-		$order->update([
-			'name' => $request->name,
-			'start' => $request->start,
-			'end' => $request->end,
-			'place' => $request->place,
-			'description' => $request->description,
-		]);
+		// $order = Order::findOrFail($id);
+		// $order->update([
+		// 	'name' => $request->name,
+		// 	'start' => $request->start,
+		// 	'end' => $request->end,
+		// 	'place' => $request->place,
+		// 	'description' => $request->description,
+		// ]);
 
-		session()->put('success', "Заявка на практику № {$order->getKey()} обновлена");
-		return redirect()->route('orders.index');
+		// session()->put('success', "Заявка на практику № {$order->getKey()} обновлена");
+		// return redirect()->route('orders.index');
 	}
 
 	public function destroy(Request $request, int $order) {

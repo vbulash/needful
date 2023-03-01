@@ -8,30 +8,27 @@ use App\Http\Requests\Auth\LoginRequest;
 use \Exception;
 use Illuminate\Http\Request;
 
-class AuthenticatedSessionController extends Controller
-{
-    /**
-     * Display the login view.
-     *
-     * @return View
-     */
-    public function create()
-    {
-        return view('auth.login');
-    }
+class AuthenticatedSessionController extends Controller {
+	/**
+	 * Display the login view.
+	 *
+	 * @return View
+	 */
+	public function create() {
+		return view('auth.login');
+	}
 
-    /**
-     * Handle an incoming authentication request.
-     *
-     * @param LoginRequest $request
-     * @return RedirectResponse
-     */
-    public function store(LoginRequest $request)
-    {
-        try {
-            $request->authenticate();
-            $request->session()->regenerate();
-			session()->put('success', "Вы успешно авторизовались");
+	/**
+	 * Handle an incoming authentication request.
+	 *
+	 * @param LoginRequest $request
+	 * @return RedirectResponse
+	 */
+	public function store(LoginRequest $request) {
+		try {
+			$request->authenticate();
+			$request->session()->regenerate();
+			// session()->put('success', "Вы успешно авторизовались");
 
 			if (auth()->user()->hasRole(RoleName::TRAINEE->value)) {
 				if (auth()->user()->students()->count() == 0)
@@ -44,28 +41,27 @@ class AuthenticatedSessionController extends Controller
 					return redirect()->route('schools.create');
 			}
 			return redirect()->route('dashboard');
-        } catch(Exception $exc) {
+		} catch (Exception $exc) {
 			session()->put('error', $exc->getMessage());
-            event(new ToastEvent('error', '', $exc->getMessage()));
+			event(new ToastEvent('error', '', $exc->getMessage()));
 
-            return redirect()->route('login');
-        }
-    }
+			return redirect()->route('login');
+		}
+	}
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function destroy(Request $request)
-    {
-        auth()->guard('web')->logout();
+	/**
+	 * Destroy an authenticated session.
+	 *
+	 * @param Request $request
+	 * @return RedirectResponse
+	 */
+	public function destroy(Request $request) {
+		auth()->guard('web')->logout();
 
-        $request->session()->invalidate();
+		$request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+		$request->session()->regenerateToken();
 
-        return redirect()->route('login');
-    }
+		return redirect()->route('login');
+	}
 }

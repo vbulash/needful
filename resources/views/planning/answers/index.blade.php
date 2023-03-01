@@ -6,7 +6,7 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => true, 'context' => 'answer']];
+		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => true, 'context' => 'answer'], ['title' => 'Практиканты', 'active' => false, 'context' => 'answer.students']];
 	@endphp
 @endsection
 
@@ -33,7 +33,8 @@
 				</table>
 			</div>
 		@else
-			<p>Ответов работодателей пока нет...</p>
+			<p>Ответов работодателей пока нет - ожидайте утверждения работодателем заявок в целом (специальности + количества).
+			</p>
 		@endif
 	</div>
 @endsection
