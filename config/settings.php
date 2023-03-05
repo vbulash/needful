@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\orders\Sent2AnsweredTaskEvent;
 use App\Notifications\e2s\Accepted2ApprovedNotification;
 use App\Notifications\e2s\Accepted2CancelledNotification;
 use App\Notifications\e2s\All2DestroyedNotification;
@@ -67,6 +68,7 @@ return [
 			New2Sent::class => 'Уведомление работодателю',
 			Sent2Reject::class => 'Работодатель отказался',
 			Sent2Accept::class => 'Работодатель согласился',
+			Sent2AnsweredTaskEvent::class => 'Работодатель ответил',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',
