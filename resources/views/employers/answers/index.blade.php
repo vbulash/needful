@@ -43,10 +43,8 @@
 			@if (
 				$_order->pivot->status != App\Models\OrderEmployerStatus::ACCEPTED->value &&
 					$_order->pivot->status != App\Models\OrderEmployerStatus::REJECTED->value)
-				<a href="{{ route('employers.orders.reject', compact('employer', 'order')) }}"
-					class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
-				<a href="{{ route('employers.orders.accept', compact('employer', 'order')) }}"
-					class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
+				<a onclick="clickReject()" class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
+				<a onclick="clickAccept()" class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
 				<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
 						Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
 					</small></p>
@@ -77,6 +75,31 @@
 			<p>Ответов на заявку на практику для текущего работодателя пока нет...</p>
 		@endif
 	</div>
+
+	<div class="modal fade" id="modal-answer" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+		aria-labelledby="modal-answer-label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<input type="hidden" id="answer-mode" />
+				<div class="modal-header">
+					<h5 class="modal-title" id="answer-title">&nbsp;</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="answer-body">
+					<p class="mb-4">Вы можете добавить в сообщение работодателю необязательную дополнительную информацию из поля
+						ниже:</p>
+					<div class="form-floating mb-4">
+						<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;" required></textarea>
+						<label class="form-label" for="message">Дополнительная информация &gt;</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="answer-yes" data-bs-dismiss="modal">Отправить</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+				</div>
+			</div>
+		</div>
+	</div>
 @endsection
 
 @if ($count > 0)
@@ -87,6 +110,42 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
+			function clickAccept() {
+				document.getElementById('answer-title').innerText = "Принять заявку от образовательного учреждения";
+				document.getElementById('answer-yes').innerText = 'Принять заявку';
+				document.getElementById('answer-mode').value = 'accept';
+				let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
+				answerDialog.show();
+			}
+
+			function clickReject() {
+				document.getElementById('answer-title').innerText = "Отказаться от заявки образовательного учреждения";
+				document.getElementById('answer-yes').innerText = 'Отказаться от заявки';
+				document.getElementById('answer-mode').value = 'reject';
+				let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
+				answerDialog.show();
+			}
+
+			document.getElementById('answer-yes').addEventListener('click', (event) => {
+				let url = '';
+				const mode = document.getElementById('answer-mode').value;
+				if (mode == 'accept') url = "{{ route('employers.orders.accept', compact('employer', 'order')) }}";
+				else if (mode == 'reject') url = "{{ route('employers.orders.reject', compact('employer', 'order')) }}";
+				$.ajax({
+					method: 'GET',
+					url: url,
+					data: {
+						message: document.getElementById('message').value,
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: () => {
+						window.datatable.ajax.reload();
+					}
+				});
+			}, false);
+
 			$(function() {
 				window.datatable = $('#answers_table').DataTable({
 					language: {
