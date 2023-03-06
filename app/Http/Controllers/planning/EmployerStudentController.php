@@ -16,7 +16,8 @@ use Yajra\DataTables\DataTables;
 class EmployerStudentController extends Controller {
 	public function getData() {
 		$context = session('context');
-		$query = Answer::find($context['answer'])->students;
+		$query = Answer::find($context['answer'])->students()
+			->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value));
 
 		return DataTables::of($query)
 			->editColumn('fio', fn($student) => $student->getTitle())
@@ -43,8 +44,9 @@ class EmployerStudentController extends Controller {
 
 	public function index() {
 		$context = session('context');
-		$students = Answer::find($context['answer'])->students;
-		$count = count($students);
+		$students = Answer::find($context['answer'])->students()
+			->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value));
+		$count = $students->count();
 
 		return view('employers.students.index', compact('count'));
 	}

@@ -47,10 +47,12 @@ SQL,
 				$selectRoute = route('employers.orders.answers.select', ['answer' => $answer->id]);
 				$items = [];
 
-				if ($_order->pivot->status != OrderEmployerStatus::ACCEPTED->value && $_order->pivot->status != OrderEmployerStatus::REJECTED->value)
+				if ($_order->pivot->status != OrderEmployerStatus::ACCEPTED->value &&
+					$_order->pivot->status != OrderEmployerStatus::REJECTED->value) {
 					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
-				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'divider'];
+					// $items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+					$items[] = ['type' => 'divider'];
+				}
 				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Выбор практикантов'];
 
 				return createDropdown('Действия', $items);
