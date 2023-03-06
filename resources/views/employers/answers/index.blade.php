@@ -43,8 +43,8 @@
 			@if (
 				$_order->pivot->status != App\Models\OrderEmployerStatus::ACCEPTED->value &&
 					$_order->pivot->status != App\Models\OrderEmployerStatus::REJECTED->value)
-				<a onclick="clickReject()" class="btn btn-primary mt-3 mb-3">Отказать учебному заведению</a>
-				<a onclick="clickAccept()" class="btn btn-primary mt-3 mb-3">Принять заявку учебного заведения</a>
+				<a onclick="clickReject()" class="btn btn-primary mt-3 mb-3">Отказать образовательному учреждению</a>
+				<a onclick="clickAccept()" class="btn btn-primary mt-3 mb-3">Принять заявку образовательного учреждения</a>
 				<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
 						Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
 					</small></p>

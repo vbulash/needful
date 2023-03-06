@@ -6,10 +6,7 @@
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => true, 'context' => 'order.employer']
-		];
+		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => true, 'context' => 'order.employer']];
 	@endphp
 @endsection
 
@@ -21,7 +18,8 @@
 				data-bs-target="#employers-list">
 				Добавить работодателя к заявке на практику
 			</button>
-			<p>Вы также можете перейти на специальности в заявке по ссылке <a href="{{ route('order.specialties.index', ['order' => $order]) }}">Специальности в заявке</a></p>
+			<p>Вы также можете перейти на специальности в заявке по ссылке <a
+					href="{{ route('order.specialties.index', ['order' => $order]) }}">Специальности в заявке</a></p>
 			<p id="no-enabled-data" style="display: none;">Все работодатели внесены в заявку на практику</p>
 		</div>
 	</div>
@@ -53,7 +51,8 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 				</div>
 				<div class="modal-body">
-					<p>Здесь доступны все работодатели, даже если у них нет пересечения по специальностям с учебным заведением.</p>
+					<p>Здесь доступны все работодатели, даже если у них нет пересечения по специальностям с образовательным учреждением.
+					</p>
 					<div class="mb-4">
 						<select name="employers" class="select2 form-control" style="width:100%;" id="employers"></select>
 					</div>

@@ -1,21 +1,18 @@
 @extends('layouts.detail')
 
 @section('service')
-	Работа с учебными заведениями
+	Работа с образовательными учреждениями
 @endsection
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Учебное заведение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')],
-			['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index')],
-		];
+		$steps = [['title' => 'Образовательное учреждение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index')]];
 	@endphp
 @endsection
 
 @section('interior.header')
 	<div>
-		<p>Новая специальность в учебном заведении</p>
+		<p>Новая специальность в образовательном учреждении</p>
 		@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 			<p>Новые специальности может добавлять только администратор платформы</p>
 		@endif
@@ -23,17 +20,21 @@
 @endsection
 
 @section('form.params')
-	id="{{ form(\App\Models\Fspecialty::class, $mode, 'id') }}" name="{{ form(\App\Models\Fspecialty::class, $mode, 'name') }}"
+	id="{{ form(\App\Models\Fspecialty::class, $mode, 'id') }}"
+	name="{{ form(\App\Models\Fspecialty::class, $mode, 'name') }}"
 	action="{{ form(\App\Models\Fspecialty::class, $mode, 'action') }}"
 @endsection
 
 @section('form.fields')
 	@php
-		$fields = [
-			['name' => 'specialty_id', 'title' => 'Выбор специальности', 'required' => false, 'type' => 'select', 'placeholder' => 'Выберите специальность'],
-		];
-        if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
-			$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+		$fields = [['name' => 'specialty_id', 'title' => 'Выбор специальности', 'required' => false, 'type' => 'select', 'placeholder' => 'Выберите специальность']];
+		if (
+		    auth()
+		        ->user()
+		        ->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+		) {
+		    $fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+		}
 	@endphp
 @endsection
 

@@ -20,7 +20,8 @@
 			</button>
 			<p>Вы также можете перейти на уведомления работодателей по ссылке <a
 					href="{{ route('order.employers.index', ['order' => $order]) }}">Уведомления работодателей</a></p>
-			<p id="no-enabled-data" style="display: none;">Все специальности учебного заведения внесены в заявку на практику</p>
+			<p id="no-enabled-data" style="display: none;">Все специальности образовательного учреждения внесены в заявку на
+				практику</p>
 		</div>
 	</div>
 	<div class="block-content p-4">

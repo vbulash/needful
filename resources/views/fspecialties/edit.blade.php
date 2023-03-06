@@ -1,28 +1,25 @@
 @extends('layouts.detail')
 
 @section('service')
-	Работа с учебными заведениями
+	Работа с образовательными учреждениями
 @endsection
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Учебное заведение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')],
-			['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index')],
-		];
+		$steps = [['title' => 'Образовательное учреждение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty', 'link' => route('fspecialties.index')]];
 	@endphp
 @endsection
 
 @section('interior.header')
 	<div>
 		<p>
-			@if($mode == config('global.show'))
+			@if ($mode == config('global.show'))
 				Просмотр
 			@else
 				Изменение
 			@endif специальности &laquo;{{ $fspecialty->specialty->name }}&raquo;
 		</p>
-		@if($mode == config('global.edit'))
+		@if ($mode == config('global.edit'))
 			@if (!auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
 				<p>Новые специальности может добавлять только администратор платформы</p>
 			@endif
@@ -38,26 +35,47 @@
 @section('form.fields')
 	@php
 		$fields = [];
-        if ($mode == config('global.show')) {
-			if ($fspecialty->specialty->federal) {
-				$fields[] = [
-					'name' => 'federal', 'title' => 'Тип записи специальности', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Специальность из федерального справочника'
-				];
-			} else {
-				$fields[] = [
-					'name' => 'federal', 'title' => 'Тип записи специальности', 'required' => false, 'type' => 'text', 'disabled' => true, 'value' => 'Специальность введена вручную'
-				];
-			}
-        }
+		if ($mode == config('global.show')) {
+		    if ($fspecialty->specialty->federal) {
+		        $fields[] = [
+		            'name' => 'federal',
+		            'title' => 'Тип записи специальности',
+		            'required' => false,
+		            'type' => 'text',
+		            'disabled' => true,
+		            'value' => 'Специальность из федерального справочника',
+		        ];
+		    } else {
+		        $fields[] = [
+		            'name' => 'federal',
+		            'title' => 'Тип записи специальности',
+		            'required' => false,
+		            'type' => 'text',
+		            'disabled' => true,
+		            'value' => 'Специальность введена вручную',
+		        ];
+		    }
+		}
 		$fields[] = [
-			'name' => 'specialty_id', 'title' => 'Выбор специальности', 'required' => false, 'type' => 'select'
+		    'name' => 'specialty_id',
+		    'title' => 'Выбор специальности',
+		    'required' => false,
+		    'type' => 'select',
 		];
-        $fields[] = [
-            'name' => 'id', 'type' => 'hidden', 'value' => $fspecialty->getKey()
+		$fields[] = [
+		    'name' => 'id',
+		    'type' => 'hidden',
+		    'value' => $fspecialty->getKey(),
 		];
-        if($mode == config('global.edit'))
-            if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value))
-            	$fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+		if ($mode == config('global.edit')) {
+		    if (
+		        auth()
+		            ->user()
+		            ->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+		    ) {
+		        $fields[] = ['name' => 'specialty', 'title' => 'Нет в списке, добавить новую специальность', 'required' => false, 'type' => 'text'];
+		    }
+		}
 	@endphp
 @endsection
 

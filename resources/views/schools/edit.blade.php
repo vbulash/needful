@@ -1,25 +1,22 @@
 @extends('layouts.detail')
 
 @section('service')
-	Работа с учебными заведениями
+	Работа с образовательными учреждениями
 @endsection
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Учебное заведение', 'active' => true, 'context' => 'school', 'link' => route('schools.index')],
-			['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'specialty'],
-		];
+		$steps = [['title' => 'Образовательное учреждение', 'active' => true, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'specialty']];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
+	@if ($mode == config('global.show'))
 		Просмотр
 	@else
 		Редактирование
 	@endif
-	анкеты учебного заведения &laquo;{{ $school->name }}&raquo;
+	анкеты образовательного учреждения &laquo;{{ $school->name }}&raquo;
 @endsection
 
 @section('form.params')
@@ -31,22 +28,38 @@
 	@include('schools.assign')
 	@php
 		$fields = [];
-        if (auth()->user()->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)) {
-            $fields[] = ['name' => 'status', 'title' => 'Статус активности объекта', 'required' => false, 'type' => 'select', 'options' => [
-                \App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
-                \App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
-                \App\Models\ActiveStatus::FROZEN->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::FROZEN->value),
-			], 'value' => $school->status];
-        }
+		if (
+		    auth()
+		        ->user()
+		        ->hasRole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
+		) {
+		    $fields[] = [
+		        'name' => 'status',
+		        'title' => 'Статус активности объекта',
+		        'required' => false,
+		        'type' => 'select',
+		        'options' => [
+		            \App\Models\ActiveStatus::NEW->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::NEW->value),
+		            \App\Models\ActiveStatus::ACTIVE->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::ACTIVE->value),
+		            \App\Models\ActiveStatus::FROZEN->value => \App\Models\ActiveStatus::getName(\App\Models\ActiveStatus::FROZEN->value),
+		        ],
+		        'value' => $school->status,
+		    ];
+		}
 		$fields[] = [
-            'name' => 'type', 'title' => 'Тип учебного заведения', 'required' => true, 'type' => 'select', 'options' => [
-                \App\Models\SchoolType::SCHOOL->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::SCHOOL->value),
-                \App\Models\SchoolType::COLLEGE->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::COLLEGE->value),
-                \App\Models\SchoolType::UNIVERSITY->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::UNIVERSITY->value),
-			], 'value' => $school->type
+		    'name' => 'type',
+		    'title' => 'Тип образовательного учреждения',
+		    'required' => true,
+		    'type' => 'select',
+		    'options' => [
+		        \App\Models\SchoolType::SCHOOL->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::SCHOOL->value),
+		        \App\Models\SchoolType::COLLEGE->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::COLLEGE->value),
+		        \App\Models\SchoolType::UNIVERSITY->value => \App\Models\SchoolType::getName(\App\Models\SchoolType::UNIVERSITY->value),
+		    ],
+		    'value' => $school->type,
 		];
-
-        $fields[] = ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40, 'value' => $school->short];
+		
+		$fields[] = ['name' => 'short', 'title' => 'Краткое наименование организации', 'required' => true, 'type' => 'text', 'length' => 40, 'value' => $school->short];
 		$fields[] = ['name' => 'name', 'title' => 'Наименование организации', 'required' => true, 'type' => 'textarea', 'value' => $school->name];
 		$fields[] = ['name' => 'contact', 'title' => 'Контактное лицо', 'required' => false, 'type' => 'text', 'value' => $school->contact];
 		$fields[] = ['name' => 'phone', 'title' => 'Телефон', 'required' => true, 'type' => 'text', 'value' => $school->phone];

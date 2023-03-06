@@ -11,7 +11,8 @@
 				data-bs-target="#specialties-list">
 				Добавить специальность к заявке на практику
 			</button>
-			<p id="no-enabled-data" style="display: none;">Все специальности учебного заведения внесены в заявку на практику</p>
+			<p id="no-enabled-data" style="display: none;">Все специальности образовательного учреждения внесены в заявку на
+				практику</p>
 		</div>
 	</div>
 @endsection
@@ -143,7 +144,7 @@
 		document.getElementById('core-create').addEventListener('submit', (event) => {
 			if (window.selected.size == 0) {
 				event.preventDefault();
-                event.stopPropagation();
+				event.stopPropagation();
 				showToast('error', 'Не выбраны специальности для заявки', false);
 			} else {
 				document.getElementById('specs').value =
@@ -189,7 +190,7 @@
 			window.selected = new Map();
 			window.selectedArray = [];
 			@if (isset($heap['specialties']))
-				source = JSON.parse('{!! json_encode($heap["specialties"]) !!}');
+				source = JSON.parse('{!! json_encode($heap['specialties']) !!}');
 				for (let item of source) {
 					let object = {
 						'id': item.id,

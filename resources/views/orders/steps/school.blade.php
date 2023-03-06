@@ -13,7 +13,7 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<h3 class="block-title">
-			Выберите учебное заведение для создания заявки на практику
+			Выберите образовательное учредение для создания заявки на практику
 		</h3>
 	</div>
 	<div class="block-content p-4">
@@ -23,7 +23,7 @@
 					<thead>
 						<tr>
 							<th style="width: 30px">#</th>
-							<th>Тип учебного заведения</th>
+							<th>Тип образовательного учреждения</th>
 							<th>Краткое наименование</th>
 							<th>Телефон</th>
 							<th>Электронная почта</th>
@@ -33,7 +33,7 @@
 				</table>
 			</div>
 		@else
-			<p>Активных учебных заведений пока нет...</p>
+			<p>Активных образовательных учреждений пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -46,7 +46,7 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
-			$(function () {
+			$(function() {
 				window.datatable = $('#schools_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
@@ -55,12 +55,31 @@
 					serverSide: true,
 					ajax: '{!! route('orders.steps.index.data') !!}',
 					responsive: true,
-					columns: [
-						{data: 'id', name: 'id', responsivePriority: 1},
-						{data: 'type', name: 'type', responsivePriority: 2},
-						{data: 'short', name: 'short', responsivePriority: 1},
-						{data: 'phone', name: 'phone', responsivePriority: 2},
-						{data: 'email', name: 'email', responsivePriority: 2},
+					columns: [{
+							data: 'id',
+							name: 'id',
+							responsivePriority: 1
+						},
+						{
+							data: 'type',
+							name: 'type',
+							responsivePriority: 2
+						},
+						{
+							data: 'short',
+							name: 'short',
+							responsivePriority: 1
+						},
+						{
+							data: 'phone',
+							name: 'phone',
+							responsivePriority: 2
+						},
+						{
+							data: 'email',
+							name: 'email',
+							responsivePriority: 2
+						},
 						{
 							data: 'action',
 							name: 'action',

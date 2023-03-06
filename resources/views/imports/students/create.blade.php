@@ -31,7 +31,7 @@
 		<div class="block-content p-4">
 			<div>
 				<div class="row mb-4">
-					<label class="col-sm-3 col-form-label" for="school">{{ $index++ }}. Выберите учебное заведение, к
+					<label class="col-sm-3 col-form-label" for="school">{{ $index++ }}. Выберите образовательное учреждение, к
 						которому будет привязаны
 						импортированные учащиеся
 					</label>

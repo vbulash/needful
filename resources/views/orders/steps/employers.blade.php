@@ -7,8 +7,10 @@
 @section('interior.header')
 	<div class="block-header block-header-default">
 		<div>
-			<p>Здесь отображаются работодатели, полностью либо частично пересекающиеся по списку специальностей с ранее выбранным учебным заведением.<br/>
-				Если список работодателей пуст - пересечения по специальностям нет. Но вы можете откорректировать список специальностей работодателя.<br/>
+			<p>Здесь отображаются работодатели, полностью либо частично пересекающиеся по списку специальностей с ранее выбранным
+				образовательным учреждением.<br />
+				Если список работодателей пуст - пересечения по специальностям нет. Но вы можете откорректировать список
+				специальностей работодателя.<br />
 				Выбранные здесь работодатели при завершении создания заявки на практику будут уведомлены о заявке на практику</p>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-employer" data-bs-toggle="modal"
 				data-bs-target="#employers-list">
@@ -135,7 +137,7 @@
 		document.getElementById('core-create').addEventListener('submit', (event) => {
 			if (window.selected.size == 0) {
 				event.preventDefault();
-                event.stopPropagation();
+				event.stopPropagation();
 				showToast('error', 'Не выбран работодатель для заявки', false);
 			} else {
 				document.getElementById('emps').value =
@@ -179,7 +181,7 @@
 			window.selected = new Map();
 			window.selectedArray = [];
 			@if (isset($heap['employers']))
-				source = JSON.parse('{!! json_encode($heap["employers"]) !!}');
+				source = JSON.parse('{!! json_encode($heap['employers']) !!}');
 				for (let item of source) {
 					let object = {
 						'id': item.id,

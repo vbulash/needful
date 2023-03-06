@@ -1,12 +1,12 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с учебными заведениями
+	Работа с образовательными учреждениями
 @endsection
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Учебное заведение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty']];
+		$steps = [['title' => 'Образовательное учреждение', 'active' => false, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => true, 'context' => 'specialty']];
 	@endphp
 @endsection
 
@@ -32,7 +32,7 @@
 				</table>
 			</div>
 		@else
-			<p>Список специальностей учебного заведения пока пуст...</p>
+			<p>Список специальностей образоваательного учреждения пока пуст...</p>
 		@endif
 	</div>
 @endsection

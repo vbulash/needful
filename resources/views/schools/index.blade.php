@@ -1,12 +1,12 @@
 @extends('layouts.chain')
 
 @section('service')
-	Работа с учебными заведениями
+	Работа с образовательными учреждениями
 @endsection
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Учебное заведение', 'active' => true, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'specialty']];
+		$steps = [['title' => 'Образовательное учреждение', 'active' => true, 'context' => 'school', 'link' => route('schools.index')], ['title' => 'Специальности<br/>Заявки на практику', 'active' => false, 'context' => 'specialty']];
 	@endphp
 @endsection
 
@@ -15,17 +15,18 @@
 		<div>
 			@hasrole(\App\Http\Controllers\Auth\RoleName::ADMIN->value)
 				<a href="{{ route('schools.create', ['sid' => session()->getId()]) }}" class="btn btn-primary mt-3 mb-3">Добавить
-					учебное заведение</a>
+					образовательное учреждение</a>
 			@endhasrole
 
-			<p>Красным цветом выделены неактивные учебные заведения. Активацию объектов выполняет администратор платформы<br />
+			<p>Красным цветом выделены неактивные образовательные учреждения. Активацию объектов выполняет администратор
+				платформы<br />
 				Работа с неактивными объектами ограничена только изменением / просмотром / удалением</p>
 		</div>
 
 		<h3 class="block-title">
 			@if (isset($ids))
 				<br />
-				<small>Отображаются только записи учебных заведений, доступные текущему пользователю</small>
+				<small>Отображаются только записи образовательных учреждений, доступные текущему пользователю</small>
 			@endif
 		</h3>
 	</div>
@@ -36,7 +37,7 @@
 					<thead>
 						<tr>
 							<th style="width: 30px">#</th>
-							<th>Тип учебного заведения</th>
+							<th>Тип образовательного учреждения</th>
 							<th>Краткое наименование</th>
 							<th>Телефон</th>
 							<th>Электронная почта</th>
@@ -47,7 +48,7 @@
 				</table>
 			</div>
 		@else
-			<p>Учебных заведений пока нет...</p>
+			<p>Образовательных учреждений пока нет...</p>
 		@endif
 	</div>
 @endsection
@@ -78,7 +79,8 @@
 
 			function clickDelete(id, name) {
 				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить учебное заведение &laquo;" + name + "&raquo; ?";
+				document.getElementById('confirm-body').innerHTML = "Удалить образовательное учреждение &laquo;" + name +
+					"&raquo; ?";
 				document.getElementById('confirm-yes').dataset.id = id;
 				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
 				confirmDialog.show();

@@ -6,8 +6,8 @@
 
 @section('form.fields')
 	@php
-        $fields = [];
-		$fields[] = ['name' => 'name', 'title' => 'Название учебного заведения', 'required' => false, 'type' => 'text', 'value' => $total['school']];
+		$fields = [];
+		$fields[] = ['name' => 'name', 'title' => 'Название образовательного учреждения', 'required' => false, 'type' => 'text', 'value' => $total['school']];
 		$fields[] = ['title' => 'Информация по заявке', 'type' => 'heading'];
 		$fields[] = ['name' => 'name', 'title' => 'Название практики', 'required' => false, 'type' => 'text', 'value' => $total['name']];
 		$fields[] = ['name' => 'start', 'title' => 'Дата начала', 'required' => false, 'type' => 'date', 'value' => $total['start']->format('d.m.Y')];
@@ -20,4 +20,3 @@
 		$fields[] = ['name' => 'employers', 'title' => 'Список работодателей', 'required' => false, 'type' => 'textarea', 'value' => $total['employers']];
 	@endphp
 @endsection
-

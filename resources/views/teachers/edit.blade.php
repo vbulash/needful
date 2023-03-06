@@ -28,7 +28,7 @@
 	@php
 		$fields = [];
 		$fields[] = ['name' => 'name', 'title' => 'ФИО руководителя практики', 'required' => true, 'type' => 'text', 'value' => $teacher->name];
-
+		
 		$select = $teacher->job->getKey();
 		switch ($teacher->job->getMorphClass()) {
 		    case \App\Models\Employer::class:
@@ -38,7 +38,7 @@
 		        $fields[] = ['name' => 'school', 'title' => 'Работает в', 'required' => false, 'type' => 'select', 'options' => $schools];
 		        break;
 		    case \App\Models\School::class:
-		        $title = 'Работает в учебном заведении';
+		        $title = 'Работает в образовательном учреждении';
 		        $fields[] = ['name' => 'in_school', 'title' => $title, 'required' => false, 'type' => 'checkbox', 'value' => true];
 		        $fields[] = ['name' => 'employer', 'title' => 'Работает в', 'required' => false, 'type' => 'select', 'options' => $employers];
 		        $fields[] = ['name' => 'school', 'title' => 'Работает в', 'required' => false, 'type' => 'select', 'options' => $schools, 'value' => $select];
@@ -58,8 +58,8 @@
 	<script>
 		let place = document.getElementById('in_school');
 		place.addEventListener('change', (event) => {
-			if (event.target.checked) { // Работает в учебном заведении
-				event.target.parentElement.querySelector('label').innerText = 'Работает в учебном заведении';
+			if (event.target.checked) { // Работает в образовательном учреждении
+				event.target.parentElement.querySelector('label').innerText = 'Работает в образовательном учреждении';
 				document.getElementById('school').parentElement.parentElement.style.display = 'flex';
 				document.getElementById('employer').parentElement.parentElement.style.display = 'none';
 			} else { // Работает у работодателя
