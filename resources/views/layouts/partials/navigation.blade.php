@@ -36,7 +36,7 @@
 		        : 'Практики от работодателей';
 		    $menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
 		}
-		if ($admin) {
+		if ($admin || $schools) {
 		    $menu[] = ['title' => 'Заявки на практику от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
 		    $menu[] = ['title' => 'Планирование практикантов от ОУ', 'icon' => 'fas fa-history', 'route' => 'planning.orders.index', 'pattern' => ['planning.*']];
 		}
@@ -49,7 +49,7 @@
 		    $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index.clear', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
 		}
 		if ($schools) {
-		    $menu[] = ['title' => 'Учебные заведения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
+		    $menu[] = ['title' => 'Образовательные учреждения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
 		}
 		if ($schools || $employers) {
 		    $menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];

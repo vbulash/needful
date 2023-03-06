@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\orders\Sent2AnsweredTaskEvent;
 use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\Order;
 use App\Models\Answer;
+use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
 use App\Notifications\orders\Sent2Accept;
 use App\Notifications\orders\Sent2Reject;
@@ -98,6 +100,11 @@ EOS, ['employer' => $employer, 'order' => $order]);
 		$_order = Order::findOrFail($order);
 
 		$_order->school->user->notify(new Sent2Reject($_order, $_employer));
+		$orderEmployer = OrderEmployer::all()
+			->where('order_id', $order)
+			->where('employer_id', $employer)
+			->first();
+		event(new Sent2AnsweredTaskEvent($orderEmployer));
 		session()->put('success', "Вы отказались от участия в практике");
 		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}
@@ -110,6 +117,11 @@ EOS, ['employer' => $employer, 'order' => $order]);
 		$_order = Order::findOrFail($order);
 
 		$_order->school->user->notify(new Sent2Accept($_order, $_employer));
+		$orderEmployer = OrderEmployer::all()
+			->where('order_id', $order)
+			->where('employer_id', $employer)
+			->first();
+		event(new Sent2AnsweredTaskEvent($orderEmployer));
 		session()->put('success', "Вы согласились принять практикантов");
 		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}

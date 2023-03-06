@@ -48,7 +48,7 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 		$employer = $order_employer->employer->getKey();
 		foreach ($order->specialties as $order_specialty) {
 			$answer = Answer::all()
-				->where('order_specialty_id', $order_specialty->getKey())
+				->where('orders_specialties_id', $order_specialty->getKey())
 				->where('employer_id', $employer)
 				->first();
 			$fields[$order_specialty->specialty->getTitle()] = sprintf("%d / %s", $order_specialty->quantity, $answer->approved ?? 'отказ');
