@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-enum RoleName: string
-{
+enum RoleName: string {
 	case ADMIN = 'Администратор';
 	case EMPLOYER = 'Работодатель';
-	case SCHOOL = 'Учебное заведение';
+	case SCHOOL = 'Образовательное учреждение';
 	case TRAINEE = 'Практикант';
 }

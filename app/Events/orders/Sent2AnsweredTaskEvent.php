@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\OrderEmployer;
 
 class Sent2AnsweredTaskEvent extends TaskEvent {
-	public function __construct(OrderEmployer $order_employer) {
+	public function __construct(OrderEmployer $order_employer, string $message) {
 		$name = $order_employer->order->getTitle();
 		$employer_name = $order_employer->employer->getTitle();
 		$lines = [];
@@ -16,6 +16,13 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrderContent($order_employer));
 		$lines[] = "</ul>";
+
+		if (isset($message)) {
+			$lines[] = "Работодатель дополнительно оставил вам сообщение:";
+			$lines[] = "<ul>";
+			$lines[] = "<li>{$message}</li>";
+			$lines[] = "</ul>";
+		}
 		$lines[] = "<p>Если вы готовы работать с данным работодателем - сейчас вы можете начать наполнение заявки реальными учащимися-практикантами.</p>";
 
 		$context = [
@@ -37,7 +44,7 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 		$order = $order_employer->order;
 		$lines = [];
 		$fields = [
-			'Название учебного заведения' => $order->school->getTitle(),
+			'Название образовательного учреждения' => $order->school->getTitle(),
 			'Дата начала практики' => $order->start->format('d.m.Y'),
 			'Дата завершения практики' => $order->end->format('d.m.Y'),
 			'Место прохождения практики' => $order->place,

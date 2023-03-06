@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\orders\Sent2AnsweredTaskEvent;
+use App\Events\orders\Sent2RejectedTaskEvent;
 use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\Order;
@@ -104,24 +105,25 @@ EOS, ['employer' => $employer, 'order' => $order]);
 			->where('order_id', $order)
 			->where('employer_id', $employer)
 			->first();
-		event(new Sent2AnsweredTaskEvent($orderEmployer));
+		event(new Sent2RejectedTaskEvent($orderEmployer));
 		session()->put('success', "Вы отказались от участия в практике");
 		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}
 
-	public function accept(int $employer, int $order) {
+	public function accept(Request $request, int $employer, int $order) {
+		$message = $request->message;
 		$_employer = Employer::findOrFail($employer);
 		$_employer->orders()->updateExistingPivot($order, [
 			'status' => OrderEmployerStatus::ACCEPTED->value,
 		]);
 		$_order = Order::findOrFail($order);
 
-		$_order->school->user->notify(new Sent2Accept($_order, $_employer));
+		$_order->school->user->notify(new Sent2Accept($_order, $_employer, $message));
 		$orderEmployer = OrderEmployer::all()
 			->where('order_id', $order)
 			->where('employer_id', $employer)
 			->first();
-		event(new Sent2AnsweredTaskEvent($orderEmployer));
+		event(new Sent2AnsweredTaskEvent($orderEmployer, $message));
 		session()->put('success', "Вы согласились принять практикантов");
 		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}

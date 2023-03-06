@@ -45,7 +45,7 @@ class StudentImportController extends ImportController {
 		'I' => ['type' => 'textarea', 'field' => 'parentscontact', 'title' => 'Контактные телефоны родителей или опекунов'],
 		'J' => ['type' => 'textarea', 'field' => 'passport', 'title' => 'Данные документа, удостоверяющего личность (серия, номер, кем и когда выдан)'],
 		'K' => ['type' => 'textarea', 'field' => 'address', 'title' => 'Адрес проживания'],
-		'L' => ['type' => 'date', 'field' => '', 'key' => 'admission', 'title' => 'Дата поступления в учебное заведение', 'required' => true],
+		'L' => ['type' => 'date', 'field' => '', 'key' => 'admission', 'title' => 'Дата поступления в образовательное учреждение', 'required' => true],
 		'M' => ['type' => 'text', 'field' => '', 'key' => 'specialty', 'title' => 'Специальность', 'required' => true],
 		'N' => ['type' => 'text', 'field' => 'grade', 'title' => 'Класс / группа (на момент заполнения)'],
 		'O' => ['type' => 'textarea', 'field' => 'hobby', 'title' => 'Увлечения (хобби)'],
@@ -88,9 +88,9 @@ class StudentImportController extends ImportController {
 		Specialty::all()
 			->sortBy('name')
 			->each(function ($specialty) use ($sheet, &$row) {
-			    $sheet->setCellValue('A' . $row, $specialty->name);
-			    $sheet->setCellValue('B' . $row++, $specialty->federal ? 'Из федерального справочника' : 'Введена вручную');
-		    });
+				$sheet->setCellValue('A' . $row, $specialty->name);
+				$sheet->setCellValue('B' . $row++, $specialty->federal ? 'Из федерального справочника' : 'Введена вручную');
+			});
 
 		$filename = '/assets/export-specialties.xlsx';
 		$writer = new Xlsx($spreadsheet);
@@ -175,11 +175,11 @@ class StudentImportController extends ImportController {
 
 			$learn = Learn
 				::whereHas('student', function (Builder $query) use ($student) {
-				    $query->where('id', $student->getKey());
-			    })
+					$query->where('id', $student->getKey());
+				})
 				->whereHas('school', function (Builder $query) use ($school) {
-				    $query->where('id', $school->getKey());
-			    })
+					$query->where('id', $school->getKey());
+				})
 				->first();
 			if ($learn)
 				$learn->delete();

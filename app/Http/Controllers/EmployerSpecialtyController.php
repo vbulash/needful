@@ -65,7 +65,7 @@ class EmployerSpecialtyController extends Controller {
 		$specialty = Specialty::findOrFail($id);
 		$created = false;
 
-		// Затем добавляем эту специальность в список специальностей учебного заведения
+		// Затем добавляем эту специальность в список специальностей образовательного учреждения
 		$employerSpecialty = new EmployerSpecialty();
 		$employerSpecialty->specialty()->associate($specialty);
 		$employerSpecialty->employer()->associate($employer);

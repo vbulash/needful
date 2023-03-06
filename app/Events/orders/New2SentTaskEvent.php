@@ -36,7 +36,7 @@ class New2SentTaskEvent extends TaskEvent {
 	private function getOrderContent(Order $order): iterable {
 		$lines = [];
 		$fields = [
-			'Название учебного заведения' => $order->school->getTitle(),
+			'Название образовательного учреждения' => $order->school->getTitle(),
 			'Дата начала практики' => $order->start->format('d.m.Y'),
 			'Дата завершения практики' => $order->end->format('d.m.Y'),
 			'Место прохождения практики' => $order->place,

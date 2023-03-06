@@ -18,8 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class FspecialtyController extends Controller
-{
+class FspecialtyController extends Controller {
 	/**
 	 * Process datatables ajax request.
 	 *
@@ -27,13 +26,12 @@ class FspecialtyController extends Controller
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function getData(Request $request)
-	{
+	public function getData(Request $request) {
 		$context = session('context');
 		$query = School::findOrFail($context['school'])->fspecialties()->get();
 
 		return Datatables::of($query)
-			->addColumn('name', fn ($fspecialty) => $fspecialty->specialty->name)
+			->addColumn('name', fn($fspecialty) => $fspecialty->specialty->name)
 			->addColumn('action', function ($fspecialty) {
 				$editRoute = route('fspecialties.edit', ['fspecialty' => $fspecialty->getKey(), 'sid' => session()->getId()]);
 				$showRoute = route('fspecialties.show', ['fspecialty' => $fspecialty->getKey(), 'sid' => session()->getId()]);
@@ -54,8 +52,7 @@ class FspecialtyController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function index(Request $request)
-	{
+	public function index(Request $request) {
 		$context = session('context');
 		unset($context['fspecialty']);
 		session()->put('context', $context);
@@ -72,8 +69,7 @@ class FspecialtyController extends Controller
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function create(Request $request)
-	{
+	public function create(Request $request) {
 		$mode = config('global.create');
 		$context = session('context');
 		$school = School::findOrFail($context['school']);
@@ -99,24 +95,23 @@ class FspecialtyController extends Controller
 	 * @param Request $request
 	 * @return RedirectResponse
 	 */
-	public function store(StoreFspecialtyRequest $request)
-	{
+	public function store(StoreFspecialtyRequest $request) {
 		$context = session('context');
 		$school = School::findOrFail($context['school']);
 
-		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
+		if ($request->has('specialty') && isset($request->specialty)) { // Новая специальность
 			// Сначала добавить новую специальность в список
 			$specialty = Specialty::create([
 				'name' => $request->specialty
 			]);
 			$specialty->save();
 			$created = true;
-		} else {    // Выбор из существующих
+		} else { // Выбор из существующих
 			$specialty = Specialty::findOrFail($request->specialty_id);
 			$created = false;
 		}
 
-		// Затем добавляем эту специальность в список специальностей учебного заведения
+		// Затем добавляем эту специальность в список специальностей образовательного учреждения
 		$fspecialty = new Fspecialty();
 		$fspecialty->specialty()->associate($specialty);
 		$fspecialty->school()->associate($school);
@@ -125,7 +120,7 @@ class FspecialtyController extends Controller
 
 		session()->put('success', $created ?
 			"Специальность \"{$name}\" добавлена" :
-			"Список специальностей учебного заведения изменён"
+			"Список специальностей образовательного учреждения изменён"
 		);
 
 		return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
@@ -138,8 +133,7 @@ class FspecialtyController extends Controller
 	 * @param int $id
 	 * @return Application|Factory|View
 	 */
-	public function show(Request $request, int $id)
-	{
+	public function show(Request $request, int $id) {
 		return $this->edit($request, $id, true);
 	}
 
@@ -151,8 +145,7 @@ class FspecialtyController extends Controller
 	 * @param bool $show
 	 * @return Application|Factory|View
 	 */
-	public function edit(Request $request, int $id, bool $show = false)
-	{
+	public function edit(Request $request, int $id, bool $show = false) {
 		$context = session('context');
 		$context['fspecialty'] = $id;
 		session()->put('context', $context);
@@ -182,13 +175,12 @@ class FspecialtyController extends Controller
 	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function update(UpdateFspecialtyRequest $request, $id)
-	{
+	public function update(UpdateFspecialtyRequest $request, $id) {
 		$fspecialty = Fspecialty::findOrFail($id);
 		$school = $fspecialty->school;
 
 		$out = [];
-		if ($request->has('specialty') && isset($request->specialty)) {    // Новая специальность
+		if ($request->has('specialty') && isset($request->specialty)) { // Новая специальность
 			// Сначала добавить новую специальность в список
 			$specialty = Specialty::create([
 				'name' => $request->specialty
@@ -196,13 +188,13 @@ class FspecialtyController extends Controller
 			$specialty->save();
 			$name = $specialty->name;
 			$out[] = "Специальность \"{$name}\" добавлена";
-		} else {	// Выбор из существующих
+		} else { // Выбор из существующих
 			$specialty = Specialty::findOrFail($request->specialty_id);
 		}
 		$fspecialty->specialty()->associate($specialty);
 		$fspecialty->school()->associate($school);
 		$fspecialty->update();
-		$out[] = "Список специальностей учебного заведения обновлён";
+		$out[] = "Список специальностей образовательного учреждения обновлён";
 
 		session()->put('success', implode('<br/>', $out));
 		return redirect()->route('fspecialties.index', ['sid' => session()->getId()]);
@@ -215,17 +207,17 @@ class FspecialtyController extends Controller
 	 * @param int $fspecialty
 	 * @return bool
 	 */
-	public function destroy(Request $request, int $fspecialty)
-	{
+	public function destroy(Request $request, int $fspecialty) {
 		if ($fspecialty == 0) {
 			$id = $request->id;
-		} else $id = $fspecialty;
+		} else
+			$id = $fspecialty;
 
 		$fspecialty = Fspecialty::findOrFail($id);
 		$name = $fspecialty->specialty->name;
 		$fspecialty->delete();
 
-		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей учебного заведения"));
+		event(new ToastEvent('success', '', "Специальность '{$name}' удалена из списка специальностей образовательного учреждения"));
 		return true;
 	}
 }

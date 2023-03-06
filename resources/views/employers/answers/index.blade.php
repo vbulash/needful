@@ -79,25 +79,26 @@
 	<div class="modal fade" id="modal-answer" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
 		aria-labelledby="modal-answer-label" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<input type="hidden" id="answer-mode" />
-				<div class="modal-header">
-					<h5 class="modal-title" id="answer-title">&nbsp;</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body" id="answer-body">
-					<p class="mb-4">Вы можете добавить в сообщение работодателю необязательную дополнительную информацию из поля
-						ниже:</p>
-					<div class="form-floating mb-4">
-						<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;" required></textarea>
-						<label class="form-label" for="message">Дополнительная информация &gt;</label>
+			<form action="" id="form-answer">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="answer-title">&nbsp;</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="answer-body">
+						<p class="mb-4">Вы можете добавить в сообщение работодателю необязательную дополнительную информацию из поля
+							ниже:</p>
+						<div class="form-floating mb-4">
+							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;" required></textarea>
+							<label class="form-label" for="message">Дополнительная информация &gt;</label>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" id="answer-yes" data-bs-dismiss="modal">Отправить</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="answer-yes" data-bs-dismiss="modal">Отправить</button>
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 @endsection
@@ -113,7 +114,8 @@
 			function clickAccept() {
 				document.getElementById('answer-title').innerText = "Принять заявку от образовательного учреждения";
 				document.getElementById('answer-yes').innerText = 'Принять заявку';
-				document.getElementById('answer-mode').value = 'accept';
+				document.getElementById("form-answer").action =
+					"{{ route('employers.orders.accept', compact('employer', 'order')) }}";
 				let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
 				answerDialog.show();
 			}
@@ -121,7 +123,8 @@
 			function clickReject() {
 				document.getElementById('answer-title').innerText = "Отказаться от заявки образовательного учреждения";
 				document.getElementById('answer-yes').innerText = 'Отказаться от заявки';
-				document.getElementById('answer-mode').value = 'reject';
+				document.getElementById("form-answer").action =
+					"{{ route('employers.orders.reject', compact('employer', 'order')) }}";
 				let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
 				answerDialog.show();
 			}

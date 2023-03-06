@@ -38,25 +38,25 @@ class SchoolController extends Controller {
 			->addColumn('type', fn($school) => SchoolType::getName($school->type))
 			->editColumn('link', fn($school) => $school->user->name)
 			->addColumn('action', function ($school) {
-			    $editRoute = route('schools.edit', ['school' => $school->id]);
-			    $showRoute = route('schools.show', ['school' => $school->id]);
-			    $selectRoute = route('schools.select', ['school' => $school->id]);
+				$editRoute = route('schools.edit', ['school' => $school->id]);
+				$showRoute = route('schools.show', ['school' => $school->id]);
+				$selectRoute = route('schools.select', ['school' => $school->id]);
 				$items = [];
 
-			    if (auth()->user()->can('schools.edit') || auth()->user()->allowed($school))
+				if (auth()->user()->can('schools.edit') || auth()->user()->allowed($school))
 					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
-			    if (auth()->user()->can('schools.show') || auth()->user()->allowed($school))
+				if (auth()->user()->can('schools.show') || auth()->user()->allowed($school))
 					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-			    if (auth()->user()->can('schools.destroy') || auth()->user()->allowed($school))
+				if (auth()->user()->can('schools.destroy') || auth()->user()->allowed($school))
 					$items[] = ['type' => 'item', 'click' => "clickDelete({$school->id}, '{$school->short}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
-			    if ($school->status == ActiveStatus::ACTIVE->value) {
+				if ($school->status == ActiveStatus::ACTIVE->value) {
 					$items[] = ['type' => 'divider'];
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Специальности'];
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Заявки на практику'];
 				}
-			    return createDropdown('Действия', $items);
-		    })
+				return createDropdown('Действия', $items);
+			})
 			->make(true);
 	}
 
@@ -90,25 +90,25 @@ class SchoolController extends Controller {
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
-				    $collect =
-				    	(auth()->user()->getKey() == $user->getKey()) ||
-				    	($user->hasRole(RoleName::SCHOOL->value))
-				    	;
-				    if (!$collect)
-					    return null;
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole(RoleName::SCHOOL->value))
+					;
+					if (!$collect)
+						return null;
 
-				    return [
-				    	'id' => $user->getKey(),
-				    	'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
-				    ];
-			    })
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
 				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('schools.create', compact('users', 'mode'));
 		} elseif (auth()->user()->can($baseRight))
 			return view('schools.create', compact('mode'));
 		else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи учебного заведения'));
+			event(new ToastEvent('info', '', 'Недостаточно прав для создания записи образовательного учреждения'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 	}
@@ -128,7 +128,7 @@ class SchoolController extends Controller {
 
 		$school->user->notify(new NewSchool($school));
 
-		session()->put('success', "Учебное заведение \"{$name}\" создано");
+		session()->put('success', "Образовательное учреждение \"{$name}\" создано");
 		return redirect()->route('schools.index', ['sid' => session()->getId()]);
 	}
 
@@ -159,25 +159,25 @@ class SchoolController extends Controller {
 		if (auth()->user()->hasRole(RoleName::ADMIN->value)) {
 			$users = User::orderBy('name')->get()
 				->map(function ($user) {
-				    $collect =
-				    	(auth()->user()->getKey() == $user->getKey()) ||
-				    	($user->hasRole(RoleName::SCHOOL->value))
-				    	;
-				    if (!$collect)
-					    return null;
+					$collect =
+						(auth()->user()->getKey() == $user->getKey()) ||
+						($user->hasRole(RoleName::SCHOOL->value))
+					;
+					if (!$collect)
+						return null;
 
-				    return [
-				    	'id' => $user->getKey(),
-				    	'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
-				    ];
-			    })
+					return [
+						'id' => $user->getKey(),
+						'name' => sprintf("%s (роль %s)", $user->name, $user->roles()->first()->name)
+					];
+				})
 				->reject(fn($value) => $value === null)
 				->toArray();
 			return view('schools.edit', compact('school', 'users', 'mode'));
 		} elseif (auth()->user()->can($baseRight) || auth()->user()->allowed($school))
 			return view('schools.edit', compact('school', 'mode'));
 		else {
-			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи учебного заведения'));
+			event(new ToastEvent('info', '', 'Недостаточно прав для редактирования / просмотра записи образовательного учреждения'));
 			return redirect()->route('dashboard', ['sid' => session()->getId()]);
 		}
 	}
@@ -202,7 +202,7 @@ class SchoolController extends Controller {
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)
 			event(new UpdateSchoolTaskEvent($school));
 
-		session()->put('success', "Анкета учебного заведения \"{$name}\" обновлена");
+		session()->put('success', "Анкета образовательного учреждения \"{$name}\" обновлена");
 		return redirect()->route('schools.index', ['sid' => session()->getId()]);
 	}
 
@@ -227,7 +227,7 @@ class SchoolController extends Controller {
 
 		$school->delete();
 
-		event(new ToastEvent('success', '', "Учебное заведение '{$name}' удалено"));
+		event(new ToastEvent('success', '', "Образовательное учреждение '{$name}' удалено"));
 		return true;
 	}
 }

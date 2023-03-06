@@ -39,30 +39,30 @@ class TeacherController extends Controller {
 			->addColumn('worksin', fn($teacher) => $teacher->job->short)
 			->editColumn('position', fn($teacher) => $teacher->position)
 			->addColumn('action', function ($teacher) {
-			    $editRoute = route('teachers.edit', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
-			    $showRoute = route('teachers.show', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
-			    $actions = '';
+				$editRoute = route('teachers.edit', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
+				$showRoute = route('teachers.show', ['teacher' => $teacher->getKey(), 'sid' => session()->getId()]);
+				$actions = '';
 
-			    $actions .=
-			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-			    	"<i class=\"fas fa-edit\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-			    	"<i class=\"fas fa-eye\"></i>\n" .
-			    	"</a>\n";
+				$actions .=
+					"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
+					"<i class=\"fas fa-edit\"></i>\n" .
+					"</a>\n";
+				$actions .=
+					"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
+					"<i class=\"fas fa-eye\"></i>\n" .
+					"</a>\n";
 
-			    $name = $teacher->getTitle();
-			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$teacher->getKey()}, '{$name}')\">\n" .
-			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-			    	"</a>\n";
+				$name = $teacher->getTitle();
+				$actions .=
+					"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$teacher->getKey()}, '{$name}')\">\n" .
+					"<i class=\"fas fa-trash-alt\"></i>\n" .
+					"</a>\n";
 
-			    return $actions;
-		    })
+				return $actions;
+			})
 			->make(true);
 	}
 
@@ -102,7 +102,7 @@ class TeacherController extends Controller {
 		$teacher->position = $request->position;
 		$teacher->phone = $request->phone;
 		$teacher->email = $request->email;
-		if ($request->has('in_school')) { // Руководитель практики работает в учебном заведении
+		if ($request->has('in_school')) { // Руководитель практики работает в образовательном учреждении
 			$school = School::findOrFail($request->school);
 			$teacher->job()->associate($school);
 		} else { // Руководитель практики работает у работодателя
@@ -112,7 +112,7 @@ class TeacherController extends Controller {
 		auth()->user()->allow($teacher);
 		$teacher->save();
 
-		// О создании руководителя практики уведомить пользователя-владельца учебного заведения или работодателя
+		// О создании руководителя практики уведомить пользователя-владельца образовательного учреждения или работодателя
 		$teacher->job->user->notify(new NewTeacher($teacher));
 
 		session()->put('success', "Руководитель практики &laquo;{$teacher->name}&raquo; создан");
@@ -158,7 +158,7 @@ class TeacherController extends Controller {
 		$teacher->position = $request->position;
 		$teacher->phone = $request->phone;
 		$teacher->email = $request->email;
-		if ($request->has('in_school')) { // Руководитель практики работает в учебном заведении
+		if ($request->has('in_school')) { // Руководитель практики работает в образовательном учреждении
 			$school = School::findOrFail($request->school);
 			$teacher->job()->associate($school);
 			$school->user->allow($teacher);
@@ -170,7 +170,7 @@ class TeacherController extends Controller {
 		auth()->user()->allow($teacher);
 		$teacher->update();
 
-		// О создании руководителя практики уведомить пользователя-владельца учебного заведения или работодателя
+		// О создании руководителя практики уведомить пользователя-владельца образовательного учреждения или работодателя
 		$teacher->job->user->notify(new UpdateTeacher($teacher));
 
 		session()->put('success', "Руководитель практики &laquo;{$teacher->name}&raquo; изменён");
@@ -194,7 +194,7 @@ class TeacherController extends Controller {
 		$name = $teacher->getTitle();
 
 		auth()->user()->disallow($teacher);
-		// TODO Убрать права у пользователя учебного заведения или школы - в зависимости от типа $teacher->job()
+		// TODO Убрать права у пользователя образовательного учреждения - в зависимости от типа $teacher->job()
 
 		$teacher->delete();
 

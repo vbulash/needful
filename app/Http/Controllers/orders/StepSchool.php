@@ -20,21 +20,21 @@ class StepSchool implements Step {
 			->addColumn('short', fn($school) => $school->short)
 			->addColumn('type', fn($school) => SchoolType::getName($school->type))
 			->addColumn('action', function ($school) use ($request) {
-			    $selectRoute = route('orders.steps.next', [
-			    	'school' => $school->getKey()
-			    ]);
-			    $actions =
-			    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-			    	"<i class=\"fas fa-check\"></i>\n" .
-			    	"</a>\n";
-			    return $actions;
-		    })
+				$selectRoute = route('orders.steps.next', [
+					'school' => $school->getKey()
+				]);
+				$actions =
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
+					"</a>\n";
+				return $actions;
+			})
 			->make(true);
 	}
 
 	public function getTitle(): string {
-		return 'Учебное заведение';
+		return 'Образовательное учреждение';
 	}
 
 	public function getStoreRules(): array {

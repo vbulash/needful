@@ -19,20 +19,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static create(array $data)
  * @method static findOrFail(int $id)
  */
-class Learn extends Model implements FormTemplate
-{
-    use HasFactory, HasTitle;
+class Learn extends Model implements FormTemplate {
+	use HasFactory, HasTitle;
 
 	protected $fillable = [
-		'start',			// Дата поступления
-		'finish',			// Дата завершения
-		'new_school',		// Новое учебное заведение
-		'new_specialty',	// Новая специальность
-		'status',			// Статус активности объекта
+		'start', // Дата поступления
+		'finish', // Дата завершения
+		'new_school', // Новое образовательное учреждение
+		'new_specialty', // Новая специальность
+		'status', // Статус активности объекта
 	];
 
-	public function getTitle(): string
-	{
+	public function getTitle(): string {
 		$name = $this->school->short ?? $this->new_school;
 		$start = $this->start->format('d.m.Y');
 		$finish = isset($this->finish) ? $this->finish->format('d.m.Y') : 'н/вр';
@@ -44,56 +42,49 @@ class Learn extends Model implements FormTemplate
 	/**
 	 * @throws Exception
 	 */
-	private static function convert2Date($value): ?DateTime
-	{
-		if($value instanceof DateTime)
+	private static function convert2Date($value): ?DateTime {
+		if ($value instanceof DateTime)
 			return $value;
 		elseif (isset($value))
 			return new DateTime($value);
-		else return null;
+		else
+			return null;
 	}
 
-	protected function start(): Attribute
-	{
+	protected function start(): Attribute {
 		return Attribute::make(
-			get: fn($value) => self::convert2Date($value),
-			set: fn($value) => self::convert2Date($value),
+		get: fn($value) => self::convert2Date($value),
+		set: fn($value) => self::convert2Date($value),
 		);
 
 	}
 
-	protected function finish(): Attribute
-	{
+	protected function finish(): Attribute {
 		return Attribute::make(
-			get: fn($value) => self::convert2Date($value),
-			set: fn($value) => self::convert2Date($value),
+		get: fn($value) => self::convert2Date($value),
+		set: fn($value) => self::convert2Date($value),
 		);
 
 	}
 
-	public function student(): BelongsTo
-	{
+	public function student(): BelongsTo {
 		return $this->belongsTo(Student::class);
 	}
 
-	public function school(): BelongsTo
-	{
+	public function school(): BelongsTo {
 		return $this->belongsTo(School::class);
 	}
 
-	public function specialty(): BelongsTo
-	{
+	public function specialty(): BelongsTo {
 		return $this->belongsTo(Specialty::class);
 	}
 
-	public function teachers(): BelongsToMany
-	{
+	public function teachers(): BelongsToMany {
 		return $this->belongsToMany(Teacher::class, 'teacher_learn')
 			->withTimestamps();
 	}
 
-	public static function createTemplate(): array
-	{
+	public static function createTemplate(): array {
 		return [
 			'id' => 'learn-create',
 			'name' => 'learn-create',
@@ -102,8 +93,7 @@ class Learn extends Model implements FormTemplate
 		];
 	}
 
-	public function editTemplate(): array
-	{
+	public function editTemplate(): array {
 		return [
 			'id' => 'learn-edit',
 			'name' => 'learn-edit',
