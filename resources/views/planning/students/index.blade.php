@@ -10,6 +10,8 @@
 		$order = \App\Models\Order::find($context['order']);
 		$school = $order->school;
 		$answer = \App\Models\Answer::find($context['answer']);
+		$employer = $answer->employer;
+		$specialty = $answer->orderSpecialty->specialty;
 		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => false, 'context' => 'answer', 'link' => route('planning.answers.index', ['order' => $context['order']])], ['title' => 'Практиканты', 'active' => true, 'context' => 'answer.students']];
 	@endphp
 @endsection
@@ -30,13 +32,22 @@
 			<p id="no-enabled-data" style="display: none;">Все учащиеся образовательного учреждения
 				&laquo;{{ $school->getTitle() }}&raquo; распределены</p>
 
-			<button type="button" class="btn btn-primary mt-3 mb-3" id="send-students">
-				Уведомить работодателя
-			</button>
+			<div class="d-flex">
+				<button type="button" class="btn btn-primary mt-3 mb-3 me-4" id="send-students">
+					Уведомить работодателя
+				</button>
+				<button type="button" class="btn btn-primary mt-3 mb-3" id="fix-students">
+					Зафиксировать практикантов
+				</button>
+			</div>
 			<p>
 				<small>
-					Если количество практикантов станет равным одобренному количеству ({{ $answer->approved }}), вы сможете уведомить
-					работодателя о полной комплектности по выбранной специальности
+					Если количество практикантов (новых или новых + одобренных) станет равным одобренному количеству
+					({{ $answer->approved }}), вы сможете уведомить
+					работодателя для принятия решения по персоналиям практикантов.<br />
+					Если количество одобренных практикантов станет равным {{ $answer->approved }}, вы сможете окончательно зафиксировать
+					практикантов в заявке по специальности
+					&laquo;{{ $specialty->name }}&raquo; по работодателю &laquo{{ $employer->getTitle() }};&raquo;.
 				</small>
 			</p>
 		</div>
