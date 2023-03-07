@@ -1,6 +1,7 @@
 /node_modules
 /storage/*.key
 /vendor
+.env
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml
@@ -10,3 +11,8 @@ npm-debug.log
 yarn-error.log
 /resources/plugins/ckeditor5/node_modules
 /**/.DS_Store
+composer.lock
+package-lock.json
+mix-manifest.json
+public/css/app.css
+public/js/app.js
