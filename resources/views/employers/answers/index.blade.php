@@ -25,7 +25,7 @@
 		        'context' => 'answer',
 		    ],
 		    [
-		        'title' => 'Выбор практикантов',
+		        'title' => 'Предложенные практиканты',
 		        'active' => false,
 		        'context' => 'employer.students',
 		    ],

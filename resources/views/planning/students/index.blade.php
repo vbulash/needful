@@ -33,21 +33,22 @@
 				&laquo;{{ $school->getTitle() }}&raquo; распределены</p>
 
 			<div class="d-flex">
-				<button type="button" class="btn btn-primary mt-3 mb-3 me-4" id="send-students">
+				<button type="button" class="btn btn-primary mt-3 mb-3 me-4" id="send-students" disabled>
 					Уведомить работодателя
 				</button>
-				<button type="button" class="btn btn-primary mt-3 mb-3" id="fix-students">
+				<button type="button" class="btn btn-primary mt-3 mb-3" id="fix-students" disabled>
 					Зафиксировать практикантов
 				</button>
 			</div>
 			<p>
 				<small>
-					Если количество практикантов (новых или новых + одобренных) станет равным одобренному количеству
-					({{ $answer->approved }}), вы сможете уведомить
-					работодателя для принятия решения по персоналиям практикантов.<br />
+					Если количество практикантов (новых или новых + одобренных) станет равным {{ $answer->approved }}, вы сможете
+					уведомить
+					работодателя для принятия решения по персоналиям практикантов. Пока в списке практикантов остается хоть один
+					отклоненный работодателем, кнопка &laquo;Уведомить работодателя&raquo; останется недоступной.<br />
 					Если количество одобренных практикантов станет равным {{ $answer->approved }}, вы сможете окончательно зафиксировать
 					практикантов в заявке по специальности
-					&laquo;{{ $specialty->name }}&raquo; по работодателю &laquo{{ $employer->getTitle() }};&raquo;.
+					&laquo;{{ $specialty->name }}&raquo; по работодателю &laquo;{{ $employer->getTitle() }}&raquo;.
 				</small>
 			</p>
 		</div>
@@ -113,10 +114,11 @@
 				let select = $('#students');
 
 				const data = [];
-				for (let object in window.enabled)
+				for (let index in window.enabled)
 					data.push({
-						'id': object,
-						'text': window.enabled[object]
+						'id': index,
+						'text': window.enabled[index].text,
+						'status': window.enabled[index].status,
 					});
 				data.sort((a, b) => {
 					if (a.text === b.text) return 0;
@@ -130,9 +132,33 @@
 				});
 				//select.val('').trigger('change');
 				document.getElementById('no-enabled-data').style.display = 'none';
-			}
+				// Подсчитать количества
 
-			document.getElementById('send-students').disabled = Object.keys(window.selected).length != {{ $answer->approved }};
+				let countNew = 0;
+				let countInvited = 0;
+				let countRejected = 0;
+				let countApproved = 0;
+				for (let index in window.selected)
+					switch (window.selected[index].status) {
+						case {{ App\Models\AnswerStudentStatus::NEW->value }}:
+							countNew++;
+							break;
+						case {{ App\Models\AnswerStudentStatus::INVITED->value }}:
+							countInvited++;
+							break;
+						case {{ App\Models\AnswerStudentStatus::REJECTED->value }}:
+							countRejected++;
+							break;
+						case {{ App\Models\AnswerStudentStatus::APPROVED->value }}:
+							countApproved++;
+							break;
+					}
+				const goal = {{ $answer->approved }};
+				document.getElementById('send-students').disabled =
+					(countNew != goal) && (countNew + countInvited != goal) &&
+					(countRejected != 0);
+				document.getElementById('fix-students').disabled = countApproved != goal;
+			}
 		}
 
 		function clickDelete(student) {
@@ -147,9 +173,13 @@
 				},
 				success: () => {
 					const id = student;
-					const text = window.selected[id];
+					const text = window.selected[id].text;
+					const status = window.selected[id].status;
 					delete window.selected[id];
-					window.enabled[id] = text;
+					window.enabled[id] = {
+						text: text,
+						status: status
+					};
 
 					reloadSelect();
 					window.datatable.ajax.reload();
@@ -233,7 +263,7 @@
 
 			$('#link-student').on('click', (event) => {
 				const id = $('#students').val();
-				const text = window.enabled[id];
+				const text = window.enabled[id].text;
 
 				$.ajax({
 					method: 'POST',
@@ -247,7 +277,10 @@
 					},
 					success: () => {
 						delete window.enabled[id];
-						window.selected[id] = text;
+						window.selected[id] = {
+							text: text,
+							status: {{ App\Models\AnswerStudentStatus::NEW->value }}
+						};
 
 						reloadSelect();
 						window.datatable.ajax.reload();

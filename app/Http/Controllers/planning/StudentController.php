@@ -44,7 +44,10 @@ class StudentController extends Controller {
 		$students->each(function ($student) use (&$selected) {
 			$id = $student->getKey();
 			$text = $student->getTitle();
-			$selected[$id] = $text;
+			$selected[$student->getKey()] = (object) [
+				'text' => $student->getTitle(),
+				'status' => $student->pivot->status
+			];
 		});
 
 		$enabled = [];
@@ -64,12 +67,13 @@ EOS,
 			['school' => $school->getKey()]);
 		foreach ($query as $student) {
 			$id = $student->id;
-			$text =
-				sprintf("%s %s%s",
-					$student->lastname, $student->firstname, $student->surname ? ' ' . $student->surname : '');
 			if (array_key_exists($id, $selected))
 				continue;
-			$enabled[$id] = $text;
+			$enabled[$id] = (object) [
+				'text' => sprintf("%s %s%s",
+					$student->lastname, $student->firstname, $student->surname ? ' ' . $student->surname : ''),
+				'status' => 0,
+			];
 		}
 
 		return view('planning.students.index', compact('count', 'selected', 'enabled'));
@@ -103,7 +107,7 @@ EOS,
 
 	public function send(int $answer) {
 		$_answer = Answer::find($answer);
-		// TODO отправить письмо работодателю
+		// TODO отправить письмо работодателю и отправить нотификацию ему же. Не забыть о settings и listener'е
 		$ids = $_answer->students->pluck('id')->toArray();
 		$_answer->students()->syncWithPivotValues($ids, ['status' => AnswerStudentStatus::INVITED->value]);
 		return true;

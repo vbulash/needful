@@ -31,7 +31,7 @@
 		        'link' => route('employers.orders.answers.index', ['employer' => $employer->getKey(), 'order' => $order->getKey()]),
 		    ],
 		    [
-		        'title' => 'Выбор практикантов',
+		        'title' => 'Предложенные практиканты',
 		        'active' => true,
 		        'context' => 'employer.students',
 		        'link' => route('employers.students.index'),
