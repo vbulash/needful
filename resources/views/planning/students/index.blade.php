@@ -263,6 +263,7 @@
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
 					success: () => {
+						reloadSelect();
 						window.datatable.ajax.reload();
 					}
 				});
