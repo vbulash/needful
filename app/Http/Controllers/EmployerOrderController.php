@@ -8,6 +8,7 @@ use App\Events\ToastEvent;
 use App\Models\Employer;
 use App\Models\Order;
 use App\Models\Answer;
+use App\Models\AnswerStatus;
 use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
 use App\Notifications\orders\Sent2Accept;
@@ -74,14 +75,12 @@ class EmployerOrderController extends Controller {
 		return true;
 	}
 
-	public function reject(int $employer, int $order) {
-		$_employer = Employer::findOrFail($employer);
-		$_employer->orders()->updateExistingPivot($order, [
-			'status' => OrderEmployerStatus::REJECTED->value,
-		]);
-		$query = DB::select(<<<'EOS'
+	private function getAnswers(int $employer, int $order): iterable {
+		return DB::select(<<<'EOS'
 SELECT
-    answers.id
+    answers.id,
+	answers.approved,
+	answers.status
 FROM
     answers,
     orders_specialties AS os,
@@ -93,19 +92,31 @@ WHERE
     answers.employer_id = employers.id AND
     answers.orders_specialties_id = os.id AND
     os.order_id = orders.id;
-EOS, ['employer' => $employer, 'order' => $order]);
+EOS,
+			['employer' => $employer, 'order' => $order]);
+	}
+
+	public function reject(Request $request, int $employer, int $order) {
+		$message = $request->message;
+		$_employer = Employer::findOrFail($employer);
+		$_employer->orders()->updateExistingPivot($order, [
+			'status' => OrderEmployerStatus::REJECTED->value,
+		]);
+		$query = $this->getAnswers($employer, $order);
 		foreach ($query as $answer) {
-			Answer::find($answer->id)->update(['approved' => 0]);
+			Answer::find($answer->id)->update([
+				'approved' => 0,
+				'status' => AnswerStatus::REJECTED->value
+			]);
 		}
-		;
 		$_order = Order::findOrFail($order);
 
-		$_order->school->user->notify(new Sent2Reject($_order, $_employer));
+		$_order->school->user->notify(new Sent2Reject($_order, $_employer, $message));
 		$orderEmployer = OrderEmployer::all()
 			->where('order_id', $order)
 			->where('employer_id', $employer)
 			->first();
-		event(new Sent2RejectedTaskEvent($orderEmployer));
+		event(new Sent2RejectedTaskEvent($orderEmployer, $message));
 		session()->put('success', "Вы отказались от участия в практике");
 		return redirect()->route('employers.orders.answers.index', compact('employer', 'order'));
 	}
@@ -117,6 +128,12 @@ EOS, ['employer' => $employer, 'order' => $order]);
 			'status' => OrderEmployerStatus::ACCEPTED->value,
 		]);
 		$_order = Order::findOrFail($order);
+		$query = $this->getAnswers($employer, $order);
+		foreach ($query as $answer) {
+			Answer::find($answer->id)->update([
+				'status' => ($answer->approved == 0 ? AnswerStatus::REJECTED->value : AnswerStatus::ACCEPTED->value)
+			]);
+		}
 
 		$_order->school->user->notify(new Sent2Accept($_order, $_employer, $message));
 		$orderEmployer = OrderEmployer::all()

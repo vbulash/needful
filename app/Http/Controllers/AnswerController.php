@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Models\Answer;
+use App\Models\AnswerStatus;
 use App\Models\Employer;
 use App\Models\OrderEmployerStatus;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +19,8 @@ SELECT
     a.id,
 	s.name,
 	os.quantity,
-	a.approved
+	a.approved,
+	a.status
 FROM
     answers AS a,
     orders_specialties AS os,
@@ -47,6 +49,7 @@ SQL,
 		$_order = $_employer->orders()->find($order);
 		$query = $this->getQuery($employer, $order);
 		return DataTables::of($query)
+			->addColumn('status', fn($answer) => AnswerStatus::getName($answer->status))
 			->addColumn('action', function ($answer) use ($employer, $_order) {
 				// $showRoute = route('employers.orders.answers.show', ['answer' => $answer->id]);
 				$editRoute = route('employers.orders.answers.edit', ['answer' => $answer->id]);

@@ -69,6 +69,7 @@
 							<th>Название специальности</th>
 							<th>Запрос практикантов</th>
 							<th>Согласны принять</th>
+							<th>Статус по специальности</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -182,6 +183,11 @@
 							data: 'approved',
 							name: 'approved',
 							responsivePriority: 2
+						},
+						{
+							data: 'status',
+							name: 'status',
+							responsivePriority: 3
 						},
 						{
 							data: 'action',

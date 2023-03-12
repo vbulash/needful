@@ -79,9 +79,12 @@ class New2Sent extends Notification {
 			'Дата начала практики' => $this->order->start->format('d.m.Y'),
 			'Дата завершения практики' => $this->order->end->format('d.m.Y'),
 			'Место прохождения практики' => $this->order->place,
-			'Дополнительная информация' => $this->order->description,
-			'Информация по специальностям заявки - наименование: количество позиций в заявке' => null,
 		];
+		if (isset($this->order->description)) {
+			$fields['Дополнительная информация'] = $this->order->description;
+		}
+		$fields['Информация по специальностям заявки - наименование: количество позиций в заявке'] = null;
+
 		foreach ($this->order->specialties as $order_specialty)
 			$fields[$order_specialty->specialty->getTitle()] = $order_specialty->quantity; foreach ($fields as $key => $value) {
 			if ($value == null)

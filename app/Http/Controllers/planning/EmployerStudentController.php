@@ -58,8 +58,10 @@ EOS,
 
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
 				$items[] = ['type' => 'divider'];
-				$items[] = ['type' => 'item', 'click' => $approveCall, 'icon' => 'fas fa-thumbs-up', 'title' => 'Утвердить практиканта'];
-				$items[] = ['type' => 'item', 'click' => $rejectCall, 'icon' => 'fas fa-thumbs-down', 'title' => 'Отказаться от практиканта'];
+				if ($student->status != AnswerStudentStatus::APPROVED->value)
+					$items[] = ['type' => 'item', 'click' => $approveCall, 'icon' => 'fas fa-thumbs-up', 'title' => 'Утвердить практиканта'];
+				if ($student->status != AnswerStudentStatus::REJECTED->value)
+					$items[] = ['type' => 'item', 'click' => $rejectCall, 'icon' => 'fas fa-thumbs-down', 'title' => 'Отказаться от практиканта'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -69,12 +71,16 @@ EOS,
 	public function index() {
 		$query = $this->getQuery();
 		$count = count($query);
+		$selected = [];
+		foreach ($query as $student) {
+			$selected[$student->id] = $student->status;
+		}
 		// $students = Answer::find($context['answer'])->students()
 		// 	->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value))
 		// 	->get();
 		// $count = $students->count();
 
-		return view('employers.students.index', compact('count'));
+		return view('employers.students.index', compact('count', 'selected'));
 	}
 
 	public function show(int $student) {

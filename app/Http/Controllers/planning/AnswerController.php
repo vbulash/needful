@@ -59,7 +59,8 @@ EOS;
 				$selectRoute = route('planning.answers.select', ['answer' => $answer->aid]);
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Практиканты'];
+				if ($answer->status != AnswerStatus::REJECTED->value)
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Практиканты'];
 
 				return createDropdown('Действия', $items);
 			})

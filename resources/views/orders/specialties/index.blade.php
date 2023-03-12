@@ -6,20 +6,20 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявка на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Детали заявки<br/>Уведомления работодателей', 'active' => true, 'context' => 'order.specialty']];
+		$steps = [['title' => 'Заявка на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Детали заявки<br/>Уведомления работодателям', 'active' => true, 'context' => 'order.specialty']];
 	@endphp
 @endsection
 
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
-			<h3 class="block-title fw-semibold">Специальности в заявке</h3>
+			<h3 class="block-title fw-semibold">Детали заявки</h3>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-specialty" data-bs-toggle="modal"
 				data-bs-target="#specialties-list">
 				Добавить специальность к заявке на практику
 			</button>
 			<p>Вы также можете перейти на уведомления работодателей по ссылке <a
-					href="{{ route('order.employers.index', ['order' => $order]) }}">Уведомления работодателей</a></p>
+					href="{{ route('order.employers.index', ['order' => $order]) }}">Уведомления работодателям</a></p>
 			<p id="no-enabled-data" style="display: none;">Все специальности образовательного учреждения внесены в заявку на
 				практику</p>
 		</div>

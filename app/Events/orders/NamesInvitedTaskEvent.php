@@ -9,8 +9,6 @@ use App\Models\Order;
 use App\Models\OrderEmployer;
 
 class NamesInvitedTaskEvent extends TaskEvent {
-	/*
-	 */
 	public function __construct(Answer $answer) {
 		$order = $answer->orderSpecialty->order;
 		$school = $order->school;

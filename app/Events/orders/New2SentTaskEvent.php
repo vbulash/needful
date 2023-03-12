@@ -10,10 +10,8 @@ class New2SentTaskEvent extends TaskEvent {
 	public function __construct(OrderEmployer $order_employer) {
 		$name = $order_employer->order->getTitle();
 		$lines = [];
-		$lines[] = "Создана заявка на практику \"{$name}\":";
-		$lines[] = "<ul>";
+		$lines[] = "<p>Создана заявка на практику \"{$name}\":</p>";
 		$lines = array_merge($lines, $this->getOrderContent($order_employer->order));
-		$lines[] = "</ul>";
 		$lines[] = "<p>Просим принять решение по практике,  которой вы сможете изучить по ссылке ниже. Ваш ответ по практике можно также откорректировать, если у вас нет возможности принять всех предлагаемых практикантов.</p>";
 		$lines[] = '<p>Если у вас нет необходимости или возможности принять практикантов - проигнорируйте данное сообщение.</p>';
 
@@ -35,24 +33,30 @@ class New2SentTaskEvent extends TaskEvent {
 
 	private function getOrderContent(Order $order): iterable {
 		$lines = [];
+		$lines[] = "<ul>";
 		$fields = [
 			'Название образовательного учреждения' => $order->school->getTitle(),
 			'Дата начала практики' => $order->start->format('d.m.Y'),
 			'Дата завершения практики' => $order->end->format('d.m.Y'),
 			'Место прохождения практики' => $order->place,
-			'Дополнительная информация' => $order->description,
-			'Информация по специальностям заявки - наименование: количество позиций в заявке' => null,
+			'Дополнительная информация' => $order->description ?? ' ',
 		];
+		foreach ($fields as $key => $value) {
+			$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
+		}
+		$lines[] = "</ul>";
+		$lines[] = "<p>Информация по специальностям заявки - наименование: количество позиций в заявке:</p>";
+		$lines[] = "<ul>";
+
+		$fields = [];
 		foreach ($order->specialties as $order_specialty) {
 			$fields[$order_specialty->specialty->getTitle()] = $order_specialty->quantity;
 		}
 
 		foreach ($fields as $key => $value) {
-			if ($value == null)
-				$lines[] = sprintf("%s:", $key);
-			else
-				$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
+			$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
 		}
+		$lines[] = "</ul>";
 
 		return $lines;
 	}

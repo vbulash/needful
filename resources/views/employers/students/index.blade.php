@@ -44,12 +44,12 @@
 		<div>
 			<h3 class="block-title fw-semibold mb-4">Практиканты, предложенные образовательным учреждением</h3>
 			@if ($count > 0)
-				<p>
+				<div>
 					<small>
 						Вы можете утвердить всех практикантов или отказаться от всех практикантов по кнопкам ниже.<br />
 						Либо утвердить практиканта / отказаться от практиканта в индивидуальном порядке через соответствующее действие
 					</small>
-				</p>
+				</div>
 				<div>
 					<button type="button" class="btn btn-primary mt-3 mb-3" id="approve-all">
 						Утвердить всех практикантов
@@ -57,6 +57,15 @@
 					<button type="button" class="btn btn-primary mt-3 mb-3" id="reject-all">
 						Отказаться от всех практикантов
 					</button>
+				</div>
+				<button type="button" class="btn btn-primary mt-3 mb-3" id="send-students">
+					Уведомить образовательное учреждение
+				</button>
+				<div>
+					<small>
+						После того как вы вынесете решение по всем практикантам, предложенным образовательным учреждением (одобрите или
+						отклоните), у вас появится возможность уведомить образовательное учреждение о принятом решении.
+					</small>
 				</div>
 			@endif
 		</div>
@@ -84,6 +93,35 @@
 				(специальности + количества).</p>
 		@endif
 	</div>
+
+	<div class="modal fade" id="modal-answer" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+		aria-labelledby="modal-answer-label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<form action="" method="post" id="form-answer" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="answer-title">Работодатель принял решение по всем предложенным практикантам</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="answer-body">
+						<p class="mb-4">Вы можете добавить в сообщение образовательному учреждению необязательную дополнительную
+							информацию из поля
+							ниже:</p>
+						<div class="form-floating mb-4">
+							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;"></textarea>
+							<label class="form-label" for="message">Дополнительная информация &gt;</label>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" id="answer-yes" data-bs-dismiss="modal">Уведомить образовательное
+							учреждение</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 @endsection
 
 {{-- @if ($count > 0) --}}
@@ -94,6 +132,28 @@
 @push('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
+		const goal = {{ $count }};
+
+		function checkSendButton() {
+			let countRejected = 0;
+			let countApproved = 0;
+			for (let index in window.selected)
+				switch (window.selected[index]) {
+					case {{ App\Models\AnswerStudentStatus::REJECTED->value }}:
+						countRejected++;
+						break;
+					case {{ App\Models\AnswerStudentStatus::APPROVED->value }}:
+						countApproved++;
+						break;
+				}
+			document.getElementById('send-students').disabled = !(
+				// Допустимые варианты для видимости кнопки
+				countApproved == goal || // Все практиканты одобрены
+				countRejected == goal || // Все практиканты отклонены
+				countApproved + countRejected == goal // Все практиканты разобраны (одобрены или отклонены)
+			);
+		}
+
 		function clickChangeStatus(student, status) {
 			$.ajax({
 				method: 'POST',
@@ -106,6 +166,12 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				success: () => {
+					if (student == 0) {
+						//
+					} else {
+						window.selected[student] = status;
+					}
+					checkSendButton();
 					window.datatable.ajax.reload();
 				}
 			});
@@ -180,6 +246,9 @@
 					}
 				});
 			});
+
+			window.selected = {!! json_encode($selected) !!};
+			checkSendButton();
 		});
 
 		document.getElementById('approve-all').onclick = () => {
@@ -188,6 +257,11 @@
 
 		document.getElementById('reject-all').onclick = () => {
 			clickChangeStatus(0, {{ \App\Models\AnswerStudentStatus::REJECTED->value }});
+		}
+
+		document.getElementById('send-students').onclick = () => {
+			let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
+			answerDialog.show();
 		}
 	</script>
 @endpush

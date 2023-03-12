@@ -13,12 +13,10 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 		$employer_name = $order_employer->employer->getTitle();
 		$lines = [];
 		$lines[] = "Работодатель \"{$employer_name}\" готов принять практику \"{$name}\":";
-		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrderContent($order_employer));
-		$lines[] = "</ul>";
 
 		if (isset($message)) {
-			$lines[] = "Работодатель оставил вам сообщение:";
+			$lines[] = "<p>Работодатель оставил вам сообщение:</p>";
 			$lines[] = "<ul>";
 			$lines[] = "<li>{$message}</li>";
 			$lines[] = "</ul>";
@@ -43,30 +41,32 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 	private function getOrderContent(OrderEmployer $order_employer): iterable {
 		$order = $order_employer->order;
 		$lines = [];
+		$lines[] = "<ul>";
 		$fields = [
 			'Название образовательного учреждения' => $order->school->getTitle(),
 			'Дата начала практики' => $order->start->format('d.m.Y'),
 			'Дата завершения практики' => $order->end->format('d.m.Y'),
 			'Место прохождения практики' => $order->place,
 			'Дополнительная информация' => $order->description,
-			'Информация по специальностям заявки - наименование: количество позиций в заявке / работодатель готов принять' => null,
 		];
+		foreach ($fields as $key => $value)
+			$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
+		$lines[] = "</ul>";
+		$lines[] = '<p>Информация по специальностям заявки - наименование: количество позиций в заявке / работодатель готов принять:</p>';
+		$lines[] = "<ul>";
 
-		$employer = $order_employer->employer->getKey();
-		foreach ($order->specialties as $order_specialty) {
+		$fields = [];
+		$employer = $order_employer->employer->getKey(); foreach ($order->specialties as $order_specialty) {
 			$answer = Answer::all()
 				->where('orders_specialties_id', $order_specialty->getKey())
 				->where('employer_id', $employer)
 				->first();
-			$fields[$order_specialty->specialty->getTitle()] = sprintf("%d / %s", $order_specialty->quantity, $answer->approved ?? 'отказ');
+			$fields[$order_specialty->specialty->getTitle()] = sprintf("%d / %s", $order_specialty->quantity, $answer->approved > 0 ? $answer->approved : 'отказ');
 		}
 
-		foreach ($fields as $key => $value) {
-			if ($value == null)
-				$lines[] = sprintf("%s:", $key);
-			else
-				$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
-		}
+		foreach ($fields as $key => $value)
+			$lines[] = sprintf("<li><strong>%s</strong>: <i>%s</i></li>", $key, $value);
+		$lines[] = "</ul>";
 
 		return $lines;
 	}

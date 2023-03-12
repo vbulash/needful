@@ -6,15 +6,12 @@
 
 @section('steps')
 	@php
-		$steps = [
-			['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')],
-			['title' => 'Специальности в заявке<br/>Уведомления работодателей', 'active' => true, 'context' => 'order.employer', 'link' => route('order.employers.index', ['order' => $order])]
-		];
+		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('orders.index')], ['title' => 'Детали заявки<br/>Уведомления работодателям', 'active' => true, 'context' => 'order.employer', 'link' => route('order.employers.index', ['order' => $order])]];
 	@endphp
 @endsection
 
 @section('interior.header')
-	@if($mode == config('global.show'))
+	@if ($mode == config('global.show'))
 		Просмотр
 	@else
 		Редактирование
