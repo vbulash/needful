@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\OrderEmployer;
 
 class Sent2AnsweredTaskEvent extends TaskEvent {
-	public function __construct(OrderEmployer $order_employer, string $message) {
+	public function __construct(OrderEmployer $order_employer, ?string $message) {
 		$name = $order_employer->order->getTitle();
 		$employer_name = $order_employer->employer->getTitle();
 		$lines = [];
@@ -18,7 +18,7 @@ class Sent2AnsweredTaskEvent extends TaskEvent {
 		$lines[] = "</ul>";
 
 		if (isset($message)) {
-			$lines[] = "Работодатель дополнительно оставил вам сообщение:";
+			$lines[] = "Работодатель оставил вам сообщение:";
 			$lines[] = "<ul>";
 			$lines[] = "<li>{$message}</li>";
 			$lines[] = "</ul>";

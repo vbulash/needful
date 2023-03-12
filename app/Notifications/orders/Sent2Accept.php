@@ -12,14 +12,14 @@ class Sent2Accept extends Notification {
 	use Queueable;
 	protected Order $order;
 	protected Employer $employer;
-	protected string $message;
+	protected ?string $message;
 
 	/**
 	 * Create a new notification instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(Order $order, Employer $employer, string $message) {
+	public function __construct(Order $order, Employer $employer, ?string $message) {
 		$this->order = $order;
 		$this->employer = $employer;
 		$this->message = $message;

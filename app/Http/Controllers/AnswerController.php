@@ -22,16 +22,23 @@ SELECT
 FROM
     answers AS a,
     orders_specialties AS os,
-    specialties AS s
+    specialties AS s,
+	orders_employers AS oe
 WHERE
     a.orders_specialties_id = os.id
         AND os.specialty_id = s.id
-		AND os.order_id = :order
-		AND a.employer_id = :employer
+		AND os.order_id = :order1
+		AND a.employer_id = :employer1
+		AND oe.order_id = :order2
+		AND oe.employer_id = :employer2
+		AND oe.status <> :status
 SQL,
 			[
-				'order' => $order,
-				'employer' => $employer
+				'order1' => $order,
+				'employer1' => $employer,
+				'order2' => $order,
+				'employer2' => $employer,
+				'status' => OrderEmployerStatus::NEW ->value
 			]);
 	}
 
@@ -41,19 +48,18 @@ SQL,
 		$query = $this->getQuery($employer, $order);
 		return DataTables::of($query)
 			->addColumn('action', function ($answer) use ($employer, $_order) {
-				$showRoute = route('employers.orders.answers.show', ['answer' => $answer->id]);
+				// $showRoute = route('employers.orders.answers.show', ['answer' => $answer->id]);
 				$editRoute = route('employers.orders.answers.edit', ['answer' => $answer->id]);
-				// Route::get('/employers.orders.answers.select/{answer}', 'AnswerController@select')->name('employers.orders.answers.select');
 				$selectRoute = route('employers.orders.answers.select', ['answer' => $answer->id]);
 				$items = [];
 
-				if ($_order->pivot->status != OrderEmployerStatus::ACCEPTED->value &&
-					$_order->pivot->status != OrderEmployerStatus::REJECTED->value) {
+				if ($_order->pivot->status == OrderEmployerStatus::SENT->value) {
 					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 					// $items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-					$items[] = ['type' => 'divider'];
 				}
-				$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Выбор практикантов'];
+
+				if ($answer->approved > 0 && $_order->pivot->status == OrderEmployerStatus::ACCEPTED->value)
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Выбор практикантов'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -67,8 +73,12 @@ SQL,
 
 		$query = $this->getQuery($employer, $order);
 		$count = count($query);
+		$zeros = 0;
+		foreach ($query as $answer)
+			if ($answer->approved == 0)
+				$zeros++;
 
-		return view('employers.answers.index', compact('count', 'employer', 'order'));
+		return view('employers.answers.index', compact('count', 'employer', 'order', 'zeros'));
 	}
 
 	public function select(int $answer) {

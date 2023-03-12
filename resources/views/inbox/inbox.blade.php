@@ -239,6 +239,19 @@
 					headers: {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
+					beforeSend: () => {
+						if (!message.read)
+							$.ajax({
+								method: 'POST',
+								url: "{{ route('message.read') }}",
+								data: {
+									message: window.message,
+								},
+								headers: {
+									'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+								},
+							});
+					},
 					success: url => {
 						window.location.href = url;
 					}

@@ -27,6 +27,7 @@
 							<th>Работодатель</th>
 							<th>Специальность</th>
 							<th>Одобренных практикантов</th>
+							<th>Статус ответа</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -74,6 +75,11 @@
 						{
 							data: 'approved',
 							name: 'approved',
+							responsivePriority: 2
+						},
+						{
+							data: 'status',
+							name: 'status',
 							responsivePriority: 2
 						},
 						{

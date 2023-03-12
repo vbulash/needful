@@ -19,6 +19,8 @@
 @section('interior')
 	<div class="block-header block-header-default">
 		<div>
+			<h3 class="block-title fw-semibold mb-4">Практиканты от образовательного учреждения
+				&laquo;{{ $school->getTitle() }}&raquo;</h3>
 			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-student" data-bs-toggle="modal"
 				data-bs-target="#students-list">
 				Добавить практиканта
@@ -54,25 +56,21 @@
 		</div>
 	</div>
 	<div class="block-content p-4">
-		@if ($count > 0)
-			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="students_table" style="width: 100%;">
-					<thead>
-						<tr>
-							<th style="width: 30px">#</th>
-							<th>Фамилия, имя и отчество</th>
-							<th>Дата рождения</th>
-							<th>Телефон</th>
-							<th>Электронная почта</th>
-							<th>Статус практиканта</th>
-							<th>Действия</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		@else
-			<p>Практикантов пока нет...</p>
-		@endif
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover text-nowrap" id="students_table" style="width: 100%;">
+				<thead>
+					<tr>
+						<th style="width: 30px">#</th>
+						<th>Фамилия, имя и отчество</th>
+						<th>Дата рождения</th>
+						<th>Телефон</th>
+						<th>Электронная почта</th>
+						<th>Статус практиканта</th>
+						<th>Действия</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
 	</div>
 
 	<div class="modal fade" id="students-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
@@ -156,7 +154,7 @@
 				const goal = {{ $answer->approved }};
 				document.getElementById('send-students').disabled =
 					(countNew != goal) && (countNew + countInvited != goal) &&
-					(countRejected != 0);
+					(countRejected == 0);
 				document.getElementById('fix-students').disabled = countApproved != goal;
 			}
 		}

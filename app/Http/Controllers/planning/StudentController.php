@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\planning;
 
+use App\Events\orders\NamesInvitedTaskEvent;
+use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\AnswerStatus;
 use App\Models\AnswerStudentStatus;
 use App\Models\Order;
 use App\Models\OrderEmployerStatus;
 use App\Models\School;
 use App\Models\Student;
+use App\Notifications\orders\NamesSchool2Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -107,9 +111,18 @@ EOS,
 
 	public function send(int $answer) {
 		$_answer = Answer::find($answer);
-		// TODO отправить письмо работодателю и отправить нотификацию ему же. Не забыть о settings и listener'е
+
+		$_answer->update([
+			'status' => AnswerStatus::NAMES->value
+		]);
+		$_answer->save();
+		$_answer->employer->user->notify(new NamesSchool2Employer($_answer));
+		event(new NamesInvitedTaskEvent($_answer));
+
 		$ids = $_answer->students->pluck('id')->toArray();
 		$_answer->students()->syncWithPivotValues($ids, ['status' => AnswerStudentStatus::INVITED->value]);
+
+		event(new ToastEvent('success', '', 'Вы уведомили работодателя о предложении практикантов'));
 		return true;
 	}
 }

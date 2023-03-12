@@ -43,11 +43,14 @@
 			@if (
 				$_order->pivot->status != App\Models\OrderEmployerStatus::ACCEPTED->value &&
 					$_order->pivot->status != App\Models\OrderEmployerStatus::REJECTED->value)
-				<a onclick="clickReject()" class="btn btn-primary mt-3 mb-3">Отказать образовательному учреждению</a>
-				<a onclick="clickAccept()" class="btn btn-primary mt-3 mb-3">Принять заявку образовательного учреждения</a>
-				<p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
-						Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
-					</small></p>
+				@if ($count == $zeros)
+					<a onclick="clickReject()" class="btn btn-primary mt-3 mb-3">Отказать образовательному учреждению</a>
+				@else
+					<a onclick="clickAccept()" class="btn btn-primary mt-3 mb-3">Принять заявку образовательного учреждения</a>
+					{{-- <p><small>Полная приёмка заявки - без корректировки ответов в таблице ниже<br />
+							Частичная приёмка заявки - с корректировкой поля &laquo;Согласны принять&raquo; в таблице ниже
+						</small></p> --}}
+				@endif
 			@else
 				<p><small>
 						Статус заявки &laquo;{{ App\Models\OrderEmployerStatus::getName($_order->pivot->status) }}&raquo; конечный - ответ
@@ -79,17 +82,19 @@
 	<div class="modal fade" id="modal-answer" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
 		aria-labelledby="modal-answer-label" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
-			<form action="" id="form-answer">
+			<form action="" method="post" id="form-answer" enctype="multipart/form-data">
+				@csrf
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="answer-title">&nbsp;</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body" id="answer-body">
-						<p class="mb-4">Вы можете добавить в сообщение работодателю необязательную дополнительную информацию из поля
+						<p class="mb-4">Вы можете добавить в сообщение образовательному учреждению необязательную дополнительную
+							информацию из поля
 							ниже:</p>
 						<div class="form-floating mb-4">
-							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;" required></textarea>
+							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;"></textarea>
 							<label class="form-label" for="message">Дополнительная информация &gt;</label>
 						</div>
 					</div>
@@ -129,25 +134,25 @@
 				answerDialog.show();
 			}
 
-			document.getElementById('answer-yes').addEventListener('click', (event) => {
-				let url = '';
-				const mode = document.getElementById('answer-mode').value;
-				if (mode == 'accept') url = "{{ route('employers.orders.accept', compact('employer', 'order')) }}";
-				else if (mode == 'reject') url = "{{ route('employers.orders.reject', compact('employer', 'order')) }}";
-				$.ajax({
-					method: 'GET',
-					url: url,
-					data: {
-						message: document.getElementById('message').value,
-					},
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}, false);
+			// document.getElementById('answer-yes').addEventListener('click', (event) => {
+			// 	let url = '';
+			// 	const mode = document.getElementById('answer-mode').value;
+			// 	if (mode == 'accept') url = "{{ route('employers.orders.accept', compact('employer', 'order')) }}";
+			// 	else if (mode == 'reject') url = "{{ route('employers.orders.reject', compact('employer', 'order')) }}";
+			// 	$.ajax({
+			// 		method: 'GET',
+			// 		url: url,
+			// 		data: {
+			// 			message: document.getElementById('message').value,
+			// 		},
+			// 		headers: {
+			// 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			// 		},
+			// 		success: () => {
+			// 			window.datatable.ajax.reload();
+			// 		}
+			// 	});
+			// }, false);
 
 			$(function() {
 				window.datatable = $('#answers_table').DataTable({
@@ -166,17 +171,17 @@
 						{
 							data: 'name',
 							name: 'name',
-							responsivePriority: 1
+							responsivePriority: 2
 						},
 						{
 							data: 'quantity',
 							name: 'quantity',
-							responsivePriority: 1
+							responsivePriority: 3
 						},
 						{
 							data: 'approved',
 							name: 'approved',
-							responsivePriority: 1
+							responsivePriority: 2
 						},
 						{
 							data: 'action',

@@ -12,6 +12,7 @@ class Answer extends Model implements FormTemplate {
 
 	protected $fillable = [
 		'approved', // Одобренное количество практикантов
+		'status', // Статус ответа
 	];
 
 	public function getTitle(): string {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\planning;
 use App\Http\Controllers\Controller;
 use App\Events\ToastEvent;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\AnswerStatus;
 use App\Models\Order;
 use App\Models\OrderEmployerStatus;
 use App\Models\School;
@@ -22,7 +23,8 @@ SELECT
     e.short as employer,
     s.id as sid,
 	s.name as specialty,
-	a.approved
+	a.approved,
+	a.status
 FROM
     answers AS a,
     orders_specialties AS os,
@@ -52,6 +54,7 @@ EOS;
 		$query = $this->getQuery($order);
 
 		return DataTables::of($query)
+			->addColumn('status', fn($answer) => AnswerStatus::getName($answer->status))
 			->addColumn('action', function ($answer) {
 				$selectRoute = route('planning.answers.select', ['answer' => $answer->aid]);
 				$items = [];

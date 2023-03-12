@@ -12,15 +12,17 @@ class Sent2Reject extends Notification {
 	use Queueable;
 	protected Order $order;
 	protected Employer $employer;
+	protected ?string $message;
 
 	/**
 	 * Create a new notification instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(Order $order, Employer $employer) {
+	public function __construct(Order $order, Employer $employer, ?string $message) {
 		$this->order = $order;
 		$this->employer = $employer;
+		$this->message = $message;
 	}
 
 	/**
@@ -47,6 +49,10 @@ class Sent2Reject extends Notification {
 		$lines = [];
 		$lines[] = "Работодатель \"{$name}\" отказался от участия в практике:";
 		$lines = array_merge($lines, $this->getOrderContent());
+		if (isset($this->message)) {
+			$lines[] = "Работодатель дополнительно оставил вам сообщение:";
+			$lines[] = "- *{$this->message}*";
+		}
 
 		$message = (new MailMessage)
 			->subject($subject)

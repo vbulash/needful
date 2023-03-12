@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\OrderEmployer;
 
 class Sent2RejectedTaskEvent extends TaskEvent {
-	public function __construct(OrderEmployer $order_employer) {
+	public function __construct(OrderEmployer $order_employer, ?string $message) {
 		$name = $order_employer->order->getTitle();
 		$employer_name = $order_employer->employer->getTitle();
 		$lines = [];
@@ -16,6 +16,12 @@ class Sent2RejectedTaskEvent extends TaskEvent {
 		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrderContent($order_employer));
 		$lines[] = "</ul>";
+		if (isset($message)) {
+			$lines[] = "Работодатель оставил вам сообщение:";
+			$lines[] = "<ul>";
+			$lines[] = "<li>{$message}</li>";
+			$lines[] = "</ul>";
+		}
 
 		parent::__construct(
 		title: 'Работодатель отказался принять практику',

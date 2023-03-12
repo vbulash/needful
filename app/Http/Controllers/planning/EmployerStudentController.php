@@ -9,27 +9,51 @@ use App\Models\Order;
 use App\Models\OrderEmployerStatus;
 use App\Models\School;
 use App\Models\Student;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class EmployerStudentController extends Controller {
-	public function getData() {
+	protected function getQuery(): iterable {
 		$context = session('context');
-		$query = Answer::find($context['answer'])->students()
-			->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value));
+		return DB::select(<<<EOS
+SELECT
+	students.*,
+	ans.status
+FROM
+	answers,
+	students,
+	answers_students AS ans
+WHERE
+	ans.answer_id = answers.id
+	AND ans.student_id = students.id
+	AND ans.status <> :status
+	AND answers.id = :answer
+EOS,
+			[
+				'status' => AnswerStudentStatus::NEW ->value,
+				'answer' => $context['answer']
+			]
+		);
+	}
+
+	public function getData() {
+		$query = $this->getQuery();
 
 		return DataTables::of($query)
-			->editColumn('fio', fn($student) => $student->getTitle())
-			->editColumn('birthdate', fn($student) => $student->birthdate->format('d.m.Y'))
-			->addColumn('status', fn($student) => AnswerStudentStatus::getName($student->pivot->status))
+			->editColumn('fio', fn($student) => sprintf("%s %s%s",
+				$student->lastname, $student->firstname, $student->surname ? ' ' . $student->surname : '')
+			)
+			->editColumn('birthdate', fn($student) => (new DateTime($student->birthdate))->format('d.m.Y'))
+			->addColumn('status', fn($student) => AnswerStudentStatus::getName($student->status))
 			->addColumn('action', function ($student) {
 				// $showRoute = route('planning.students.show', ['student' => $student->getKey()]);
-				$showRoute = route('employers.students.show', ['student' => $student->getKey()]);
+				$showRoute = route('employers.students.show', ['student' => $student->id]);
 				$approveCall = sprintf("clickChangeStatus(%s, %d)",
-					$student->getKey(), AnswerStudentStatus::APPROVED->value);
+					$student->id, AnswerStudentStatus::APPROVED->value);
 				$rejectCall = sprintf("clickChangeStatus(%s, %d)",
-					$student->getKey(), AnswerStudentStatus::REJECTED->value);
+					$student->id, AnswerStudentStatus::REJECTED->value);
 				$items = [];
 
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
@@ -43,10 +67,12 @@ class EmployerStudentController extends Controller {
 	}
 
 	public function index() {
-		$context = session('context');
-		$students = Answer::find($context['answer'])->students()
-			->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value));
-		$count = $students->count();
+		$query = $this->getQuery();
+		$count = count($query);
+		// $students = Answer::find($context['answer'])->students()
+		// 	->whereHas('answers', fn($query) => $query->where('status', '<>', AnswerStudentStatus::NEW ->value))
+		// 	->get();
+		// $count = $students->count();
 
 		return view('employers.students.index', compact('count'));
 	}
