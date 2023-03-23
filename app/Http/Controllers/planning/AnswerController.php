@@ -5,6 +5,7 @@ namespace App\Http\Controllers\planning;
 use App\Http\Controllers\Controller;
 use App\Events\ToastEvent;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\Answer;
 use App\Models\AnswerStatus;
 use App\Models\Order;
 use App\Models\OrderEmployerStatus;
@@ -17,29 +18,31 @@ class AnswerController extends Controller {
 	private function getQuery(int $order, int $answer = 0) {
 		$sql = <<<EOS
 SELECT
-	a.id as aid,
-    e.id as eid,
-    os.id as oid,
-    e.short as employer,
-    s.id as sid,
-	s.name as specialty,
-	a.approved,
-	a.status
+	a.id AS aid,
+	a.`employer_id` AS eid,
+	os.`id` AS oid,
+	e.`short` AS employer,
+	a.`approved`,
+	a.`status`,
+	s.`id` AS sid,
+	s.`name` AS specialty
 FROM
-    answers AS a,
-    orders_specialties AS os,
-    orders_employers AS oe,
-    employers as e,
-    specialties AS s
+	`orders_specialties` AS os,
+	`orders_employers` AS oe,
+	`answers` AS a,
+	`employers` AS e,
+	`specialties` AS s
 WHERE
-    a.orders_specialties_id = os.id
-    AND os.specialty_id = s.id
-    AND oe.employer_id = e.id
-    AND oe.status = :status
-	AND os.order_id = :order
+	a.`orders_specialties_id` = os.`id`
+	AND os.`order_id` = :order
+	AND a.`employer_id` = e.`id`
+	AND os.`specialty_id` = s.id
+	AND oe.`order_id` = os.`order_id`
+	AND oe.`employer_id` = a.`employer_id`
+	AND oe.`status` = :status
 EOS;
 		if ($answer != 0)
-			$sql .= " AND a.answer = :answer";
+			$sql .= " AND a.id = :answer";
 
 		$params = [
 			'status' => OrderEmployerStatus::ACCEPTED->value,

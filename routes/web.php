@@ -60,6 +60,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/employers.students.data', [EmployerStudentController::class, 'getData'])->name('employers.students.index.data');
 	Route::get('/employers.students/{student}', [EmployerStudentController::class, 'show'])->name('employers.students.show');
 	Route::post('/employers.students.status', [EmployerStudentController::class, 'changeStatus'])->name('employers.students.status');
+	Route::post('/employers.students.send/{answer}', [EmployerStudentController::class, 'send'])->name('employers.students.send');
 
 	// Практики от работодателей
 	Route::resource('/internships', 'InternshipController');
@@ -109,6 +110,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::post('/planning.students', [PlanningStudentController::class, 'store'])->name('planning.students.store');
 	Route::delete('/planning.students', [PlanningStudentController::class, 'destroy'])->name('planning.students.destroy');
 	Route::post('/planning.students.send/{answer}', [PlanningStudentController::class, 'send'])->name('planning.students.send');
+	Route::get('/planning.students.fix/{answer}', [PlanningStudentController::class, 'fix'])->name('planning.students.fix');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');

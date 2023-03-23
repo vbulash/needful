@@ -43,7 +43,11 @@
 	<div class="block-header block-header-default">
 		<div>
 			<h3 class="block-title fw-semibold mb-4">Практиканты, предложенные образовательным учреждением</h3>
-			@if ($count > 0)
+			@if ($answer->status == App\Models\AnswerStatus::DONE->value)
+				<p>Статус &laquo;{{ App\Models\AnswerStatus::getName($answer->status) }}&raquo; конечный - более никакие действия над
+					списком практикантов невозможны. Время заключать
+					договор!</p>
+			@elseif ($count > 0)
 				<div>
 					<small>
 						Вы можете утвердить всех практикантов или отказаться от всех практикантов по кнопкам ниже.<br />
@@ -94,10 +98,11 @@
 		@endif
 	</div>
 
-	<div class="modal fade" id="modal-answer" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+	<div class="modal fade" id="modal-send" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
 		aria-labelledby="modal-answer-label" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<form action="" method="post" id="form-answer" enctype="multipart/form-data">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<form action="{{ route('employers.students.send', ['answer' => $answer->getKey()]) }}" method="post" id="form-answer"
+				enctype="multipart/form-data">
 				@csrf
 				<div class="modal-content">
 					<div class="modal-header">
@@ -107,14 +112,15 @@
 					<div class="modal-body" id="answer-body">
 						<p class="mb-4">Вы можете добавить в сообщение образовательному учреждению необязательную дополнительную
 							информацию из поля
-							ниже:</p>
+							ниже.<br />Если вы отклонили каких-либо практикантов - опишите здесь причину, что поможет образовательному
+							учреждению подобрать правильную замену:</p>
 						<div class="form-floating mb-4">
 							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;"></textarea>
 							<label class="form-label" for="message">Дополнительная информация &gt;</label>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" id="answer-yes" data-bs-dismiss="modal">Уведомить образовательное
+						<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Уведомить образовательное
 							учреждение</button>
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
 					</div>
@@ -167,7 +173,9 @@
 				},
 				success: () => {
 					if (student == 0) {
-						//
+						for (let index in window.selected) {
+							window.selected[index] = status;
+						}
 					} else {
 						window.selected[student] = status;
 					}
@@ -187,8 +195,15 @@
 				ajax: '{!! route('employers.students.index.data') !!}',
 				responsive: true,
 				createdRow: function(row, data, dataIndex) {
-					if (data.status === 0)
+					if (data.status ===
+						"{{ App\Models\AnswerStudentStatus::getName(App\Models\AnswerStudentStatus::REJECTED->value) }}"
+					) {
 						row.style.color = 'red';
+					} else if (data.status ===
+						"{{ App\Models\AnswerStudentStatus::getName(App\Models\AnswerStudentStatus::INVITED->value) }}"
+					) {
+						row.style.color = 'green';
+					}
 				},
 				columns: [{
 						data: 'id',
@@ -260,7 +275,7 @@
 		}
 
 		document.getElementById('send-students').onclick = () => {
-			let answerDialog = new bootstrap.Modal(document.getElementById('modal-answer'));
+			let answerDialog = new bootstrap.Modal(document.getElementById('modal-send'));
 			answerDialog.show();
 		}
 	</script>

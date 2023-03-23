@@ -20,39 +20,44 @@
 	<div class="block-header block-header-default">
 		<div>
 			<h3 class="block-title fw-semibold mb-4">Практиканты от образовательного учреждения
-				&laquo;{{ $school->getTitle() }}&raquo;</h3>
-			<button type="button" class="btn btn-primary mt-3 mb-3" id="add-student" data-bs-toggle="modal"
-				data-bs-target="#students-list">
-				Добавить практиканта
-			</button>
-			<p>
-				<small>
-					Добавить в заявку на практику можно только учащихся образовательного учреждения
-					&laquo;{{ $school->getTitle() }}&raquo;
-				</small>
-			</p>
-			<p id="no-enabled-data" style="display: none;">Все учащиеся образовательного учреждения
-				&laquo;{{ $school->getTitle() }}&raquo; распределены</p>
+				&laquo;{{ $school->getTitle() }}&raquo; для работодателя &laquo;{{ $employer->getTitle() }}&raquo;</h3>
+			@if ($answer->status == App\Models\AnswerStatus::DONE->value)
+				<p>Статус &laquo;{{ App\Models\AnswerStatus::getName($answer->status) }}&raquo; конечный - более никакие действия над
+					списком практикантов невозможны. Время заключать
+					договор!</p>
+			@else
+				<button type="button" class="btn btn-primary mt-3 mb-3" id="add-student" data-bs-toggle="modal"
+					data-bs-target="#students-list">
+					Добавить практиканта
+				</button>
+				<p>
+					<small>
+						Добавить в заявку на практику можно только учащихся образовательного учреждения
+						&laquo;{{ $school->getTitle() }}&raquo;
+					</small>
+				</p>
+				<p id="no-enabled-data" style="display: none;">Все учащиеся образовательного учреждения
+					&laquo;{{ $school->getTitle() }}&raquo; распределены</p>
 
-			<div class="d-flex">
-				<button type="button" class="btn btn-primary mt-3 mb-3 me-4" id="send-students" disabled>
-					Уведомить работодателя
-				</button>
-				<button type="button" class="btn btn-primary mt-3 mb-3" id="fix-students" disabled>
-					Зафиксировать практикантов
-				</button>
-			</div>
-			<p>
-				<small>
-					Если количество практикантов (новых или новых + одобренных) станет равным {{ $answer->approved }}, вы сможете
-					уведомить
-					работодателя для принятия решения по персоналиям практикантов. Пока в списке практикантов остается хоть один
-					отклоненный работодателем, кнопка &laquo;Уведомить работодателя&raquo; останется недоступной.<br />
-					Если количество одобренных практикантов станет равным {{ $answer->approved }}, вы сможете окончательно зафиксировать
-					практикантов в заявке по специальности
-					&laquo;{{ $specialty->name }}&raquo; по работодателю &laquo;{{ $employer->getTitle() }}&raquo;.
-				</small>
-			</p>
+				<div class="d-flex">
+					<button type="button" class="btn btn-primary mt-3 mb-3 me-4" id="send-students" disabled>
+						Уведомить работодателя
+					</button>
+					<button type="button" class="btn btn-primary mt-3 mb-3" id="fix-students" disabled>
+						Зафиксировать практикантов
+					</button>
+				</div>
+				<p>
+					<small>
+						Пока в списке практикантов остается хоть один
+						отклоненный работодателем, кнопка &laquo;Уведомить работодателя&raquo; останется недоступной.<br />
+						Если все практиканты в списке станут одобренными (не более {{ $answer->approved }}), вы сможете окончательно
+						зафиксировать
+						практикантов в заявке по специальности
+						&laquo;{{ $specialty->name }}&raquo; по работодателю &laquo;{{ $employer->getTitle() }}&raquo;.
+					</small>
+				</p>
+			@endif
 		</div>
 	</div>
 	<div class="block-content p-4">
@@ -130,32 +135,50 @@
 				});
 				//select.val('').trigger('change');
 				document.getElementById('no-enabled-data').style.display = 'none';
-				// Подсчитать количества
+			}
 
-				let countNew = 0;
-				let countInvited = 0;
-				let countRejected = 0;
-				let countApproved = 0;
-				for (let index in window.selected)
-					switch (window.selected[index].status) {
-						case {{ App\Models\AnswerStudentStatus::NEW->value }}:
-							countNew++;
-							break;
-						case {{ App\Models\AnswerStudentStatus::INVITED->value }}:
-							countInvited++;
-							break;
-						case {{ App\Models\AnswerStudentStatus::REJECTED->value }}:
-							countRejected++;
-							break;
-						case {{ App\Models\AnswerStudentStatus::APPROVED->value }}:
-							countApproved++;
-							break;
-					}
-				const goal = {{ $answer->approved }};
-				document.getElementById('send-students').disabled =
-					(countNew != goal) && (countNew + countInvited != goal) &&
-					(countRejected == 0);
-				document.getElementById('fix-students').disabled = countApproved != goal;
+			// Подсчитать количества
+			let countAll = 0;
+			let countNew = 0;
+			let countInvited = 0;
+			let countRejected = 0;
+			let countApproved = 0;
+			for (let index in window.selected) {
+				countAll++;
+				switch (window.selected[index].status) {
+					case {{ App\Models\AnswerStudentStatus::NEW->value }}:
+						countNew++;
+						break;
+					case {{ App\Models\AnswerStudentStatus::INVITED->value }}:
+						countInvited++;
+						break;
+					case {{ App\Models\AnswerStudentStatus::REJECTED->value }}:
+						countRejected++;
+						break;
+					case {{ App\Models\AnswerStudentStatus::APPROVED->value }}:
+						countApproved++;
+						break;
+				}
+			}
+			const goal = {{ $answer->approved }};
+			if (
+				(countRejected != 0) ||
+				(countNew + countInvited + countRejected + countApproved > goal) ||
+				(countNew + countInvited + countRejected + countApproved == 0)
+			) {
+				document.getElementById('send-students').disabled = true;
+				document.getElementById('fix-students').disabled = true;
+			} else {
+				if (
+					(countApproved == countAll) ||
+					(countNew = countAll)
+				) {
+					document.getElementById('send-students').disabled = false;
+				}
+
+				if (countApproved == countAll) {
+					document.getElementById('fix-students').disabled = false;
+				}
 			}
 		}
 
@@ -195,8 +218,11 @@
 				ajax: '{!! route('planning.students.index.data') !!}',
 				responsive: true,
 				createdRow: function(row, data, dataIndex) {
-					if (data.status === 0)
+					if (data.status ===
+						"{{ App\Models\AnswerStudentStatus::getName(App\Models\AnswerStudentStatus::REJECTED->value) }}"
+					) {
 						row.style.color = 'red';
+					}
 				},
 				columns: [{
 						data: 'id',
@@ -296,6 +322,20 @@
 					success: () => {
 						reloadSelect();
 						window.datatable.ajax.reload();
+					}
+				});
+			});
+
+			$('#fix-students').on('click', (event) => {
+				$.ajax({
+					method: 'GET',
+					url: "{{ route('planning.students.fix', ['answer' => $answer->getKey()]) }}",
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: () => {
+						// reloadSelect();
+						window.location.reload();
 					}
 				});
 			});

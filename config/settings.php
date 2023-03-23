@@ -20,6 +20,8 @@ use App\Notifications\NewStudent;
 use App\Notifications\NewSupport;
 use App\Notifications\NewTeacher;
 use App\Notifications\NewUser;
+use App\Notifications\orders\FixNames;
+use App\Notifications\orders\NamesEmployer2School;
 use App\Notifications\orders\NamesSchool2Employer;
 use App\Notifications\orders\New2Sent;
 use App\Notifications\orders\Sent2Accept;
@@ -69,6 +71,8 @@ return [
 			Sent2Reject::class => 'Работодатель отказался',
 			Sent2Accept::class => 'Работодатель согласился',
 			NamesSchool2Employer::class => 'ОУ предложило практикантов',
+			NamesEmployer2School::class => 'Работодатель ответил по практикантам',
+			FixNames::class => 'ОУ зафиксировало практикантов'
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\planning;
 
+use App\Events\orders\NamesFixedTaskEvent;
 use App\Events\orders\NamesInvitedTaskEvent;
 use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderEmployerStatus;
 use App\Models\School;
 use App\Models\Student;
+use App\Notifications\orders\FixNames;
 use App\Notifications\orders\NamesSchool2Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,18 +22,20 @@ use Yajra\DataTables\DataTables;
 class StudentController extends Controller {
 	public function getData() {
 		$context = session('context');
-		$query = Answer::find($context['answer'])->students;
+		$answer = Answer::find($context['answer']);
+		$query = $answer->students;
 
 		return DataTables::of($query)
 			->editColumn('fio', fn($student) => $student->getTitle())
 			->editColumn('birthdate', fn($student) => $student->birthdate->format('d.m.Y'))
 			->addColumn('status', fn($student) => AnswerStudentStatus::getName($student->pivot->status))
-			->addColumn('action', function ($student) {
+			->addColumn('action', function ($student) use ($answer) {
 				$showRoute = route('planning.students.show', ['student' => $student->getKey()]);
 				$items = [];
 
 				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'item', 'click' => "clickDelete({$student->getKey()})", 'icon' => 'fas fa-ban', 'title' => 'Удаление практиканта'];
+				if ($answer->status != AnswerStatus::DONE->value)
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$student->getKey()})", 'icon' => 'fas fa-ban', 'title' => 'Удаление практиканта'];
 
 				return createDropdown('Действия', $items);
 			})
@@ -115,14 +119,30 @@ EOS,
 		$_answer->update([
 			'status' => AnswerStatus::NAMES->value
 		]);
-		$_answer->save();
+
+		foreach ($_answer->students as $student) {
+			if ($student->pivot->status == AnswerStudentStatus::NEW ->value)
+				$_answer->students()->updateExistingPivot($student, ['status' => AnswerStudentStatus::INVITED->value]);
+		}
+
 		$_answer->employer->user->notify(new NamesSchool2Employer($_answer));
 		event(new NamesInvitedTaskEvent($_answer));
 
-		$ids = $_answer->students->pluck('id')->toArray();
-		$_answer->students()->syncWithPivotValues($ids, ['status' => AnswerStudentStatus::INVITED->value]);
-
 		event(new ToastEvent('success', '', 'Вы уведомили работодателя о предложении практикантов'));
 		return true;
+	}
+
+	public function fix(int $answer) {
+		$_answer = Answer::find($answer);
+
+		$_answer->update([
+			'status' => AnswerStatus::DONE->value
+		]);
+
+		$_answer->employer->user->notify(new FixNames($_answer));
+		event(new NamesFixedTaskEvent($_answer));
+
+		event(new ToastEvent('success', '', 'Заявка с практикантами полностью зафиксирована'));
+		return redirect()->route('planning.students.index');
 	}
 }

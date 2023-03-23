@@ -8,6 +8,8 @@ use App\Events\Asked2RejectedTaskEvent;
 use App\Events\InviteTraineeTaskEvent;
 use App\Events\New2AskedTaskEvent;
 use App\Events\orders\NamesInvitedTaskEvent;
+use App\Events\orders\NamesBack2SchoolTaskEvent;
+use App\Events\orders\NamesFixedTaskEvent;
 use App\Events\orders\New2SentTaskEvent;
 use App\Events\orders\Sent2AnsweredTaskEvent;
 use App\Events\orders\Sent2RejectedTaskEvent;
@@ -68,6 +70,12 @@ class EventServiceProvider extends ServiceProvider {
 			TaskRegisterListener::class
 		],
 		NamesInvitedTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		NamesBack2SchoolTaskEvent::class => [
+			TaskRegisterListener::class
+		],
+		NamesFixedTaskEvent::class => [
 			TaskRegisterListener::class
 		],
 			// Фильтрация уведомлений перед отправкой
