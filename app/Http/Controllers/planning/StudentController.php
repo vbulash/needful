@@ -133,14 +133,47 @@ EOS,
 	}
 
 	public function fix(int $answer) {
+		$context = session('context');
+		$order = $context['order'];
 		$_answer = Answer::find($answer);
 
+		// TODO закрыто на время отладки
 		$_answer->update([
 			'status' => AnswerStatus::DONE->value
 		]);
 
 		$_answer->employer->user->notify(new FixNames($_answer));
 		event(new NamesFixedTaskEvent($_answer));
+
+		foreach ($_answer->students as $done_student) {
+			$query = DB::select(<<<EOS
+SELECT
+	a.id AS aid,
+	s.id AS sid
+FROM
+	`students` AS s,
+	`answers` AS a,
+	`answers_students` AS ans,
+	`orders_specialties` AS os
+WHERE
+	s.id = :student
+	AND ans.`answer_id` = a.`id`
+	AND ans.`student_id` = s.`id`
+	AND a.`id` <> :answer
+	AND os.`id` = a.`orders_specialties_id`
+	AND os.`order_id` = :order
+EOS, [
+					'student' => $done_student->getKey(),
+					'answer' => $answer,
+					'order' => $order
+				]);
+			foreach ($query as $temp_answer) {
+				$_temp_answer = Answer::find($temp_answer->aid);
+				$_temp_answer->students()->updateExistingPivot($temp_answer->sid,
+					['status' => AnswerStudentStatus::RESERVED->value]);
+			}
+
+		}
 
 		event(new ToastEvent('success', '', 'Заявка с практикантами полностью зафиксирована'));
 		return redirect()->route('planning.students.index');
