@@ -9,19 +9,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NamesSchool2Employer extends Notification {
+class ReservedSchool2Employer extends Notification {
 	use Queueable;
 	protected Answer $answer;
-	protected ?string $message;
 
 	/**
 	 * Create a new notification instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(Answer $answer, ?string $message) {
+	public function __construct(Answer $answer) {
 		$this->answer = $answer;
-		$this->message = $message;
 	}
 
 	/**
@@ -45,18 +43,14 @@ class NamesSchool2Employer extends Notification {
 		$order = $this->answer->orderSpecialty->order;
 		$employer = $this->answer->employer;
 		$school = $order->school;
-		$subject = 'Образовательное учреждение предложило практикантов';
+		$subject = 'Некоторые студенты забронированы для прохождения другой практики';
 
 		$lines = [];
 		$lines[] = "Образовательное учреждение \"{$school->getTitle()}\" в рамках подготовки практики \"{$order->getTitle()}\":";
 		$lines = array_merge($lines, $this->getOrder($order));
-		$lines[] = "предложило следующих практикантов (ФИО / специальность / статус практиканта):";
+		$lines[] = "сообщает с извинениями, что некоторые планируемые практиканты уже выбраны для прохождения другой практики. На текущий момент список практикантов выглядит следующим образом (ФИО / специальность / статус практиканта):";
 		$lines = array_merge($lines, $this->getOrderContent());
-
-		if (isset($this->message)) {
-			$lines[] = "Образовательное учреждение дополнительно оставило вам сообщение:";
-			$lines[] = "- *{$this->message}*";
-		}
+		$lines[] = "Мы свяжемся с вами для обсуждения других кандидатур практикантов вместо зарезервированных по другой заявке.";
 
 		$message = (new MailMessage)
 			->subject($subject)

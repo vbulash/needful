@@ -50,7 +50,8 @@
 				<p>
 					<small>
 						Пока в списке практикантов остается хоть один
-						отклоненный работодателем, кнопка &laquo;Уведомить работодателя&raquo; останется недоступной.<br />
+						отклоненный работодателем или зарезервированный по другой заявке, кнопка &laquo;Уведомить работодателя&raquo;
+						останется недоступной.<br />
 						Если все практиканты в списке станут одобренными (не более {{ $answer->approved }}), вы сможете окончательно
 						зафиксировать
 						практикантов в заявке по специальности
@@ -98,6 +99,34 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="modal-send" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+		aria-labelledby="modal-answer-label" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<form action="" method="post" id="form-answer" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="answer-title">Образовательное учреждение приняло решение по всем практикантам</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="answer-body">
+						<p class="mb-4">Вы можете добавить в сообщение работодателю необязательную дополнительную
+							информацию из поля
+							ниже:</p>
+						<div class="form-floating mb-4">
+							<textarea class="form-control" id="message" name="message" placeholder="Сообщение" style="height: 200px;"></textarea>
+							<label class="form-label" for="message">Дополнительная информация &gt;</label>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Уведомить работодателя</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 @endsection
 
 {{-- @if ($count > 0) --}}
@@ -108,12 +137,18 @@
 @push('js_after')
 	<script src="{{ asset('js/datatables.js') }}"></script>
 	<script>
+		const addStudent = document.getElementById('add-student');
+		const noData = document.getElementById('no-enabled-data');
+
 		function reloadSelect() {
 			if (Object.keys(window.enabled).length === 0) {
-				document.getElementById('add-student').style.display = 'none';
-				document.getElementById('no-enabled-data').style.display = 'block';
+				if (addStudent)
+					addStudent.style.display = 'none';
+				if (noData)
+					noData.style.display = 'block';
 			} else {
-				document.getElementById('add-student').style.display = 'block';
+				if (addStudent)
+					addStudent.style.display = 'block';
 				let select = $('#students');
 
 				const data = [];
@@ -134,7 +169,8 @@
 					data: data,
 				});
 				//select.val('').trigger('change');
-				document.getElementById('no-enabled-data').style.display = 'none';
+				if (noData)
+					noData.style.display = 'none';
 			}
 
 			// Подсчитать количества
@@ -143,6 +179,7 @@
 			let countInvited = 0;
 			let countRejected = 0;
 			let countApproved = 0;
+			let countReserved = 0;
 			for (let index in window.selected) {
 				countAll++;
 				switch (window.selected[index].status) {
@@ -158,11 +195,15 @@
 					case {{ App\Models\AnswerStudentStatus::APPROVED->value }}:
 						countApproved++;
 						break;
+					case {{ App\Models\AnswerStudentStatus::RESERVED->value }}:
+						countReserved++;
+						break;
 				}
 			}
 			const goal = {{ $answer->approved }};
 			if (
 				(countRejected != 0) ||
+				(countReserved != 0) ||
 				(countNew + countInvited + countRejected + countApproved > goal) ||
 				(countNew + countInvited + countRejected + countApproved == 0)
 			) {
@@ -313,9 +354,18 @@
 			});
 
 			$('#send-students').on('click', (event) => {
+				let answerDialog = new bootstrap.Modal(document.getElementById('modal-send'));
+				answerDialog.show();
+			});
+
+			$('#form-answer').submit(event => {
+				event.preventDefault();
 				$.ajax({
 					method: 'POST',
 					url: "{{ route('planning.students.send', ['answer' => $answer->getKey()]) }}",
+					data: {
+						message: $('#message').val(),
+					},
 					headers: {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},

@@ -101,8 +101,7 @@
 	<div class="modal fade" id="modal-send" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
 		aria-labelledby="modal-answer-label" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
-			<form action="{{ route('employers.students.send', ['answer' => $answer->getKey()]) }}" method="post" id="form-answer"
-				enctype="multipart/form-data">
+			<form action="" method="post" id="form-answer" enctype="multipart/form-data">
 				@csrf
 				<div class="modal-content">
 					<div class="modal-header">
@@ -278,6 +277,23 @@
 			let answerDialog = new bootstrap.Modal(document.getElementById('modal-send'));
 			answerDialog.show();
 		}
+
+		$('#form-answer').submit(event => {
+			event.preventDefault();
+			$.ajax({
+				method: 'POST',
+				url: "{{ route('employers.students.send', ['answer' => $answer->getKey()]) }}",
+				data: {
+					message: $('#message').val(),
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: () => {
+					window.location.reload();
+				}
+			});
+		});
 	</script>
 @endpush
 {{-- @endif --}}

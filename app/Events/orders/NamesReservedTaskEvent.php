@@ -8,30 +8,22 @@ use App\Models\AnswerStudentStatus;
 use App\Models\Order;
 use App\Models\OrderEmployer;
 
-class NamesInvitedTaskEvent extends TaskEvent {
-	public function __construct(Answer $answer, ?string $message) {
+class NamesReservedTaskEvent extends TaskEvent {
+	public function __construct(Answer $answer) {
 		$order = $answer->orderSpecialty->order;
 		$school = $order->school;
 		$employer = $answer->employer;
 
 		$lines = [];
-		$lines[] = "Образовательное учреждение \"{$school->getTitle()}\" в рамках подготовки практики:";
+		$lines[] = "Образовательное учреждение \"{$school->getTitle()}\" в рамках подготовки практики \"{$order->getTitle()}\":";
 		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrder($order));
 		$lines[] = "</ul>";
-		$lines[] = "предложило следующих практикантов (ФИО / специальность / статус практиканта):";
+		$lines[] = "сообщает с извинениями, что некоторые планируемые практиканты уже выбраны для прохождения другой практики.<br/>На текущий момент список практикантов выглядит следующим образом (ФИО / специальность / статус практиканта):";
 		$lines[] = "<ul>";
 		$lines = array_merge($lines, $this->getOrderContent($answer));
 		$lines[] = "</ul>";
-
-		if (isset($message)) {
-			$lines[] = "<p>Образовательное учреждение оставило вам сообщение:</p>";
-			$lines[] = "<ul>";
-			$lines[] = "<li>{$message}</li>";
-			$lines[] = "</ul>";
-		}
-
-		$lines[] = "<p>По ссылке внизу данного сообщения вы сможете либо полностью одобрить предложение образовательного учреждения, либо работать с практикантами индиввидуально - принять или отклонить.</p>";
+		$lines[] = "<p>Мы свяжемся с вами для обсуждения других кандидатур практикантов вместо зарезервированных по другой заявке.</p>";
 
 
 		$context = [
@@ -41,7 +33,7 @@ class NamesInvitedTaskEvent extends TaskEvent {
 		];
 
 		parent::__construct(
-		title: 'Образовательное учреждение предложило практикантов',
+		title: 'Некоторые студенты забронированы для прохождения другой практики',
 		description: implode("\n", $lines),
 		route: route('employers.students.index'),
 		from: auth()->user(),
@@ -76,12 +68,11 @@ class NamesInvitedTaskEvent extends TaskEvent {
 			$fields[] = [
 				'name' => $student->getTitle(),
 				'specialty' => $specialty->name,
-				'status' => AnswerStudentStatus::getName($student->pivot->status)
 			];
 		}
 
 		foreach ($fields as $field) {
-			$lines[] = sprintf("<li><strong>%s</strong> / <em>%s</em> / <em>%s<em></li>", $field['name'], $field['specialty'], $field['status']);
+			$lines[] = sprintf("<li><strong>%s</strong> / <em>%s</em></li>", $field['name'], $field['specialty']);
 		}
 		return $lines;
 	}

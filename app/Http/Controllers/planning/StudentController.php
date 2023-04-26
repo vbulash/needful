@@ -15,6 +15,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Notifications\orders\FixNames;
 use App\Notifications\orders\NamesSchool2Employer;
+use App\Notifications\orders\ReservedSchool2Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -113,7 +114,8 @@ EOS,
 		return true;
 	}
 
-	public function send(int $answer) {
+	public function send(Request $request, int $answer) {
+		$message = $request->message;
 		$_answer = Answer::find($answer);
 
 		$_answer->update([
@@ -125,8 +127,8 @@ EOS,
 				$_answer->students()->updateExistingPivot($student, ['status' => AnswerStudentStatus::INVITED->value]);
 		}
 
-		$_answer->employer->user->notify(new NamesSchool2Employer($_answer));
-		event(new NamesInvitedTaskEvent($_answer));
+		$_answer->employer->user->notify(new NamesSchool2Employer($_answer, $message));
+		event(new NamesInvitedTaskEvent($_answer, $message));
 
 		event(new ToastEvent('success', '', 'Вы уведомили работодателя о предложении практикантов'));
 		return true;
@@ -136,6 +138,7 @@ EOS,
 		$context = session('context');
 		$order = $context['order'];
 		$_answer = Answer::find($answer);
+		$_employer = $_answer->employer;
 
 		// TODO закрыто на время отладки
 		$_answer->update([
@@ -169,13 +172,18 @@ EOS, [
 				]);
 			foreach ($query as $temp_answer) {
 				$_temp_answer = Answer::find($temp_answer->aid);
-				$_temp_answer->students()->updateExistingPivot($temp_answer->sid,
-					['status' => AnswerStudentStatus::RESERVED->value]);
+				// Переводить студентов в резерв можно при условиях ...
+				if ($_temp_answer->employer->getKey() != $_employer->getKey() && // ... это другой работодатель
+					$_temp_answer->status != AnswerStatus::DONE->value // ... текущая заявка еще не согласована финально
+				) {
+					$_temp_answer->students()->updateExistingPivot($temp_answer->sid,
+						['status' => AnswerStudentStatus::RESERVED->value]);
+					$_temp_answer->employer->user->notify(new ReservedSchool2Employer($_temp_answer));
+				}
 			}
 
 		}
 
-		event(new ToastEvent('success', '', 'Заявка с практикантами полностью зафиксирована'));
-		return redirect()->route('planning.students.index');
+		return redirect()->route('planning.students.index')->with('success', 'Заявка с практикантами полностью зафиксирована');
 	}
 }
