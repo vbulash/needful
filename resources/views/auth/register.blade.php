@@ -11,8 +11,7 @@
 					<div class="hero-static col-sm-8 col-md-6 col-xl-4 d-flex align-items-center p-2 px-sm-0">
 						<!-- Sign In Block -->
 						<div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
-							<div
-								class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
+							<div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
 								<!-- Header -->
 								<div class="mb-2 text-center">
 									<a class="link-fx fw-bold fs-1" href="javascript:void(0)">
@@ -23,54 +22,47 @@
 								</div>
 								<!-- END Header -->
 
-								<form method="POST" action="{{ route('register') }}">
+								<form method="POST" action="{{ route('register') }}" autocomplete="off">
 									@csrf
 									<div class="form-floating mb-4">
 										<input type="text" class="form-control" id="signup-username" name="name"
-											   placeholder="Фамилия, имя и отчество">
+											placeholder="Фамилия, имя и отчество" autocomplete="off">
 										<label for="name">Фамилия, имя и отчество</label>
 									</div>
 									<div class="form-floating mb-4">
-										<input type="email" class="form-control" id="signup-email" name="email"
-											   placeholder="Электронная почта">
+										<input type="email" class="form-control" id="signup-email" name="email" placeholder="Электронная почта"
+											autocomplete="off">
 										<label for="email">Электронная почта</label>
 									</div>
 									<div class="form-floating mb-4">
-										<input type="password" class="form-control" id="signup-password" name="password"
-											   placeholder="Пароль">
+										<input type="password" class="form-control" id="signup-password" name="password" placeholder="Пароль">
 										<label for="password">Пароль</label>
 									</div>
 									<div class="form-floating mb-4">
 										<input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-											   placeholder="Подтверждение пароля">
+											placeholder="Подтверждение пароля">
 										<label for="password_confirmation">Подтверждение пароля</label>
 									</div>
 
 									<div class="form-floating mb-4">
-										<select name="role" id="role"
-												class="form-control">
-											@foreach($roles as $role)
-												<option value="{{ $role }}"
-														@if ($loop->first)
-															selected
-														@endif
-												>{!! $role !!}</option>
+										<select name="role" id="role" class="form-control">
+											@foreach ($roles as $role)
+												<option value="{{ $role }}" @if ($loop->first) selected @endif>{!! $role !!}
+												</option>
 											@endforeach
 										</select>
 										<label for="password_confirmation">Роль нового пользователя</label>
 									</div>
 
-									<div
-										class="d-sm-flex justify-content-sm-between align-items-sm-center mb-4 bg-body rounded py-2 px-3">
+									<div class="d-sm-flex justify-content-sm-between align-items-sm-center mb-4 bg-body rounded py-2 px-3">
 										<div class="form-check">
-											<input type="checkbox" class="signup form-check-input" id="terms"
-												   name="terms">
+											<input type="checkbox" class="signup form-check-input" id="terms" name="terms">
 											<label class="form-check-label" for="terms">Я соглашаюсь с Политикой
 												конфиденциальности</label>
 										</div>
 										<div class="fw-semibold fs-sm py-1">
-											<a class="fw-semibold fs-sm" href="#" data-bs-toggle="modal"
-											   data-bs-target="#modal-terms">Политика конфиденциальности</a>
+											<a class="fw-semibold fs-sm" href="#" data-bs-toggle="modal" data-bs-target="#modal-terms">Политика
+												конфиденциальности</a>
 										</div>
 									</div>
 									<div class="text-center mb-4">
@@ -87,15 +79,14 @@
 
 				<!-- Terms Modal -->
 				<div class="modal fade" id="modal-terms" tabindex="-1" role="dialog" aria-labelledby="modal-terms"
-					 aria-hidden="true">
+					aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
 							<div class="block block-themed block-transparent mb-0">
 								<div class="block-header bg-success">
 									<h3 class="block-title">Политика конфиденциальности</h3>
 									<div class="block-options">
-										<button type="button" class="btn-block-option" data-bs-dismiss="modal"
-												aria-label="Close">
+										<button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
 											<i class="fa fa-fw fa-times"></i>
 										</button>
 									</div>
@@ -139,9 +130,9 @@
 
 @push('js_after')
 	<script>
-			document.getElementById('terms').addEventListener('change', event => {
-				document.getElementById('submit_btn').disabled = !event.target.checked;
-			}, false);
+		document.getElementById('terms').addEventListener('change', event => {
+			document.getElementById('submit_btn').disabled = !event.target.checked;
+		}, false);
 
 		document.addEventListener("DOMContentLoaded", () => {
 			document.getElementById('terms').dispatchEvent(new Event('change'));

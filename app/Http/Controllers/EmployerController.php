@@ -190,7 +190,10 @@ class EmployerController extends Controller {
 		$employer->save();
 		$name = $employer->name;
 
-		auth()->user()->allow($employer);
+		if ($request->has('user_id')) {
+			$user = User::findOrFail($request->user_id);
+			$user->allow($employer);
+		}
 
 		$employer->user->notify(new NewEmployer($employer));
 
@@ -255,12 +258,18 @@ class EmployerController extends Controller {
 	 */
 	public function update(StoreEmployerRequest $request, int $id): RedirectResponse {
 		$employer = Employer::findOrFail($id);
+		$user = $employer->user;
 		$name = $employer->name;
 		$oldStatus = $employer->status;
 		$employer->update($request->all());
 		$newStatus = $employer->status;
 
-		auth()->user()->allow($employer);
+		if ($request->has('user_id')) {
+			if ($user->getKey() != $request->user_id)
+				$user->disallow($employer);
+			$user = User::findOrFail($request->user_id);
+			$user->allow($employer);
+		}
 
 		$employer->user->notify(new UpdateEmployer($employer));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)

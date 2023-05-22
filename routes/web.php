@@ -202,7 +202,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 	Route::get('/e2s.start_internship.step5.create', 'StartInternship\Step5Controller@create')->name('e2s.start_internship.step5.create');
 });
 
-// Заявки на практику
+// Мастер: Заявки на практику
 Route::group(['namespace' => 'App\Http\Controllers\orders', 'middleware' => ['auth']], function () {
 	Route::get('/orders.steps/play', 'StepController@play')->name('orders.steps.play');
 	Route::get('/orders.steps/back', 'StepController@back')->name('orders.steps.back');
@@ -210,6 +210,15 @@ Route::group(['namespace' => 'App\Http\Controllers\orders', 'middleware' => ['au
 	Route::get('/orders.steps/close', 'StepController@close')->name('orders.steps.close');
 	Route::get('/orders.steps/finish', 'StepController@finish')->name('orders.steps.finish');
 	Route::get('/orders.steps.data', 'StepController@getData')->name('orders.steps.index.data');
+});
+// Мастер: Договора на практику
+Route::group(['namespace' => 'App\Http\Controllers\contracts', 'middleware' => ['auth']], function () {
+	Route::get('/contracts.steps/play', 'StepController@play')->name('contracts.steps.play');
+	Route::get('/contracts.steps/back', 'StepController@back')->name('contracts.steps.back');
+	Route::get('/contracts.steps/next', 'StepController@next')->name('contracts.steps.next');
+	Route::get('/contracts.steps/close', 'StepController@close')->name('contracts.steps.close');
+	Route::get('/contracts.steps/finish', 'StepController@finish')->name('contracts.steps.finish');
+	Route::get('/contracts.steps.data', 'StepController@getData')->name('contracts.steps.index.data');
 });
 
 require __DIR__ . '/auth.php';

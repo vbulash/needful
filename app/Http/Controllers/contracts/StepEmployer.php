@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\orders;
+namespace App\Http\Controllers\contracts;
 
 use App\Models\Employer;
 use App\Models\School;
 use Illuminate\Http\Request;
 
-class StepEmployers implements Step {
+class StepEmployer implements Step {
 	public function isBrowse(): bool {
 		return false;
 	}

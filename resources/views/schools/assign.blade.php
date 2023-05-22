@@ -19,9 +19,8 @@
 				<option selected disabled>Выберите пользователя</option>
 				@foreach ($users as $user)
 					<option value="{{ $user['id'] }}"
-						@if (isset($school) && $school->user->getKey() == $user['id']) selected
-						@elseif(auth()->user()->getKey() == $user['id'])
-						selected @endif>
+						@if (isset($school)) @if ($school->user->getKey() == $user['id']) selected @endif
+					@elseif(auth()->user()->getKey() == $user['id']) selected @endif>
 						{{ $user['name'] }}
 					</option>
 				@endforeach

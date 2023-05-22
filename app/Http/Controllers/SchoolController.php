@@ -124,7 +124,10 @@ class SchoolController extends Controller {
 		$school->save();
 		$name = $school->name;
 
-		auth()->user()->allow($school);
+		if ($request->has('user_id')) {
+			$user = User::findOrFail($request->user_id);
+			$user->allow($school);
+		}
 
 		$school->user->notify(new NewSchool($school));
 
@@ -191,12 +194,18 @@ class SchoolController extends Controller {
 	 */
 	public function update(StoreSchoolRequest $request, $id): RedirectResponse {
 		$school = School::findOrFail($id);
+		$user = $school->user;
 		$oldStatus = $school->status;
 		$name = $school->name;
 		$school->update($request->all());
 		$newStatus = $school->status;
 
-		auth()->user()->allow($school);
+		if ($request->has('user_id')) {
+			if ($user->getKey() != $request->user_id)
+				$user->disallow($school);
+			$user = User::findOrFail($request->user_id);
+			$user->allow($school);
+		}
 
 		$school->user->notify(new UpdateSchool($school));
 		if ($oldStatus != $newStatus && $newStatus == ActiveStatus::ACTIVE->value)

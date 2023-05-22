@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\orders;
+namespace App\Http\Controllers\contracts;
 
 use App\Models\ActiveStatus;
 use App\Models\School;
@@ -14,13 +14,15 @@ class StepSchool implements Step {
 	}
 
 	public function getBrowseData(Request $request) {
-		$query = School::all()->where('status', ActiveStatus::ACTIVE->value);
+		$query = School::all()
+			->where('status', ActiveStatus::ACTIVE->value)
+			->sortBy('short');
 
 		return DataTables::of($query)
 			->addColumn('short', fn($school) => $school->short)
 			->addColumn('type', fn($school) => SchoolType::getName($school->type))
 			->addColumn('action', function ($school) use ($request) {
-				$selectRoute = route('orders.steps.next', [
+				$selectRoute = route('contracts.steps.next', [
 					'school' => $school->getKey()
 				]);
 				$actions =
@@ -55,7 +57,7 @@ class StepSchool implements Step {
 		$heap[$this->getContext()] = '';
 		session()->put('heap', $heap);
 
-		return view('orders.steps.school', compact('mode', 'buttons', 'count'));
+		return view('contracts.steps.school', compact('mode', 'buttons', 'count'));
 	}
 
 	public function store(Request $request): bool {

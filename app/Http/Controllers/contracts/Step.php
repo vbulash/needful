@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\orders;
+namespace App\Http\Controllers\contracts;
 
 use App\Models\Titleable;
 use Illuminate\Http\Request;
