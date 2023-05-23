@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\contracts;
 
+use App\Models\Employer;
 use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -35,23 +36,16 @@ class StepFinal implements Step {
 		$total = [];
 		$temp = School::findOrFail($heap['school']);
 		$total['school'] = $temp->getTitle();
+		$temp = Employer::findOrFail($heap['employer']);
+		$total['employer'] = $temp->getTitle();
 		//
-		$total['name'] = $heap['name'];
-		$total['start'] = $heap['start'];
-		$total['end'] = $heap['end'];
-		$total['place'] = $heap['place'];
-		$total['description'] = $heap['description'];
-		//
-		$temp = [];
-		foreach ($heap['specialties'] as $item)
-			$temp[] = sprintf("%s (%d)", $item->text, $item->quantity);
-		$total['specialties'] = implode(', ', $temp);
-		//
-		$temp = []; foreach ($heap['employers'] as $item)
-			$temp[] = $item->text;
-		$total['employers'] = implode(', ', $temp);
+		$total['number'] = $heap['number'];
+		$total['sealed'] = $heap['sealed']->format('d.m.Y');
+		$total['start'] = $heap['start']->format('d.m.Y');
+		$total['finish'] = $heap['finish']->format('d.m.Y');
+		$total['scan'] = isset($heap['scan']) ? 'Да' : 'Нет';
 
-		return view('orders.steps.final', compact('mode', 'buttons', 'total'));
+		return view('contracts.steps.final', compact('mode', 'buttons', 'total'));
 	}
 
 	public function store(Request $request): bool {

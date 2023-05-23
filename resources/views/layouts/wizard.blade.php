@@ -60,7 +60,9 @@
 					@switch($field['type'])
 						@case('text')
 						@case('email')
+
 						@case('number')
+						@case('file')
 							<div class="col-sm-5">
 								<input type="{{ $field['type'] }}" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
 									@if ($field['type'] == 'number' && isset($field['min'])) min="{{ max(0, $field['min']) }}" @endif autocomplete="off"
@@ -143,7 +145,7 @@
 											@elseif ($key == $field['value'])
 												checked
 											@endif
-											@if ($mode == config('global.show')) disabled @endif
+										@if ($mode == config('global.show')) disabled @endif
 										value="{{ $key }}"
 										>
 										<label class="btn btn-outline-primary" for="{{ $field['name'] . $item++ }}">{{ $value }}</label>

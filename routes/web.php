@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\contracts\StepController as ContractSteps;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\orders\StepController as OrderSteps;
 use App\Http\Controllers\planning\OrderController as PlanningOrderController;
 use App\Http\Controllers\planning\AnswerController as PlanningAnswerController;
 use App\Http\Controllers\planning\StudentController as PlanningStudentController;
@@ -133,6 +136,12 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/orders.employers.data/{order}', 'OrderEmployerController@getData')->name('order.employers.index.data');
 	Route::post('/orders.employers.mail', 'OrderEmployerController@mail')->name('order.employers.mail');
 
+	// Договора на практику
+	Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
+	Route::get('/contracts.data', [ContractController::class, 'getData'])->name('contracts.index.data');
+	Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+	Route::delete('/contracts', [ContractController::class, 'destroy'])->name('contracts.destroy');
+
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');
 	Route::get('/teachers.data', 'TeacherController@getData')->name('teachers.index.data');
@@ -204,21 +213,21 @@ Route::group(['namespace' => 'App\Http\Controllers\Services\E2S', 'middleware' =
 
 // Мастер: Заявки на практику
 Route::group(['namespace' => 'App\Http\Controllers\orders', 'middleware' => ['auth']], function () {
-	Route::get('/orders.steps/play', 'StepController@play')->name('orders.steps.play');
-	Route::get('/orders.steps/back', 'StepController@back')->name('orders.steps.back');
-	Route::get('/orders.steps/next', 'StepController@next')->name('orders.steps.next');
-	Route::get('/orders.steps/close', 'StepController@close')->name('orders.steps.close');
-	Route::get('/orders.steps/finish', 'StepController@finish')->name('orders.steps.finish');
-	Route::get('/orders.steps.data', 'StepController@getData')->name('orders.steps.index.data');
+	Route::get('/orders.steps/play', [OrderSteps::class, 'play'])->name('orders.steps.play');
+	Route::get('/orders.steps/back', [OrderSteps::class, 'back'])->name('orders.steps.back');
+	Route::get('/orders.steps/next', [OrderSteps::class, 'next'])->name('orders.steps.next');
+	Route::get('/orders.steps/close', [OrderSteps::class, 'close'])->name('orders.steps.close');
+	Route::get('/orders.steps/finish', [OrderSteps::class, 'finish'])->name('orders.steps.finish');
+	Route::get('/orders.steps.data', [OrderSteps::class, 'getData'])->name('orders.steps.index.data');
 });
 // Мастер: Договора на практику
 Route::group(['namespace' => 'App\Http\Controllers\contracts', 'middleware' => ['auth']], function () {
-	Route::get('/contracts.steps/play', 'StepController@play')->name('contracts.steps.play');
-	Route::get('/contracts.steps/back', 'StepController@back')->name('contracts.steps.back');
-	Route::get('/contracts.steps/next', 'StepController@next')->name('contracts.steps.next');
-	Route::get('/contracts.steps/close', 'StepController@close')->name('contracts.steps.close');
-	Route::get('/contracts.steps/finish', 'StepController@finish')->name('contracts.steps.finish');
-	Route::get('/contracts.steps.data', 'StepController@getData')->name('contracts.steps.index.data');
+	Route::get('/contracts.steps/play', [ContractSteps::class, 'play'])->name('contracts.steps.play');
+	Route::get('/contracts.steps/back', [ContractSteps::class, 'back'])->name('contracts.steps.back');
+	Route::get('/contracts.steps/next', [ContractSteps::class, 'next'])->name('contracts.steps.next');
+	Route::get('/contracts.steps/close', [ContractSteps::class, 'close'])->name('contracts.steps.close');
+	Route::get('/contracts.steps/finish', [ContractSteps::class, 'finish'])->name('contracts.steps.finish');
+	Route::get('/contracts.steps.data', [ContractSteps::class, 'getData'])->name('contracts.steps.index.data');
 });
 
 require __DIR__ . '/auth.php';

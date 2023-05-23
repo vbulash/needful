@@ -13,6 +13,7 @@ class StepController extends Controller {
 	public static array $steps = [
 		StepSchool::class,
 		StepEmployer::class,
+		StepContract::class,
 		StepFinal::class,
 	];
 
@@ -110,17 +111,20 @@ class StepController extends Controller {
 		$contract->employer()->associate($heap['employer']);
 		$contract->number = $heap['number'];
 		$contract->sealed = $heap['sealed'];
-		$contract->title = $heap['title'];
+		// $contract->title = $heap['title'];
 		$contract->start = $heap['start'];
 		$contract->finish = $heap['finish'];
 		// TODO Реализовать scan
 		$contract->save();
 
+		$contract->school->user->allow($contract);
+		$contract->employer->user->allow($contract);
+
 		session()->forget('heap');
 		session()->put('success', "Договор на практику № {$contract->number} от {$contract->sealed->format('d.m.Y')} зарегистрирован");
 
-		return redirect()->route('dashboard');
-		//return redirect()->route('contracts.show', ['contract' => $contract->getKey()]);
+		// return redirect()->route('dashboard');
+		return redirect()->route('contracts.show', ['contract' => $contract->getKey()]);
 	}
 
 	public function close(Request $request) {

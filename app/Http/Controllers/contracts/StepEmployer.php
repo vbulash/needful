@@ -2,21 +2,39 @@
 
 namespace App\Http\Controllers\contracts;
 
+use App\Models\ActiveStatus;
 use App\Models\Employer;
-use App\Models\School;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class StepEmployer implements Step {
 	public function isBrowse(): bool {
-		return false;
+		return true;
 	}
 
 	public function getBrowseData(Request $request) {
-		return null;
+		$query = Employer::all()
+			->where('status', ActiveStatus::ACTIVE->value)
+			->sortBy('short');
+
+		return DataTables::of($query)
+			->addColumn('short', fn($employer) => $employer->short)
+			->addColumn('action', function ($employer) use ($request) {
+				$selectRoute = route('contracts.steps.next', [
+					'employer' => $employer->getKey()
+				]);
+				$actions =
+					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left\" " .
+					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
+					"<i class=\"fas fa-check\"></i>\n" .
+					"</a>\n";
+				return $actions;
+			})
+			->make(true);
 	}
 
 	public function getTitle(): string {
-		return 'Уведомление работодателям';
+		return 'Работодатель';
 	}
 
 	public function getStoreRules(): array {
@@ -30,43 +48,28 @@ class StepEmployer implements Step {
 	public function run(Request $request) {
 		$mode = config('global.create');
 		$buttons = intval($request->buttons);
-		$heap = session('heap') ?? [];
-		$specs_school = collect($heap['specialties'])->pluck('id')->toArray();
-
-		$employers = [];
-		Employer::fullAll()->each(function ($item) use (&$employers, $specs_school) {
-			$specs_employer = [];
-			$item->specialties()->each(function ($item_specialty) use (&$specs_employer) {
-				$specs_employer[] = $item_specialty->specialty->getKey();
-			});
-			$specs = array_intersect($specs_school, $specs_employer);
-			if (count($specs) > 0)
-				$employers[] = [
-					'id' => $item->getKey(),
-					'name' => $item->getTitle(),
-				];
-		});
-		usort($employers, fn($a, $b) => $a['name'] < $b['name'] ? -1 : ($a['name'] > $b['name'] ? 1 : 0));
-		$employers = json_encode($employers);
+		$count = Employer::where('status', ActiveStatus::ACTIVE)->count();
 
 		$heap = session('heap') ?? [];
+		$heap['contract'] = '';
 		$heap[$this->getContext()] = '';
 		session()->put('heap', $heap);
 
-		return view('orders.steps.employers', compact('mode', 'buttons', 'heap', 'employers'));
+		return view('contracts.steps.employer', compact('mode', 'buttons', 'count'));
 	}
 
 	public function store(Request $request): bool {
 		$heap = session('heap') ?? [];
-		$heap['employers'] = json_decode($request->emps);
-		$heap[$this->getContext()] = (count($heap['employers']) == 1 ? $heap['employers'][0]->text : '[заполнено]');
+		$heap['contract'] = '';
+		$heap['employer'] = $request->employer;
 		session()->put('heap', $heap);
+
 		return true;
 	}
 	/**
 	 * @return string
 	 */
 	public function getContext(): string {
-		return 'order.employer';
+		return 'employer';
 	}
 }

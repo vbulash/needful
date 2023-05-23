@@ -28,13 +28,14 @@ class Contract extends Model {
 	];
 
 	protected $casts = [
+		'sealed' => 'datetime',
 		'start' => 'datetime',
 		'finish' => 'datetime',
 	];
 
 	public function getTitle(): string {
-		return sprintf("Практика%s (%s - %s",
-			$this->title ? ' ' . $this->title : '', $this->start->format('Y.m.d'), $this->finish->format('Y.m.d'));
+		return sprintf("%s от %s",
+			$this->number, $this->start->format('Y.m.d'));
 	}
 
 	public function school(): BelongsTo {

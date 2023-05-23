@@ -18,6 +18,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Timetable;
 use App\Models\User;
+use App\Models\Contract;
 
 if (!function_exists('form')) {
 	function form($formTemplate, int $mode, string $param): string {
@@ -50,6 +51,7 @@ if (!function_exists('classByContext')) {
 			'order.employer' => OrderEmployer::class,
 			'employer.specialty' => EmployerSpecialty::class,
 			'answer' => Answer::class,
+			'contract' => Contract::class,
 			default => null
 		};
 	}

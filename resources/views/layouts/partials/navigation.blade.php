@@ -24,9 +24,9 @@
 		        ->user()
 		        ->hasRole(\App\Http\Controllers\Auth\RoleName::SCHOOL->value);
 		}
-		
+
 		$menu = [['title' => 'Главная', 'icon' => 'fa fa-home', 'route' => 'dashboard', 'pattern' => 'dashboard']];
-		
+
 		$menu[] = ['title' => 'Практики', 'heading' => true];
 		if (env('BRANCH_EMPLOYER')) {
 		    $name = auth()
@@ -39,12 +39,13 @@
 		if ($admin || $schools) {
 		    $menu[] = ['title' => 'Заявки на практику от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
 		    $menu[] = ['title' => 'Планирование практикантов от ОУ', 'icon' => 'fas fa-history', 'route' => 'planning.orders.index', 'pattern' => ['planning.*']];
+			$menu[] = ['title' => 'Договора на практику', 'icon' => 'fas fa-file-signature', 'route' => 'contracts.index', 'pattern' => ['contracts.*']];
 		}
-		
+
 		if ($employers || $students || $schools) {
 		    $menu[] = ['title' => 'Субъекты', 'heading' => true];
 		}
-		
+
 		if ($employers || $students) {
 		    $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index.clear', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
 		}
@@ -54,7 +55,7 @@
 		if ($schools || $employers) {
 		    $menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];
 		}
-		
+
 		if (
 		    auth()
 		        ->user()
@@ -62,12 +63,12 @@
 		) {
 		    $menu[] = ['title' => 'Учащиеся', 'icon' => 'fas fa-gear', 'route' => 'students.index', 'pattern' => ['students.*']];
 		}
-		
+
 		if (!$students || $admin) {
 		    $menu[] = ['title' => 'Справочники', 'heading' => true];
 		    $menu[] = ['title' => 'Специальности', 'icon' => 'fas fa-book', 'route' => 'specialties.index', 'pattern' => ['specialties.*']];
 		}
-		
+
 		if ($admin || $schools) {
 		    $menu[] = ['title' => 'Настройки', 'heading' => true];
 		    if ($admin) {
