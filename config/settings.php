@@ -12,6 +12,7 @@ use App\Notifications\e2s\EmployerPracticeDestroyedNotification;
 use App\Notifications\e2s\EmployerPracticeStartedNotification;
 use App\Notifications\e2s\LastWarningNotification;
 use App\Notifications\e2s\New2AskedNotification;
+use App\Notifications\NewContract;
 use App\Notifications\NewEmployer;
 use App\Notifications\NewLearn;
 use App\Notifications\NewOrder;
@@ -75,6 +76,9 @@ return [
 			NamesEmployer2School::class => 'Работодатель ответил по практикантам',
 			FixNames::class => 'ОУ зафиксировало практикантов',
 			ReservedSchool2Employer::class => 'ОУ извиняется за резервирование практикантов'
+		]],
+		['group' => 'Договора', 'classes' => [
+			NewContract::class => 'Регистрация договора на практику',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',

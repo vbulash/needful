@@ -7,6 +7,7 @@ use App\Http\Controllers\orders\StepController as OrderSteps;
 use App\Http\Controllers\planning\OrderController as PlanningOrderController;
 use App\Http\Controllers\planning\AnswerController as PlanningAnswerController;
 use App\Http\Controllers\planning\StudentController as PlanningStudentController;
+use App\Http\Controllers\planning\ContractController as PlanningContractController;
 use App\Http\Controllers\planning\EmployerStudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -114,6 +115,9 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::delete('/planning.students', [PlanningStudentController::class, 'destroy'])->name('planning.students.destroy');
 	Route::post('/planning.students.send/{answer}', [PlanningStudentController::class, 'send'])->name('planning.students.send');
 	Route::get('/planning.students.fix/{answer}', [PlanningStudentController::class, 'fix'])->name('planning.students.fix');
+	// Договора
+	Route::get('/planning.contracts.create/{order}', [PlanningContractController::class, 'create'])->name('planning.contracts.create');
+	Route::post('/planning.contracts.store', [PlanningContractController::class, 'store'])->name('planning.contracts.store');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Договор на практику
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \DateTime $start
  * @property \DateTime $finish
  * @property string $scan
+ * @property \App\Models\School $school
+ * @property \App\Models\Employer $employer
  */
 class Contract extends Model {
 	use HasTitle, GrantedAll;
@@ -35,7 +38,7 @@ class Contract extends Model {
 
 	public function getTitle(): string {
 		return sprintf("%s от %s",
-			$this->number, $this->start->format('Y.m.d'));
+			$this->number, $this->sealed->format('d.m.Y'));
 	}
 
 	public function school(): BelongsTo {
@@ -44,6 +47,10 @@ class Contract extends Model {
 
 	public function employer(): BelongsTo {
 		return $this->belongsTo(Employer::class);
+	}
+
+	public function answers(): HasMany {
+		return $this->hasMany(Answer::class);
 	}
 
 }

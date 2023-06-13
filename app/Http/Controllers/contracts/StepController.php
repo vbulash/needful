@@ -5,6 +5,7 @@ namespace App\Http\Controllers\contracts;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WizardButtons;
 use App\Models\Contract;
+use App\Notifications\NewContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -119,6 +120,8 @@ class StepController extends Controller {
 
 		$contract->school->user->allow($contract);
 		$contract->employer->user->allow($contract);
+
+		$contract->school->user->notify(new NewContract($contract));
 
 		session()->forget('heap');
 		session()->put('success', "Договор на практику № {$contract->number} от {$contract->sealed->format('d.m.Y')} зарегистрирован");

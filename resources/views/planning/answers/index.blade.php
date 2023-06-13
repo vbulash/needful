@@ -6,7 +6,16 @@
 
 @section('steps')
 	@php
-		$steps = [['title' => 'Заявки на практику', 'active' => false, 'context' => 'order', 'link' => route('planning.orders.index')], ['title' => 'Ответы работодателей', 'active' => true, 'context' => 'answer'], ['title' => 'Практиканты', 'active' => false, 'context' => 'answer.students']];
+		$steps = [
+		    [
+		        'title' => 'Заявки на практику',
+		        'active' => false,
+		        'context' => 'order',
+		        'link' => route('planning.orders.index'),
+		    ],
+		    ['title' => 'Ответы работодателей', 'active' => true, 'context' => 'answer'],
+		    ['title' => 'Практиканты', 'active' => false, 'context' => 'answer.students'],
+		];
 	@endphp
 @endsection
 
@@ -15,6 +24,10 @@
 		<div>
 			<h3 class="block-title fw-semibold mb-4">Ответы работодателей</h3>
 			<p><small>Отображаются ответы работодателей только в случае утверждения работодателем заявки на практику</small></p>
+			@if (count($ready) > 0)
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sign-contract">Заключить договор с
+					работодателем</button>
+			@endif
 		</div>
 	</div>
 	<div class="block-content p-4">
@@ -28,6 +41,7 @@
 							<th>Специальность</th>
 							<th>Одобренных практикантов</th>
 							<th>Статус ответа</th>
+							<th>Договор</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -37,6 +51,38 @@
 			<p>Ответов работодателей пока нет - ожидайте утверждения работодателем заявок в целом (специальности + количества).
 			</p>
 		@endif
+	</div>
+
+	<div class="modal fade" id="sign-contract" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+		data-bs-keyboard="false">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Выбор работодателя для регистрации договора</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<p>Новый договор включит в себя все специальности работодателя, по которым полностью согласован список практикантов.
+					</p>
+					<p>
+						Если хотите зарегистрировать договор на отдельную специальность - воспользуйтесь меню &laquo;Действия&raquo; для
+						согласованной специальности.
+					</p>
+					<div class="mb-4">
+						<select name="employers" class="select2 form-control" style="width:100%;" id="employers"></select>
+					</div>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Закрыть</button>
+					<form method="get" action="{{ route('planning.contracts.create', ['order' => $order, 'answer' => 0]) }}"
+						id="register-contract" enctype="multipart/form-data">
+						<input type="hidden" name="employer" id="employer" value="">
+						<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Зарегистрировать
+							договор с работодателем</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 @endsection
 
@@ -49,6 +95,32 @@
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
 			$(function() {
+				window.employers = {!! json_encode($ready) !!};
+				let select = $('#employers');
+
+				const data = [];
+				for (let object in window.employers)
+					data.push({
+						'id': object,
+						'text': window.employers[object]
+					});
+				data.sort((a, b) => {
+					if (a.text === b.text) return 0;
+					else if (a.text > b.text) return 1;
+					else return -1;
+				});
+				select.empty().select2({
+					language: 'ru',
+					dropdownParent: $('#sign-contract'),
+					data: data,
+					// placeholder: 'Выберите одного или нескольких учащихся из выпадающего списка',
+					// sorter: function(data) {
+					// 	return data.sort(function(a, b) {
+					// 		return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+					// 	});
+					// }
+				});
+
 				window.datatable = $('#answers_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
@@ -83,6 +155,11 @@
 							responsivePriority: 2
 						},
 						{
+							data: 'contract',
+							name: 'contract',
+							responsivePriority: 3
+						},
+						{
 							data: 'action',
 							name: 'action',
 							sortable: false,
@@ -107,6 +184,12 @@
 							parent.style.height = clientHeight.toString() + 'px';
 						}
 					});
+				});
+
+				$('#register-contract').on('submit', (event) => {
+					const id = $('#employers').val();
+					document.getElementById('employer').value = id;
+					// const text = window.employers[id];
 				});
 			});
 		</script>

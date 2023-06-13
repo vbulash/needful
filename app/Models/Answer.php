@@ -22,6 +22,10 @@ class Answer extends Model implements FormTemplate {
 		);
 	}
 
+	public function contract(): BelongsTo {
+		return $this->belongsTo(Contract::class);
+	}
+
 	public function employer(): BelongsTo {
 		return $this->belongsTo(Employer::class);
 	}

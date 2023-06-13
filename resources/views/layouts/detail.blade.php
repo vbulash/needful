@@ -69,6 +69,7 @@
 								@case('text')
 								@case('email')
 								@case('number')
+								@case('file')
 								<div class="col-sm-5">
 									<input type="{{ $field['type'] }}" class="form-control" id="{{ $field['name'] }}"
 										   name="{{ $field['name'] }}"

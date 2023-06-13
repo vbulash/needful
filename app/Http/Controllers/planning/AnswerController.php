@@ -7,6 +7,7 @@ use App\Events\ToastEvent;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Answer;
 use App\Models\AnswerStatus;
+use App\Models\Contract;
 use App\Models\Order;
 use App\Models\OrderEmployerStatus;
 use App\Models\School;
@@ -24,6 +25,7 @@ SELECT
 	e.`short` AS employer,
 	a.`approved`,
 	a.`status`,
+	a.`contract_id` AS contract,
 	s.`id` AS sid,
 	s.`name` AS specialty
 FROM
@@ -40,6 +42,7 @@ WHERE
 	AND oe.`order_id` = os.`order_id`
 	AND oe.`employer_id` = a.`employer_id`
 	AND oe.`status` = :status
+
 EOS;
 		if ($answer != 0)
 			$sql .= " AND a.id = :answer";
@@ -58,12 +61,38 @@ EOS;
 
 		return DataTables::of($query)
 			->addColumn('status', fn($answer) => AnswerStatus::getName($answer->status))
-			->addColumn('action', function ($answer) {
+			->addColumn('contract', function ($answer) {
+				if (isset($answer->contract)) {
+					$_contract = Contract::findOrFail($answer->contract);
+					return $_contract->getTitle();
+				} else
+					return '';
+			})
+			->addColumn('action', function ($answer) use ($order) {
 				$selectRoute = route('planning.answers.select', ['answer' => $answer->aid]);
+				if (isset($answer->contract)) {
+				} else {
+					//
+				}
 				$items = [];
 
 				if ($answer->status != AnswerStatus::REJECTED->value)
 					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'Практиканты'];
+
+				if ($answer->status == AnswerStatus::DONE->value) {
+					if (isset($answer->contract)) {
+						$contractRoute = route('contracts.show', ['contract' => $answer->contract]);
+						$items[] = ['type' => 'divider'];
+						$items[] = ['type' => 'item', 'link' => $contractRoute, 'icon' => 'fas fa-arrow-right', 'title' => 'Переход к договору на практику'];
+					} else {
+						$createRoute = route('planning.contracts.create', [
+							'order' => $order,
+							'answer' => $answer->aid
+						]);
+						$items[] = ['type' => 'divider'];
+						$items[] = ['type' => 'item', 'link' => $createRoute, 'icon' => 'fas fa-check', 'title' => 'Регистрация договора на практику'];
+					}
+				}
 
 				return createDropdown('Действия', $items);
 			})
@@ -82,9 +111,16 @@ EOS;
 		$context = session('context');
 		unset($context['answer']);
 		session()->put('context', $context);
-		$count = count($this->getQuery($order));
+		$query = $this->getQuery($order);
+		$count = count($query);
+		$ready = [];
+		collect($query)->each(function ($item) use (&$ready) {
+			if ($item->status == AnswerStatus::DONE->value)
+				if (!isset($ready[$item->eid]))
+					$ready[$item->eid] = $item->employer;
+		});
 
-		return view('planning.answers.index', compact('count', 'order'));
+		return view('planning.answers.index', compact('count', 'order', 'ready'));
 	}
 
 	public function create() {
