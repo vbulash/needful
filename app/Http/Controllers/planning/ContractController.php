@@ -84,6 +84,17 @@ class ContractController extends Controller {
 		return true;
 	}
 
+	public function attach(Request $request) {
+		$_answer = Answer::findOrFail($request->answer);
+		$_contract = Contract::findOrFail($request->contract);
+		$_answer->contract()->associate($_contract);
+		$_answer->save();
+
+		$_contract->school->user->notify(new UpdateContract($_contract));
+
+		return true;
+	}
+
 	public function list(Request $request) {
 		$contracts = [];
 		Contract::where('school_id', $request->school)

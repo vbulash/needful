@@ -120,6 +120,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	Route::get('/planning.contracts.create/{order}', [PlanningContractController::class, 'create'])->name('planning.contracts.create');
 	Route::post('/planning.contracts.store', [PlanningContractController::class, 'store'])->name('planning.contracts.store');
 	Route::post('/planning.contracts.detach', [PlanningContractController::class, 'detach'])->name('planning.contracts.detach');
+	Route::post('/planning.contracts.attach', [PlanningContractController::class, 'attach'])->name('planning.contracts.attach');
 	Route::post('/planning.contracts.list', [PlanningContractController::class, 'list'])->name('planning.contracts.list');
 
 	// Учебные заведения

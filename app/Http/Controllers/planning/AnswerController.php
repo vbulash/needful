@@ -95,7 +95,7 @@ EOS;
 							'answer' => $answer->aid
 						]);
 						$items[] = ['type' => 'divider'];
-						$items[] = ['type' => 'item', 'click' => "clickListContracts({$answer->school}, {$answer->eid}, '{$answer->specialty}')", 'icon' => 'fas fa-plus', 'title' => 'Добавить специальность в договор'];
+						$items[] = ['type' => 'item', 'click' => "clickListContracts({$answer->aid}, {$answer->school}, {$answer->eid}, '{$answer->specialty}')", 'icon' => 'fas fa-plus', 'title' => 'Добавить специальность в договор'];
 						$items[] = ['type' => 'item', 'link' => $createRoute, 'icon' => 'fas fa-check', 'title' => 'Регистрация договора на практику'];
 					}
 				}
