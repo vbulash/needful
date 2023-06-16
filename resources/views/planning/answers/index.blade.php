@@ -84,6 +84,27 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="contracts-list" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+		data-bs-keyboard="false">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Выбор договора</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-4" id="contracts-cue"></div>
+					<div class="mb-4">
+						<select name="contracts" class="select2 form-control" style="width:100%;" id="contracts"></select>
+					</div>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Закрыть</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="link-contract">Добавить специальность в договор</button>
+				</div>
+			</div>
+		</div>
 @endsection
 
 @if ($count > 0)
@@ -94,6 +115,80 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
+			function showContracts(response, specialty) {
+				const data = [];
+				response.contracts.forEach(contract => {
+					data.push({
+						'id': contract.id,
+						'text': contract.text
+					})
+				})
+				data.sort((a, b) => {
+					if (a.text === b.text) return 0;
+					else if (a.text > b.text) return 1;
+					else return -1;
+				});
+				$('#contracts').empty().select2({
+					language: 'ru',
+					dropdownParent: $('#contracts-list'),
+					data: data,
+					// placeholder: 'Выберите одного или нескольких учащихся из выпадающего списка',
+					// sorter: function(data) {
+					// 	return data.sort(function(a, b) {
+					// 		return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+					// 	});
+					// }
+				})
+				document.getElementById('contracts-cue').innerHTML =
+					"<p>Выберите договор между образовательным учреждением &laquo;" + response.school + "&raquo; и " +
+					"работодателем &laquo;" + response.employer + "&raquo; для добавления в него специальности &laquo;" + specialty + "&raquo;"
+				let contractsDialog = new bootstrap.Modal(document.getElementById('contracts-list'));
+				contractsDialog.show();
+			}
+
+			function clickListContracts(school, employer, specialty) {
+				$.ajax({
+					method: 'POST',
+					url: "{{ route('planning.contracts.list') }}",
+					data: {
+						school: school,
+						employer: employer,
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: (response) => {
+						if (response.contracts.length == 0) {
+							document.getElementById('alert-title').innerText = "Нет договоров"
+							document.getElementById('alert-body').innerHTML =
+								"Нет зарегистрированных договоров между образовательным учреждением &laquo;" + response.school + "&raquo; и " +
+								"работодателем &laquo;" + response.employer + "&raquo;.<br/>" +
+								"Зарегистрируйте новый договор."
+							let alertDialog = new bootstrap.Modal(document.getElementById('modal-alert'))
+							alertDialog.show()
+						} else showContracts(response, specialty)
+						// window.datatable.ajax.reload();
+					}
+				})
+			}
+
+			function clickDetach(contract, answer) {
+				$.ajax({
+					method: 'POST',
+					url: "{{ route('planning.contracts.detach') }}",
+					data: {
+						contract: contract,
+						answer: answer,
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: () => {
+						window.datatable.ajax.reload();
+					}
+				});
+			}
+
 			$(function() {
 				window.employers = {!! json_encode($ready) !!};
 				let select = $('#employers');

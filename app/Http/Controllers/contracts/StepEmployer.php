@@ -20,15 +20,10 @@ class StepEmployer implements Step {
 		return DataTables::of($query)
 			->addColumn('short', fn($employer) => $employer->short)
 			->addColumn('action', function ($employer) use ($request) {
-				$selectRoute = route('contracts.steps.next', [
-					'employer' => $employer->getKey()
-				]);
-				$actions =
-					"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-					"<i class=\"fas fa-check\"></i>\n" .
-					"</a>\n";
-				return $actions;
+				$items = [];
+				$items[] = ['type' => 'item', 'click' => "clickEmployer({$employer->getKey()})", 'icon' => 'fas fa-check', 'title' => 'Реквизиты договора'];
+
+				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}

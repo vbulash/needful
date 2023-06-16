@@ -115,7 +115,7 @@ class StepController extends Controller {
 		// $contract->title = $heap['title'];
 		$contract->start = $heap['start'];
 		$contract->finish = $heap['finish'];
-		// TODO Реализовать scan
+		$contract->scan = $heap['scan'];
 		$contract->save();
 
 		$contract->school->user->allow($contract);

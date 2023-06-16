@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Договор на практику
@@ -53,4 +55,13 @@ class Contract extends Model {
 		return $this->hasMany(Answer::class);
 	}
 
+	public static function uploadScan(Request $request, string $scan = null) {
+		if ($request->hasFile('scan')) {
+			if ($scan)
+				Storage::delete($scan);
+			$folder = date('Y-m-d');
+			return $request->file('scan')->store("scans/{$folder}");
+		}
+		return null;
+	}
 }

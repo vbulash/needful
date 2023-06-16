@@ -48,7 +48,7 @@ class NewContract extends Notification {
 		$admin = env('MAIL_ADMIN_ADDRESS');
 		$employer = $this->contract->employer->user->email;
 		//
-		$subject = sprintf("Зарегистрирован %sдоговор", $this->empty ? 'рамочный ' : '');
+		$subject = $this->getSubject();
 		//
 		$lines = [];
 		$lines[] = $subject . ' на проведение практики:';
@@ -104,5 +104,9 @@ class NewContract extends Notification {
 				$lines[] = sprintf("- %s / %s", $specialty, $student->getTitle());
 		}
 		return $lines;
+	}
+
+	protected function getSubject(): string {
+		return sprintf("Зарегистрирован %sдоговор", $this->empty ? 'рамочный ' : '');
 	}
 }

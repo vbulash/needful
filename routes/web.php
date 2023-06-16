@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\contracts\StepController as ContractSteps;
+use App\Http\Controllers\ContractStudentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\orders\StepController as OrderSteps;
 use App\Http\Controllers\planning\OrderController as PlanningOrderController;
@@ -118,6 +119,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Договора
 	Route::get('/planning.contracts.create/{order}', [PlanningContractController::class, 'create'])->name('planning.contracts.create');
 	Route::post('/planning.contracts.store', [PlanningContractController::class, 'store'])->name('planning.contracts.store');
+	Route::post('/planning.contracts.detach', [PlanningContractController::class, 'detach'])->name('planning.contracts.detach');
+	Route::post('/planning.contracts.list', [PlanningContractController::class, 'list'])->name('planning.contracts.list');
 
 	// Учебные заведения
 	Route::resource('/schools', 'SchoolController');
@@ -143,8 +146,14 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'r
 	// Договора на практику
 	Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
 	Route::get('/contracts.data', [ContractController::class, 'getData'])->name('contracts.index.data');
+	Route::get('/contracts.select/{contract}', [ContractController::class, 'select'])->name('contracts.select');
 	Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+	Route::get('/contracts.edit/{contract}', [ContractController::class, 'edit'])->name('contracts.edit');
+	Route::put('/contracts/{contract}', [ContractController::class, 'update'])->name('contracts.update');
 	Route::delete('/contracts', [ContractController::class, 'destroy'])->name('contracts.destroy');
+	// Практиканты к договорам
+	Route::get('/contracts.students/{contract}', [ContractStudentController::class, 'index'])->name('contracts.students.index');
+	Route::get('/contracts.students.data/{contract}', [ContractStudentController::class, 'getData'])->name('contracts.students.index.data');
 
 	// Руководители практики
 	Route::resource('/teachers', 'TeacherController');
@@ -228,7 +237,7 @@ Route::group(['namespace' => 'App\Http\Controllers\orders', 'middleware' => ['au
 Route::group(['namespace' => 'App\Http\Controllers\contracts', 'middleware' => ['auth']], function () {
 	Route::get('/contracts.steps/play', [ContractSteps::class, 'play'])->name('contracts.steps.play');
 	Route::get('/contracts.steps/back', [ContractSteps::class, 'back'])->name('contracts.steps.back');
-	Route::get('/contracts.steps/next', [ContractSteps::class, 'next'])->name('contracts.steps.next');
+	Route::post('/contracts.steps/next', [ContractSteps::class, 'next'])->name('contracts.steps.next');
 	Route::get('/contracts.steps/close', [ContractSteps::class, 'close'])->name('contracts.steps.close');
 	Route::get('/contracts.steps/finish', [ContractSteps::class, 'finish'])->name('contracts.steps.finish');
 	Route::get('/contracts.steps.data', [ContractSteps::class, 'getData'])->name('contracts.steps.index.data');

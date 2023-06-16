@@ -4,6 +4,10 @@
 	Регистрация договора на практику
 @endsection
 
+@section('form.method')
+	method="post"
+@endsection
+
 @section('form.fields')
 	@php
 		$fields = [];

@@ -28,6 +28,7 @@ use App\Notifications\orders\New2Sent;
 use App\Notifications\orders\ReservedSchool2Employer;
 use App\Notifications\orders\Sent2Accept;
 use App\Notifications\orders\Sent2Reject;
+use App\Notifications\UpdateContract;
 use App\Notifications\UpdateEmployer;
 use App\Notifications\UpdateLearn;
 use App\Notifications\UpdateSchool;
@@ -79,6 +80,7 @@ return [
 		]],
 		['group' => 'Договора', 'classes' => [
 			NewContract::class => 'Регистрация договора на практику',
+			UpdateContract::class => 'Изменение договора на практику',
 		]],
 		['group' => 'Разное', 'classes' => [
 			NewSupport::class => 'Пользователь отправил сообщение администратору',

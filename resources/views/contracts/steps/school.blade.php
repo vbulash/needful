@@ -32,6 +32,10 @@
 					</thead>
 				</table>
 			</div>
+			<form action="{{ route('contracts.steps.next') }}" method="POST" id="school-next">
+				@csrf
+				<input type="hidden" name="school" id="school">
+			</form>
 		@else
 			<p>Активных образовательных учреждений пока нет...</p>
 		@endif
@@ -46,6 +50,11 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
+			function clickSchool(school) {
+				document.getElementById('school').value = school;
+				document.getElementById('school-next').submit();
+			}
+
 			$(function() {
 				window.datatable = $('#schools_table').DataTable({
 					language: {

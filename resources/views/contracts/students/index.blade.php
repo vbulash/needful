@@ -8,13 +8,14 @@
 	@php
 		$steps = [
 		    [
-		        'title' => 'Договора на практику',
-		        'active' => true,
+		        'title' => 'Договор на практику',
+		        'active' => false,
 		        'context' => 'contract',
+				'link' => route('contracts.index'),
 		    ],
 			[
 		        'title' => 'Практиканты',
-		        'active' => false,
+		        'active' => true,
 		        'context' => 'contract.students',
 		    ],
 		];
@@ -23,22 +24,18 @@
 
 @section('interior')
 	<div class="block-header block-header-default">
-		<h3 class="block-title fw-semibold mb-4">Договора на практику</h3>
+		<h3 class="block-title fw-semibold mb-4">Практиканты</h3>
 	</div>
 	<div class="block-content p-4">
 		@if ($count > 0)
 			<div class="table-responsive">
-				<table class="table table-bordered table-hover text-nowrap" id="contracts_table" style="width: 100%;">
+				<table class="table table-bordered table-hover text-nowrap" id="students_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<th style="width: 30px">#</th>
-							<th>Образовательное учреждение</th>
-							<th>Работодатель</th>
-							<th>Номер договора</th>
-							<th>Дата подписания</th>
-							<th>Тип</th>
-							<th>Начало практики</th>
-							<th>Завершение практики</th>
+							<th>Специальность</th>
+							<th>Практикант</th>
+							<th>Телефон</th>
+							<th>Электронная почта</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -58,78 +55,35 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
-			document.getElementById('confirm-yes').addEventListener('click', (event) => {
-				$.ajax({
-					method: 'DELETE',
-					url: "{{ route('contracts.destroy') }}",
-					data: {
-						id: event.target.dataset.id,
-					},
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					success: () => {
-						window.datatable.ajax.reload();
-					}
-				});
-			}, false);
-
-			function clickDelete(id, title) {
-				document.getElementById('confirm-title').innerText = "Подтвердите удаление";
-				document.getElementById('confirm-body').innerHTML = "Удалить договор на практику № " + title + " ?";
-				document.getElementById('confirm-yes').dataset.id = id;
-				let confirmDialog = new bootstrap.Modal(document.getElementById('modal-confirm'));
-				confirmDialog.show();
-			}
-
 			$(function() {
-				window.datatable = $('#contracts_table').DataTable({
+				window.datatable = $('#students_table').DataTable({
 					language: {
 						"url": "{{ asset('lang/ru/datatables.json') }}"
 					},
 					processing: true,
 					serverSide: true,
-					ajax: '{!! route('contracts.index.data') !!}',
+					ajax: "{!! route('contracts.students.index.data', ['contract' => $contract]) !!}",
 					responsive: true,
-					columns: [{
-							data: 'id',
-							name: 'id',
+					columns: [
+						{
+							data: 'specialty',
+							name: 'specialty',
 							responsivePriority: 1
 						},
 						{
-							data: 'school',
-							name: 'school',
+							data: 'student',
+							name: 'student',
 							responsivePriority: 1
 						},
 						{
-							data: 'employer',
-							name: 'employer',
-							responsivePriority: 1
-						},
-						{
-							data: 'number',
-							name: 'number',
+							data: 'phone',
+							name: 'phone',
 							responsivePriority: 2
 						},
 						{
-							data: 'sealed',
-							name: 'sealed',
+							data: 'email',
+							name: 'email',
 							responsivePriority: 2
-						},
-						{
-							data: 'type',
-							name: 'type',
-							responsivePriority: 4
-						},
-						{
-							data: 'start',
-							name: 'start',
-							responsivePriority: 3
-						},
-						{
-							data: 'finish',
-							name: 'finish',
-							responsivePriority: 3
 						},
 						{
 							data: 'action',

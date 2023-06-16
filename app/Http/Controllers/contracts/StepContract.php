@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\contracts;
 
+use App\Models\Contract;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -53,6 +54,7 @@ class StepContract implements Step {
 		$heap['sealed'] = new DateTime($request->sealed);
 		$heap['start'] = new DateTime($request->start);
 		$heap['finish'] = new DateTime($request->finish);
+		$heap['scan'] = Contract::uploadScan($request);
 
 		$heap['contract'] = sprintf("№ %s от %s", $heap['number'], $heap['sealed']->format('d.m.Y'));
 		session()->put('heap', $heap);

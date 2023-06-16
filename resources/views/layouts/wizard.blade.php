@@ -71,6 +71,16 @@
 							</div>
 						@break
 
+						@case('link')
+							<div class="col-sm-5">
+								@if (isset($field['value']))
+									<a href="/uploads/{{ $field['value'] }}" target="_blank" id="{{ $field['name'] }}" name="{{ $field['name'] }}">
+										<i class="fas fa-globe"></i> {{ $field['title'] }}
+									</a>
+								@endif
+							</div>
+						@break
+
 						@case('checkbox')
 							<div class="col-sm-8">
 								<div class="form-check form-switch">

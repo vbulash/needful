@@ -43,6 +43,7 @@
 @include('layouts.partials.toast')
 @include('layouts.partials.modal-confirm')
 @include('layouts.partials.modal-support')
+@include('layouts.partials.modal-alert')
 
 @stack('js_before')
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>

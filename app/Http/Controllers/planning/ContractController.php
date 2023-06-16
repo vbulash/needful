@@ -8,7 +8,9 @@ use App\Models\Answer;
 use App\Models\Contract;
 use App\Models\Employer;
 use App\Models\Order;
+use App\Models\School;
 use App\Notifications\NewContract;
+use App\Notifications\UpdateContract;
 use Illuminate\Http\Request;
 
 class ContractController extends Controller {
@@ -50,7 +52,7 @@ class ContractController extends Controller {
 		// $contract->title = $heap['title'];
 		$contract->start = $request->start;
 		$contract->finish = $request->finish;
-		// TODO Реализовать scan
+		$contract->scan = Contract::uploadScan($request);
 		$contract->save();
 
 		if ($request->answer == 0) {
@@ -69,5 +71,36 @@ class ContractController extends Controller {
 		session()->put('success', sprintf("Зарегистрирован договор %s с работодателем &laquo;%s&raquo;",
 			$contract->getTitle(), $contract->employer->getTitle()));
 		return redirect()->route('planning.answers.index', ['order' => $request->order]);
+	}
+
+	public function detach(Request $request) {
+		$_answer = Answer::findOrFail($request->answer);
+		$_contract = Contract::findOrFail($request->contract);
+		$_answer->contract()->dissociate();
+		$_answer->save();
+
+		$_contract->school->user->notify(new UpdateContract($_contract));
+
+		return true;
+	}
+
+	public function list(Request $request) {
+		$contracts = [];
+		Contract::where('school_id', $request->school)
+			->where('employer_id', $request->employer)
+			->get()
+			->each(function ($contract) use (&$contracts) {
+				$contracts[] = [
+					'id' => $contract->getKey(),
+					'text' => $contract->getTitle(),
+				];
+			});
+		$school = School::findOrFail($request->school);
+		$employer = Employer::findOrFail($request->employer);
+		return response()->json([
+			'school' => $school->getTitle(),
+			'employer' => $employer->getTitle(),
+			'contracts' => $contracts
+		]);
 	}
 }

@@ -32,6 +32,10 @@
 					</thead>
 				</table>
 			</div>
+			<form action="{{ route('contracts.steps.next') }}" method="POST" id="employer-next">
+				@csrf
+				<input type="hidden" name="employer" id="employer">
+			</form>
 		@else
 			<p>Активных работодателей пока нет...</p>
 		@endif
@@ -46,6 +50,11 @@
 	@push('js_after')
 		<script src="{{ asset('js/datatables.js') }}"></script>
 		<script>
+			function clickEmployer(school) {
+				document.getElementById('employer').value = school;
+				document.getElementById('employer-next').submit();
+			}
+
 			$(function() {
 				window.datatable = $('#employers_table').DataTable({
 					language: {

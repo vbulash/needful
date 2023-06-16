@@ -89,6 +89,16 @@
 								</div>
 								@break
 
+								@case('link')
+									<div class="col-sm-5">
+										@if (isset($field['value']))
+											<a href="/uploads/{{ $field['value'] }}" class="form-control" target="_blank" id="{{ $field['name'] }}" name="{{ $field['name'] }}">
+												<i class="fas fa-globe"></i> {{ $field['title'] }}
+											</a>
+										@endif
+									</div>
+								@break
+
 								@case('checkbox')
 								<div class="col-sm-8">
 									<div class="form-check form-switch">
@@ -99,7 +109,7 @@
 												checked
 											@endif
 											@if($mode == config('global.show') || isset($field['disabled'])) disabled @endif>
-										<label class="form-check-label" for="{{ $field['name'] }}">{{ $field['title'] }}</label>
+										<label class="form-check-label" for="{{ $field['name'] }}" id="{{ $field['name'] }}-label">{{ $field['title'] }}</label>
 									</div>
 								</div>
 								@break

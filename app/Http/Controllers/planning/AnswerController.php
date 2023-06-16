@@ -20,6 +20,7 @@ class AnswerController extends Controller {
 		$sql = <<<EOS
 SELECT
 	a.id AS aid,
+	o.`school_id` AS school,
 	a.`employer_id` AS eid,
 	os.`id` AS oid,
 	e.`short` AS employer,
@@ -33,7 +34,8 @@ FROM
 	`orders_employers` AS oe,
 	`answers` AS a,
 	`employers` AS e,
-	`specialties` AS s
+	`specialties` AS s,
+	`orders` AS o
 WHERE
 	a.`orders_specialties_id` = os.`id`
 	AND os.`order_id` = :order
@@ -42,6 +44,7 @@ WHERE
 	AND oe.`order_id` = os.`order_id`
 	AND oe.`employer_id` = a.`employer_id`
 	AND oe.`status` = :status
+	AND os.`order_id` = o.`id`
 
 EOS;
 		if ($answer != 0)
@@ -70,6 +73,7 @@ EOS;
 			})
 			->addColumn('action', function ($answer) use ($order) {
 				$selectRoute = route('planning.answers.select', ['answer' => $answer->aid]);
+
 				if (isset($answer->contract)) {
 				} else {
 					//
@@ -84,12 +88,14 @@ EOS;
 						$contractRoute = route('contracts.show', ['contract' => $answer->contract]);
 						$items[] = ['type' => 'divider'];
 						$items[] = ['type' => 'item', 'link' => $contractRoute, 'icon' => 'fas fa-arrow-right', 'title' => 'Переход к договору на практику'];
+						$items[] = ['type' => 'item', 'click' => "clickDetach({$answer->contract}, {$answer->aid})", 'icon' => 'fas fa-cancel', 'title' => 'Убрать специальность из договора'];
 					} else {
 						$createRoute = route('planning.contracts.create', [
 							'order' => $order,
 							'answer' => $answer->aid
 						]);
 						$items[] = ['type' => 'divider'];
+						$items[] = ['type' => 'item', 'click' => "clickListContracts({$answer->school}, {$answer->eid}, '{$answer->specialty}')", 'icon' => 'fas fa-plus', 'title' => 'Добавить специальность в договор'];
 						$items[] = ['type' => 'item', 'link' => $createRoute, 'icon' => 'fas fa-check', 'title' => 'Регистрация договора на практику'];
 					}
 				}
