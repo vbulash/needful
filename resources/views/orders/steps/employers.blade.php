@@ -136,9 +136,10 @@
 
 		document.getElementById('core-create').addEventListener('submit', (event) => {
 			if (window.selected.size == 0) {
-				event.preventDefault();
-				event.stopPropagation();
-				showToast('error', 'Не выбран работодатель для заявки', false);
+				document.getElementById('emps').value = '';
+				// event.preventDefault();
+				// event.stopPropagation();
+				// showToast('error', 'Не выбран работодатель для заявки', false);
 			} else {
 				document.getElementById('emps').value =
 					JSON.stringify(window.selectedArray);

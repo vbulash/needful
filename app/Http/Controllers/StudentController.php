@@ -43,37 +43,24 @@ class StudentController extends Controller {
 			    $editRoute = route('students.edit', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 			    $showRoute = route('students.show', ['student' => $student->getKey(), 'sid' => session()->getId()]);
 			    $selectRoute = route('students.select', ['student' => $student->id, 'sid' => session()->getId()]);
-			    $actions = '';
+				$items = [];
 
 			    if (auth()->user()->can('students.edit'))
-				    $actions .=
-				    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-				    	"<i class=\"fas fa-edit\"></i>\n" .
-				    	"</a>\n";
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
 			    if (auth()->user()->can('students.show'))
-				    $actions .=
-				    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-				    	"<i class=\"fas fa-eye\"></i>\n" .
-				    	"</a>\n";
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
 			    if (auth()->user()->can('students.destroy')) {
 				    $name = $student->getTitle();
-				    $actions .=
-				    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$student->getKey()}, '{$name}')\">\n" .
-				    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-				    	"</a>\n";
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$student->getKey()}, '{$name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 			    }
 
-			    if ($student->status == ActiveStatus::ACTIVE->value)
-				    $actions .=
-				    	"<a href=\"{$selectRoute}\" class=\"btn btn-primary btn-sm float-left ms-5\" " .
-				    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Выбор\">\n" .
-				    	"<i class=\"fas fa-check\"></i>\n" .
-				    	"</a>\n";
+				if ($student->status == ActiveStatus::ACTIVE->value) {
+					if (count($items) > 0)
+						$items[] = ['type' => 'divider'];
+					$items[] = ['type' => 'item', 'link' => $selectRoute, 'icon' => 'fas fa-check', 'title' => 'История обучения'];
+				}
 
-			    return $actions;
+				return createDropdown('Действия', $items);
 		    })
 			->make(true);
 	}

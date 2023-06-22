@@ -30,9 +30,12 @@ class OrderSpecialtyController extends Controller {
 				$name = $order_specialty->specialty->getTitle();
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
-				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'item', 'click' => "clickDelete({$order_specialty->getKey()}, '{$name}', {$id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+				if (auth()->user()->can('orders.details.edit'))
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				if (auth()->user()->can('orders.details.show'))
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				if (auth()->user()->can('orders.details.delete'))
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$order_specialty->getKey()}, '{$name}', {$id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
 				return createDropdown('Действия', $items);
 			})

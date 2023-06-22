@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ToastEvent;
 use App\Http\Controllers\Auth\RoleName;
+use App\Models\AnswerStudentStatus;
 use App\Models\Contract;
 use DateTime;
 use Illuminate\Http\Request;
@@ -12,11 +13,13 @@ use Yajra\DataTables\DataTables;
 
 class ContractController extends Controller {
 	public function getData() {
-		$query = DB::select(<<<EOS
+		$query = collect(DB::select(<<<EOS
 SELECT
 	contracts.id,
 	schools.short as school,
+	schools.id as sid,
 	employers.short as employer,
+	employers.id as eid,
 	contracts.`number`,
 	contracts.sealed,
 	contracts.`start`,
@@ -28,7 +31,12 @@ FROM
 WHERE
 	contracts.school_id = schools.id
 	AND contracts.employer_id = employers.id
-EOS);
+EOS))
+			->filter(function ($value) {
+				$contract = Contract::findOrFail($value->id);
+				return auth()->user()->isAllowed($contract);
+			});
+
 		return DataTables::of($query)
 			->addColumn('type', function ($contract) {
 				$_contract = Contract::findOrFail($contract->id);
@@ -111,12 +119,20 @@ EOS);
 		return redirect()->route('contracts.index');
 	}
 
-	public function destroy(Request $request) {
-		$contract = Contract::findOrFail($request->id);
+	public function destroy(Request $request): bool {
+		$id = $request->id;
+		$contract = Contract::findOrFail($id);
 		$title = $contract->getTitle();
+
+		foreach ($contract->answers as $answer) foreach ($answer->students as $student)
+				if ($student->pivot->status == AnswerStudentStatus::APPROVED->value)
+					$student->user->disallow($contract);
+		$contract->school->user->disallow($contract);
+		$contract->employer->user->disallow($contract);
+
 		$contract->delete();
 
-		event(new ToastEvent('success', '', "Договор на практику № {$title} удалён"));
+		event(new ToastEvent('success', '', "Договор № '{$title}' удалён"));
 		return true;
 	}
 }
