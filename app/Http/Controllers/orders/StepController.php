@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
 use App\Models\OrderSpecialty;
+use App\Models\School;
 use App\Notifications\NewOrder;
 use App\Notifications\orders\New2Sent;
 use Illuminate\Http\RedirectResponse;
@@ -122,6 +123,10 @@ class StepController extends Controller {
 		$order->place = $heap['place'];
 		$order->description = $heap['description'];
 		$order->save();
+
+		$school = School::findOrFail($heap['school']);
+		$school->user->allow($order);
+
 		foreach ($heap['specialties'] as $item) {
 			$orderSpecialty = new OrderSpecialty();
 			$orderSpecialty->quantity = $item->quantity;
@@ -131,12 +136,15 @@ class StepController extends Controller {
 		}
 		foreach ($heap['employers'] as $item) {
 			$orderEmployer = new OrderEmployer();
-			$orderEmployer->status = OrderEmployerStatus::NEW->value;
+			$orderEmployer->status = OrderEmployerStatus::NEW ->value;
 			$orderEmployer->order()->associate($order);
 			$orderEmployer->employer()->associate($item->id);
 			$orderEmployer->save();
 
-			foreach (OrderSpecialty::all() as $orderSpecialty) {
+			$orderEmployer->employer->user->allow($order);
+
+			foreach ($orderEmployer->order->specialties as $orderSpecialty) {
+				// foreach (OrderSpecialty::all() as $orderSpecialty) {
 				$answer = new Answer();
 				$answer->approved = 0;
 				$answer->orderSpecialty()->associate($orderSpecialty);

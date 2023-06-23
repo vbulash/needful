@@ -58,8 +58,13 @@ class StepEmployers implements Step {
 
 	public function store(Request $request): bool {
 		$heap = session('heap') ?? [];
-		$heap['employers'] = json_decode($request->emps);
-		$heap[$this->getContext()] = (count($heap['employers']) == 1 ? $heap['employers'][0]->text : '[заполнено]');
+		if (isset($request->emps)) {
+			$heap['employers'] = json_decode($request->emps);
+			$heap[$this->getContext()] = (count($heap['employers']) == 1 ? $heap['employers'][0]->text : '[заполнено]');
+		} else {
+			$heap['employers'] = [];
+			$heap[$this->getContext()] = '';
+		}
 		session()->put('heap', $heap);
 		return true;
 	}

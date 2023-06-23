@@ -116,10 +116,14 @@
 
 						@case('date')
 							<div class="col-sm-5">
-								<input type="text" class="flatpickr-input form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
-									data-date-format="d.m.Y"
-									value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}"
-									@if ($mode == config('global.show')) disabled @endif>
+								@if($mode == config('global.show'))
+									<input type="text" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+										value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}" disabled>
+								@else
+									<input type="text" class="flatpickr-input form-control" id="{{ $field['name'] }}"
+										name="{{ $field['name'] }}" data-date-format="d.m.Y"
+										value="{{ isset($field['value']) ? old($field['name'], $field['value']) : old($field['name']) }}">
+								@endif
 							</div>
 						@break
 

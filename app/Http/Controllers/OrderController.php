@@ -30,9 +30,12 @@ class OrderController extends Controller {
 				]);
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
-				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'item', 'click' => "clickDelete({$order->getKey()}, '{$order->name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+				if (auth()->user()->can('orders.edit'))
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				if (auth()->user()->can('orders.show'))
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				if (auth()->user()->can('orders.delete'))
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$order->getKey()}, '{$order->name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 				$items[] = ['type' => 'divider'];
 				$items[] = ['type' => 'item', 'link' => $specialtiesRoute, 'icon' => 'fas fa-graduation-cap', 'title' => 'Детали заявки'];
 				$items[] = ['type' => 'item', 'link' => $employersRoute, 'icon' => 'fas fa-building', 'title' => 'Уведомления работодателям'];

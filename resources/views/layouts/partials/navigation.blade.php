@@ -36,23 +36,27 @@
 		        : 'Практики от работодателей';
 		    $menu[] = ['title' => $name, 'icon' => 'fas fa-history', 'route' => 'history.index', 'pattern' => ['history.*', 'trainees.*']];
 		}
-		if ($admin || $schools) {
+		if ($admin || $schools || $employers) {
 		    $menu[] = ['title' => 'Заявки на практику от ОУ', 'icon' => 'fas fa-history', 'route' => 'orders.index', 'pattern' => ['orders.*']];
+		}
+		if ($admin || $schools) {
 		    $menu[] = ['title' => 'Планирование практикантов от ОУ', 'icon' => 'fas fa-history', 'route' => 'planning.orders.index', 'pattern' => ['planning.*']];
-			$menu[] = ['title' => 'Договора на практику', 'icon' => 'fas fa-file-signature', 'route' => 'contracts.index', 'pattern' => ['contracts.*']];
+		}
+		if ($admin || $schools || $employers) {
+		    $menu[] = ['title' => 'Договора на практику от ОУ', 'icon' => 'fas fa-file-signature', 'route' => 'contracts.index', 'pattern' => ['contracts.*']];
 		}
 
 		if ($employers || $students || $schools) {
 		    $menu[] = ['title' => 'Субъекты', 'heading' => true];
 		}
 
-		if ($employers || $students) {
+		if ($admin || $employers) {
 		    $menu[] = ['title' => 'Работодатели', 'icon' => 'fas fa-business-time', 'route' => 'employers.index.clear', 'pattern' => ['employers.*', 'internships.*', 'especialties.*', 'timetables.*']];
 		}
-		if ($schools) {
+		if ($admin || $schools) {
 		    $menu[] = ['title' => 'Образовательные учреждения', 'icon' => 'fas fa-university', 'route' => 'schools.index', 'pattern' => ['schools.*', 'fspecialties.*']];
 		}
-		if ($schools || $employers) {
+		if (false) {
 		    $menu[] = ['title' => 'Руководители практики', 'icon' => 'fas fa-users-cog', 'route' => 'teachers.index', 'pattern' => ['teachers.*']];
 		}
 
@@ -74,7 +78,7 @@
 		    if ($admin) {
 		        $menu[] = ['title' => 'Пользователи', 'icon' => 'fa fa-user-alt', 'route' => 'users.index', 'pattern' => 'users.*'];
 		    }
-		    if ($schools) {
+		    if ($admin || $schools) {
 		        $menu[] = ['title' => 'Импорт', 'icon' => 'fa-solid fa-file-import', 'route' => 'import.index', 'pattern' => 'import.*'];
 		    }
 		    if ($admin) {
