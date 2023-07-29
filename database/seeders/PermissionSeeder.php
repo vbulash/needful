@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Http\Controllers\Auth\RoleName;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
@@ -49,11 +50,40 @@ class PermissionSeeder extends Seeder {
 			'histories.edit',
 			'histories.show',
 			'histories.delete',
+			// Заявки
+			'orders.list',
+			'orders.create',
+			'orders.edit',
+			'orders.show',
+			'orders.delete',
+			// Детали заявки
+			'orders.details.list',
+			'orders.details.create',
+			'orders.details.edit',
+			'orders.details.show',
+			'orders.details.delete',
+			// Уведомления работодателям
+			'orders.employers.list',
+			'orders.employers.create',
+			'orders.employers.edit',
+			'orders.employers.show',
+			'orders.employers.delete',
+			// Контракты (инициатор: образовательное учреждение)
+			'contracts.schools.list',
+			'contracts.schools.create',
+			'contracts.schools.edit',
+			'contracts.schools.show',
+			'contracts.schools.delete',
 		];
 		$permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
-			return ['name' => $permission, 'guard_name' => 'web'];
+			return [
+				'name' => $permission,
+				'guard_name' => 'web',
+				'created_at' => Carbon::now(),
+				'updated_at' => Carbon::now()
+			];
 		});
-		Permission::insert($permissions->toArray());
+		Permission::upsert($permissions->toArray(), ['name']);
 
 		$employer = Role::where('name', RoleName::EMPLOYER->value)->first();
 		$employer->givePermissionTo([
@@ -73,6 +103,16 @@ class PermissionSeeder extends Seeder {
 			'histories.edit',
 			'histories.show',
 			'histories.delete',
+			// Заявки
+			'orders.list',
+			'orders.show',
+			// Детали заявки
+			'orders.details.list',
+			'orders.details.show',
+			// Уведомления работодателям
+			'orders.employers.show',
+			// Контракты (инициатор: образовательное учреждение)
+			'contracts.schools.show',
 		]);
 
 		$school = Role::where('name', RoleName::SCHOOL->value)->first();
@@ -90,6 +130,30 @@ class PermissionSeeder extends Seeder {
 			'histories.create',
 			'histories.edit',
 			'histories.show',
+			// Заявки
+			'orders.list',
+			'orders.create',
+			'orders.edit',
+			'orders.show',
+			'orders.delete',
+			// Детали заявки
+			'orders.details.list',
+			'orders.details.create',
+			'orders.details.edit',
+			'orders.details.show',
+			'orders.details.delete',
+			// Уведомления работодателям
+			'orders.employers.list',
+			'orders.employers.create',
+			'orders.employers.edit',
+			'orders.employers.show',
+			'orders.employers.delete',
+			// Контракты (инициатор: образовательное учреждение)
+			'contracts.schools.list',
+			'contracts.schools.create',
+			'contracts.schools.edit',
+			'contracts.schools.show',
+			'contracts.schools.delete',
 		]);
 
 		$student = Role::where('name', RoleName::TRAINEE->value)->first();
@@ -108,6 +172,8 @@ class PermissionSeeder extends Seeder {
 			// Практики
 			'histories.list',
 			'histories.show',
+			// Контракты (инициатор: образовательное учреждение)
+			'contracts.schools.show',
 		]);
 	}
 }

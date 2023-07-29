@@ -38,27 +38,13 @@ class UserController extends Controller
 			->addColumn('action', function ($user) {
 				$editRoute = route('users.edit', ['user' => $user->id, 'sid' => session()->getId()]);
 				$showRoute = route('users.show', ['user' => $user->id, 'sid' => session()->getId()]);
-				$actions = '';
+				$items = [];
 
-				if (auth()->user()->can('users.edit'))
-					$actions .=
-						"<a href=\"$editRoute\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-						"<i class=\"fas fa-edit\"></i>\n" .
-						"</a>\n";
-				if (auth()->user()->can('users.show'))
-					$actions .=
-						"<a href=\"$showRoute\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-						"<i class=\"fas fa-eye\"></i>\n" .
-						"</a>\n";
-				if (auth()->user()->can('users.destroy') && auth()->user()->getKey() != $user->getKey())
-					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete($user->id, '$user->name')\">\n" .
-						"<i class=\"fas fa-trash-alt\"></i>\n" .
-						"</a>\n";
-				return $actions;
+				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$items[] = ['type' => 'item', 'click' => "clickDelete($user->id, '$user->name')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+
+				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}

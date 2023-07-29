@@ -41,26 +41,14 @@ class LearnController extends Controller {
 			->addColumn('action', function ($learn) {
 			    $editRoute = route('learns.edit', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
 			    $showRoute = route('learns.show', ['learn' => $learn->getKey(), 'sid' => session()->getId()]);
-			    $actions = '';
+				$items = [];
 
-			    $actions .=
-			    	"<a href=\"{$editRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-			    	"<i class=\"fas fa-edit\"></i>\n" .
-			    	"</a>\n";
-			    $actions .=
-			    	"<a href=\"{$showRoute}\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-			    	"<i class=\"fas fa-eye\"></i>\n" .
-			    	"</a>\n";
-			    $name = $learn->getTitle();
-			    $actions .=
-			    	"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-			    	"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$learn->getKey()}, '{$name}')\">\n" .
-			    	"<i class=\"fas fa-trash-alt\"></i>\n" .
-			    	"</a>\n";
+				$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				$name = $learn->getTitle();
+				$items[] = ['type' => 'item', 'click' => "clickDelete({$learn->getKey()}, '{$name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
 
-			    return $actions;
+				return createDropdown('Действия', $items);
 		    })
 			->make(true);
 	}

@@ -42,7 +42,7 @@
 											<label class="form-check-label" for="remember_me">Запомнить меня</label>
 										</div>
 										<div class="fw-semibold fs-sm py-1">
-											<a href="{{ route('password.request') }}">Забыли пароль?</a>
+											<a href="{{ route('password.request') }}">Я забыл(а) пароль / у меня нет пароля</a>
 										</div>
 									</div>
 									<div

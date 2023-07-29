@@ -8,39 +8,50 @@ use App\Events\UnreadCountEvent;
 use App\Http\Requests\StoreOrderEmployerRequest;
 use App\Http\Requests\UpdateOrderEmployerRequest;
 use App\Http\Requests\UpdateOrderSpecialtyRequest;
+use App\Models\Answer;
 use App\Models\Employer;
 use App\Models\Order;
 use App\Models\OrderEmployer;
 use App\Models\OrderEmployerStatus;
 use App\Notifications\orders\New2Sent;
 use Illuminate\Http\Request;
+use Spatie\Permission\PermissionRegistrar;
 use Yajra\DataTables\DataTables;
 
 class OrderEmployerController extends Controller {
 	public function getData(int $order) {
-		$query = Order::findOrFail($order)->employers();
+		$query = Order::findOrFail($order)->employers()
+			->get();
+		if (auth()->user()->cannot('orders.employers.list'))
+			$query = $query->filter(fn($value, $key) => auth()->user()->isAllowed($value->employer));
 
 		return DataTables::of($query)
 			->editColumn('id', fn($order_employer) => $order_employer->employer->getKey())
 			->addColumn('name', fn($order_employer) => $order_employer->getTitle())
 			->addColumn('status', fn($order_employer) => OrderEmployerStatus::getName($order_employer->status))
 			->addColumn('action', function ($order_employer) use ($order) {
-			    $showRoute = route('order.employers.show', [
-			    	'order' => $order,
-			    	'employer' => $order_employer->getKey()
-			    ]);
-			    $id = $order_employer->getKey();
-			    $name = $order_employer->getTitle();
-			    $employer_id = $order_employer->employer->getKey();
+				$showRoute = route('order.employers.show', [
+					'order' => $order,
+					'employer' => $order_employer->getKey()
+				]);
+				$id = $order_employer->getKey();
+				$name = base64_encode($order_employer->getTitle());
+				$employer_id = $order_employer->employer->getKey();
 				$items = [];
 
-				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
-				$items[] = ['type' => 'item', 'click' => "clickDelete({$id}, '{$name}', {$employer_id})", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
-				$items[] = ['type' => 'divider'];
+				if (auth()->user()->can('orders.employers.edit'))
+					$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр анкеты работодателя'];
+				if (auth()->user()->can('orders.employers.delete')) {
+					$func = sprintf("clickDelete(%d, '%s', %d)", $id, $name, $employer_id);
+					$items[] = ['type' => 'item', 'click' => "{$func}", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление уведомления работодателю'];
+				}
+
+				if (count($items) > 0)
+					$items[] = ['type' => 'divider'];
 				$items[] = ['type' => 'item', 'click' => "clickMail({$id})", 'icon' => 'fas fa-envelope', 'title' => 'Сообщение работодателю'];
 
 				return createDropdown('Действия', $items);
-		    })
+			})
 			->make(true);
 	}
 
@@ -82,6 +93,17 @@ class OrderEmployerController extends Controller {
 		$orderEmployer->status = OrderEmployerStatus::NEW ->value;
 		$orderEmployer->save();
 
+		foreach ($orderEmployer->order->specialties as $orderSpecialty) {
+			// foreach (OrderSpecialty::all() as $orderSpecialty) {
+			$answer = new Answer();
+			$answer->approved = 0;
+			$answer->orderSpecialty()->associate($orderSpecialty);
+			$answer->employer()->associate($orderEmployer->employer);
+			$answer->save();
+		}
+
+		$orderEmployer->employer->user->allow($orderEmployer->order);
+
 		event(new ToastEvent('success', '', "Работодатель &laquo;{$text}&raquo; добавлен в заявку на практику"));
 		return true;
 	}
@@ -106,6 +128,7 @@ class OrderEmployerController extends Controller {
 			$id = $employer;
 
 		$order_employer = OrderEmployer::findOrFail($id);
+		$order_employer->employer->user->disallow($order_employer->order);
 		$name = $order_employer->getTitle();
 		$order_employer->delete();
 

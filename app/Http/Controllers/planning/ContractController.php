@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\planning;
 
+use App\Events\ToastEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContractRequest;
 use App\Models\Answer;
+use App\Models\AnswerStudentStatus;
 use App\Models\Contract;
 use App\Models\Employer;
 use App\Models\Order;
@@ -55,6 +57,9 @@ class ContractController extends Controller {
 		$contract->scan = Contract::uploadScan($request);
 		$contract->save();
 
+		$contract->school->user->allow($contract);
+		$contract->employer->user->allow($contract);
+
 		if ($request->answer == 0) {
 			$answers = Answer::where('employer_id', $request->employer)->get();
 			foreach ($answers as $answer) {
@@ -65,6 +70,10 @@ class ContractController extends Controller {
 			$_answer->contract()->associate($contract);
 			$_answer->save();
 		}
+
+		foreach ($contract->answers as $answer) foreach ($answer->students as $student)
+				if ($student->pivot->status == AnswerStudentStatus::APPROVED->value)
+					$student->user->allow($contract);
 
 		$contract->school->user->notify(new NewContract($contract));
 

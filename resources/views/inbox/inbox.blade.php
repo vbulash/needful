@@ -221,7 +221,7 @@
 		const cardRoute = document.getElementById('card-route');
 		if (cardRoute)
 			cardRoute.addEventListener('click', event => {
-				const id = event.target.dataset.id;
+				const id = window.message;
 				const message = messages.get(parseInt(id));
 
 				if (!message.context) return;
