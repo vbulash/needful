@@ -37,27 +37,18 @@ class SpecialtyController extends Controller
 			->addColumn('action', function ($specialty) {
 				$editRoute = route('specialties.edit', ['specialty' => $specialty->id, 'sid' => session()->getId()]);
 				$showRoute = route('specialties.show', ['specialty' => $specialty->id, 'sid' => session()->getId()]);
-				$actions = '';
+				$items = [];
 
-				if (!$specialty->federal)
-					$actions .=
-						"<a href=\"$editRoute\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Редактирование\">\n" .
-						"<i class=\"fas fa-edit\"></i>\n" .
-						"</a>\n";
-				$actions .=
-					"<a href=\"$showRoute\" class=\"btn btn-primary btn-sm float-left mr-1\" " .
-					"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Просмотр\">\n" .
-					"<i class=\"fas fa-eye\"></i>\n" .
-					"</a>\n";
-				if (!$specialty->federal)
-					$actions .=
-						"<a href=\"javascript:void(0)\" class=\"btn btn-primary btn-sm float-left me-5\" " .
-						"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Удаление\" onclick=\"clickDelete({$specialty->getKey()}, '{$specialty->name}')\">\n" .
-						"<i class=\"fas fa-trash-alt\"></i>\n" .
-						"</a>\n";
 
-				return $actions;
+				if (!$specialty->federal) {
+					$items[] = ['type' => 'item', 'link' => $editRoute, 'icon' => 'fas fa-edit', 'title' => 'Редактирование'];
+				}
+				$items[] = ['type' => 'item', 'link' => $showRoute, 'icon' => 'fas fa-eye', 'title' => 'Просмотр'];
+				if (!$specialty->federal) {
+					$items[] = ['type' => 'item', 'click' => "clickDelete({$specialty->getKey()}, '{$specialty->name}')", 'icon' => 'fas fa-trash-alt', 'title' => 'Удаление'];
+				}
+
+				return createDropdown('Действия', $items);
 			})
 			->make(true);
 	}
